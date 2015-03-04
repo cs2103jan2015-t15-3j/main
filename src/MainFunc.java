@@ -13,7 +13,11 @@ private static final String MESSAGE_TASK_ADDED = "Task has been added.\n";
 	
 	public void deleteTask(String taskName) {}
 	
+	public void displayTask(String taskName) {}
+	
 	public void searchTask(String taskName) {}
+	
+	public void undoTask(String taskName) {}
 	
 	public void sortTask(String taskName) {}
 	
