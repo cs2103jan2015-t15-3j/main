@@ -3,7 +3,7 @@ import java.util.*;
 
 
 public class MainFunc {
-public static ArrayList<String> myList;
+public static ArrayList<String> myList = new ArrayList<String>();
 public static ArrayList<String> undoList;
 private static final String MESSAGE_TASK_ADDED = "Task has been added.\n";
 private static final String MESSAGE_TEXT_DELETED = "Task has been deleted\n";
@@ -12,18 +12,46 @@ private static final String MESSAGE_TEXT_SORTED = "all content sorted in %1$s\n"
 private static final String MESSAGE_NO_SEARCH_RESULT = "%1$s is not found in %2$s\n";
 private static final String MESSAGE_EMPTY_LIST = "%1$s is empty\n";
 private static final String MESSAGE_ERROR = "Error: Invalid command\n";
+private static Scanner sc = new Scanner(System.in);
 
-	public String addTask(String taskName) {
-		myList.add(taskName);
+	public static String identifyCommand(String command){
+		switch (command){
+		case "add":
+			return addTask();
+		case "delete":
+			return deleteTask();
+		case "display":
+			return displayTask();
+		case "exit":
+			System.exit(0);
+		default:
+			return MESSAGE_ERROR;
+		}
+	}
+
+	public static String addTask() {
+		System.out.println("input text to be added here");
+		String result = sc.nextLine();
+		myList.add(result);
 		return MESSAGE_TASK_ADDED;		
 	}
 	
-	public String deleteTask(int i) {
-		myList.remove(i);
+	
+	public static String deleteTask() {
+		System.out.println("input index of text to be deleted here");
+		String indexNum = sc.nextLine();
+		int index = Integer.parseInt(indexNum);
+		myList.remove(index-1);
 		return MESSAGE_TEXT_DELETED;
 	}
 	
-	public void displayTask(String taskName) {}
+	public static String displayTask() {
+		for(int i=0; i<myList.size(); i++) {
+			System.out.println(myList.get(i));
+		}
+		System.out.println();
+		return " ";
+	}
 	
 	public String updateTask(String taskName) {
 		return MESSAGE_TEXT_UPDATED;
@@ -36,13 +64,14 @@ private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 	public void sortTask(String taskName) {}
 	
 	public void powerSearchTask(String taskName) {}
-
+	
 	public static void main(String args[]) throws IOException {
-		System.out.println("Hi! Input add and delete here");
-		Scanner sc = new Scanner(System.in);
-		int numTest = sc.nextInt();
-		for(int i = 0; i < numTest; i++){
-			
+	
+		while(true){
+			System.out.println("Hi! Input command first: ");
+			String input = sc.nextLine();
+			String command = input.trim().split("\\s+")[0];
+			identifyCommand(command);
 		}
 	}
 }
