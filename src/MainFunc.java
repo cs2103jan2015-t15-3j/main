@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 
 
@@ -17,7 +18,8 @@ private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 		return MESSAGE_TASK_ADDED;		
 	}
 	
-	public String deleteTask(String taskName) {
+	public String deleteTask(int i) {
+		myList.remove(i);
 		return MESSAGE_TEXT_DELETED;
 	}
 	
@@ -34,4 +36,13 @@ private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 	public void sortTask(String taskName) {}
 	
 	public void powerSearchTask(String taskName) {}
+
+	public static void main(String args[]) throws IOException {
+		System.out.println("Hi! Input add and delete here");
+		Scanner sc = new Scanner(System.in);
+		int numTest = sc.nextInt();
+		for(int i = 0; i < numTest; i++){
+			
+		}
+	}
 }
