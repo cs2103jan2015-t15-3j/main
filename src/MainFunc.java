@@ -33,5 +33,5 @@ private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 	
 	public void sortTask(String taskName) {}
 	
-	public void POWERsearchTask(String taskName) {}
+	public void powerSearchTask(String taskName) {}
 }
