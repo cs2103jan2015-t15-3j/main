@@ -112,7 +112,7 @@ public class UserInterface implements ActionListener {
 
 				String input = textFieldInput.getText().toString();
 				displayLabel.setText(input);
-
+				
 				// JOptionPane.showMessageDialog(enterButton, "testing");
 			}
 		});
