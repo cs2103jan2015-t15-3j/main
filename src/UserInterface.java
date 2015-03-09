@@ -55,12 +55,13 @@ public class UserInterface implements ActionListener {
 	private void initialize() {
 		;
 		frame = new JFrame("ProTask");
+		frame.setResizable(false);
 		frame.setBounds(100, 100, 740, 455);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		JLabel proTaskLabel = new JLabel("ProTask");
-		proTaskLabel.setFont(new Font("Tekton Pro", Font.BOLD, 30));
+		proTaskLabel.setFont(new Font("Stencil Std", Font.BOLD, 30));
 		proTaskLabel.setBounds(114, 11, 200, 50);
 		frame.getContentPane().add(proTaskLabel);
 		ImageIcon proTaskIcon = new ImageIcon("src/Purple-Pear-400px.png");

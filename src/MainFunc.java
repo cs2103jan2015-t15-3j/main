@@ -3,7 +3,17 @@ import java.util.*;
 
 
 public class MainFunc {
-public static ArrayList<String> myList = new ArrayList<String>();
+	
+private Parser parser;
+private ProTaskStorage storage;
+
+private boolean isRunning;
+
+public MainFunc() {
+	isRunning = true;
+}
+
+/*public static ArrayList<String> myList = new ArrayList<String>();
 public static ArrayList<String> undoList;
 private static final String MESSAGE_TASK_ADDED = "Task has been added.\n";
 private static final String MESSAGE_TEXT_DELETED = "Task has been deleted\n";
@@ -13,6 +23,9 @@ private static final String MESSAGE_NO_SEARCH_RESULT = "%1$s is not found in %2$
 private static final String MESSAGE_EMPTY_LIST = "%1$s is empty\n";
 private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 private static Scanner sc = new Scanner(System.in);
+*/
+
+	public Object 
 
 	public static String identifyCommand(String command){
 		switch (command){
@@ -46,11 +59,11 @@ private static Scanner sc = new Scanner(System.in);
 	}
 	
 	public static String displayTask() {
-		for(int i=0; i<myList.size(); i++) {
+		for(int i=0; i < myList.size(); i++) {
 			System.out.println(myList.get(i));
 		}
 		System.out.println();
-		return " ";
+		return "";
 	}
 	
 	public String updateTask(String taskName) {
