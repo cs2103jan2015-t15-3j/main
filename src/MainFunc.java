@@ -4,14 +4,21 @@ import java.util.*;
 
 public class MainFunc {
 	
+private static MainFunc instance = null;
 private Parser parser;
 private ProTaskStorage storage;
 
+
+//private static ArrayList<>
 private boolean isRunning;
 
-public MainFunc() {
-	isRunning = true;
+public static MainFunc getInstance() {
+	if(instance == null) {
+		instance = new MainFunc();
+	}
+	return instance;
 }
+
 
 /*public static ArrayList<String> myList = new ArrayList<String>();
 public static ArrayList<String> undoList;
@@ -25,7 +32,12 @@ private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 private static Scanner sc = new Scanner(System.in);
 */
 
-	public Object 
+	public static ArrayList<Floating> userInput(String userInput) {
+		ArrayList<Floating> arrayList = new ArrayList<Floating>();
+		return arrayList;
+	}
+	
+	public
 
 	public static String identifyCommand(String command){
 		switch (command){
