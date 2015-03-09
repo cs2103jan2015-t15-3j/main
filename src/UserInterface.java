@@ -17,7 +17,10 @@ import java.awt.Font;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 public class UserInterface implements ActionListener {
 	//testing 
@@ -71,29 +74,39 @@ public class UserInterface implements ActionListener {
 		tabbedPane.setBounds(114, 93, 517, 265);
 		frame.getContentPane().add(tabbedPane);
 
-		JPanel panel = new JPanel();
+		JPanel toDoPanel = new JPanel();
 		ImageIcon toDoIcon = new ImageIcon("images/toDoIcon.png");
 		// ImageIcon tab1Icon = new
 		// ImageIcon(this.getClass().getResource("/images/toDoIcon.png"));
-		tabbedPane.addTab("To-Do", toDoIcon, panel);
-		panel.setLayout(null);
+		tabbedPane.addTab("To-Do", toDoIcon, toDoPanel);
+		toDoPanel.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 492, 215);
-		panel.add(scrollPane);
+		toDoPanel.add(scrollPane);
 
 		toDoTable = new JTable();
+		toDoTable.setEnabled(false);
+		toDoTable.setRowSelectionAllowed(false);
 		scrollPane.setViewportView(toDoTable);
 
-		toDoTable.setModel(new DefaultTableModel(new Object[][] {
-				{ null, null, null, null, null },
-				{ null, null, null, null, null },
-				{ null, null, null, null, null }, }, new String[] { "ID",
-				"Task Name", "Start", "End", "Comments" }));
+		toDoTable.setModel(new DefaultTableModel(
+			new Object[][] {
+				{"abc ", "testing", null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+			},
+			new String[] {
+				"ID", "Task Name", "Start", "End", "Comments"
+			}
+		));
+		
+		toDoTable.getTableHeader().setReorderingAllowed(false);
+		toDoTable.getTableHeader().setResizingAllowed(false);
 
-		JPanel panel_1 = new JPanel();
+		JPanel completedPanel = new JPanel();
 		ImageIcon completedIcon = new ImageIcon("images/completedIcon.png");
-		tabbedPane.addTab("Completed", completedIcon, panel_1);
+		tabbedPane.addTab("Completed", completedIcon, completedPanel);
 
 		textFieldInput = new JTextField();
 		textFieldInput.setBounds(114, 62, 401, 20);
