@@ -59,7 +59,7 @@ public class UserInterface implements ActionListener {
 		;
 		frame = new JFrame("ProTask");
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 740, 455);
+		frame.setBounds(100, 100, 882, 519);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -71,7 +71,7 @@ public class UserInterface implements ActionListener {
 		proTaskLabel.setIcon(proTaskIcon);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(114, 93, 517, 265);
+		tabbedPane.setBounds(114, 93, 591, 214);
 		frame.getContentPane().add(tabbedPane);
 
 		JPanel toDoPanel = new JPanel();
@@ -92,14 +92,21 @@ public class UserInterface implements ActionListener {
 
 		toDoTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"abc ", "testing", null, null, null},
+				{"1", "testing", null, null, null},
 				{null, null, null, null, null},
 				{null, null, null, null, null},
 			},
 			new String[] {
-				"ID", "Task Name", "Start", "End", "Comments"
+				"ID", "Description", "Start Time", "End Time", "Remarks"
 			}
 		));
+		
+		TableColumnModel cResize = toDoTable.getColumnModel();
+		cResize.getColumn(0).setPreferredWidth(30);      //ID
+		cResize.getColumn(1).setPreferredWidth(150);    //Description
+		cResize.getColumn(2).setPreferredWidth(80);    //StartTime
+		cResize.getColumn(3).setPreferredWidth(80);   //EndTime
+		cResize.getColumn(3).setPreferredWidth(150); //Remarks
 		
 		toDoTable.getTableHeader().setReorderingAllowed(false);
 		toDoTable.getTableHeader().setResizingAllowed(false);
