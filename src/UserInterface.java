@@ -83,11 +83,6 @@ public class UserInterface implements ActionListener {
 		toDoTable.getTableHeader().setReorderingAllowed(false);
 		toDoTable.getTableHeader().setResizingAllowed(false);
 
-		toDoTable.setModel(new DefaultTableModel(new Object[][] {
-				{ "1", "Testing", "09/03/2015", "12:00", "18:00", "No remarks" },
-				{ null, null, null, null, null },
-				{ null, null, null, null, null }, }, new String[] { "ID",
-				"Description", "Date", "Start Time", "End Time", "Remarks" }));
 
 		TableColumnModel cResize = toDoTable.getColumnModel();
 		cResize.getColumn(0).setPreferredWidth(20); // ID
