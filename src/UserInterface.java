@@ -1,4 +1,3 @@
-
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -18,12 +17,9 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 
 public class UserInterface implements ActionListener {
-	//testing 
 
 	private JFrame frame;
 	private JTextField textFieldInput;
@@ -56,74 +52,62 @@ public class UserInterface implements ActionListener {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		;
-		frame = new JFrame("ProTask");
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 882, 519);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-
-		JLabel proTaskLabel = new JLabel("ProTask");
-		proTaskLabel.setFont(new Font("Stencil Std", Font.BOLD, 30));
-		proTaskLabel.setBounds(114, 11, 200, 50);
-		frame.getContentPane().add(proTaskLabel);
-		ImageIcon proTaskIcon = new ImageIcon("src/Purple-Pear-400px.png");
-		proTaskLabel.setIcon(proTaskIcon);
+		proTaskLogo();
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(114, 93, 591, 214);
+		tabbedPane.setBounds(29, 93, 676, 268);
 		frame.getContentPane().add(tabbedPane);
 
-		JPanel toDoPanel = new JPanel();
+		JPanel panel = new JPanel();
 		ImageIcon toDoIcon = new ImageIcon("images/toDoIcon.png");
 		// ImageIcon tab1Icon = new
 		// ImageIcon(this.getClass().getResource("/images/toDoIcon.png"));
-		tabbedPane.addTab("To-Do", toDoIcon, toDoPanel);
-		toDoPanel.setLayout(null);
+		tabbedPane.addTab("To-Do", toDoIcon, panel);
+		panel.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 492, 215);
-		toDoPanel.add(scrollPane);
+		scrollPane.setBounds(10, 11, 651, 215);
+		panel.add(scrollPane);
 
 		toDoTable = new JTable();
 		toDoTable.setEnabled(false);
-		toDoTable.setRowSelectionAllowed(false);
 		scrollPane.setViewportView(toDoTable);
 
-		toDoTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"1", "testing", null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-			},
-			new String[] {
-				"ID", "Description", "Start Time", "End Time", "Remarks"
-			}
-		));
-		
-		TableColumnModel cResize = toDoTable.getColumnModel();
-		cResize.getColumn(0).setPreferredWidth(30);      //ID
-		cResize.getColumn(1).setPreferredWidth(150);    //Description
-		cResize.getColumn(2).setPreferredWidth(80);    //StartTime
-		cResize.getColumn(3).setPreferredWidth(80);   //EndTime
-		cResize.getColumn(3).setPreferredWidth(150); //Remarks
-		
+		toDoTable.setModel(new DefaultTableModel(new Object[][] {
+				{ "1", "testing", null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null }, }, new String[] { "ID",
+				"Description", "Start Time", "End Time", "Remarks" }));
+
 		toDoTable.getTableHeader().setReorderingAllowed(false);
 		toDoTable.getTableHeader().setResizingAllowed(false);
 
-		JPanel completedPanel = new JPanel();
+		toDoTable.setModel(new DefaultTableModel(new Object[][] {
+				{ "1", "testing", null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null }, }, new String[] { "ID",
+				"Description", "Start", "End", "Remarks" }));
+
+		TableColumnModel cResize = toDoTable.getColumnModel();
+		cResize.getColumn(0).setPreferredWidth(20); // ID
+		cResize.getColumn(1).setPreferredWidth(150); // Description
+		cResize.getColumn(2).setPreferredWidth(60); // StartTime
+		cResize.getColumn(3).setPreferredWidth(60); // EndTime
+		cResize.getColumn(4).setPreferredWidth(300); // Remarks
+
+		JPanel panel_1 = new JPanel();
 		ImageIcon completedIcon = new ImageIcon("images/completedIcon.png");
-		tabbedPane.addTab("Completed", completedIcon, completedPanel);
+		tabbedPane.addTab("Completed", completedIcon, panel_1);
 
 		textFieldInput = new JTextField();
-		textFieldInput.setBounds(114, 62, 401, 20);
+		textFieldInput.setBounds(29, 62, 536, 20);
 		frame.getContentPane().add(textFieldInput);
 		textFieldInput.setColumns(10);
 
 		JLabel displayLabel = new JLabel("");
 		displayLabel.setForeground(Color.BLACK);
 		displayLabel.setBackground(Color.GRAY);
-		displayLabel.setBounds(114, 360, 517, 46);
+		displayLabel.setBounds(29, 360, 676, 40);
 		frame.getContentPane().add(displayLabel);
 
 		JButton enterButton = new JButton("Enter");
@@ -139,9 +123,24 @@ public class UserInterface implements ActionListener {
 			}
 		});
 
-		enterButton.setBounds(542, 61, 89, 23);
+		enterButton.setBounds(585, 61, 89, 23);
 		frame.getContentPane().add(enterButton);
+	}
 
+	// OOP
+	private void proTaskLogo() {
+		frame = new JFrame("ProTask");
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 740, 455);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+
+		JLabel proTaskLabel = new JLabel("ProTask");
+		proTaskLabel.setFont(new Font("Stencil Std", Font.BOLD, 30));
+		proTaskLabel.setBounds(29, 11, 200, 50);
+		frame.getContentPane().add(proTaskLabel);
+		ImageIcon proTaskIcon = new ImageIcon("src/Purple-Pear-400px.png");
+		proTaskLabel.setIcon(proTaskIcon);
 	}
 
 	@Override
