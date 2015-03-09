@@ -1,6 +1,10 @@
 import java.util.Date;
 
+<<<<<<< HEAD
 public class Deadline extends Object {
+=======
+public class Deadline extends Floating {
+>>>>>>> origin/master
 
 	private Date dueDate;
 
