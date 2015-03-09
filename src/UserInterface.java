@@ -73,7 +73,7 @@ public class UserInterface implements ActionListener {
 		toDoTable.setEnabled(false);
 		scrollPane.setViewportView(toDoTable);
 
-		toDoTable.setModel(new DefaultTableModel(new Object[][] {
+		toDoTable.setModel(new DefaultTableModel(new Floating[][] {
 				{ "1", "testing", null, null, null },
 				{ null, null, null, null, null },
 				{ null, null, null, null, null }, }, new String[] { "ID",
@@ -82,7 +82,7 @@ public class UserInterface implements ActionListener {
 		toDoTable.getTableHeader().setReorderingAllowed(false);
 		toDoTable.getTableHeader().setResizingAllowed(false);
 
-		toDoTable.setModel(new DefaultTableModel(new Object[][] {
+		toDoTable.setModel(new DefaultTableModel(new Floating[][] {
 				{ "1", "testing", null, null, null },
 				{ null, null, null, null, null },
 				{ null, null, null, null, null }, }, new String[] { "ID",
