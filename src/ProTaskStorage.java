@@ -5,6 +5,8 @@ import java.io.IOException;
 public class ProTaskStorage {
 
 	private static final String taskDataBase = "test.csv";
+	
+	
 	public static void main (String args[])
 	{
 		generateCsvFile();		
@@ -19,6 +21,10 @@ public class ProTaskStorage {
 	{
 		
 	}
+	public static void clearCompletedTask()
+	{
+		
+	}
 	
     public static void generateCsvFile()
     {
@@ -28,11 +34,17 @@ public class ProTaskStorage {
       
          writer.append("ID");
          writer.append(',');
-         writer.append("Task Name");
+         writer.append("Description");
          writer.append(',');
-         writer.append("Start");
+         writer.append("Date");
          writer.append(',');
-         writer.append("End");
+         writer.append("Start Time");
+         writer.append(',');
+         writer.append("End Time");
+         writer.append(",");
+         writer.append("Remarks");
+         writer.append(",");
+         writer.append("Completed");
          writer.append('\n');
       
       
