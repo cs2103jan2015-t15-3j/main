@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class UserInterface implements ActionListener {
 
@@ -58,16 +59,16 @@ public class UserInterface implements ActionListener {
 		tabbedPane.setBounds(29, 93, 676, 268);
 		frame.getContentPane().add(tabbedPane);
 
-		JPanel panel = new JPanel();
+		JPanel toDoPanel = new JPanel();
 		ImageIcon toDoIcon = new ImageIcon("images/toDoIcon.png");
 		// ImageIcon tab1Icon = new
 		// ImageIcon(this.getClass().getResource("/images/toDoIcon.png"));
-		tabbedPane.addTab("To-Do", toDoIcon, panel);
-		panel.setLayout(null);
+		tabbedPane.addTab("To-Do", toDoIcon, toDoPanel);
+		toDoPanel.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 651, 215);
-		panel.add(scrollPane);
+		toDoPanel.add(scrollPane);
 
 		toDoTable = new JTable();
 		toDoTable.setEnabled(false);
@@ -83,69 +84,78 @@ public class UserInterface implements ActionListener {
 		toDoTable.getTableHeader().setResizingAllowed(false);
 
 		toDoTable.setModel(new DefaultTableModel(new Object[][] {
-				{ "1", "testing", null, null, null },
+				{ "1", "Testing", "09/03/2015", "12:00", "18:00", "No remarks" },
 				{ null, null, null, null, null },
 				{ null, null, null, null, null }, }, new String[] { "ID",
-				"Description", "Start", "End", "Remarks" }));
+				"Description", "Date", "Start Time", "End Time", "Remarks" }));
 
 		TableColumnModel cResize = toDoTable.getColumnModel();
 		cResize.getColumn(0).setPreferredWidth(20); // ID
-		cResize.getColumn(1).setPreferredWidth(150); // Description
-		cResize.getColumn(2).setPreferredWidth(60); // StartTime
-		cResize.getColumn(3).setPreferredWidth(60); // EndTime
-		cResize.getColumn(4).setPreferredWidth(300); // Remarks
+		cResize.getColumn(1).setPreferredWidth(250); // Description
+		cResize.getColumn(2).setPreferredWidth(80); // Date
+		cResize.getColumn(3).setPreferredWidth(70); // StartTime
+		cResize.getColumn(4).setPreferredWidth(70); // EndTime
+		cResize.getColumn(5).setPreferredWidth(150); // Remarks
 
-		JPanel panel_1 = new JPanel();
+		JPanel completedPanel = new JPanel();
 		ImageIcon completedIcon = new ImageIcon("images/completedIcon.png");
-		tabbedPane.addTab("Completed", completedIcon, panel_1);
+		tabbedPane.addTab("Completed", completedIcon, completedPanel);
+		
+		JTextArea displayTextArea = new JTextArea();
+		displayTextArea.setForeground(Color.WHITE);
+		displayTextArea.setBackground(Color.GRAY);
+		displayTextArea.setBounds(29, 372, 676, 44);
+		frame.getContentPane().add(displayTextArea);
 
 		textFieldInput = new JTextField();
 		textFieldInput.setBounds(29, 62, 536, 20);
 		frame.getContentPane().add(textFieldInput);
 		textFieldInput.setColumns(10);
 
-		JLabel displayLabel = new JLabel("");
-		displayLabel.setForeground(Color.BLACK);
-		displayLabel.setBackground(Color.GRAY);
-		displayLabel.setBounds(29, 360, 676, 40);
-		frame.getContentPane().add(displayLabel);
-
 		JButton enterButton = new JButton("Enter");
+		enterButton.setBounds(585, 61, 89, 23);
+		frame.getContentPane().add(enterButton);
+		
 		enterButton.addActionListener(new ActionListener() {
 
 			// get user input and print on label (testing)
 			public void actionPerformed(ActionEvent e) {
 
 				String input = textFieldInput.getText().toString();
-				displayLabel.setText(input);
-
-				// JOptionPane.showMessageDialog(enterButton, "testing");
+				
+				//display on text area
+				displayTextArea.setText(input);
+				
+				//pass string to logic
+				//MainFunc. 
+			
 			}
 		});
+		
+		textFieldInput.addActionListener(new ActionListener() {
 
-		enterButton.setBounds(585, 61, 89, 23);
-		frame.getContentPane().add(enterButton);
+		    public void actionPerformed(ActionEvent e) {
+		       
+		    	String input = textFieldInput.getText().toString();
+		    	displayTextArea.setText(input);
+		    }
+		});
+		
 	}
 
 	// OOP
 	private void proTaskLogo() {
 		frame = new JFrame("ProTask");
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 740, 455);
+		frame.setBounds(100, 100, 742, 465);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		JLabel proTaskLabel = new JLabel("ProTask");
-		proTaskLabel.setFont(new Font("Stencil Std", Font.BOLD, 30));
+		proTaskLabel.setFont(new Font("Tekton Pro", Font.BOLD, 30));
 		proTaskLabel.setBounds(29, 11, 200, 50);
 		frame.getContentPane().add(proTaskLabel);
 		ImageIcon proTaskIcon = new ImageIcon("src/Purple-Pear-400px.png");
 		proTaskLabel.setIcon(proTaskIcon);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	}	
 }
