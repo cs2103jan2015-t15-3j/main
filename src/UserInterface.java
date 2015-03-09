@@ -17,10 +17,7 @@ import java.awt.Font;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 
 public class UserInterface implements ActionListener {
 	//testing 
@@ -56,12 +53,7 @@ public class UserInterface implements ActionListener {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		;
-		frame = new JFrame("ProTask");
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 740, 455);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		makeFrame();
 
 		JLabel proTaskLabel = new JLabel("ProTask");
 		proTaskLabel.setFont(new Font("Stencil Std", Font.BOLD, 30));
@@ -74,39 +66,29 @@ public class UserInterface implements ActionListener {
 		tabbedPane.setBounds(114, 93, 517, 265);
 		frame.getContentPane().add(tabbedPane);
 
-		JPanel toDoPanel = new JPanel();
+		JPanel panel = new JPanel();
 		ImageIcon toDoIcon = new ImageIcon("images/toDoIcon.png");
 		// ImageIcon tab1Icon = new
 		// ImageIcon(this.getClass().getResource("/images/toDoIcon.png"));
-		tabbedPane.addTab("To-Do", toDoIcon, toDoPanel);
-		toDoPanel.setLayout(null);
+		tabbedPane.addTab("To-Do", toDoIcon, panel);
+		panel.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 492, 215);
-		toDoPanel.add(scrollPane);
+		panel.add(scrollPane);
 
 		toDoTable = new JTable();
-		toDoTable.setEnabled(false);
-		toDoTable.setRowSelectionAllowed(false);
 		scrollPane.setViewportView(toDoTable);
 
-		toDoTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"abc ", "testing", null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-			},
-			new String[] {
-				"ID", "Task Name", "Start", "End", "Comments"
-			}
-		));
-		
-		toDoTable.getTableHeader().setReorderingAllowed(false);
-		toDoTable.getTableHeader().setResizingAllowed(false);
+		toDoTable.setModel(new DefaultTableModel(new Object[][] {
+				{ null, null, null, null, null },
+				{ null, null, null, null, null },
+				{ null, null, null, null, null }, }, new String[] { "ID",
+				"Task Name", "Start", "End", "Comments" }));
 
-		JPanel completedPanel = new JPanel();
+		JPanel panel_1 = new JPanel();
 		ImageIcon completedIcon = new ImageIcon("images/completedIcon.png");
-		tabbedPane.addTab("Completed", completedIcon, completedPanel);
+		tabbedPane.addTab("Completed", completedIcon, panel_1);
 
 		textFieldInput = new JTextField();
 		textFieldInput.setBounds(114, 62, 401, 20);
@@ -134,7 +116,14 @@ public class UserInterface implements ActionListener {
 
 		enterButton.setBounds(542, 61, 89, 23);
 		frame.getContentPane().add(enterButton);
-
+	}
+	
+	private void makeFrame() {
+		frame = new JFrame("ProTask");
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 740, 455);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 	}
 
 	@Override
