@@ -1,9 +1,6 @@
 package userInterface;
 
 
-import MainFunc;
-import Object;
-
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -26,11 +23,15 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import logic.MainFunc; //import mainfunc
+
 public class UserInterfaceMain implements ActionListener{
 
 	private JFrame frame;
 	private JTable toDoTable;
 	private JTextField textFieldInput;
+	//mainfunc import
+	private MainFunc func;
 
 	/**
 	 * Launch the application.
@@ -53,6 +54,8 @@ public class UserInterfaceMain implements ActionListener{
 	 */
 	public UserInterfaceMain() {
 		initialize();
+		
+		//func = new MainFunc();
 	}
 
 	/**
@@ -129,10 +132,6 @@ public class UserInterfaceMain implements ActionListener{
 				//display on text area (testing)
 				displayTextArea.setText(input);
 				textFieldInput.setText(null);
-				
-				
-				//pass string to logic
-				//MainFunc.userInput(input);
 			}
 		});
 		
@@ -141,7 +140,11 @@ public class UserInterfaceMain implements ActionListener{
 		   public void actionPerformed(ActionEvent e) {
 		       
 		    	String input = textFieldInput.getText().toString();
-		    	displayTextArea.setText(input);
+		    	
+		    	
+				//pass string to logic
+				func.userInput(input);
+				displayTextArea.setText(input);
 				textFieldInput.setText(null);
 		    }
 		});
