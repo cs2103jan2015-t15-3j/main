@@ -32,18 +32,11 @@ private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 private static Scanner sc = new Scanner(System.in);
 */
 
-<<<<<<< HEAD
-	public static String userInput(String userInput) {
-		return userInput;
-	}
-=======
 	public static ArrayList<Floating> userInput(String userInput) {
 		ArrayList<Floating> arrayList = new ArrayList<Floating>();
 		return arrayList;
 	}
 	
-	public
->>>>>>> origin/master
 
 	public static String identifyCommand(String command){
 		switch (command){
