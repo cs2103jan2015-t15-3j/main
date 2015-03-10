@@ -1,6 +1,5 @@
 package userInterface;
 
-
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -23,13 +22,16 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.util.ArrayList;
 import logic.MainFunc; //import mainfunc
+
 
 public class UserInterfaceMain implements ActionListener{
 
 	private JFrame frame;
 	private JTable toDoTable;
 	private JTextField textFieldInput;
+	
 	//mainfunc import
 	private MainFunc func;
 
@@ -54,8 +56,6 @@ public class UserInterfaceMain implements ActionListener{
 	 */
 	public UserInterfaceMain() {
 		initialize();
-		
-		//func = new MainFunc();
 	}
 
 	/**
@@ -132,6 +132,7 @@ public class UserInterfaceMain implements ActionListener{
 				//display on text area (testing)
 				displayTextArea.setText(input);
 				textFieldInput.setText(null);
+				
 			}
 		});
 		
@@ -140,15 +141,26 @@ public class UserInterfaceMain implements ActionListener{
 		   public void actionPerformed(ActionEvent e) {
 		       
 		    	String input = textFieldInput.getText().toString();
-		    	
+		    
+		    	displayTextArea.setText(input);
 		    	
 				//pass string to logic
 				func.userInput(input);
-				displayTextArea.setText(input);
+				//func.updateTask(input);
+				
 				textFieldInput.setText(null);
 		    }
 		});
+		
+		//print list 
+		/*ArrayList<MainFunc> list = new ArrayList<MainFunc>();
+		
+		for(int i = 0; i < list.size(); i++){
+			
+			displayTextArea.setText(list.toString());
+		}*/
 	}
+	
 
 	private void proTasklogo() {
 		
