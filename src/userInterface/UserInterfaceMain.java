@@ -127,10 +127,11 @@ public class UserInterfaceMain implements ActionListener{
 				
 				//display on text area (testing)
 				displayTextArea.setText(input);
+				textFieldInput.setText(null);
 				
 				//pass string to logic
+
 				//MainFunc.(methodname)(input);
-			
 			}
 		});
 		
@@ -140,6 +141,7 @@ public class UserInterfaceMain implements ActionListener{
 		       
 		    	String input = textFieldInput.getText().toString();
 		    	displayTextArea.setText(input);
+				textFieldInput.setText(null);
 		    }
 		});
 		
