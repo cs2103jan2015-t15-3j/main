@@ -1,4 +1,5 @@
-public class Object {
+package logic;
+public class Floating {
 	
 	enum AssignmentType {
 		FLOATING, APPOINTMENT, DEADLINE
@@ -10,7 +11,7 @@ public class Object {
 	private String remarks;
 	private AssignmentType assignType;
 	
-	public Object () {
+	public Floating () {
 		this.taskID = 0;
 		this.taskName = null;
 		this.isCompleted = false;
@@ -18,7 +19,7 @@ public class Object {
 		this.assignType = AssignmentType.FLOATING;
 	}
 	
-	public Object(int taskID, String taskName, String remarks, boolean isCompleted) {
+	public Floating(int taskID, String taskName, String remarks, boolean isCompleted) {
 		this.taskID = taskID;
 		this.taskName = taskName;
 		this.remarks = remarks;
