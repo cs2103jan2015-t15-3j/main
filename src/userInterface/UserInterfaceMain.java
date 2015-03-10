@@ -1,4 +1,5 @@
 package userInterface;
+import logic.MainFunc;
 
 import java.awt.EventQueue;
 
@@ -27,6 +28,7 @@ public class UserInterfaceMain implements ActionListener{
 	private JFrame frame;
 	private JTable toDoTable;
 	private JTextField textFieldInput;
+	private MainFunc func;
 
 	/**
 	 * Launch the application.
@@ -131,7 +133,8 @@ public class UserInterfaceMain implements ActionListener{
 				
 				//pass string to logic
 
-				//MainFunc.(methodname)(input);
+				func.userInput(input);
+		
 			}
 		});
 		
