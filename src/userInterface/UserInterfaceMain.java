@@ -1,5 +1,9 @@
 package userInterface;
 
+
+import MainFunc;
+import Object;
+
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -116,22 +120,19 @@ public class UserInterfaceMain implements ActionListener{
 		frame.getContentPane().add(displayTextArea);
 		
 		
-		//Arraylist<String> myList = new Arraylist<String>();
-		
 		enterButton.addActionListener(new ActionListener() {
 
 			// get user input and print on label (testing)
 			public void actionPerformed(ActionEvent e) {
 
-				String input = textFieldInput.getText().toString();
-				
+				String input = textFieldInput.getText().toString();			
 				//display on text area (testing)
 				displayTextArea.setText(input);
 				textFieldInput.setText(null);
 				
+				
 				//pass string to logic
-
-				//MainFunc.(methodname)(input);
+				//MainFunc.userInput(input);
 			}
 		});
 		
