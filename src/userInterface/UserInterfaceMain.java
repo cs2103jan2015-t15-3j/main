@@ -135,7 +135,7 @@ public class UserInterfaceMain implements ActionListener{
 				displayTextArea.setText(input);
 				
 				//pass string to logic
-			
+				textFieldInput.setText(null);
 			}
 		});
 		
@@ -145,6 +145,7 @@ public class UserInterfaceMain implements ActionListener{
 		       
 		    	String input = textFieldInput.getText().toString();
 		    	displayTextArea.setText(input);
+				textFieldInput.setText(null);
 		    }
 		});
 		

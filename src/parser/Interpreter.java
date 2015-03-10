@@ -1,23 +1,16 @@
-/* Interpreter class takes in input from ProParser
- * and decodes them. 
- * Methods will be called in Methods class
- * Methods decoded to fetch stuff will be implemented 
- * in Interpreter class
- */
 package parser;
 
-import java.util.*;
-import java.io.*; 
-import java.lang.*;
+import java.util.StringTokenizer;
 
 public class Interpreter {
 	
 	Methods methods = new Methods();
 	
 	enum CommandType {
-		ADD, DELETE, UPDATE, SEARCH, EXIT; 
+		ADD, DELETE, UPDATE, DISPLAY; 
 	}
 	private CommandType command;
+
 
 	private static StringTokenizer inputString;
 	private static String ID;
@@ -27,27 +20,32 @@ public class Interpreter {
 	private static String commentText;
 	private static boolean isCompleted;
 	
-	private void identifyCommand(String[] textContent) {
+	private void identifyCommand(String command, String[] textContent) {
 		switch (command){
-		case ADD:
+		case "add":
 			methods.add(textContent);
 			break;
-		case UPDATE:
+		case "update":
 			methods.update(textContent);
 			break;
-		case DELETE:
+		case "delete":
 			methods.delete(textContent);
 			break;
-		case SEARCH:
-			methods.search();
+		case "display":
+			methods.display();
 			break;
-		case EXIT:
+		case "exit":
 			//storeText();
 			System.exit(0);
 		}
 	}
 	
-	/*==========GET METHODS==========*/	
+
+	
+	
+	/*==========GET METHODS==========*/
+
+	
 	private String getStartDate() {
 		return this.startDate;
 	}
