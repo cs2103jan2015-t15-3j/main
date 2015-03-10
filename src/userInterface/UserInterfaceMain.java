@@ -148,7 +148,6 @@ public class UserInterfaceMain implements ActionListener{
 				textFieldInput.setText(null);
 		    }
 		});
-		
 	}
 
 	private void proTasklogo() {
