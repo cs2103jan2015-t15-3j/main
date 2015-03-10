@@ -55,17 +55,8 @@ public class UserInterfaceMain implements ActionListener{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame("ProTask");
-		frame.setBounds(100, 100, 792, 478);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		proTasklogo();
 		
-		JLabel proTaskLabel = new JLabel("ProTask");
-		proTaskLabel.setFont(new Font("Tekton Pro", Font.PLAIN, 30));
-		proTaskLabel.setBounds(94, 30, 175, 57);
-		frame.getContentPane().add(proTaskLabel);
-		ImageIcon proTaskIcon = new ImageIcon("images/Purple-Pear-400px.png");
-		proTaskLabel.setIcon(proTaskIcon);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(94, 118, 600, 237);
@@ -124,6 +115,9 @@ public class UserInterfaceMain implements ActionListener{
 		displayTextArea.setBounds(94, 366, 600, 46);
 		frame.getContentPane().add(displayTextArea);
 		
+		
+		//Arraylist<String> myList = new Arraylist<String>();
+		
 		enterButton.addActionListener(new ActionListener() {
 
 			// get user input and print on label (testing)
@@ -131,24 +125,40 @@ public class UserInterfaceMain implements ActionListener{
 
 				String input = textFieldInput.getText().toString();
 				
-				//display on text area
+				//display on text area (testing)
 				displayTextArea.setText(input);
 				
 				//pass string to logic
+				//MainFunc.(methodname)(input);
 			
 			}
 		});
 		
-		textFieldInput.addActionListener(new ActionListener() {
+		textFieldInput.addActionListener(new ActionListener(){
 
-		    public void actionPerformed(ActionEvent e) {
+		   public void actionPerformed(ActionEvent e) {
 		       
 		    	String input = textFieldInput.getText().toString();
 		    	displayTextArea.setText(input);
 		    }
 		});
 		
-	
+	}
+
+	private void proTasklogo() {
+		
+		// TODO Auto-generated method stub
+		frame = new JFrame("ProTask");
+		frame.setBounds(100, 100, 792, 478);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel proTaskLabel = new JLabel("ProTask");
+		proTaskLabel.setFont(new Font("Tekton Pro", Font.PLAIN, 30));
+		proTaskLabel.setBounds(94, 30, 175, 57);
+		frame.getContentPane().add(proTaskLabel);
+		ImageIcon proTaskIcon = new ImageIcon("images/Purple-Pear-400px.png");
+		proTaskLabel.setIcon(proTaskIcon);
 	}
 }
 
