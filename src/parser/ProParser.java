@@ -1,22 +1,22 @@
 package parser;
-import java.util.*;
-import java.io.*; 
-import java.lang.*;
 
 public class ProParser {
 	
 	Interpreter item = new Interpreter();
 	
-	private static StringTokenizer inputString;
-	private static String id;
-	private static String command;	
-	private static String descriptionText;	
-	private static String startDate;
-	private static String endDate;
-	private static String commentText;
-	private static boolean isCompleted;
-	
-	
+	public static Interpreter parse(String command) {
+		Interpreter item = new Interpreter();
+		
+		/*
+			This is your main parser function,
+			Interpreter is your object, where you store your necessary information
+			Understand different patterns, and edit your user guide while you found new easy pattern for each command
+			you'll need a few classes for it
+		*/
+		return item;
+	}
+}
+	/*
 	public ProParser() {
 		id = null;
 		command = null; 
@@ -40,7 +40,23 @@ public class ProParser {
 		return textContent;
 	}
 	
-}
-	
-	
-	
+	private void identifyCommand(String command, String[] textContent) {
+		switch (command){
+		case "add":
+			methods.add(textContent);
+			break;
+		case "update":
+			methods.update(textContent);
+			break;
+		case "delete":
+			methods.delete(textContent);
+			break;
+		case "display":
+			methods.display();
+			break;
+		case "exit":
+			//storeText();
+			System.exit(0);
+		}
+	}
+	*/

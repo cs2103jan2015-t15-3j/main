@@ -1,27 +1,96 @@
 package logic;
 
+import parser.Interpreter;
+import parser.Interpreter.CommandType;
 import parser.ProParser;
-import java.io.IOException;
-import java.util.*;
-
 
 public class MainFunc {
+	// For testing
+	public static void main(String[] args) {
+		
+		Printer.printToUser(Message.WELCOME);
+		Memory mem = new Memory();
+		// Storage.openFile(InternalStorage.getFilePath(), InternalStorage.getBuffer());
+		toDoManager(mem);
+	}
 	
-private static MainFunc instance = null;
-private ProParser parser;
-private ProTaskStorage storage;
+	// For testing
+	public static void toDoManager(Memory mem) {
+		
+		while (true) {
+			Printer.printToUser(Message.PROMPT);
+
+			mem = executeCommand(mem.getScanner().nextLine(), mem);
+			
+			Printer.print(mem.getBuffer());
+		}		
+	} 
+	/* Note: 
+	 * Memory is being passed around among UI, logic and storage
+	 * storage will update the respective information inside memory and return back to you when it first load
+	 * you will need another function for the UI to call upon to load the storage, and display on the front end
+	 * (When first open) [UI --> logic --> storage(load, aka update memory) --> return to logic --> return to UI]
+	 * 
+	 */
+	public static Memory executeCommand(String command, Memory mem) {
+		
+		Interpreter confidential = ProParser.parse(command);
+
+		CommandType commandInfo = confidential.getCommand();
+		
+		switch (commandInfo){
+		case ADD:
+			Affix.addTask(confidential, mem.getBuffer(), mem.serialNumGen());
+			break;
+		case DELETE:
+			// deleteTask(confidential, mem.getBuffer());
+			break;
+		case DISPLAY:
+			// nothing to be done because nothing to be updated
+			break;
+		case SEARCH:
+			// 
+			break;
+		case EDIT:
+			// 
+			break;
+		case UNDO:
+			//
+			break;
+		case COMPLETE:
+			// completeTask(confidential, mem.getBuffer());
+			break;
+		case UNCOMPLETE:
+			// uncompleteTask(confidential, mem.getBuffer());
+			break;
+		case POWERSEARCH:
+			//
+			break;
+		case EXIT:
+			System.exit(0);
+		default:
+			Printer.printToUser(Message.INVALID_COMMAND);
+			break;
+		}
+		// save function
+		return mem;
+	}
+
+// private static MainFunc instance = null;
+// private ProParser parser;
+// private ProTaskStorage storage;
 
 
 //private static ArrayList<>
-private boolean isRunning;
-
+//private boolean isRunning;
+/*
 public static MainFunc getInstance() {
 	if(instance == null) {
 		instance = new MainFunc();
 	}
 	return instance;
 }
-
+*/
 
 /*public static ArrayList<String> myList = new ArrayList<String>();
 public static ArrayList<String> undoList;
@@ -34,35 +103,13 @@ private static final String MESSAGE_EMPTY_LIST = "%1$s is empty\n";
 private static final String MESSAGE_ERROR = "Error: Invalid command\n";
 private static Scanner sc = new Scanner(System.in);
 */
-
+/*
 	public ArrayList<Floating> userInput(Floating userInput) {
 		ArrayList<Floating> arrayList = new ArrayList<Floating>();
 		arrayList.add(userInput); 
 		return arrayList;
 	}
-	
-	/*public static String identifyCommand(String command){
-		switch (command){
-		case "add":
-			return addTask();
-		case "delete":
-			return deleteTask();
-		case "display":
-			return displayTask();
-		case "exit":
-			System.exit(0);
-		default:
-			return MESSAGE_ERROR;
-		}
-	}
 
-	public static String addTask() {
-		System.out.println("input text to be added here");
-		String result = sc.nextLine();
-		myList.add(result);
-		return MESSAGE_TASK_ADDED;		
-	}
-	
 	
 	public static String deleteTask() {
 		System.out.println("input index of text to be deleted here");
@@ -83,14 +130,6 @@ private static Scanner sc = new Scanner(System.in);
 	public String updateTask(String taskName) {
 		return MESSAGE_TEXT_UPDATED;
 	}
-	
-	public void searchTask(String taskName) {}
-	
-	public void undoTask(String taskName) {}
-	
-	public void sortTask(String taskName) {}
-	
-	public void powerSearchTask(String taskName) {}
 	
 	public static void main(String args[]) throws IOException {
 	

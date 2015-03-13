@@ -1,40 +1,40 @@
 package logic;
-public class Floating {
-	
-	enum AssignmentType {
-		FLOATING, APPOINTMENT, DEADLINE
-	}
 
-	private int taskID;
+import logic.Enumerator.AssignmentType;
+
+public class Floating {
+
+	private int taskId;
 	private String taskName;
 	private boolean isCompleted;
 	private String remarks;
 	private AssignmentType assignType;
-	
-	public Floating () {
-		this.taskID = 0;
+
+	public Floating() {
+		this.taskId = 0;
 		this.taskName = null;
 		this.isCompleted = false;
 		this.remarks = null;
 		this.assignType = AssignmentType.FLOATING;
 	}
-	
-	public Floating(int taskID, String taskName, String remarks, boolean isCompleted) {
-		this.taskID = taskID;
+
+	public Floating(int taskId, String taskName, String remarks,
+			boolean isCompleted) {
+		this.taskId = taskId;
 		this.taskName = taskName;
 		this.remarks = remarks;
 		this.isCompleted = isCompleted;
 		this.assignType = AssignmentType.FLOATING;
 	}
-	
-	public int getTaskID() {
-		return this.taskID;
+
+	public int getTaskId() {
+		return this.taskId;
 	}
-	
+
 	public String getTaskName() {
 		return this.taskName;
 	}
-	
+
 	public String getRemarks() {
 		return this.remarks;
 	}
@@ -42,7 +42,7 @@ public class Floating {
 	public boolean getCompleted() {
 		return this.isCompleted;
 	}
-	
+
 	public AssignmentType getAssignment() {
 		return this.assignType;
 	}
@@ -51,10 +51,10 @@ public class Floating {
 		this.taskName = taskName;
 	}
 
-	public void setTaskID(int taskID) {
-		this.taskID = taskID;
+	public void setTaskId(int taskId) {
+		this.taskId = taskId;
 	}
-	
+
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
@@ -62,14 +62,15 @@ public class Floating {
 	public void setIsCompleted(boolean isCompleted) {
 		this.isCompleted = isCompleted;
 	}
-	
+
 	public void setAssignment(AssignmentType assignType) {
 		this.assignType = assignType;
 	}
-	
+
 	@Override
-	  public String toString() {
-	    return this.getTaskID() + "+" + this.getTaskName() + "+" + this.getRemarks() + "+" + this.getCompleted() 
-	    		+ "+" + this.getAssignment();
-	  }
+	public String toString() {
+		return this.getTaskId() + "+" + this.getTaskName() + "+"
+				+ this.getRemarks() + "+" + this.getCompleted() + "+"
+				+ this.getAssignment();
+	}
 }
