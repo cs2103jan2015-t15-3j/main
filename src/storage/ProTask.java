@@ -1,3 +1,4 @@
+package storage;
 
 public class ProTask {
 
@@ -21,6 +22,17 @@ public class ProTask {
 	public int getID()
 	{
 		return ID;
+	}
+	public String getIDString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(ID);
+		
+		return sb.toString();
+	}
+	public void setID(int id)
+	{
+		ID = id;
 	}
 	
 }
