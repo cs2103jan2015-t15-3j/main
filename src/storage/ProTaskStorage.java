@@ -12,33 +12,41 @@ import com.opencsv.CSVWriter;
 
 public class ProTaskStorage {
 
-	private static final String taskDataBase = "test.csv";
-	protected static ArrayList<ProTask> allTasks;
-	private static CSVReader reader;
+	private final String taskDataBase = "test.csv";
+	protected ArrayList<ProTask> allTasks;
 
-	public static void main(String[] args) throws FileNotFoundException {
-		generateCsvFile();
-		addTask(1, "Complete CS2103 tut", "08 March", "13:00", "15:40",
-				"Some qns not sure", false);
-		addTask(2, "Go for a run", "21 Feb", "08:00", "08:15", "so tiring",
-				true);
-		getAllTasks();
-	}
+	/*
+	 * public static void main(String[] args) throws FileNotFoundException {
+	 * createDataBase(); addTask(1, "Complete CS2103 tut", "08 March", "13:00",
+	 * "15:40", "Some qns not sure", false); addTask(2, "Go for a run",
+	 * "21 Feb", "08:00", "08:15", "so tiring", true); getAllTasks(); }
+	 */
+	
+	public ProTaskStorage() {
 
-	public ProTaskStorage() throws FileNotFoundException {
-
+		createDataBase();
 		// reader = new CSVReader(new FileReader(taskDataBase), ',', '"', 1);
 
 	}
 
-	public static String toString(int id) {
+	private String intToString(int id) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(id);
 
 		return sb.toString();
 	}
 
-	public static void addTask(int id, String desc, String startDate,
+	private boolean returnBooleanValue(String rowEntry) {
+		boolean toReturnBoolean = false;
+
+		if (rowEntry.equalsIgnoreCase("true")) {
+			toReturnBoolean = true;
+		}
+
+		return toReturnBoolean;
+	}
+
+	public void addTask(int id, String desc, String startDate,
 			String startTime, String endTime, String remarks,
 			boolean isCompleted) {
 
@@ -46,7 +54,7 @@ public class ProTaskStorage {
 			CSVWriter writer = new CSVWriter(new FileWriter(taskDataBase, true));
 
 			ArrayList<String> record = new ArrayList<String>();
-			record.add(toString(id));
+			record.add(intToString(id));
 			record.add(desc);
 			record.add(startDate);
 			record.add(startTime);
@@ -64,39 +72,51 @@ public class ProTaskStorage {
 
 	}
 
-	public static void clearCompletedTask() {
+	public void clearCompletedTask() {
 
 	}
 
-	public static void getAllTasks() throws FileNotFoundException {
+	public ProTask[] getAllTasks() throws FileNotFoundException {
 
 		allTasks = new ArrayList<ProTask>();
 		// Build reader instance
 		// Read data.csv
-		// Default seperator is comma
+		// Default separator is comma
 		// Default quote character is double quote
 		// Start reading from line number 2 (line numbers start from zero)
-		// CSVReader reader = new CSVReader(new FileReader(taskDataBase), ',' ,
-		// '"' , 1);
-		reader = new CSVReader(new FileReader(taskDataBase), ',', '"', 1);
+
+		CSVReader reader = new CSVReader(new FileReader(taskDataBase), ',',
+				'"', 1);
 
 		// Read CSV line by line and use the string array as you want
 		String[] nextLine;
 		try {
 			while ((nextLine = reader.readNext()) != null) {
 				if (nextLine != null) {
-					// Verifying the read data here
-					System.out.println(Arrays.toString(nextLine));
+
+					ProTask task = new ProTask(Integer.parseInt(nextLine[0]),
+							nextLine[1]);
+					task.setDate(nextLine[2]);
+					task.setStartTime(nextLine[3]);
+					task.setEndTime(nextLine[4]);
+					task.setRemarks(nextLine[5]);
+					task.setCompleted(returnBooleanValue(nextLine[6]));
+
+					allTasks.add(task);
+
+					System.out.println(task.getTaskName());// Arrays.toString(nextLine));
 				}
+				reader.close();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// return (ProTask[]) allTasks.toArray(new ProTask[0]);
+		return (ProTask[]) allTasks.toArray(new ProTask[0]);
 	}
 
-	public static void generateCsvFile() {
+	// use this method at the start of the program or if database is not present
+	public void createDataBase() {
 		try {
 			FileWriter writer = new FileWriter(taskDataBase);
 
