@@ -23,22 +23,23 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
-//import java.awt.event.KeyListener;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import logic.MainFunc; //import mainfunc
 
-public class UserInterfaceMain implements ActionListener {
+public class UserInterfaceMain implements KeyListener {
 
 	private JFrame frame;
-	private JTable toDoTable;
 	private JTextField textFieldInput;
+	private JTable table;
 
 	// mainfunc import
-	private MainFunc func;
+	//private MainFunc func;
 
 	/**
 	 * Launch the application.
@@ -71,7 +72,7 @@ public class UserInterfaceMain implements ActionListener {
 		proTasklogo();
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(94, 118, 600, 237);
+		tabbedPane.setBounds(94, 84, 600, 237);
 		frame.getContentPane().add(tabbedPane);
 		ImageIcon toDoIcon = new ImageIcon("images/toDoIcon.png");
 
@@ -81,110 +82,112 @@ public class UserInterfaceMain implements ActionListener {
 		JPanel toDoPanel = new JPanel();
 		tabbedPane.addTab("To-Do", toDoIcon, toDoPanel);
 		toDoPanel.setLayout(null);
-
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 575, 187);
 		toDoPanel.add(scrollPane);
-
-		toDoTable = new JTable();
-		toDoTable.setEnabled(false);
-		toDoTable.setModel(new DefaultTableModel(new Object[][] {
-				{ null, null, null, null, null },
-				{ null, null, null, null, null },
-				{ null, null, null, null, null }, },
-				new String[] { "ID", "Description", "Due Date", "Start Time",
-						"End Time", "Remarks" }));
-		scrollPane.setViewportView(toDoTable);
-		toDoTable.getTableHeader().setReorderingAllowed(false);
-		toDoTable.getTableHeader().setResizingAllowed(false);
-
-		TableColumnModel cResize = toDoTable.getColumnModel();
-		cResize.getColumn(0).setPreferredWidth(20); // ID
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+			},
+			new String[] {
+				"ID", "Description", "Start", "End", "Remarks"
+			}
+		));
+		scrollPane.setViewportView(table);
+		
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.getColumnModel().getColumn(0).setPreferredWidth(27);
+		table.getColumnModel().getColumn(1).setPreferredWidth(120);
+		table.getColumnModel().getColumn(2).setPreferredWidth(100);
+		table.getColumnModel().getColumn(3).setPreferredWidth(100);
+		table.getColumnModel().getColumn(4).setPreferredWidth(100);
+		
+		/*cResize.getColumn(0).setPreferredWidth(20);  // ID
 		cResize.getColumn(1).setPreferredWidth(250); // Description
-		cResize.getColumn(2).setPreferredWidth(80); // Date
-		cResize.getColumn(3).setPreferredWidth(70); // StartTime
-		cResize.getColumn(4).setPreferredWidth(70); // EndTime
-		cResize.getColumn(5).setPreferredWidth(150); // Remarks
+		cResize.getColumn(2).setPreferredWidth(200);  // Deadline
+		cResize.getColumn(4).setPreferredWidth(150); // Remarks
+		*/
 
 		tabbedPane.addTab("Completed", completedIcon, completedPanel);
+		
 
 		textFieldInput = new JTextField();
-		textFieldInput.setBounds(94, 87, 488, 20);
+		textFieldInput.setBounds(94, 377, 600, 28);
 		frame.getContentPane().add(textFieldInput);
 		textFieldInput.setColumns(10);
 
-		JButton enterButton = new JButton("Enter");
-		enterButton.setBounds(592, 86, 89, 23);
-		frame.getContentPane().add(enterButton);
+/*		JButton enterButton = new JButton("Enter");
+		enterButton.setBounds(592, 377, 102, 28);
+		frame.getContentPane().add(enterButton);*/
 
 		JTextArea displayTextArea = new JTextArea();
 		displayTextArea.setForeground(Color.WHITE);
-		displayTextArea.setBackground(Color.GRAY);
-		displayTextArea.setBounds(94, 366, 600, 46);
+		displayTextArea.setBackground(Color.DARK_GRAY);
+		displayTextArea.setBounds(94, 332, 600, 28);
 		frame.getContentPane().add(displayTextArea);
-
-		enterButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-
-				String input = textFieldInput.getText().toString();
-
-				MainFunc.userInput(input);
-
-				// static printing on Jtable
-				toDoTable.setValueAt("1", 0, 0);
-
-				String delimiter = " ";
-				String[] temp = input.split(delimiter);
-
-				toDoTable.setValueAt(temp[1], 0, 1);
-				toDoTable.setValueAt(temp[2], 0, 2);
-				toDoTable.setValueAt(temp[3], 0, 3);
-				toDoTable.setValueAt(temp[4], 0, 4);
-				toDoTable.setValueAt(temp[5], 0, 5); // remarks
-
-				displayTextArea.setText(" added successfully !");
-
-				textFieldInput.setText(null);
-
-			}
-		});
-
-		textFieldInput.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-
-				String input = textFieldInput.getText().toString();
-
-				MainFunc.userInput(input);
-
-				// static printing on Jtable
-				toDoTable.setValueAt(1, 0, 0);
-
-				String delimiter = " ";
-				String[] temp = input.split(delimiter);
-
-				toDoTable.setValueAt(temp[1], 0, 1);
-				toDoTable.setValueAt(temp[2], 0, 2);
-				toDoTable.setValueAt(temp[3], 0, 3);
-				toDoTable.setValueAt(temp[4], 0, 4);
-				toDoTable.setValueAt(temp[5], 0, 5); // remarks
-
-				displayTextArea.setText(" added successfully !");
-
-				textFieldInput.setText(null);
-			}
-		});
 		
+		KeyListener listener = new KeyListener(){
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER){
+				String userInput = textFieldInput.getText().toString();
+				displayTextArea.setText(userInput);
+				}
+				
+			}
+			
+			public void keyReleased(KeyEvent e) {
+				
+			}
+			public void keyTyped(KeyEvent e) {	
+				
+			}
+		
+		};
+		textFieldInput.addKeyListener(listener);
 	}
+	
+		/*textFieldInput.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				String input = textFieldInput.getText().toString();
+
+				//MainFunc.userInput(input);
+
+				// static printing on Jtable
+				/*toDoTable.setValueAt(1, 0, 0);
+
+				String delimiter = " ";
+				String[] temp = input.split(delimiter);
+
+				toDoTable.setValueAt(temp[1], 0, 1);
+				toDoTable.setValueAt(temp[2], 0, 2);
+				toDoTable.setValueAt(temp[3], 0, 3);
+				toDoTable.setValueAt(temp[4], 0, 4);
+				toDoTable.setValueAt(temp[5], 0, 5); // remarks
+				*/
+
+				//displayTextArea.setText("Lunch with lecturer completed!");
+
+			//	textFieldInput.setText(null);
+	//		}
+		//});
+
 
 	// print list
 	/*
-	 * ArrayList<MainFunc> list = new ArrayList<MainFunc>();
-	 * 
-	 * for(int i = 0; i < list.size(); i++){
-	 * 
-	 * displayTextArea.setText(list.toString()); }
+	 ArrayList<MainFunc> list = new ArrayList<MainFunc>();
+	 
+	 for(int i = 0; i < list.size(); i++){
+	 
+	 displayTextArea.setText(list.toString()); }
 	 */
 
 	private void proTasklogo() {
