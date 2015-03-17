@@ -31,6 +31,9 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import logic.MainFunc; //import mainfunc
+import logic.Memory;
+
+
 
 public class UserInterfaceMain implements KeyListener {
 
@@ -38,8 +41,6 @@ public class UserInterfaceMain implements KeyListener {
 	private JTextField textFieldInput;
 	private JTable table;
 
-	// mainfunc import
-	//private MainFunc func;
 
 	/**
 	 * Launch the application.
@@ -62,7 +63,6 @@ public class UserInterfaceMain implements KeyListener {
 	 */
 	public UserInterfaceMain() {
 		initialize();
-		// func = new MainFunc();
 	}
 
 	/**
@@ -87,6 +87,8 @@ public class UserInterfaceMain implements KeyListener {
 		scrollPane.setBounds(10, 11, 575, 187);
 		toDoPanel.add(scrollPane);
 		
+		TableMain.setupTable();
+		/*
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -114,6 +116,7 @@ public class UserInterfaceMain implements KeyListener {
 		*/
 
 		tabbedPane.addTab("Completed", completedIcon, completedPanel);
+		TableMain.setupTable();
 		
 
 		textFieldInput = new JTextField();
@@ -131,13 +134,36 @@ public class UserInterfaceMain implements KeyListener {
 		displayTextArea.setBounds(94, 332, 600, 28);
 		frame.getContentPane().add(displayTextArea);
 		
+		
+		//table = TableMain.setupTable(shell);
+		//load data into the table in the beginning
+		//Loader.populateTable(table, mem);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		Memory mem = new Memory();
+		
 		KeyListener listener = new KeyListener(){
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER){
 				String userInput = textFieldInput.getText().toString();
-				displayTextArea.setText(userInput);
+				
+				mem = MainFunc.executeCommand(userInput, mem);
+				displayTextArea.setText("command accepted!");
 				}
 				
 			}
