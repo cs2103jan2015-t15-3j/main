@@ -4,7 +4,7 @@ import parser.Interpreter;
 import parser.Interpreter.CommandType;
 import parser.ProParser;
 
-public class MainFunc {
+public class LogicMain {
 	// For testing
 	public static void main(String[] args) {
 		
@@ -32,36 +32,41 @@ public class MainFunc {
 	 * (When first open) [UI --> logic --> storage(load, aka update memory) --> return to logic --> return to UI]
 	 * 
 	 */
+	public static Memory showToUI(Memory mem) {
+		return mem;
+	}
+	
+	
 	public static Memory executeCommand(String command, Memory mem) {
 		
-		Interpreter confidential = ProParser.parse(command);
+		Interpreter item = ProParser.parse(command);
 
-		CommandType commandInfo = confidential.getCommand();
+		CommandType commandInfo = item.getCommand();
 		
 		switch (commandInfo){
 		case ADD:
-			Affix.addTask(confidential, mem.getBuffer(), mem.serialNumGen());
+			Affix.addTask(item, mem.getBuffer(), mem.numberGenerator());
 			break;
 		case DELETE:
-			// deleteTask(confidential, mem.getBuffer());
+			Obliterator.deleteTask(item, mem.getBuffer());
 			break;
 		case DISPLAY:
-			// nothing to be done because nothing to be updated
+			// 
 			break;
 		case SEARCH:
-			// 
+			SearchEngine.searchForKeyWords(item, mem.getBuffer());
 			break;
 		case EDIT:
-			// 
+			// Amend.editTask(item, mem.getBuffer());
 			break;
 		case UNDO:
 			//
 			break;
 		case COMPLETE:
-			// completeTask(confidential, mem.getBuffer());
+			Amend.setCompletionTask(item, mem.getBuffer());
 			break;
 		case UNCOMPLETE:
-			// uncompleteTask(confidential, mem.getBuffer());
+			Amend.setCompletionTask(item, mem.getBuffer());
 			break;
 		case POWERSEARCH:
 			//
