@@ -32,41 +32,45 @@ public class LogicMain {
 	 * (When first open) [UI --> logic --> storage(load, aka update memory) --> return to logic --> return to UI]
 	 * 
 	 */
-	public static Memory showToUI(Memory mem) {
-		return mem;
+	public static Memory displayToUI(Memory mem) {
+		return executeCommand("display", mem);
 	}
-	
 	
 	public static Memory executeCommand(String command, Memory mem) {
 		
-		Interpreter item = ProParser.parse(command);
+		Interpreter input = new Interpreter();
+		
+		input = ProParser.parse(command);
 
-		CommandType commandInfo = item.getCommand();
+		CommandType commandInfo = input.getCommand();
 		
 		switch (commandInfo){
 		case ADD:
-			Affix.addTask(item, mem.getBuffer(), mem.numberGenerator());
+			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
 			break;
 		case DELETE:
-			Obliterator.deleteTask(item, mem.getBuffer());
+			Obliterator.deleteTask(input, mem.getBuffer());
+			break;
+		case CLEAR:
+			Obliterator.clearTask(input, mem.getBuffer());
 			break;
 		case DISPLAY:
 			// 
 			break;
 		case SEARCH:
-			SearchEngine.searchForKeyWords(item, mem.getBuffer());
+			SearchEngine.searchForKeyWords(input, mem.getBuffer());
 			break;
 		case EDIT:
-			// Amend.editTask(item, mem.getBuffer());
+			Amend.editTask(input, mem.getBuffer());
 			break;
 		case UNDO:
 			//
 			break;
 		case COMPLETE:
-			Amend.setCompletionTask(item, mem.getBuffer());
+			Amend.setCompletionTask(input, mem.getBuffer());
 			break;
 		case UNCOMPLETE:
-			Amend.setCompletionTask(item, mem.getBuffer());
+			Amend.setCompletionTask(input, mem.getBuffer());
 			break;
 		case POWERSEARCH:
 			//

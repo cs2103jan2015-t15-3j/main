@@ -9,7 +9,7 @@ import logic.Enumerator.AssignmentType;
 public class Interpreter {
 
 	public enum CommandType {
-		ADD, DELETE, UPDATE, DISPLAY, EDIT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
+		ADD, DELETE, CLEAR, UPDATE, DISPLAY, EDIT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
 	}
 
 	private int taskId;

@@ -10,7 +10,7 @@ public class Obliterator {
 		buffer.remove(taskId);
 	}
 	
-	protected static void deleteAllTask(Interpreter item, ArrayList<Floating> buffer) {
+	protected static void clearTask(Interpreter item, ArrayList<Floating> buffer) {
 		buffer.removeAll(buffer);
 	}
 }
