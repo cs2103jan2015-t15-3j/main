@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Memory {
 
 	private ArrayList<Task> buffer;
-	private ArrayList<Task> searchBuffer;
+	private ArrayList<Task> tempBuffer;
 	private Scanner scanner;
 	private int currentId;
 	private String feedbackMsg;
@@ -21,12 +21,12 @@ public class Memory {
 		return this.buffer;
 	}
 	
-	public ArrayList<Task> getSearchBuffer() {
-		return this.searchBuffer;
+	public ArrayList<Task> getTempBuffer() {
+		return this.tempBuffer;
 	}
 
 	public int numberGenerator () {
-		this.currentId++;
+		this.currentId += 1;
 		return this.currentId;
 	}
 
@@ -46,8 +46,8 @@ public class Memory {
 		this.buffer = buffer;
 	}
 	
-	public void setSearchBuffer(ArrayList<Task> searchBuffer) {
-		this.searchBuffer = searchBuffer;
+	public void setTempBuffer(ArrayList<Task> tempBuffer) {
+		this.tempBuffer = tempBuffer;
 	}
 
 	public void setCurrentId(int currentId) {

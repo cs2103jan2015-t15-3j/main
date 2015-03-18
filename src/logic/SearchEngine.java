@@ -11,9 +11,9 @@ public class SearchEngine {
 		ArrayList<Task> buffer = mem.getBuffer();
 
 		if (input.matches("\\d+")) {
-			mem.setSearchBuffer(searchByTaskId(input, buffer));
+			mem.setTempBuffer(searchByTaskId(input, buffer));
 		} else {
-			mem.setSearchBuffer(searchByWords(input, buffer));
+			mem.setTempBuffer(searchByWords(input, buffer));
 		}
 	}
 
@@ -73,31 +73,34 @@ public class SearchEngine {
 		}
 		return taskFound;
 	}
-	
-	private static boolean searchByKeyWord(String description, String searchKeyWord) {
+
+	private static boolean searchByKeyWord(String description,
+			String searchKeyWord) {
 		boolean found = false;
 
 		String[] textArray = description.split(" ");
 
-		for(int count = 0; count < textArray.length; count++) {
+		for (int count = 0; count < textArray.length; count++) {
 			String checkText = textArray[count];
 
-			if(searchKeyWord.equals(checkText)) {
+			if (searchKeyWord.equals(checkText)) {
 				found = true;
 			} else {
-				found = searchByKeyPhrase(count, textArray, searchKeyWord, checkText);
+				found = searchByKeyPhrase(count, textArray, searchKeyWord,
+						checkText);
 			}
 		}
 		return found;
 	}
-	
-	private static boolean searchByKeyPhrase(int count, String[] textArray, String searchKeyWord, String checkText) {
+
+	private static boolean searchByKeyPhrase(int count, String[] textArray,
+			String searchKeyWord, String checkText) {
 		boolean found = false;
 
-		for(int textExtendCount = count++; textExtendCount < textArray.length; textExtendCount++) {
+		for (int textExtendCount = count++; textExtendCount < textArray.length; textExtendCount++) {
 			checkText += " " + textArray[textExtendCount];
-			
-			if(checkText.equalsIgnoreCase(searchKeyWord)) {
+
+			if (checkText.equalsIgnoreCase(searchKeyWord)) {
 				found = true;
 			}
 		}

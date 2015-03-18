@@ -9,13 +9,13 @@ public class ToBuffer {
 		buffer.add(buffer.size(), task);
 	}
 
-	protected static void addDeadlineToBuffer(Deadline task,
+	protected static void addDeadlineToBuffer(Deadline deadline,
 			ArrayList<Task> buffer) {
-
+		buffer.add(buffer.size(), deadline);
 	}
 
-	protected static void addAppointmentToBuffer(Appointment task,
+	protected static void addAppointmentToBuffer(Appointment appt,
 			ArrayList<Task> buffer) {
-
+		buffer.add(buffer.size(), appt);
 	}
 }
