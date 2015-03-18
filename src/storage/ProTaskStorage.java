@@ -62,7 +62,9 @@ public class ProTaskStorage {
 		if (!checkFileExist()) {
 
 			createDataBase(taskDataBase);
-
+			
+			//addString is just for testing purposes!
+			
 			addStringTask(1, "Complete CS2103 tut", "08 March 13:00",
 					"09 March 15:40", "Some qns not sure", false);
 			addStringTask(2, "Go for a run", "21 Feb 08:00", " 21 Feb 08:15",
@@ -129,9 +131,8 @@ public class ProTaskStorage {
 		return sb.toString();
 	}
 
-	private boolean isCorrectColumns(String[]
-
-	dataBaseCols) {
+	private boolean isCorrectColumns(String[] dataBaseCols) {
+		
 		if (dataBaseColumns == dataBaseCols) {
 			return true;
 		} else
@@ -193,9 +194,8 @@ public class ProTaskStorage {
 
 	}
 
-	public void addAppointment(Appointment
-
-	newApmt, String dataBaseName) {
+	public void addAppointment(Appointment newApmt, String dataBaseName) {
+		
 		try {
 			CSVWriter writer = new
 
