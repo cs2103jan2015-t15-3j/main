@@ -12,7 +12,7 @@ public class Interpreter {
 		ADD, DELETE, CLEAR, UPDATE, DISPLAY, EDIT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
 	}
 
-	private int taskId;
+	private int taskID;
 	private String taskName;
 	private String remarks;
 	private boolean isCompleted;
@@ -26,8 +26,8 @@ public class Interpreter {
 		return this.command;
 	}
 
-	public int getTaskId() {
-		return this.taskId;
+	public int getTaskID() {
+		return this.taskID;
 	}
 
 	public String getTaskName() {
@@ -66,8 +66,8 @@ public class Interpreter {
 		this.taskName = taskName;
 	}
 
-	public void setTaskId(int taskId) {
-		this.taskId = taskId;
+	public void setTaskID(int taskID) {
+		this.taskID = taskID;
 	}
 
 	public void setRemarks(String remarks) {
@@ -109,7 +109,7 @@ public class Interpreter {
 	}
 
 	public String toString() {
-		return this.getCommand() + "+" + this.getTaskId() + "+"
+		return this.getCommand() + "+" + this.getTaskID() + "+"
 				+ this.getTaskName() + "+" + this.getRemarks() + "+"
 				+ this.getCompleted() + "+" + this.getType() + "+"
 				+ this.getDueDateString() + "+" + this.getStartDateString();
