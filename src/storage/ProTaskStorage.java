@@ -249,9 +249,7 @@ public class ProTaskStorage {
 		replaceTempToOriginal();
 	}
 
-	public void updateTask(Appointment
-
-	updatedApp) {
+	public void updateTask(Appointment updatedApp) {
 		createDataBase(tempDataBase);
 		for (Appointment app : allTasks) {
 			if (app.getTaskId() !=
