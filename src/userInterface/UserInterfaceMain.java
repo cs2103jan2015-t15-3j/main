@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import logic.MainFunc; //import mainfunc
+import logic.LogicMain; //import mainfunc
 import logic.Memory;
 
 
@@ -162,7 +162,7 @@ public class UserInterfaceMain implements KeyListener {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER){
 				String userInput = textFieldInput.getText().toString();
 				
-				mem = MainFunc.executeCommand(userInput, mem);
+				mem = LogicMain.executeCommand(userInput, mem);
 				displayTextArea.setText("command accepted!");
 				}
 				

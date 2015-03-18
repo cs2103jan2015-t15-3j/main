@@ -58,10 +58,10 @@ public class LogicMain {
 			// 
 			break;
 		case SEARCH:
-			SearchEngine.searchForKeyWords(input, mem.getBuffer());
+			//SearchEngine.searchForKeyWords(input, mem.getBuffer());
 			break;
 		case EDIT:
-			Amend.editTask(input, mem.getBuffer());
+			//Amend.editTask(input, mem.getBuffer());
 			break;
 		case UNDO:
 			//
