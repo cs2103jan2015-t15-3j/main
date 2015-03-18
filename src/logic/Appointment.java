@@ -3,7 +3,7 @@ package logic;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import logic.Enumerator.AssignmentType;
+import logic.Enumerator.TaskType;
 
 public class Appointment extends Deadline {
 
@@ -12,14 +12,14 @@ public class Appointment extends Deadline {
 	public Appointment() {
 		super();
 		this.startDate = new Date();
-		this.setAssignment(AssignmentType.APPOINTMENT);
+		this.setType(TaskType.APPOINTMENT);
 	}
 
 	public Appointment(int taskID, String taskName, String remarks,
 			boolean isCompleted, Date dueDate, Date startDate) {
 		super(taskID, taskName, remarks, isCompleted, dueDate);
 		this.startDate = startDate;
-		this.setAssignment(AssignmentType.APPOINTMENT);
+		this.setType(TaskType.APPOINTMENT);
 	}
 
 	public Date getStartDate() {
@@ -41,7 +41,7 @@ public class Appointment extends Deadline {
 	public String toString() {
 		return this.getTaskId() + "+" + this.getTaskName() + "+"
 				+ this.getRemarks() + "+" + this.getCompleted() + "+"
-				+ this.getAssignment() + "+" + this.getDueDateString() + "+"
+				+ this.getType() + "+" + this.getDueDateString() + "+"
 				+ this.getStartDateString();
 	}
 }

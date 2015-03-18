@@ -19,9 +19,7 @@ public class LogicMain {
 		
 		while (true) {
 			Printer.printToUser(Message.PROMPT);
-
 			mem = executeCommand(mem.getScanner().nextLine(), mem);
-			
 			Printer.print(mem.getBuffer());
 		}		
 	} 
@@ -32,6 +30,11 @@ public class LogicMain {
 	 * (When first open) [UI --> logic --> storage(load, aka update memory) --> return to logic --> return to UI]
 	 * 
 	 */
+	
+	/* Note: 
+	 * Store feedback msg before you return memory back to UI  
+	 */
+
 	public static Memory displayToUI(Memory mem) {
 		return executeCommand("display", mem);
 	}
@@ -39,14 +42,12 @@ public class LogicMain {
 	public static Memory executeCommand(String command, Memory mem) {
 		
 		Interpreter input = new Interpreter();
-		
 		input = ProParser.parse(command);
-
 		CommandType commandInfo = input.getCommand();
 		
 		switch (commandInfo){
 		case ADD:
-			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
+			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator()); //incomplete
 			break;
 		case DELETE:
 			Obliterator.deleteTask(input, mem.getBuffer());
@@ -55,16 +56,16 @@ public class LogicMain {
 			Obliterator.clearTask(input, mem.getBuffer());
 			break;
 		case DISPLAY:
-			// 
+			Printer.print(mem.getBuffer());
 			break;
 		case SEARCH:
-			//SearchEngine.searchForKeyWords(input, mem.getBuffer());
+			SearchEngine.determineSearch(input.getKey().toLowerCase(), mem);
 			break;
 		case EDIT:
-			//Amend.editTask(input, mem.getBuffer());
+			Amend.determineEdit(input, mem); //incomplete
 			break;
 		case UNDO:
-			//
+			//incomplete
 			break;
 		case COMPLETE:
 			Amend.setCompletionTask(input, mem.getBuffer());
@@ -73,7 +74,7 @@ public class LogicMain {
 			Amend.setCompletionTask(input, mem.getBuffer());
 			break;
 		case POWERSEARCH:
-			//
+			// incomplete
 			break;
 		case EXIT:
 			System.exit(0);
@@ -84,34 +85,6 @@ public class LogicMain {
 		// save function
 		return mem;
 	}
-
-// private static MainFunc instance = null;
-// private ProParser parser;
-// private ProTaskStorage storage;
-
-
-//private static ArrayList<>
-//private boolean isRunning;
-/*
-public static MainFunc getInstance() {
-	if(instance == null) {
-		instance = new MainFunc();
-	}
-	return instance;
-}
-*/
-
-/*public static ArrayList<String> myList = new ArrayList<String>();
-public static ArrayList<String> undoList;
-private static final String MESSAGE_TASK_ADDED = "Task has been added.\n";
-private static final String MESSAGE_TEXT_DELETED = "Task has been deleted\n";
-private static final String MESSAGE_TEXT_UPDATED = "Task has been updated\n";
-private static final String MESSAGE_TEXT_SORTED = "all content sorted in %1$s\n";
-private static final String MESSAGE_NO_SEARCH_RESULT = "%1$s is not found in %2$s\n";
-private static final String MESSAGE_EMPTY_LIST = "%1$s is empty\n";
-private static final String MESSAGE_ERROR = "Error: Invalid command\n";
-private static Scanner sc = new Scanner(System.in);
-*/
 /*
 	public ArrayList<Floating> userInput(Floating userInput) {
 		ArrayList<Floating> arrayList = new ArrayList<Floating>();

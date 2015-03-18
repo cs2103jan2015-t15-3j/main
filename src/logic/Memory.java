@@ -5,19 +5,24 @@ import java.util.Scanner;
 
 public class Memory {
 
-	private ArrayList<Floating> buffer;
+	private ArrayList<Task> buffer;
+	private ArrayList<Task> searchBuffer;
 	private Scanner scanner;
 	private int currentId;
 	private String feedbackMsg;
 	
 	public Memory() {
-		buffer = new ArrayList<Floating>();
+		buffer = new ArrayList<Task>();
 		scanner = new Scanner(System.in);
 		currentId = 0;
 	}
 
-	public ArrayList<Floating> getBuffer() {
+	public ArrayList<Task> getBuffer() {
 		return this.buffer;
+	}
+	
+	public ArrayList<Task> getSearchBuffer() {
+		return this.searchBuffer;
 	}
 
 	public int numberGenerator () {
@@ -37,15 +42,19 @@ public class Memory {
 		return this.scanner;
 	}
 	
-	public void setBuffer(ArrayList<Floating> buffer) {
+	public void setBuffer(ArrayList<Task> buffer) {
 		this.buffer = buffer;
+	}
+	
+	public void setSearchBuffer(ArrayList<Task> searchBuffer) {
+		this.searchBuffer = searchBuffer;
 	}
 
 	public void setCurrentId(int currentId) {
 		this.currentId = currentId;
 	}
 	
-	public void setFeedback(String feedbackMsg) {
+	public void setFeedbackMsg(String feedbackMsg) {
 		this.feedbackMsg = feedbackMsg;
 	}
 }

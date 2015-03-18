@@ -2,7 +2,7 @@ package logic;
 
 public class Enumerator {
 
-	public enum AssignmentType {
+	public enum TaskType {
 		FLOATING, APPOINTMENT, DEADLINE
 	}
 }

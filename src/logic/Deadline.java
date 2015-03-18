@@ -4,23 +4,23 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import logic.Enumerator.AssignmentType;
+import logic.Enumerator.TaskType;
 
-public class Deadline extends Floating {
+public class Deadline extends Task {
 
 	private Date dueDate;
 
 	public Deadline() {
 		super();
 		this.dueDate = new Date();
-		this.setAssignment(AssignmentType.DEADLINE);
+		this.setType(TaskType.DEADLINE);
 	}
 
 	public Deadline(int taskID, String taskName, String remarks,
 			boolean isCompleted, Date dueDate) {
 		super(taskID, taskName, remarks, isCompleted);
 		this.dueDate = dueDate;
-		this.setAssignment(AssignmentType.DEADLINE);
+		this.setType(TaskType.DEADLINE);
 	}
 
 	public Date getDate() {
@@ -42,6 +42,6 @@ public class Deadline extends Floating {
 	public String toString() {
 		return this.getTaskId() + "+" + this.getTaskName() + "+"
 				+ this.getRemarks() + "+" + this.getCompleted() + "+"
-				+ this.getAssignment() + "+" + this.getDueDateString();
+				+ this.getType() + "+" + this.getDueDateString();
 	}
 }

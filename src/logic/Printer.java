@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Printer {
 
-	public static void print(ArrayList<Floating> output) {
+	public static void print(ArrayList<Task> output) {
 		for (int count = 0; count < output.size(); count++) {
 			System.out.print(output.toString());
 		}

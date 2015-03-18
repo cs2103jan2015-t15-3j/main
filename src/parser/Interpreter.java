@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import logic.Enumerator.AssignmentType;
+import logic.Enumerator.TaskType;
 
 public class Interpreter {
 
@@ -19,8 +19,8 @@ public class Interpreter {
 	private Date dueDate;
 	private Date startDate;
 	private CommandType command;
-	private AssignmentType assignType;
-	private String searchKey;
+	private TaskType type;
+	private String key;
 
 	public CommandType getCommand() {
 		return this.command;
@@ -42,8 +42,8 @@ public class Interpreter {
 		return this.isCompleted;
 	}
 
-	public AssignmentType getAssignment() {
-		return this.assignType;
+	public TaskType getType() {
+		return this.type;
 	}
 
 	public Date getDueDate() {
@@ -54,8 +54,8 @@ public class Interpreter {
 		return this.startDate;
 	}
 
-	public String getSearchKey() {
-		return this.searchKey;
+	public String getKey() {
+		return this.key;
 	}
 
 	public void setCommandType(CommandType command) {
@@ -78,8 +78,8 @@ public class Interpreter {
 		this.isCompleted = isCompleted;
 	}
 
-	public void setAssignment(AssignmentType assignType) {
-		this.assignType = assignType;
+	public void setType(TaskType type) {
+		this.type = type;
 	}
 
 	public void setDueDate(Date dueDate) {
@@ -90,8 +90,8 @@ public class Interpreter {
 		this.startDate = startDate;
 	}
 
-	public void setSearchKey(String searchKey) {
-		this.searchKey = searchKey;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getDueDateString() {
@@ -111,7 +111,7 @@ public class Interpreter {
 	public String toString() {
 		return this.getCommand() + "+" + this.getTaskId() + "+"
 				+ this.getTaskName() + "+" + this.getRemarks() + "+"
-				+ this.getCompleted() + "+" + this.getAssignment() + "+"
+				+ this.getCompleted() + "+" + this.getType() + "+"
 				+ this.getDueDateString() + "+" + this.getStartDateString();
 	}
 }

@@ -1,30 +1,30 @@
 package logic;
 
-import logic.Enumerator.AssignmentType;
+import logic.Enumerator.TaskType;
 
-public class Floating {
+public class Task {
 
 	private int taskId;
 	private String taskName;
 	private boolean isCompleted;
 	private String remarks;
-	private AssignmentType assignType;
+	private TaskType type;
 
-	public Floating() {
+	public Task() {
 		this.taskId = 0;
 		this.taskName = null;
 		this.isCompleted = false;
 		this.remarks = null;
-		this.assignType = AssignmentType.FLOATING;
+		this.type = TaskType.FLOATING;
 	}
 
-	public Floating(int taskId, String taskName, String remarks,
+	public Task(int taskId, String taskName, String remarks,
 			boolean isCompleted) {
 		this.taskId = taskId;
 		this.taskName = taskName;
 		this.remarks = remarks;
 		this.isCompleted = isCompleted;
-		this.assignType = AssignmentType.FLOATING;
+		this.type = TaskType.FLOATING;
 	}
 
 	public int getTaskId() {
@@ -43,8 +43,8 @@ public class Floating {
 		return this.isCompleted;
 	}
 
-	public AssignmentType getAssignment() {
-		return this.assignType;
+	public TaskType getType() {
+		return this.type;
 	}
 
 	public void setTaskName(String taskName) {
@@ -63,14 +63,14 @@ public class Floating {
 		this.isCompleted = isCompleted;
 	}
 
-	public void setAssignment(AssignmentType assignType) {
-		this.assignType = assignType;
+	public void setType(TaskType type) {
+		this.type = type;
 	}
 
 	@Override
 	public String toString() {
 		return this.getTaskId() + "+" + this.getTaskName() + "+"
 				+ this.getRemarks() + "+" + this.getCompleted() + "+"
-				+ this.getAssignment();
+				+ this.getType();
 	}
 }
