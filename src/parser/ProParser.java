@@ -2,19 +2,58 @@ package parser;
 
 public class ProParser {
 	
+	public enum CommandType {
+		ADD, DELETE, UPDATE, DISPLAY, EDIT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
+	}
+	
 	Interpreter item = new Interpreter();
 	
 	public static Interpreter parse(String command) {
 		Interpreter item = new Interpreter();
+		switch (command) {
+		case "add":
+			item.setCommandType(Interpreter.CommandType.ADD);
+			break;
+		case "delete":
+			item.setCommandType(Interpreter.CommandType.DELETE);
+			break;
+		case "display":
+			item.setCommandType(Interpreter.CommandType.DISPLAY);
+			break;
+		case "search":
+			item.setCommandType(Interpreter.CommandType.SEARCH);
+			break;
+		case "edit":
+			item.setCommandType(Interpreter.CommandType.EDIT);
+			break;
+		case "undo":
+			item.setCommandType(Interpreter.CommandType.UNDO);
+			break;
+		case "complete":
+			item.setCommandType(Interpreter.CommandType.COMPLETE);
+			break;
+		case "uncomplete":
+			item.setCommandType(Interpreter.CommandType.UNCOMPLETE);
+			break;
+		case "powersearch":
+			item.setCommandType(Interpreter.CommandType.POWERSEARCH);
+			break;
+		}
 		
 		/*
-			This is your main parser function,
-			Interpreter is your object, where you store your necessary information
-			Understand different patterns, and edit your user guide while you found new easy pattern for each command
+			This is the main parser function,
+			Interpreter is the object, where the necessary information is stored
+			Understand different patterns, 
+			and edit your user guide while you found new easy pattern 
+			for each command
 			you'll need a few classes for it
 		*/
 		return item;
 	}
+	
+	
+	
+	
 }
 	/*
 	public ProParser() {

@@ -1,12 +1,4 @@
-/Appointment.class
-/Deadline.class
-/MainFunc.class
-/Object$AssignmentType.class
-/Object.class
-/Parser.class
-/ProTask.class
-/ProTaskStorage.class
-/userInterface/
-/Floating$AssignmentType.class
-/Floating.class
+/logic/
 /parser/
+/storage/
+/userInterface/
