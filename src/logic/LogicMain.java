@@ -1,12 +1,14 @@
 package logic;
 
+import java.text.ParseException;
+
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
 import parser.ProParser;
 
 public class LogicMain {
 	// For testing
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		
 		Printer.printToUser(Message.WELCOME);
 		Memory mem = new Memory();
@@ -15,7 +17,7 @@ public class LogicMain {
 	}
 	
 	// For testing
-	public static void toDoManager(Memory mem) {
+	public static void toDoManager(Memory mem) throws ParseException {
 		
 		while (true) {
 			Printer.printToUser(Message.PROMPT);
@@ -35,11 +37,11 @@ public class LogicMain {
 	 * Store feedback msg before you return memory back to UI  
 	 */
 
-	public static Memory displayToUI(Memory mem) {
+	public static Memory displayToUI(Memory mem) throws ParseException {
 		return executeCommand("display", mem);
 	}
 	
-	public static Memory executeCommand(String command, Memory mem) {
+	public static Memory executeCommand(String command, Memory mem) throws ParseException {
 		
 		Interpreter input = new Interpreter();
 		input = ProParser.parse(command);

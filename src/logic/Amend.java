@@ -9,7 +9,7 @@ public class Amend {
 
 	protected static void setCompletionTask(Interpreter item,
 			ArrayList<Task> buffer) {
-		int taskId = item.getTaskId();
+		int taskId = item.getTaskID();
 		boolean isCompleted = item.getCompleted();
 
 		int index = SearchEngine.searchBufferIndex(taskId, buffer);
@@ -36,7 +36,7 @@ public class Amend {
 	}
 
 	private static void editTaskName(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskId();
+		int taskId = item.getTaskID();
 		int index = SearchEngine.searchBufferIndex(taskId, buffer);
 		Task task = buffer.get(index);
 
@@ -45,7 +45,7 @@ public class Amend {
 
 	private static void editTaskStartDate(Interpreter item,
 			ArrayList<Task> buffer) {
-		int taskId = item.getTaskId();
+		int taskId = item.getTaskID();
 		int index = SearchEngine.searchBufferIndex(taskId, buffer);
 		Task task = buffer.get(index);
 		
@@ -58,7 +58,7 @@ public class Amend {
 			Deadline deadline = (Deadline) task;
 			Appointment appt = new Appointment();
 			
-			appt.setTaskId(item.getTaskId());
+			appt.setTaskId(item.getTaskID());
 			appt.setTaskName(item.getTaskName());
 			appt.setStartDate(item.getStartDate());
 			appt.setDate(item.getDueDate());
@@ -74,7 +74,7 @@ public class Amend {
 	}
 
 	private static void editTaskDueDate(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskId();
+		int taskId = item.getTaskID();
 		int index = SearchEngine.searchBufferIndex(taskId, buffer);
 		Task task = buffer.get(index);
 		
@@ -89,7 +89,7 @@ public class Amend {
 		else {
 			Deadline deadline = new Deadline();
 			
-			deadline.setTaskId(item.getTaskId());
+			deadline.setTaskId(item.getTaskID());
 			deadline.setTaskName(item.getTaskName());
 			deadline.setDate(item.getDueDate());
 			deadline.setRemarks(item.getRemarks());
@@ -103,7 +103,7 @@ public class Amend {
 	}
 
 	private static void editTaskRemarks(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskId();
+		int taskId = item.getTaskID();
 		int index = SearchEngine.searchBufferIndex(taskId, buffer);
 		Task type = buffer.get(index);
 		

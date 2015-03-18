@@ -6,7 +6,7 @@ import parser.Interpreter;
 
 public class Obliterator {
 	protected static void deleteTask(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskId();
+		int taskId = item.getTaskID();
 		buffer.remove(taskId);
 	}
 	

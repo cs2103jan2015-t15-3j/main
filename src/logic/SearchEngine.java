@@ -108,7 +108,7 @@ public class SearchEngine {
 	}
 
 	protected static Task retrieveTask(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskId();
+		int taskId = item.getTaskID();
 		int index = SearchEngine.searchBufferIndex(taskId, buffer);
 
 		Task retrieveType = buffer.get(index);

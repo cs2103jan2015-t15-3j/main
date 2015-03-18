@@ -77,8 +77,8 @@ public class AddTest {
 
 		assertEquals(2, buffer.size());
 		
-		UnitTest.clearTask(deadline, mem.getBuffer());
-		assertEquals(0, buffer.size());
+		//UnitTest.clearTask(deadline, mem.getBuffer());
+		//assertEquals(0, buffer.size());
 	}
 
 }
