@@ -1,15 +1,35 @@
 package parser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import logic.Enumerator.TaskType;
+
 public class ProParser {
-	
-	public enum CommandType {
-		ADD, DELETE, UPDATE, DISPLAY, EDIT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
-	}
 	
 	Interpreter item = new Interpreter();
 	
-	public static Interpreter parse(String command) {
+	public static Interpreter parse(String input) {
 		Interpreter item = new Interpreter();
+		String[] inputArray = input.split(" ");
+		
+		defineCommand(item, inputArray);
+
+		
+		/*
+			This is the main parser function,
+			Interpreter is the object, where the necessary information is stored
+			Understand different patterns, 
+			and edit your user guide while you found new easy pattern 
+			for each command
+			you'll need a few classes for it
+		*/
+		return item;
+	}
+	
+	public static void defineCommand(Interpreter item, String[] inputArray) {
+		String command = inputArray[0];
+		
 		switch (command) {
 		case "add":
 			item.setCommandType(Interpreter.CommandType.ADD);
@@ -39,20 +59,13 @@ public class ProParser {
 			item.setCommandType(Interpreter.CommandType.POWERSEARCH);
 			break;
 		}
-		
-		/*
-			This is the main parser function,
-			Interpreter is the object, where the necessary information is stored
-			Understand different patterns, 
-			and edit your user guide while you found new easy pattern 
-			for each command
-			you'll need a few classes for it
-		*/
-		return item;
 	}
 	
-	
-	
+	public static void defineType(Interpreter item, String[] inputArray) {
+		int inputArrayLength = inputArray.length; 
+		
+		
+	}
 	
 }
 	/*
