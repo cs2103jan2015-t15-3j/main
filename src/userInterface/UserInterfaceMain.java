@@ -116,7 +116,7 @@ public class UserInterfaceMain implements KeyListener {
 		// load data into the table in the beginning
 		// Loader.populateTable(table, mem);
 
-		Memory mem = new Memory();
+		//Memory mem = new Memory();
 
 		KeyListener listener = new KeyListener() {
 
@@ -125,8 +125,10 @@ public class UserInterfaceMain implements KeyListener {
 					userInput = textFieldInput.getText().toString();
 
 					// mem = LogicMain.executeCommand(userInput, mem);
-
+					
 					InputHistory.getInput(userInput);
+					//pass to logging
+					Logging.getInputLog(userInput);
 
 					displayTextArea.setText("command accepted!");
 					textFieldInput.setText(null);
