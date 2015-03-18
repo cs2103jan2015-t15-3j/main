@@ -1,6 +1,6 @@
 package parser;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import logic.Enumerator.TaskType;
@@ -9,26 +9,28 @@ public class ProParser {
 	
 	Interpreter item = new Interpreter();
 	
-	public static Interpreter parse(String input) {
+	public static Interpreter parse(String input) throws ParseException {
 		Interpreter item = new Interpreter();
-		String[] inputArray = input.split(" ");
+		//Split the input string and check for remarks
+		String[] splitInput = input.split("<");
+		if(splitInput[1] != null) {
+			String remarks = splitInput[1];
+			item.setRemarks(remarks);
+		} 
+		
+		String[] inputArray = splitInput[0].split(" ");
 		
 		defineCommand(item, inputArray);
-
-		
-		/*
-			This is the main parser function,
-			Interpreter is the object, where the necessary information is stored
-			Understand different patterns, 
-			and edit your user guide while you found new easy pattern 
-			for each command
-			you'll need a few classes for it
-		*/
+		defineTaskType(item, inputArray);
+		defineTaskNameAndDate(item, inputArray);
+		item.setTaskID(0);
+		item.setIsCompleted(false);
+				
 		return item;
 	}
 	
 	public static void defineCommand(Interpreter item, String[] inputArray) {
-		String command = inputArray[0];
+		String command = inputArray[0].toLowerCase();
 		
 		switch (command) {
 		case "add":
@@ -61,54 +63,63 @@ public class ProParser {
 		}
 	}
 	
-	public static void defineType(Interpreter item, String[] inputArray) {
+	public static void defineTaskType(Interpreter item, String[] inputArray) {
 		int inputArrayLength = inputArray.length; 
-		
-		
-	}
-	
-}
-	/*
-	public ProParser() {
-		id = null;
-		command = null; 
-		descriptionText = null;	
-		startDate = null;
-		endDate = null;
-		commentText = null;
-		isCompleted = false;
-	}	
-	
-	public void Decode(String input) {
-		id = input.trim().split("\\s+")[0];
-		command = input.trim().split("\\s+")[1];
-		String[] textInput = identifyTextInput(input, command);
-		
-	}
-	
-	public static String[] identifyTextInput(String userInput, String command) {
-		String[] textInputWithoutID = (userInput.replace(id,"").trim()).trim().split("\\s+");
-		String[] textContent = (userInput.replace(command,"").trim()).trim().split("\\s+");  
-		return textContent;
-	}
-	
-	private void identifyCommand(String command, String[] textContent) {
-		switch (command){
-		case "add":
-			methods.add(textContent);
-			break;
-		case "update":
-			methods.update(textContent);
-			break;
-		case "delete":
-			methods.delete(textContent);
-			break;
-		case "display":
-			methods.display();
-			break;
-		case "exit":
-			//storeText();
-			System.exit(0);
+		String checkLast = inputArray[inputArrayLength - 1];
+		boolean isDateValid = isDate(checkLast);
+		if(!isDateValid) {
+			item.setType(TaskType.FLOATING);
+		} else {
+			String check2ndLast = inputArray[inputArrayLength - 2];
+			boolean checkStartDate = isDate(check2ndLast);
+			if(!checkStartDate) {
+				item.setType(TaskType.DEADLINE);
+			} else {
+				item.setType(TaskType.APPOINTMENT);
+			}
 		}
 	}
-	*/
+	
+	public static boolean isDate(String checkInput) {
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.setLenient(false);
+		try {
+			Date date = sdf.parse(checkInput);
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}	
+	
+	public static void defineTaskNameAndDate(Interpreter item, String[] inputArray) throws ParseException {
+		int inputArrayLength = inputArray.length; 
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		TaskType checkTaskType = item.getType(); 
+		switch(checkTaskType) {
+		case FLOATING:
+			defineTaskName(item, inputArray, inputArrayLength - 1);
+			break;
+		case DEADLINE:
+			defineTaskName(item, inputArray, inputArrayLength - 2);
+			Date date = sdf.parse(inputArray[inputArrayLength - 1]);
+			item.setDueDate(date);
+			break;		
+		case APPOINTMENT:
+			defineTaskName(item, inputArray, inputArrayLength - 3);
+			Date dueDate = sdf.parse(inputArray[inputArrayLength - 1]);
+			item.setDueDate(dueDate);
+			Date startDate = sdf.parse(inputArray[inputArrayLength - 2]);
+			item.setStartDate(startDate);
+			break;
+		}
+	}
+	
+	public static void defineTaskName(Interpreter item, String[] inputArray, int lastIndex) {
+		String taskName = " ";
+		for(int i=1; i<=lastIndex; i++){
+			taskName = taskName.concat(inputArray[i]);
+		}
+		item.setTaskName(taskName);
+	}
+}
