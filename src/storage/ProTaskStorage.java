@@ -70,22 +70,22 @@ public class ProTaskStorage {
 			createDataBase(taskDataBase);
 
 			// addString is just for testing purposes!
-/*
-			addStringTask(1, "Complete CS2103 tut", "08 March 13:00",
-					"09 March 15:40", "Some qns not sure", false);
-			addStringTask(2, "Go for a run", "21 Feb 08:00", " 21 Feb 08:15",
-					"so tiring", true);
-			addStringTask(3, "Silat", " 9 Feb 09:00", "12:00", "seni", false);
-*/
-		} else {
-			try {
-				loadAllTasks();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-
-				e.printStackTrace();
-			}
+			/*
+			 * addStringTask(1, "Complete CS2103 tut", "08 March 13:00",
+			 * "09 March 15:40", "Some qns not sure", false); addStringTask(2,
+			 * "Go for a run", "21 Feb 08:00", " 21 Feb 08:15", "so tiring",
+			 * true); addStringTask(3, "Silat", " 9 Feb 09:00", "12:00", "seni",
+			 * false);
+			 */
 		}
+		try {
+			loadAllTasks();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+		}
+
 	}
 
 	private boolean checkFileExist() {
@@ -266,20 +266,19 @@ public class ProTaskStorage {
 		}
 	}
 
-	public void addTasks(Memory buffer)
-	{
+	public void addTasks(Memory buffer) {
 		ArrayList<Task> tasks = buffer.getBuffer();
-		for (Task task : tasks)
-		{			
-			addStringTask(task.getTaskId(),task.getTaskName(),"","",task.getRemarks(),false);
+		for (Task task : tasks) {
+			addStringTask(task.getTaskId(), task.getTaskName(), "", "",
+					task.getRemarks(), false);
 		}
 	}
-	
+
 	public void clearCompletedTasks() {
 
 		createDataBase(tempDataBase);
 		for (Appointment task : allAppointments) {
-			if (task.getCompleted() ==	false) {
+			if (task.getCompleted() == false) {
 				addAppointment(task, tempDataBase);
 			}
 		}
@@ -330,6 +329,9 @@ public class ProTaskStorage {
 				allAppointments = new ArrayList<Appointment>();
 
 			}
+			if (allTasks == null) {
+				allTasks = new ArrayList<Task>();
+			}
 
 			// Read CSV line by line and use the string array as you want
 			for (String[] row : allRows) {
@@ -344,24 +346,24 @@ public class ProTaskStorage {
 					isColumn = false;
 
 				} else {
-					
+
 					Task newTask = new Task();
 					newTask.setTaskId(Integer.parseInt(row[0]));
 					newTask.setTaskName(row[1]);
-					
+
 					allTasks.add(newTask);
 					/*
-					Appointment newApmt = new Appointment();
-
-					newApmt.setTaskId(Integer.parseInt(row[0]));
-					newApmt.setTaskName(row[1]);
-					newApmt.setStartDate(stringToDate(row[2]));
-					newApmt.setDate(stringToDate(row[3]));
-					newApmt.setRemarks(row[4]);
-					newApmt.setIsCompleted(stringToBoolean(row[5]));
-
-					allAppointments.add(newApmt);
-					*/
+					 * Appointment newApmt = new Appointment();
+					 * 
+					 * newApmt.setTaskId(Integer.parseInt(row[0]));
+					 * newApmt.setTaskName(row[1]);
+					 * newApmt.setStartDate(stringToDate(row[2]));
+					 * newApmt.setDate(stringToDate(row[3]));
+					 * newApmt.setRemarks(row[4]);
+					 * newApmt.setIsCompleted(stringToBoolean(row[5]));
+					 * 
+					 * allAppointments.add(newApmt);
+					 */
 					// System.out.println(Arrays.toString(row));
 				}
 			}
