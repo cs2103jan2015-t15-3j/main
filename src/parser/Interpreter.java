@@ -16,6 +16,8 @@ public class Interpreter {
 	private String taskName;
 	private String remarks;
 	private boolean isCompleted;
+	private boolean isDueDate;
+	private boolean isStartDate;
 	private Date dueDate;
 	private Date startDate;
 	private CommandType command;
@@ -57,7 +59,7 @@ public class Interpreter {
 	public String getKey() {
 		return this.searchKey;
 	}
-
+		
 	public void setCommandType(CommandType command) {
 		this.command = command;
 	}
@@ -76,6 +78,14 @@ public class Interpreter {
 
 	public void setIsCompleted(boolean isCompleted) {
 		this.isCompleted = isCompleted;
+	}
+	
+	public void setIsDueDate(boolean isDueDate) {
+		this.isDueDate = isDueDate;
+	}
+	
+	public void setIsStartDate(boolean isStartDate) {
+		this.isStartDate = isStartDate;
 	}
 
 	public void setType(TaskType type) {

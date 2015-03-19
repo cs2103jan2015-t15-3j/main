@@ -20,6 +20,7 @@ public class ProParser {
 			defineCommand(item, inputArray);
 		} else {
 			String[] inputArray = input.split(" ");
+			item.setRemarks("");
 			defineCommand(item, inputArray);
 		}
 		
@@ -96,11 +97,14 @@ public class ProParser {
 		boolean isDateValid = isDate(checkLast);
 		if(!isDateValid) {
 			item.setType(TaskType.FLOATING);
+			item.setIsDueDate(false);
+			item.setIsStartDate(false);
 		} else {
 			String check2ndLast = inputArray[inputArrayLength - 2];
 			boolean checkStartDate = isDate(check2ndLast);
 			if(!checkStartDate) {
 				item.setType(TaskType.DEADLINE);
+				item.setIsStartDate(false);
 			} else {
 				item.setType(TaskType.APPOINTMENT);
 			}
