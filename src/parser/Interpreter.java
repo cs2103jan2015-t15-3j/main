@@ -20,7 +20,7 @@ public class Interpreter {
 	private Date startDate;
 	private CommandType command;
 	private TaskType type;
-	private String key;
+	private String searchKey;
 
 	public CommandType getCommand() {
 		return this.command;
@@ -55,7 +55,7 @@ public class Interpreter {
 	}
 
 	public String getKey() {
-		return this.key;
+		return this.searchKey;
 	}
 
 	public void setCommandType(CommandType command) {
@@ -91,7 +91,7 @@ public class Interpreter {
 	}
 
 	public void setKey(String key) {
-		this.key = key;
+		this.searchKey = key;
 	}
 
 	public String getDueDateString() {
