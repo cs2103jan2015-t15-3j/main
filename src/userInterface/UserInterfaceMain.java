@@ -129,18 +129,11 @@ public class UserInterfaceMain{
 					
 					userInput = textFieldInput.getText().toString();
 					
-<<<<<<< HEAD
 					mem = LogicMain.executeCommand(userInput, mem);
 					ArrayList<Task> printList = mem.getBuffer();
 					
 					//testing if output is correct
 					System.out.println(printList);
-=======
-					 mem = LogicMain.executeCommand(userInput, mem);
-					 
-					 ArrayList<Task> test = mem.getBuffer();
-					 System.out.println(test);
->>>>>>> origin/master
 					
 					updateTable(printList);
 					
@@ -157,18 +150,17 @@ public class UserInterfaceMain{
 					
 				}
 			}
-
 			
-			Task task = new Task();
+			
 			public void updateTable(ArrayList<Task> printList){
 				
 				Iterator<Task> ltr = printList.iterator();
 				
-				int i = 0;
 				int j = 0;
 				
-				if(ltr.hasNext()){
-					toDoTable.setValueAt(task.getTaskId(), 0, j);
+				while(ltr.hasNext()){
+					Task task = ltr.next();
+					toDoTable.setValueAt(task.getTaskID(), 0, j);
 					toDoTable.setValueAt(task.getTaskName().toString(), 0, j+1);
 					toDoTable.setValueAt(task.getType(), 0, j+2);
 					System.out.println(task.getTaskName());

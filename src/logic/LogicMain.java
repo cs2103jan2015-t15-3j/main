@@ -100,6 +100,7 @@ public class LogicMain {
 		}
 		// Save to file
 		storage1.writeToFile(mem);
+		System.out.println(mem.getBuffer());
 		return mem;
 	}
 	/*
