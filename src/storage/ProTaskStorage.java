@@ -70,13 +70,13 @@ public class ProTaskStorage {
 			createDataBase(taskDataBase);
 
 			// addString is just for testing purposes!
-
+/*
 			addStringTask(1, "Complete CS2103 tut", "08 March 13:00",
 					"09 March 15:40", "Some qns not sure", false);
 			addStringTask(2, "Go for a run", "21 Feb 08:00", " 21 Feb 08:15",
 					"so tiring", true);
 			addStringTask(3, "Silat", " 9 Feb 09:00", "12:00", "seni", false);
-
+*/
 		} else {
 			try {
 				loadAllTasks();
@@ -349,6 +349,8 @@ public class ProTaskStorage {
 					newTask.setTaskId(Integer.parseInt(row[0]));
 					newTask.setTaskName(row[1]);
 					
+					allTasks.add(newTask);
+					/*
 					Appointment newApmt = new Appointment();
 
 					newApmt.setTaskId(Integer.parseInt(row[0]));
@@ -359,7 +361,7 @@ public class ProTaskStorage {
 					newApmt.setIsCompleted(stringToBoolean(row[5]));
 
 					allAppointments.add(newApmt);
-
+					*/
 					// System.out.println(Arrays.toString(row));
 				}
 			}
