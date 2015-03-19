@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Locale;
 
 import logic.Appointment;
+import logic.Memory;
+import logic.Task;
+import logic.Enumerator.TaskType;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -24,7 +27,8 @@ public class ProTaskStorage {
 	private final String taskDataBase = "test.csv";
 	private final String tempDataBase = "temp.csv";
 
-	protected ArrayList<Appointment> allTasks;
+	protected ArrayList<Appointment> allAppointments;
+	protected ArrayList<Task> allTasks;
 	private String[] dataBaseColumns;
 
 	/*
@@ -262,10 +266,19 @@ public class ProTaskStorage {
 		}
 	}
 
+	public void addTasks(Memory buffer)
+	{
+		ArrayList<Task> tasks = buffer.getBuffer();
+		for (Task task : tasks)
+		{			
+			addStringTask(task.getTaskId(),task.getTaskName(),"","",task.getRemarks(),false);
+		}
+	}
+	
 	public void clearCompletedTasks() {
 
 		createDataBase(tempDataBase);
-		for (Appointment task : allTasks) {
+		for (Appointment task : allAppointments) {
 			if (task.getCompleted() ==	false) {
 				addAppointment(task, tempDataBase);
 			}
@@ -276,7 +289,7 @@ public class ProTaskStorage {
 	public void deleteTask(int ID) {
 
 		createDataBase(tempDataBase);
-		for (Appointment app : allTasks) {
+		for (Appointment app : allAppointments) {
 			if (app.getTaskId() != ID) {
 				addAppointment(app, tempDataBase);
 			}
@@ -288,7 +301,7 @@ public class ProTaskStorage {
 
 		createDataBase(tempDataBase);
 
-		for (Appointment app : allTasks) {
+		for (Appointment app : allAppointments) {
 
 			if (app.getTaskId() != updatedApp.getTaskId()) {
 				addAppointment(app, tempDataBase);
@@ -312,9 +325,9 @@ public class ProTaskStorage {
 
 			List<String[]> allRows = reader.readAll();
 
-			if (allTasks == null) {
+			if (allAppointments == null) {
 
-				allTasks = new ArrayList<Appointment>();
+				allAppointments = new ArrayList<Appointment>();
 
 			}
 
@@ -331,7 +344,11 @@ public class ProTaskStorage {
 					isColumn = false;
 
 				} else {
-
+					
+					Task newTask = new Task();
+					newTask.setTaskId(Integer.parseInt(row[0]));
+					newTask.setTaskName(row[1]);
+					
 					Appointment newApmt = new Appointment();
 
 					newApmt.setTaskId(Integer.parseInt(row[0]));
@@ -341,7 +358,7 @@ public class ProTaskStorage {
 					newApmt.setRemarks(row[4]);
 					newApmt.setIsCompleted(stringToBoolean(row[5]));
 
-					allTasks.add(newApmt);
+					allAppointments.add(newApmt);
 
 					// System.out.println(Arrays.toString(row));
 				}
