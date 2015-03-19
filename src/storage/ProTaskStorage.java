@@ -266,12 +266,20 @@ public class ProTaskStorage {
 		}
 	}
 
-	public void addTasks(Memory buffer) {
-		ArrayList<Task> tasks = buffer.getBuffer();
-		for (Task task : tasks) {
-			addStringTask(task.getTaskId(), task.getTaskName(), "", "",
+	public Memory addTasks(Memory buffer) {
+		ArrayList<Task> obtainedTasks = buffer.getBuffer();
+		
+		obtainedTasks.removeAll(allTasks);
+		
+		for (Task task : obtainedTasks) {
+			System.out.println(task.getTaskName());
+			addStringTask(buffer.getCurrentID(), task.getTaskName(), "", "",
 					task.getRemarks(), false);
+			allTasks.add(task);
 		}
+		
+		buffer.setBuffer(allTasks);
+		return buffer;
 	}
 
 	public void clearCompletedTasks() {
