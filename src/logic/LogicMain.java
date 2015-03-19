@@ -7,10 +7,9 @@ import parser.Interpreter;
 import parser.Interpreter.CommandType;
 import parser.ProParser;
 import storage.ProTaskStorage;
-//import storage.ProTaskStorage;
 
 public class LogicMain {
-	ProTaskStorage storage = new ProTaskStorage();
+	
 	// For testing
 	public static void main(String[] args) throws ParseException {
 		
@@ -19,6 +18,7 @@ public class LogicMain {
 		
 		// Storage.openFile(InternalStorage.getFilePath(), InternalStorage.getBuffer());
 		toDoManager(mem);
+		//storage.addTasks(mem);
 	}
 	
 	// For testing
@@ -43,7 +43,8 @@ public class LogicMain {
 	 */
 
 	public Memory displayToUI(Memory mem) throws ParseException, FileNotFoundException {
-		storage.loadAllTasks();
+		//storage.addTasks(mem);
+		//storage.loadAllTasks();
 		return executeCommand("display", mem);
 	}
 	
@@ -96,6 +97,7 @@ public class LogicMain {
 			Printer.printToUser(Message.INVALID_COMMAND);
 			break;
 		}
+		// Save to file
 		storage1.addTasks(mem);
 		return mem;
 	}
