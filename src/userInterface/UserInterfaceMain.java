@@ -129,11 +129,18 @@ public class UserInterfaceMain{
 					
 					userInput = textFieldInput.getText().toString();
 					
+<<<<<<< HEAD
 					mem = LogicMain.executeCommand(userInput, mem);
 					ArrayList<Task> printList = mem.getBuffer();
 					
 					//testing if output is correct
 					System.out.println(printList);
+=======
+					 mem = LogicMain.executeCommand(userInput, mem);
+					 
+					 ArrayList<Task> test = mem.getBuffer();
+					 System.out.println(test);
+>>>>>>> origin/master
 					
 					updateTable(printList);
 					

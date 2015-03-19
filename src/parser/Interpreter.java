@@ -9,7 +9,7 @@ import logic.Enumerator.TaskType;
 public class Interpreter {
 
 	public enum CommandType {
-		ADD, DELETE, CLEAR, UPDATE, DISPLAY, EDIT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
+		ADD, DELETE, CLEAR, UPDATE, DISPLAY, AMEND, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
 	}
 
 	private int taskID;
@@ -22,7 +22,7 @@ public class Interpreter {
 	private Date startDate;
 	private CommandType command;
 	private TaskType type;
-	private String searchKey;
+	private String key;
 
 	public CommandType getCommand() {
 		return this.command;
@@ -57,7 +57,7 @@ public class Interpreter {
 	}
 
 	public String getKey() {
-		return this.searchKey;
+		return this.key;
 	}
 		
 	public void setCommandType(CommandType command) {
@@ -101,7 +101,7 @@ public class Interpreter {
 	}
 
 	public void setKey(String key) {
-		this.searchKey = key;
+		this.key = key;
 	}
 
 	public String getDueDateString() {

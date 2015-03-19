@@ -11,7 +11,7 @@ public class SearchEngine {
 		ArrayList<Task> buffer = mem.getBuffer();
 
 		if (input.matches("\\d+")) {
-			mem.setTempBuffer(searchByTaskId(input, buffer));
+			mem.setTempBuffer(searchByTaskID(input, buffer));
 		} else {
 			mem.setTempBuffer(searchByWords(input, buffer));
 		}
@@ -21,40 +21,38 @@ public class SearchEngine {
 		int index = 0;
 
 		for (int count = 0; count < buffer.size(); count++) {
-			if (buffer.get(count).getTaskId() == taskId) {
+			if (buffer.get(count).getTaskID() == taskId) {
 				index = count;
 				break;
 			}
 		}
 		return index;
 	}
-
-	// tell ash to convert to string
-
-	private static ArrayList<Task> searchByTaskId(String input,
+	
+	private static ArrayList<Task> searchByTaskID(String input,
 			ArrayList<Task> buffer) {
-		ArrayList<Task> searchList = new ArrayList<Task>();
+		ArrayList<Task> searchByIDList = new ArrayList<Task>();
 		int id = Converter.convertToInt(input);
-		Task assignment = buffer.get(id);
+		Task task = buffer.get(id);
 
-		searchList.add(assignment);
-
-		return searchList;
+		searchByIDList.add(task);
+		
+		return searchByIDList;
 	}
 
 	private static ArrayList<Task> searchByWords(String wordSearch,
 			ArrayList<Task> buffer) {
-		ArrayList<Task> searchList = new ArrayList<Task>();
+		ArrayList<Task> searchByWordsList = new ArrayList<Task>();
 
 		for (int count = 0; count < buffer.size(); count++) {
 			String description = buffer.get(count).getTaskName().toLowerCase();
 
 			if (description.contains(wordSearch)) {
-				searchList.add(searchBySentence(wordSearch, count, description,
+				searchByWordsList.add(searchBySentence(wordSearch, count, description,
 						buffer));
 			}
 		}
-		return searchList;
+		return searchByWordsList;
 	}
 
 	private static Task searchBySentence(String wordSearch, int count,
@@ -109,7 +107,7 @@ public class SearchEngine {
 
 	protected static Task retrieveTask(Interpreter item, ArrayList<Task> buffer) {
 		int taskId = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskId, buffer);
+		int index = searchBufferIndex(taskId, buffer);
 
 		Task retrieveType = buffer.get(index);
 
