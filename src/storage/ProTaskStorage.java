@@ -210,7 +210,7 @@ public class ProTaskStorage {
 
 			ArrayList<String> record = new ArrayList<String>();
 
-			record.add(intToString(newApmt.getTaskId()));
+			record.add(intToString(newApmt.getTaskID()));
 			record.add(newApmt.getTaskName());
 			record.add(newApmt.getStartDateString());
 			record.add(newApmt.getDueDateString());
@@ -266,7 +266,7 @@ public class ProTaskStorage {
 
 			ArrayList<String> record = new ArrayList<String>();
 
-			record.add(intToString(newApmt.getTaskId()));
+			record.add(intToString(newApmt.getTaskID()));
 			record.add(newApmt.getTaskName());
 			record.add(newApmt.getStartDateString());
 			record.add(newApmt.getDueDateString());
@@ -326,7 +326,7 @@ public class ProTaskStorage {
 
 		createDataBase(tempDataBase);
 		for (Appointment app : allAppointments) {
-			if (app.getTaskId() != ID) {
+			if (app.getTaskID() != ID) {
 				addAppointment(app, tempDataBase);
 			}
 		}
@@ -339,7 +339,7 @@ public class ProTaskStorage {
 
 		for (Appointment app : allAppointments) {
 
-			if (app.getTaskId() != updatedApp.getTaskId()) {
+			if (app.getTaskID() != updatedApp.getTaskID()) {
 				addAppointment(app, tempDataBase);
 
 			}
@@ -385,7 +385,7 @@ public class ProTaskStorage {
 				} else {
 
 					Task newTask = new Task();
-					newTask.setTaskId(Integer.parseInt(row[0]));
+					newTask.setTaskID(Integer.parseInt(row[0]));
 					newTask.setTaskName(row[1]);
 
 					allTasks.add(newTask);

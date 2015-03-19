@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import logic.LogicMain; //import LogicMain
 import logic.Memory;
+import logic.Task;
 
 public class UserInterfaceMain implements KeyListener {
 
@@ -127,6 +128,9 @@ public class UserInterfaceMain implements KeyListener {
 					userInput = textFieldInput.getText().toString();
 					
 					 mem = LogicMain.executeCommand(userInput, mem);
+					 
+					 ArrayList<Task> test = mem.getBuffer();
+					 System.out.println(test);
 					
 					InputHistory.getInput(userInput);
 					//pass to logging

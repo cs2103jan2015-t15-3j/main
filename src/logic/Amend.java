@@ -2,111 +2,112 @@ package logic;
 
 import java.util.ArrayList;
 
+import logic.Enumerator.KEY;
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
 
 public class Amend {
 
-	protected static void setCompletionTask(Interpreter item,
-			ArrayList<Task> buffer) {
-		int taskId = item.getTaskID();
+	protected static void setCompletion(Interpreter item, ArrayList<Task> buffer) {
+		int taskID = item.getTaskID();
 		boolean isCompleted = item.getCompleted();
 
-		int index = SearchEngine.searchBufferIndex(taskId, buffer);
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
 		buffer.get(index).setIsCompleted(isCompleted);
 	}
 
-	protected static void determineEdit(Interpreter item, Memory mem) {
-		String key = item.getKey();
+	protected static void determineAmend(Interpreter item, Memory mem) {
+		KEY key = Converter.KeyConverter(item.getKey().toLowerCase());
 		ArrayList<Task> buffer = mem.getBuffer();
 
 		switch (key) {
-		case "taskName":
-			editTaskName(item, buffer);
+		case TASKNAME:
+			amendName(item, buffer);
 			break;
-		case "startDate":
-			editTaskStartDate(item, buffer);
+		case STARTDATE:
+			amendStartDate(item, buffer);
 			break;
-		case "dueDate":
-			editTaskDueDate(item, buffer);
+		case DUEDATE:
+			amendDueDate(item, buffer);
 			break;
 		default:
-			editTaskRemarks(item, buffer);
+			amendRemarks(item, buffer);
 		}
 	}
 
-	private static void editTaskName(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskId, buffer);
+	private static void amendName(Interpreter item, ArrayList<Task> buffer) {
+		int taskID = item.getTaskID();
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
 		Task task = buffer.get(index);
 
 		task.setTaskName(item.getTaskName());
 	}
 
-	private static void editTaskStartDate(Interpreter item,
-			ArrayList<Task> buffer) {
-		int taskId = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskId, buffer);
+	/*
+	 * Determines the task type. If appointment, we will be concern about the
+	 * start date. If deadline, we will store the existing data into an new
+	 * appointment object. Floating tasks are not allowed.
+	 */
+
+	private static void amendStartDate(Interpreter item, ArrayList<Task> buffer) {
+		int taskID = item.getTaskID();
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
 		Task task = buffer.get(index);
-		
-		
-		if(task.getType().equals(TaskType.APPOINTMENT)) {
+
+		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
 			appt.setStartDate(item.getStartDate());
-		}
-		else if (task.getType().equals(TaskType.DEADLINE)) {
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) task;
 			Appointment appt = new Appointment();
-			
-			appt.setTaskId(item.getTaskID());
-			appt.setTaskName(item.getTaskName());
-			appt.setStartDate(item.getStartDate());
-			appt.setDate(item.getDueDate());
-			appt.setRemarks(item.getRemarks());
-		}
 
-		/*
-		 * check task.assignmentType if(appointment, just .setStartDate) else
-		 * if(deadline, store all of deadline data into a new appointment before
-		 * you replace into the buffer) floating task not acceptable for this
-		 * function since no duedate is set
-		 */
+			appt.setTaskID(deadline.getTaskID());
+			appt.setTaskName(deadline.getTaskName());
+			appt.setStartDate(item.getStartDate());
+			appt.setDate(deadline.getDate());
+			appt.setRemarks(deadline.getRemarks());
+
+			Obliterator.deleteTask(taskID, buffer);
+			ToBuffer.addAppointmentToBuffer(appt, buffer);
+		}
 	}
 
-	private static void editTaskDueDate(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskId, buffer);
+	/*
+	 * Determines the task type. If appointment or deadline, we will be concern
+	 * about the due date. If floating, we will store the existing data into an
+	 * new deadline object.
+	 */
+
+	private static void amendDueDate(Interpreter item, ArrayList<Task> buffer) {
+		int taskID = item.getTaskID();
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
 		Task task = buffer.get(index);
-		
+
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
 			appt.setDate(item.getDueDate());
-		}
-		else if (task.getType().equals(TaskType.DEADLINE)) {
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) task;
-			deadline.setDate(item.getDueDate());
-		}
-		else {
+			deadline.setDate(deadline.getDate());
+		} else if (task.getType().equals(TaskType.FLOATING)) {
+			Task tasks = task;
 			Deadline deadline = new Deadline();
-			
-			deadline.setTaskId(item.getTaskID());
-			deadline.setTaskName(item.getTaskName());
-			deadline.setDate(item.getDueDate());
-			deadline.setRemarks(item.getRemarks());
-		}
 
-		/*
-		 * check task.assignmentType if(appointment/deadline, just .setDueDate)
-		 * else if(Floating, store all of floating data into a new deadline
-		 * before you replace into the buffer)
-		 */
+			deadline.setTaskID(tasks.getTaskID());
+			deadline.setTaskName(tasks.getTaskName());
+			deadline.setRemarks(tasks.getRemarks());
+			deadline.setDate(item.getDueDate());
+
+			Obliterator.deleteTask(taskID, buffer);
+			ToBuffer.addDeadlineToBuffer(deadline, buffer);
+		}
 	}
 
-	private static void editTaskRemarks(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskId, buffer);
+	private static void amendRemarks(Interpreter item, ArrayList<Task> buffer) {
+		int taskID = item.getTaskID();
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
 		Task type = buffer.get(index);
-		
+
 		type.setRemarks(item.getRemarks());
 	}
 }

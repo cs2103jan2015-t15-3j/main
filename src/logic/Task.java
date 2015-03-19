@@ -4,31 +4,31 @@ import logic.Enumerator.TaskType;
 
 public class Task {
 
-	private int taskId;
+	private int taskID;
 	private String taskName;
 	private boolean isCompleted;
 	private String remarks;
 	private TaskType type;
 
 	public Task() {
-		this.taskId = 0;
+		this.taskID = 0;
 		this.taskName = null;
 		this.isCompleted = false;
 		this.remarks = null;
 		this.type = TaskType.FLOATING;
 	}
 
-	public Task(int taskId, String taskName, String remarks,
+	public Task(int taskID, String taskName, String remarks,
 			boolean isCompleted) {
-		this.taskId = taskId;
+		this.taskID = taskID;
 		this.taskName = taskName;
 		this.remarks = remarks;
 		this.isCompleted = isCompleted;
 		this.type = TaskType.FLOATING;
 	}
 
-	public int getTaskId() {
-		return this.taskId;
+	public int getTaskID() {
+		return this.taskID;
 	}
 
 	public String getTaskName() {
@@ -51,8 +51,8 @@ public class Task {
 		this.taskName = taskName;
 	}
 
-	public void setTaskId(int taskId) {
-		this.taskId = taskId;
+	public void setTaskID(int taskID) {
+		this.taskID = taskID;
 	}
 
 	public void setRemarks(String remarks) {
@@ -69,7 +69,7 @@ public class Task {
 
 	@Override
 	public String toString() {
-		return this.getTaskId() + "+" + this.getTaskName() + "+"
+		return this.getTaskID() + "+" + this.getTaskName() + "+"
 				+ this.getRemarks() + "+" + this.getCompleted() + "+"
 				+ this.getType();
 	}
