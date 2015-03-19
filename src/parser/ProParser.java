@@ -7,8 +7,6 @@ import logic.Enumerator.TaskType;
 
 public class ProParser {
 	
-	Interpreter item = new Interpreter();
-	
 	public static Interpreter parse(String input) throws ParseException {
 		Interpreter item = new Interpreter();
 		//Split the input string and check for remarks
@@ -115,7 +113,7 @@ public class ProParser {
 	//check if each box in the array matches the dd/mm/yy format
 	//check if the integers are valid i.e within the range
 	private static boolean isDate(String checkInput) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setLenient(false);
 		try {
 			Date date = sdf.parse(checkInput);
