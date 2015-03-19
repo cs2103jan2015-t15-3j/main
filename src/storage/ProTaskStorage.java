@@ -64,7 +64,7 @@ public class ProTaskStorage {
 	public ProTaskStorage() {
 
 		dataBaseColumns = new String[] { "ID", "Description", "Start", "End",
-				"Remarks", "Completed" };
+				"Remarks", "Completed", "Type" };
 		if (!checkFileExist()) {
 
 			createDataBase(taskDataBase);
@@ -168,7 +168,24 @@ public class ProTaskStorage {
 
 		return toReturnBoolean;
 	}
-
+	private String convertToAbbreviation(String type)
+	{
+		String returnType = "NIL";
+		
+		if (type.equals("FLOATING"))
+		{
+			returnType = "FL";
+		}
+		else if (type.equals("APPOINTMENT"))
+		{
+			returnType = "AP";
+		}
+		else if (type.equals("DEADLINE"))
+		{
+			returnType = "DL";
+		}
+		return returnType;
+	}
 	private Date stringToDate(String stringDate) {
 		DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm a",
 				Locale.ENGLISH);
@@ -213,7 +230,7 @@ public class ProTaskStorage {
 
 	// for testing purposes
 	public void addStringTask(int id, String desc, String startTime,
-			String endTime, String remarks, boolean isCompleted) {
+			String endTime, String remarks, boolean isCompleted, String type) {
 
 		try {
 			CSVWriter writer = new CSVWriter(new FileWriter(taskDataBase, true));
@@ -226,6 +243,7 @@ public class ProTaskStorage {
 			record.add(endTime);
 			record.add(remarks);
 			record.add(String.valueOf(isCompleted));
+			record.add(convertToAbbreviation(type));
 
 			writer.writeNext((String[])
 
@@ -266,15 +284,26 @@ public class ProTaskStorage {
 		}
 	}
 
-	public Memory addTasks(Memory buffer) {
+	public Memory writeToFile(Memory buffer) {
 		ArrayList<Task> obtainedTasks = buffer.getBuffer();
+		ArrayList<Task> temp = new ArrayList<Task>();
 		
-		obtainedTasks.removeAll(allTasks);
+		//int noOfRemainingTasks = buffer.getCurrentID() - allTasks.size();
+		int counter = 1;
 		
-		for (Task task : obtainedTasks) {
+		for (Task task: obtainedTasks)
+		{
+			if (counter == buffer.getCurrentID() )
+			{
+				temp.add(task);
+			}
+			else counter ++;
+		}
+		
+		for (Task task : temp) {
 			System.out.println(task.getTaskName());
 			addStringTask(buffer.getCurrentID(), task.getTaskName(), "", "",
-					task.getRemarks(), false);
+					task.getRemarks(), false, task.getType().toString());
 			allTasks.add(task);
 		}
 		
