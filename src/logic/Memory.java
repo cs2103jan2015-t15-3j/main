@@ -8,13 +8,13 @@ public class Memory {
 	private ArrayList<Task> buffer;
 	private ArrayList<Task> tempBuffer;
 	private Scanner scanner;
-	private int currentId;
+	private int currentID;
 	private String feedbackMsg;
 	
 	public Memory() {
 		buffer = new ArrayList<Task>();
 		scanner = new Scanner(System.in);
-		currentId = 0;
+		currentID = 0;
 	}
 
 	public ArrayList<Task> getBuffer() {
@@ -26,12 +26,12 @@ public class Memory {
 	}
 
 	public int numberGenerator () {
-		this.currentId += 1;
-		return this.currentId;
+		this.currentID++;
+		return this.currentID;
 	}
 
-	public int getCurrentId() {
-		return this.currentId;
+	public int getCurrentID() {
+		return this.currentID;
 	}
 	
 	public String getFeedback() {
@@ -50,8 +50,8 @@ public class Memory {
 		this.tempBuffer = tempBuffer;
 	}
 
-	public void setCurrentId(int currentId) {
-		this.currentId = currentId;
+	public void setCurrentID(int currentID) {
+		this.currentID = currentID;
 	}
 	
 	public void setFeedbackMsg(String feedbackMsg) {

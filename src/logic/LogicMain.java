@@ -1,17 +1,22 @@
 package logic;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
 import parser.ProParser;
+import storage.ProTaskStorage;
+//import storage.ProTaskStorage;
 
 public class LogicMain {
+	ProTaskStorage storage = new ProTaskStorage();
 	// For testing
 	public static void main(String[] args) throws ParseException {
 		
 		Printer.printToUser(Message.WELCOME);
 		Memory mem = new Memory();
+		
 		// Storage.openFile(InternalStorage.getFilePath(), InternalStorage.getBuffer());
 		toDoManager(mem);
 	}
@@ -37,14 +42,21 @@ public class LogicMain {
 	 * Store feedback msg before you return memory back to UI  
 	 */
 
-	public static Memory displayToUI(Memory mem) throws ParseException {
+	public Memory displayToUI(Memory mem) throws ParseException, FileNotFoundException {
+		storage.loadAllTasks();
 		return executeCommand("display", mem);
 	}
 	
-	public static Memory executeCommand(String command, Memory mem) throws ParseException {
-		
+	public static Memory executeCommand(String command, Memory mem) {
+		ProTaskStorage storage1 = new ProTaskStorage();
 		Interpreter input = new Interpreter();
-		input = ProParser.parse(command);
+
+		try {
+			input = ProParser.parse(command);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+		}
+
 		CommandType commandInfo = input.getCommand();
 		
 		switch (commandInfo){
@@ -84,7 +96,7 @@ public class LogicMain {
 			Printer.printToUser(Message.INVALID_COMMAND);
 			break;
 		}
-		// save function
+		storage1.addTasks(mem);
 		return mem;
 	}
 /*

@@ -26,6 +26,7 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.awt.event.KeyListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import logic.LogicMain; //import LogicMain
@@ -37,6 +38,7 @@ public class UserInterfaceMain implements KeyListener {
 	public static JTextField textFieldInput;
 	private JTable toDoTable;
 	private static String userInput = new String();
+	Memory mem = new Memory();
 
 	/**
 	 * Launch the application.
@@ -116,15 +118,15 @@ public class UserInterfaceMain implements KeyListener {
 		// load data into the table in the beginning
 		// Loader.populateTable(table, mem);
 
-		//Memory mem = new Memory();
+
 
 		KeyListener listener = new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					userInput = textFieldInput.getText().toString();
-
-					// mem = LogicMain.executeCommand(userInput, mem);
+					
+					 mem = LogicMain.executeCommand(userInput, mem);
 					
 					InputHistory.getInput(userInput);
 					//pass to logging
