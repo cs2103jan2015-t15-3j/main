@@ -28,7 +28,7 @@ public class Affix {
 			int index) {
 		Task floating = new Task();
 
-		floating.setTaskId(index);
+		floating.setTaskID(index);
 		floating.setTaskName(item.getTaskName());
 		floating.setRemarks(item.getRemarks());
 
@@ -39,7 +39,7 @@ public class Affix {
 			ArrayList<Task> buffer, int index) {
 		Deadline deadline = new Deadline();
 
-		deadline.setTaskId(index);
+		deadline.setTaskID(index);
 		deadline.setTaskName(item.getTaskName());
 		deadline.setDate(item.getDueDate());
 		deadline.setRemarks(item.getRemarks());
@@ -51,7 +51,7 @@ public class Affix {
 			ArrayList<Task> buffer, int index) {
 		Appointment appt = new Appointment();
 
-		appt.setTaskId(index);
+		appt.setTaskID(index);
 		appt.setTaskName(item.getTaskName());
 		appt.setStartDate(item.getStartDate());
 		appt.setDate(item.getDueDate());

@@ -48,7 +48,7 @@ public class ProParser {
 			searchTask(item, inputArray);
 			break;
 		case "edit":
-			item.setCommandType(Interpreter.CommandType.EDIT);
+			item.setCommandType(Interpreter.CommandType.AMEND);
 			editTask(item, inputArray);
 			break;
 		case "undo":

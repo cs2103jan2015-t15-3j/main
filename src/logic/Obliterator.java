@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import parser.Interpreter;
 
 public class Obliterator {
-	protected static void deleteTask(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskID();
-		buffer.remove(taskId);
+	protected static void deleteTask(int taskID, ArrayList<Task> buffer) {
+		buffer.remove(taskID);
 	}
 	
 	protected static void clearTask(Interpreter item, ArrayList<Task> buffer) {

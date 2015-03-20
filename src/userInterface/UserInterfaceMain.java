@@ -1,7 +1,6 @@
 package userInterface;
 
 import java.awt.EventQueue;
-import java.awt.TextField;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -9,35 +8,34 @@ import javax.swing.JLabel;
 
 import java.awt.Font;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import javax.swing.JTextField;
-import javax.swing.JButton;
 import javax.swing.JTextArea;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.awt.event.KeyListener;
-import java.text.ParseException;
 import java.util.ArrayList;
+
+
+import java.util.Iterator;
+import java.util.ListIterator;
 
 import logic.LogicMain; //import LogicMain
 import logic.Memory;
+import logic.Task;
 
-public class UserInterfaceMain implements KeyListener {
+public class UserInterfaceMain{
 
 	private JFrame frame;
-	public static JTextField textFieldInput;
 	private JTable toDoTable;
 	private static String userInput = new String();
+	public static JTextField textFieldInput;
+	
 	Memory mem = new Memory();
 
 	/**
@@ -83,62 +81,99 @@ public class UserInterfaceMain implements KeyListener {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 595, 209);
-		toDoPanel.add(scrollPane);
-
-		TableMain.setupTable();
+		toDoPanel.add(scrollPane);;
 
 		toDoTable = new JTable();
-		toDoTable.setEnabled(false);
-		toDoTable.setModel(new DefaultTableModel(new Object[][] {},
-						new String[] { "ID", "Description", "Start", "End",
-								"Remarks" }));
+		
+		toDoTable.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+				{null, null, null, null, null},
+			},
+			new String[] {
+				"ID", "Description", "Start", "End", "Remarks"
+			}
+		));
 		toDoTable.getColumnModel().getColumn(0).setPreferredWidth(25);
 		toDoTable.getColumnModel().getColumn(1).setPreferredWidth(228);
 		toDoTable.getColumnModel().getColumn(2).setPreferredWidth(100);
 		toDoTable.getColumnModel().getColumn(3).setPreferredWidth(100);
 		toDoTable.getColumnModel().getColumn(4).setPreferredWidth(139);
 		scrollPane.setViewportView(toDoTable);
-
+		
+		toDoTable.setEnabled(false);
 		toDoTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
+		
+		//completed table tab
 		tabbedPane.addTab("Completed", completedIcon, completedPanel);
-
-		textFieldInput = new JTextField();
-		textFieldInput.setBounds(94, 377, 600, 28);
-		frame.getContentPane().add(textFieldInput);
-		textFieldInput.setColumns(10);
 
 		JTextArea displayTextArea = new JTextArea();
 		displayTextArea.setForeground(Color.WHITE);
 		displayTextArea.setBackground(Color.DARK_GRAY);
 		displayTextArea.setBounds(94, 332, 600, 28);
 		frame.getContentPane().add(displayTextArea);
+		
+		textFieldInput = new JTextField();
+		textFieldInput.setBounds(94, 377, 600, 28);
+		frame.getContentPane().add(textFieldInput);
+		textFieldInput.setColumns(10);
 
-		// table = TableMain.setupTable(shell);
-		// load data into the table in the beginning
-		// Loader.populateTable(table, mem);
-
-
-
+		
 		KeyListener listener = new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					
 					userInput = textFieldInput.getText().toString();
 					
-					 mem = LogicMain.executeCommand(userInput, mem);
+					mem = LogicMain.executeCommand(userInput, mem);
+					ArrayList<Task> printList = mem.getBuffer();
 					
-					InputHistory.getInput(userInput);
-					//pass to logging
-					Logging.getInputLog(userInput);
+					//testing if output is correct
+					System.out.println(printList);
+					
+					updateTable(printList);
+					
 
+					InputHistory.getInput(userInput);
+					
+					//logging records
+					Logging.getInputLog(userInput);
+					
+					//displayTextArea.setText(mem.getFeedback());
 					displayTextArea.setText("command accepted!");
+					
 					textFieldInput.setText(null);
+					
 				}
 			}
-
+			
+			
+			public void updateTable(ArrayList<Task> printList){
+				
+				Iterator<Task> ltr = printList.iterator();
+				
+				int j = 0;
+				
+				while(ltr.hasNext()){
+					Task task = ltr.next();
+					toDoTable.setValueAt(task.getTaskID(), 0, j);
+					toDoTable.setValueAt(task.getTaskName().toString(), 0, j+1);
+					toDoTable.setValueAt(task.getType(), 0, j+2);
+					System.out.println(task.getTaskName());
+					
+					
+				}
+				
+			}
+					
+			
 			public void keyReleased(KeyEvent e) {
 				InputHistory.retrieveInputText(e);
+
 			}
 
 			public void keyTyped(KeyEvent e) {
@@ -150,19 +185,9 @@ public class UserInterfaceMain implements KeyListener {
 		textFieldInput.addKeyListener(listener);
 	}
 
-	/*
-	 * // static printing on Jtable /*toDoTable.setValueAt(1, 0, 0);
-	 * 
-	 * String delimiter = " "; String[] temp = input.split(delimiter);
-	 * 
-	 * toDoTable.setValueAt(temp[1], 0, 1); toDoTable.setValueAt(temp[2], 0, 2);
-	 * toDoTable.setValueAt(temp[3], 0, 3); toDoTable.setValueAt(temp[4], 0, 4);
-	 * toDoTable.setValueAt(temp[5], 0, 5); // remarks
-	 */
 
 	private void proTasklogo() {
 
-		// TODO Auto-generated method stub
 		frame = new JFrame("ProTask");
 		frame.setBounds(100, 100, 792, 478);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

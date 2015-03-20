@@ -26,11 +26,10 @@ public class AddTest {
 	@Test
 	public void test() throws ParseException {
 
-		// Add Floating
+		// Add Floating 
 		floating = new Interpreter();
 		floating.setTaskName("CS2103");
 		floating.setType(TaskType.FLOATING);
-
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		String dateInString = "07/06/2013";
 		Date date = formatter.parse(dateInString);
@@ -41,17 +40,16 @@ public class AddTest {
 		deadline = new Interpreter();
 		deadline.setTaskName("CS2106");
 		deadline.setType(TaskType.DEADLINE);
-
 		dateInString = "09/06/2013";
 		date = formatter.parse(dateInString);
 		deadline.setDueDate(date);
 		deadline.setRemarks("");
 		UnitTest.addTask(deadline, mem.getBuffer(), mem.numberGenerator());
 
+		// Add appointment
 		appt = new Interpreter();
 		appt.setTaskName("CS2106");
 		appt.setType(TaskType.APPOINTMENT);
-
 		dateInString = "10/06/2013";
 		String dateInString2 = "12/06/2013";
 		date = formatter.parse(dateInString);
@@ -62,20 +60,34 @@ public class AddTest {
 		UnitTest.addTask(appt, mem.getBuffer(), mem.numberGenerator());
 
 		buffer = mem.getBuffer();
-
-		System.out.println(buffer.get(0).toString());
-		System.out.println(buffer.get(1).toString());
-		System.out.println(buffer.get(2).toString());
 		assertEquals(3, buffer.size());
 
 		assertFalse(buffer.get(0).getTaskName().equals("CS2106"));
 
-		UnitTest.deleteTask(floating, mem.getBuffer());
+		UnitTest.deleteTask(appt.getTaskID(), mem.getBuffer());
 
 		System.out.println(buffer.get(0).toString());
 		System.out.println(buffer.get(1).toString());
 
 		assertEquals(2, buffer.size());
+		
+		appt.setKey("TASKNAME");
+		appt.setTaskName("HELLO");
+		appt.setType(TaskType.APPOINTMENT);
+
+		dateInString = "10/06/2013";
+		String dateInString3 = "12/06/2013";
+		date = formatter.parse(dateInString);
+		Date date2 = formatter.parse(dateInString3);
+		appt.setStartDate(date2);
+		appt.setDueDate(date);
+		appt.setRemarks("This is tedious!");
+		
+		UnitTest.determineAmend(appt, mem);
+		
+		System.out.println("\n");
+		System.out.println(buffer.get(0).toString());
+		System.out.println(buffer.get(1).toString());
 		
 		//UnitTest.clearTask(deadline, mem.getBuffer());
 		//assertEquals(0, buffer.size());

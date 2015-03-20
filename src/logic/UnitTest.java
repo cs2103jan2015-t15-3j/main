@@ -10,11 +10,15 @@ public class UnitTest {
 		Affix.addTask(item, buffer, index);
 	}
 	
-	public static void deleteTask(Interpreter item, ArrayList<Task> buffer) {
-		Obliterator.deleteTask(item, buffer);
+	public static void deleteTask(int taskID, ArrayList<Task> buffer) {
+		Obliterator.deleteTask(taskID, buffer);
 	}
 	
 	public static void clearTask(Interpreter item, ArrayList<Task> buffer) {
 		Obliterator.clearTask(item, buffer);
+	}
+	
+	public static void determineAmend(Interpreter item, Memory mem) {
+		Amend.determineAmend(item, mem);
 	}
 }
