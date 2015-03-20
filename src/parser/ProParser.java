@@ -91,14 +91,14 @@ public class ProParser {
 /*===========================ADD & EDIT METHODS===============================*/ 	
 	private static void defineTaskType(Interpreter item, String[] inputArray) {
 		int inputArrayLength = inputArray.length; 
-		String checkLast = inputArray[inputArrayLength - 1];
+		String checkLast = inputArray[inputArrayLength - 2] + " " + inputArray[inputArrayLength - 1];
 		boolean isDateValid = isDate(checkLast);
 		if(!isDateValid) {
 			item.setType(TaskType.FLOATING);
 			item.setIsDueDate(false);
 			item.setIsStartDate(false);
 		} else {
-			String check2ndLast = inputArray[inputArrayLength - 2];
+			String check2ndLast = inputArray[inputArrayLength - 4] + inputArray[inputArrayLength - 3];
 			boolean checkStartDate = isDate(check2ndLast);
 			if(!checkStartDate) {
 				item.setType(TaskType.DEADLINE);
@@ -125,7 +125,7 @@ public class ProParser {
 	
 	private static void defineTaskNameAndDate(Interpreter item, String[] inputArray) throws ParseException {
 		int inputArrayLength = inputArray.length; 
-		SimpleDateFormat sdf = new SimpleDateFormat();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		TaskType checkTaskType = item.getType(); 
 		switch(checkTaskType) {
 		case FLOATING:
@@ -133,14 +133,14 @@ public class ProParser {
 			break;
 		case DEADLINE:
 			defineTaskName(item, inputArray, inputArrayLength - 2);
-			Date date = sdf.parse(inputArray[inputArrayLength - 1]);
+			Date date = sdf.parse(inputArray[inputArrayLength - 2] + inputArray[inputArrayLength - 1]);
 			item.setDueDate(date);
 			break;		
 		case APPOINTMENT:
-			defineTaskName(item, inputArray, inputArrayLength - 3);
-			Date dueDate = sdf.parse(inputArray[inputArrayLength - 1]);
+			defineTaskName(item, inputArray, inputArrayLength - 4);
+			Date dueDate = sdf.parse(inputArray[inputArrayLength - 2] + inputArray[inputArrayLength - 1]);
 			item.setDueDate(dueDate);
-			Date startDate = sdf.parse(inputArray[inputArrayLength - 2]);
+			Date startDate = sdf.parse(inputArray[inputArrayLength - 4] + inputArray[inputArrayLength - 3]);
 			item.setStartDate(startDate);
 			break;
 		}
