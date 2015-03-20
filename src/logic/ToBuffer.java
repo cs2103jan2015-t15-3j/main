@@ -11,6 +11,7 @@ public class ToBuffer {
 
 	protected static void addDeadlineToBuffer(Deadline deadline,
 			ArrayList<Task> buffer) {
+		int index = Organizer.indexInsertion(deadline, buffer);
 		buffer.add(buffer.size(), deadline);
 	}
 

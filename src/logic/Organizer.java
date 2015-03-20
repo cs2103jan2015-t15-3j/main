@@ -34,4 +34,11 @@ public class Organizer {
 			ArrayList<Task> sortedListById) {
 		return sortedListById;
 	}
+
+	protected static int indexInsertion(Deadline deadline, ArrayList<Task> buffer) {
+		int index = 0;
+		
+		
+		return index;
+	}
 }
