@@ -21,7 +21,7 @@ public class AddTest {
 	
 	Memory mem = new Memory();
 
-	Interpreter floating, deadline, appt;
+	Interpreter floating, deadline, appt, test;
 
 	@Test
 	public void test() throws ParseException {
@@ -62,13 +62,14 @@ public class AddTest {
 		buffer = mem.getBuffer();
 		assertEquals(3, buffer.size());
 
-		assertFalse(buffer.get(0).getTaskName().equals("CS2106"));
+		//assertFalse(buffer.get(0).getTaskName().equals("CS2106"));
 
-		UnitTest.deleteTask(appt.getTaskID(), mem.getBuffer());
+		//UnitTest.deleteTask(2, mem.getBuffer());
+		UnitTest.sort(mem.getBuffer(), mem);
+		System.out.println(mem.getBuffer());
+		System.out.println(mem.getTempBuffer());
 
-		System.out.println(buffer.get(0).toString());
-		System.out.println(buffer.get(1).toString());
-
+		/*
 		assertEquals(2, buffer.size());
 		
 		appt.setKey("TASKNAME");
@@ -91,6 +92,7 @@ public class AddTest {
 		
 		//UnitTest.clearTask(deadline, mem.getBuffer());
 		//assertEquals(0, buffer.size());
+	}*/
 	}
 
 }

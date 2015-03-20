@@ -63,7 +63,10 @@ public class LogicMain {
 
 		switch (commandInfo) {
 		case ADD:
-			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator()); // incomplete
+			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator()); 
+			break;
+		case AMEND:
+			Amend.determineAmend(input, mem); 
 			break;
 		case DELETE:
 			Obliterator.deleteTask(input.getTaskID(), mem.getBuffer());
@@ -77,9 +80,8 @@ public class LogicMain {
 		case SEARCH:
 			SearchEngine.determineSearch(input.getKey().toLowerCase(), mem);
 			break;
-		case AMEND:
-			Amend.determineAmend(input, mem); // incomplete
-			break;
+		case SORT:
+			Organizer.sort(mem.getBuffer(), mem);
 		case UNDO:
 			// incomplete
 			break;

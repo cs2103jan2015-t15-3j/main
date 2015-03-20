@@ -1,12 +1,15 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Printer {
 
 	public static void executePrint(ArrayList<Task> output) {
-		for (int count = 0; count < output.size(); count++) {
-			System.out.print(output.toString());
+		
+		Iterator<Task> list = output.iterator();
+		while(list.hasNext()) {
+			System.out.println(list.next());
 		}
 	}
 

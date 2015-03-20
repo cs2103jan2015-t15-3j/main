@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import parser.Interpreter;
 
@@ -17,14 +18,15 @@ public class SearchEngine {
 		}
 	}
 
-	protected static int searchBufferIndex(int taskId, ArrayList<Task> buffer) {
+	protected static int searchBufferIndex(int taskID, ArrayList<Task> buffer) {
 		int index = 0;
-
-		for (int count = 0; count < buffer.size(); count++) {
-			if (buffer.get(count).getTaskID() == taskId) {
-				index = count;
+		Iterator<Task> list = buffer.iterator();
+		
+		while(list.hasNext()) {
+			if(list.next().getTaskID() == taskID) {
 				break;
 			}
+			index++;
 		}
 		return index;
 	}
@@ -106,8 +108,8 @@ public class SearchEngine {
 	}
 
 	protected static Task retrieveTask(Interpreter item, ArrayList<Task> buffer) {
-		int taskId = item.getTaskID();
-		int index = searchBufferIndex(taskId, buffer);
+		int taskID = item.getTaskID();
+		int index = searchBufferIndex(taskID, buffer);
 
 		Task retrieveType = buffer.get(index);
 

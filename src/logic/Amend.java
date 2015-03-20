@@ -36,9 +36,7 @@ public class Amend {
 	}
 
 	private static void amendName(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task task = buffer.get(index);
+		Task task = SearchEngine.retrieveTask(item, buffer);
 
 		task.setTaskName(item.getTaskName());
 	}
@@ -50,9 +48,7 @@ public class Amend {
 	 */
 
 	private static void amendStartDate(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task task = buffer.get(index);
+		Task task = SearchEngine.retrieveTask(item, buffer);
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
@@ -67,7 +63,7 @@ public class Amend {
 			appt.setDate(deadline.getDate());
 			appt.setRemarks(deadline.getRemarks());
 
-			Obliterator.deleteTask(taskID, buffer);
+			Obliterator.deleteTask(deadline.getTaskID(), buffer);
 			ToBuffer.addAppointmentToBuffer(appt, buffer);
 		}
 	}
@@ -79,9 +75,7 @@ public class Amend {
 	 */
 
 	private static void amendDueDate(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task task = buffer.get(index);
+		Task task = SearchEngine.retrieveTask(item, buffer);
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
@@ -98,16 +92,14 @@ public class Amend {
 			deadline.setRemarks(tasks.getRemarks());
 			deadline.setDate(item.getDueDate());
 
-			Obliterator.deleteTask(taskID, buffer);
+			Obliterator.deleteTask(tasks.getTaskID(), buffer);
 			ToBuffer.addDeadlineToBuffer(deadline, buffer);
 		}
 	}
 
 	private static void amendRemarks(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task type = buffer.get(index);
+		Task task = SearchEngine.retrieveTask(item, buffer);
 
-		type.setRemarks(item.getRemarks());
+		task.setRemarks(item.getRemarks());
 	}
 }

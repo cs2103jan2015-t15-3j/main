@@ -6,9 +6,10 @@ import parser.Interpreter;
 
 public class Obliterator {
 	protected static void deleteTask(int taskID, ArrayList<Task> buffer) {
-		buffer.remove(taskID);
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+		buffer.remove(index);
 	}
-	
+
 	protected static void clearTask(Interpreter item, ArrayList<Task> buffer) {
 		buffer.removeAll(buffer);
 	}

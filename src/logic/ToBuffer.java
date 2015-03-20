@@ -12,11 +12,12 @@ public class ToBuffer {
 	protected static void addDeadlineToBuffer(Deadline deadline,
 			ArrayList<Task> buffer) {
 		int index = Organizer.indexInsertion(deadline, buffer);
-		buffer.add(buffer.size(), deadline);
+		buffer.add(index, deadline);
 	}
 
 	protected static void addAppointmentToBuffer(Appointment appt,
 			ArrayList<Task> buffer) {
-		buffer.add(buffer.size(), appt);
+		int index = Organizer.indexInsertion(appt, buffer);
+		buffer.add(index, appt);
 	}
 }

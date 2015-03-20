@@ -21,4 +21,8 @@ public class UnitTest {
 	public static void determineAmend(Interpreter item, Memory mem) {
 		Amend.determineAmend(item, mem);
 	}
+	
+	public static void sort(ArrayList<Task> buffer, Memory mem) {
+		Organizer.sort(buffer, mem);
+	}
 }

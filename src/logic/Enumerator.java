@@ -9,4 +9,8 @@ public class Enumerator {
 	public enum KEY {
 		TASKNAME, STARTDATE, DUEDATE, REMARKS
 	}
+	
+	public enum BUFFER {
+		MAINBUFFER, TEMPBUFFER
+	}
 }

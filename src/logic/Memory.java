@@ -10,6 +10,7 @@ public class Memory {
 	private Scanner scanner;
 	private int currentID;
 	private String feedbackMsg;
+	// private Stack<History> action;
 	
 	public Memory() {
 		buffer = new ArrayList<Task>();
@@ -37,7 +38,11 @@ public class Memory {
 	public String getFeedback() {
 		return this.feedbackMsg;
 	}
-	
+	/*
+	public Stack<History> getAction() {
+		return this.action;
+	}
+	 */
 	public Scanner getScanner() {
 		return this.scanner;
 	}
@@ -53,7 +58,11 @@ public class Memory {
 	public void setCurrentID(int currentID) {
 		this.currentID = currentID;
 	}
-	
+	/*
+	public void setAction(Stack<History> action) {
+		this.action = action;
+	}
+	 */
 	public void setFeedbackMsg(String feedbackMsg) {
 		this.feedbackMsg = feedbackMsg;
 	}

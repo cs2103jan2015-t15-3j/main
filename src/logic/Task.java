@@ -12,9 +12,9 @@ public class Task {
 
 	public Task() {
 		this.taskID = 0;
-		this.taskName = null;
+		this.taskName = "";
 		this.isCompleted = false;
-		this.remarks = null;
+		this.remarks = "";
 		this.type = TaskType.FLOATING;
 	}
 
