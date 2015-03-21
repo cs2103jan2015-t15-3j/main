@@ -12,14 +12,14 @@ public class LogicMain {
 	// For testing
 	public static void main(String[] args) {
 		Printer.printToUser(Message.WELCOME);
-		Memory mem = new Memory();
+		Repository mem = new Repository();
 		// Storage.openFile(InternalStorage.getFilePath(),
 		// InternalStorage.getBuffer());
 		toDoManager(mem);
 	}
 
 	// For testing
-	public static void toDoManager(Memory mem) {
+	public static void toDoManager(Repository mem) {
 		while (true) {
 			mem = executeCommand(mem.getScanner().nextLine(), mem);
 			Printer.executePrint(mem.getBuffer());
@@ -30,13 +30,13 @@ public class LogicMain {
 	 * [UI --> logic --> storage(load, and update memory) --> return to logic
 	 * --> return to UI Store feedback msg before return memory back to UI
 	 */
-	public Memory displayToUI(Memory mem) {
+	public Repository displayToUI(Repository mem) {
 		// storage.addTasks(mem);
 		// storage.loadAllTasks();
 		return executeCommand("display", mem);
 	}
 
-	public static Memory executeCommand(String command, Memory mem) {
+	public static Repository executeCommand(String command, Repository mem) {
 		ProTaskStorage initializeStorage = new ProTaskStorage();
 		Interpreter input = new Interpreter();
 

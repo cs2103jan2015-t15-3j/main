@@ -8,14 +8,14 @@ import logic.Enumerator.TaskType;
 
 public class Organizer {
 
-	protected static void sort(Memory mem) {
+	protected static void sort(Repository mem) {
 		ArrayList<Task> addToTempBuffer = new ArrayList<Task>();
 
 		for (int count = 0; count < mem.getBuffer().size(); count++) {
 			addToTempBuffer.add(mem.getBuffer().get(count));
 		}
 		mem.setTempBuffer(addToTempBuffer);
-		Collections.sort(mem.getTempBuffer(), Comparable.numComparator);
+		Collections.sort(mem.getTempBuffer(), Compare.numComparator);
 	}
 
 	protected static int indexInsertion(Deadline deadline,

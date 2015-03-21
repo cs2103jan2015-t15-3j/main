@@ -8,7 +8,7 @@ import parser.Interpreter;
 
 public class SearchEngine {
 
-	protected static void determineSearch(String input, Memory mem) {
+	protected static void determineSearch(String input, Repository mem) {
 
 		ArrayList<Task> buffer = mem.getBuffer();
 
@@ -35,7 +35,7 @@ public class SearchEngine {
 	private static ArrayList<Task> searchByTaskID(String input,
 			ArrayList<Task> buffer) {
 		ArrayList<Task> searchByIDList = new ArrayList<Task>();
-		Collections.sort(buffer, Comparable.numComparator);
+		Collections.sort(buffer, Compare.numComparator);
 		int num = Converter.convertToInt(input);
 		int index = searchBufferIndex(num, buffer);
 
@@ -53,7 +53,7 @@ public class SearchEngine {
 				searchByWordsList.add(buffer.get(count));
 			}
 		}
-		Collections.sort(searchByWordsList, Comparable.numComparator);
+		Collections.sort(searchByWordsList, Compare.numComparator);
 		return searchByWordsList;
 	}
 

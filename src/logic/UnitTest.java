@@ -18,11 +18,11 @@ public class UnitTest {
 		Obliterator.clearTask(item, buffer);
 	}
 
-	public static void determineAmend(Interpreter item, Memory mem) {
+	public static void determineAmend(Interpreter item, Repository mem) {
 		Amend.determineAmend(item, mem);
 	}
 
-	public static void sort(Memory mem) {
+	public static void sort(Repository mem) {
 		Organizer.sort(mem);
 	}
 
@@ -34,7 +34,7 @@ public class UnitTest {
 		SearchEngine.searchBufferIndex(taskID, buffer);
 	}
 
-	public static void determineSearch(String input, Memory mem) {
+	public static void determineSearch(String input, Repository mem) {
 		SearchEngine.determineSearch(input, mem);
 	}
 }

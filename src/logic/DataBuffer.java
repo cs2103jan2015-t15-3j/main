@@ -2,7 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 
-public class ToBuffer {
+public class DataBuffer {
 
 	protected static void addTaskToBuffer(Task task, ArrayList<Task> buffer) {
 		buffer.add(buffer.size(), task);

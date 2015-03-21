@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import logic.Appointment;
-import logic.Memory;
+import logic.Repository;
 import logic.Task;
 import logic.Enumerator.TaskType;
 
@@ -284,7 +284,7 @@ public class ProTaskStorage {
 		}
 	}
 
-	public Memory writeToFile(Memory buffer) {
+	public Repository writeToFile(Repository buffer) {
 		ArrayList<Task> obtainedTasks = buffer.getBuffer();
 		ArrayList<Task> temp = new ArrayList<Task>();
 		

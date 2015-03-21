@@ -13,12 +13,12 @@ import logic.Enumerator.TaskType;
 import logic.Task;
 import logic.UnitTest;
 import parser.Interpreter;
-import logic.Memory;
+import logic.Repository;
 
 public class AddTest {
 
 	ArrayList<Task> buffer = new ArrayList<Task>();
-	Memory mem = new Memory();
+	Repository mem = new Repository();
 	Interpreter floating, deadline, appt, deadline2;
 
 	@Test

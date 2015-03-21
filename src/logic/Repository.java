@@ -3,7 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Memory {
+public class Repository {
 
 	private ArrayList<Task> buffer;
 	private ArrayList<Task> tempBuffer;
@@ -13,7 +13,7 @@ public class Memory {
 
 	// private Stack<History> action;
 
-	public Memory() {
+	public Repository() {
 		buffer = new ArrayList<Task>();
 		scanner = new Scanner(System.in);
 		currentID = 0;

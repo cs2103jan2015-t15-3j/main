@@ -16,7 +16,7 @@ public class Amend {
 		buffer.get(index).setIsCompleted(isCompleted);
 	}
 
-	protected static void determineAmend(Interpreter item, Memory mem) {
+	protected static void determineAmend(Interpreter item, Repository mem) {
 		KEY key = Converter.KeyConverter(item.getKey().toLowerCase());
 		ArrayList<Task> buffer = mem.getBuffer();
 
@@ -63,7 +63,7 @@ public class Amend {
 			appt.setRemarks(deadline.getRemarks());
 
 			Obliterator.deleteTask(deadline.getTaskID(), buffer);
-			ToBuffer.addAppointmentToBuffer(appt, buffer);
+			DataBuffer.addAppointmentToBuffer(appt, buffer);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class Amend {
 			deadline.setDate(item.getDueDate());
 
 			Obliterator.deleteTask(tasks.getTaskID(), buffer);
-			ToBuffer.addDeadlineToBuffer(deadline, buffer);
+			DataBuffer.addDeadlineToBuffer(deadline, buffer);
 		}
 	}
 

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import parser.Interpreter.CommandType;
 import logic.Enumerator.TaskType;
 
-;
-
 public class History {
 
 	private Task task;

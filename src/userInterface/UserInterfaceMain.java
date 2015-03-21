@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 import logic.LogicMain; //import LogicMain
-import logic.Memory;
+import logic.Repository;
 import logic.Task;
 
 public class UserInterfaceMain{
@@ -36,7 +36,7 @@ public class UserInterfaceMain{
 	private static String userInput = new String();
 	public static JTextField textFieldInput;
 	
-	Memory mem = new Memory();
+	Repository mem = new Repository();
 
 	/**
 	 * Launch the application.
