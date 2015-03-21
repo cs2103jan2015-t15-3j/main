@@ -18,17 +18,14 @@ import logic.Memory;
 public class AddTest {
 
 	ArrayList<Task> buffer = new ArrayList<Task>();
-	
 	Memory mem = new Memory();
-
-	Interpreter floating, deadline, appt, test;
+	Interpreter floating, deadline, appt, deadline2;
 
 	@Test
 	public void test() throws ParseException {
-
-		// Add Floating 
+		// --------------- Add Floating task ---------------------
 		floating = new Interpreter();
-		floating.setTaskName("CS2103");
+		floating.setTaskName("ghc");
 		floating.setType(TaskType.FLOATING);
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		String dateInString = "07/06/2013";
@@ -36,9 +33,9 @@ public class AddTest {
 		floating.setRemarks("YO");
 		UnitTest.addTask(floating, mem.getBuffer(), mem.numberGenerator());
 
-		// Add Deadline
+		// ------------ Add Deadline task -------------------
 		deadline = new Interpreter();
-		deadline.setTaskName("CS2106");
+		deadline.setTaskName("hcp");
 		deadline.setType(TaskType.DEADLINE);
 		dateInString = "09/06/2013";
 		date = formatter.parse(dateInString);
@@ -46,9 +43,9 @@ public class AddTest {
 		deadline.setRemarks("");
 		UnitTest.addTask(deadline, mem.getBuffer(), mem.numberGenerator());
 
-		// Add appointment
+		// ------------- Add appointment task -----------------
 		appt = new Interpreter();
-		appt.setTaskName("CS2106");
+		appt.setTaskName("CPH");
 		appt.setType(TaskType.APPOINTMENT);
 		dateInString = "10/06/2013";
 		String dateInString2 = "12/06/2013";
@@ -59,40 +56,47 @@ public class AddTest {
 		appt.setRemarks("This is tedious!");
 		UnitTest.addTask(appt, mem.getBuffer(), mem.numberGenerator());
 
-		buffer = mem.getBuffer();
-		assertEquals(3, buffer.size());
-
-		//assertFalse(buffer.get(0).getTaskName().equals("CS2106"));
-
-		//UnitTest.deleteTask(2, mem.getBuffer());
-		UnitTest.sort(mem.getBuffer(), mem);
-		System.out.println(mem.getBuffer());
-		System.out.println(mem.getTempBuffer());
-
-		/*
-		assertEquals(2, buffer.size());
-		
-		appt.setKey("TASKNAME");
-		appt.setTaskName("HELLO");
-		appt.setType(TaskType.APPOINTMENT);
-
-		dateInString = "10/06/2013";
+		// ---------------- Add another deadline ----------------
+		deadline2 = new Interpreter();
+		deadline2.setTaskName("GOOOO");
+		deadline2.setType(TaskType.DEADLINE);
+		dateInString = "20/06/2013";
 		String dateInString3 = "12/06/2013";
 		date = formatter.parse(dateInString);
 		Date date2 = formatter.parse(dateInString3);
-		appt.setStartDate(date2);
-		appt.setDueDate(date);
-		appt.setRemarks("This is tedious!");
-		
+		deadline2.setStartDate(date2);
+		deadline2.setDueDate(date);
+		deadline2.setRemarks("This is tedious!");
+		UnitTest.addTask(deadline2, mem.getBuffer(), mem.numberGenerator());
+
+		// ------------- Check if size is correct --------
+		assertEquals(4, mem.getBuffer().size());
+
+		// assertFalse(buffer.get(0).getTaskName().equals("CS2106"));
+		// -------------- Delete --------------------------
+		System.out.println(mem.getBuffer());
+		UnitTest.deleteTask(2, mem.getBuffer());
+
+		// ------------ Sort -------------------------------
+		UnitTest.sort(mem);
+		System.out.println(mem.getBuffer());
+		System.out.println(mem.getTempBuffer());
+
+		UnitTest.determineSearch("3", mem);
+		System.out.println(mem.getTempBuffer());
+
+		appt.setKey("TASKNAME");
+		appt.setTaskName("HELLO");
 		UnitTest.determineAmend(appt, mem);
-		
-		System.out.println("\n");
-		System.out.println(buffer.get(0).toString());
-		System.out.println(buffer.get(1).toString());
-		
-		//UnitTest.clearTask(deadline, mem.getBuffer());
-		//assertEquals(0, buffer.size());
-	}*/
+		System.out.println(mem.getBuffer());
+		/*
+		 * System.out.println("\n");
+		 * System.out.println(buffer.get(0).toString());
+		 * System.out.println(buffer.get(1).toString());
+		 * 
+		 * //UnitTest.clearTask(deadline, mem.getBuffer()); //assertEquals(0,
+		 * buffer.size()); }
+		 */
 	}
 
 }

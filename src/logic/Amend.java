@@ -37,14 +37,13 @@ public class Amend {
 
 	private static void amendName(Interpreter item, ArrayList<Task> buffer) {
 		Task task = SearchEngine.retrieveTask(item, buffer);
-
 		task.setTaskName(item.getTaskName());
 	}
 
 	/*
-	 * Determines the task type. If appointment, we will be concern about the
-	 * start date. If deadline, we will store the existing data into an new
-	 * appointment object. Floating tasks are not allowed.
+	 * Determines the task type. If appointment, start date is concerned. If
+	 * deadline, we will store the existing data into an new appointment object.
+	 * Floating tasks are not allowed.
 	 */
 
 	private static void amendStartDate(Interpreter item, ArrayList<Task> buffer) {
@@ -69,9 +68,9 @@ public class Amend {
 	}
 
 	/*
-	 * Determines the task type. If appointment or deadline, we will be concern
-	 * about the due date. If floating, we will store the existing data into an
-	 * new deadline object.
+	 * Determines the task type. If appointment or deadline, due date is
+	 * concerned. If floating, we will store the existing data into an new
+	 * deadline object.
 	 */
 
 	private static void amendDueDate(Interpreter item, ArrayList<Task> buffer) {
@@ -99,7 +98,6 @@ public class Amend {
 
 	private static void amendRemarks(Interpreter item, ArrayList<Task> buffer) {
 		Task task = SearchEngine.retrieveTask(item, buffer);
-
 		task.setRemarks(item.getRemarks());
 	}
 }

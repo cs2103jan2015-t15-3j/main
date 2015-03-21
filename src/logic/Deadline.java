@@ -40,8 +40,8 @@ public class Deadline extends Task {
 
 	@Override
 	public String toString() {
-		return this.getTaskID() + "+" + this.getTaskName() + "+"
-				+ this.getRemarks() + "+" + this.getCompleted() + "+"
-				+ this.getType() + "+" + this.getDueDateString();
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + " " + this.getDueDateString() + "]";
 	}
 }

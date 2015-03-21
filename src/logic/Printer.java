@@ -6,9 +6,8 @@ import java.util.Iterator;
 public class Printer {
 
 	public static void executePrint(ArrayList<Task> output) {
-		
 		Iterator<Task> list = output.iterator();
-		while(list.hasNext()) {
+		while (list.hasNext()) {
 			System.out.println(list.next());
 		}
 	}

@@ -9,20 +9,32 @@ public class UnitTest {
 			int index) {
 		Affix.addTask(item, buffer, index);
 	}
-	
+
 	public static void deleteTask(int taskID, ArrayList<Task> buffer) {
 		Obliterator.deleteTask(taskID, buffer);
 	}
-	
+
 	public static void clearTask(Interpreter item, ArrayList<Task> buffer) {
 		Obliterator.clearTask(item, buffer);
 	}
-	
+
 	public static void determineAmend(Interpreter item, Memory mem) {
 		Amend.determineAmend(item, mem);
 	}
-	
-	public static void sort(ArrayList<Task> buffer, Memory mem) {
-		Organizer.sort(buffer, mem);
+
+	public static void sort(Memory mem) {
+		Organizer.sort(mem);
+	}
+
+	public static void setCompletion(Interpreter item, ArrayList<Task> buffer) {
+		Amend.setCompletion(item, buffer);
+	}
+
+	public static void searchBufferIndex(int taskID, ArrayList<Task> buffer) {
+		SearchEngine.searchBufferIndex(taskID, buffer);
+	}
+
+	public static void determineSearch(String input, Memory mem) {
+		SearchEngine.determineSearch(input, mem);
 	}
 }

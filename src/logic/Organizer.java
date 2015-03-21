@@ -2,34 +2,20 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 
 import logic.Enumerator.TaskType;
 
 public class Organizer {
 
-	/*
-	 * protected static ArrayList<Memory> determineSort(ArrayList<Memory>
-	 * buffer) { ArrayList<Memory> sortedList = new ArrayList<Memory>();
-	 * sortedList = sortByID(buffer); return sortedList; }
-	 * 
-	 * protected static void sort(Memory mem, ArrayList<Task> buffer) { buffer.
-	 * mem.setTempBuffer(mem.getBuffer());
-	 * mem.getTempBuffer().sort(numComparator);
-	 * //Collections.sort(mem.getTempBuffer(), ); }
-	 */
+	protected static void sort(Memory mem) {
+		ArrayList<Task> addToTempBuffer = new ArrayList<Task>();
 
-	/*
-	 * protected static void determineSort(ArrayList<Task> buffer) {
-	 * 
-	 * ArrayList<Task> sortedList = new ArrayList<Task>(); sortedList =
-	 * sortByID(buffer); return sortedList; }
-	 */
-
-	protected static void sort(ArrayList<Task> buffer, Memory mem) {
-		mem.setTempBuffer(buffer);
-		Collections.sort(mem.getTempBuffer(), numComparator);
+		for (int count = 0; count < mem.getBuffer().size(); count++) {
+			addToTempBuffer.add(mem.getBuffer().get(count));
+		}
+		mem.setTempBuffer(addToTempBuffer);
+		Collections.sort(mem.getTempBuffer(), Comparable.numComparator);
 	}
 
 	protected static int indexInsertion(Deadline deadline,
@@ -72,13 +58,4 @@ public class Organizer {
 		}
 		return index;
 	}
-
-	protected static Comparator<Task> numComparator = new Comparator<Task>() {
-		public int compare(Task bufferOne, Task bufferTwo) {
-			int first = bufferOne.getTaskID();
-			int second = bufferTwo.getTaskID();
-			return first - second;
-		}
-	};
-
 }

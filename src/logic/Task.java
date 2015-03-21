@@ -69,8 +69,8 @@ public class Task {
 
 	@Override
 	public String toString() {
-		return this.getTaskID() + "+" + this.getTaskName() + "+"
-				+ this.getRemarks() + "+" + this.getCompleted() + "+"
-				+ this.getType();
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + "]";
 	}
 }

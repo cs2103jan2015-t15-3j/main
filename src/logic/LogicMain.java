@@ -1,6 +1,5 @@
 package logic;
 
-import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import parser.Interpreter;
@@ -11,8 +10,7 @@ import storage.ProTaskStorage;
 public class LogicMain {
 
 	// For testing
-	public static void main(String[] args) throws ParseException {
-
+	public static void main(String[] args) {
 		Printer.printToUser(Message.WELCOME);
 		Memory mem = new Memory();
 		// Storage.openFile(InternalStorage.getFilePath(),
@@ -21,37 +19,25 @@ public class LogicMain {
 	}
 
 	// For testing
-	public static void toDoManager(Memory mem) throws ParseException {
-
+	public static void toDoManager(Memory mem) {
 		while (true) {
-			Printer.printToUser(Message.PROMPT);
 			mem = executeCommand(mem.getScanner().nextLine(), mem);
 			Printer.executePrint(mem.getBuffer());
 		}
 	}
 
 	/*
-	 * Note: Memory is being passed around among UI, logic and storage storage
-	 * will update the respective information inside memory and return back to
-	 * you when it first load you will need another function for the UI to call
-	 * upon to load the storage, and display on the front end (When first open)
-	 * [UI --> logic --> storage(load, aka update memory) --> return to logic
-	 * --> return to UI]
+	 * [UI --> logic --> storage(load, and update memory) --> return to logic
+	 * --> return to UI Store feedback msg before return memory back to UI
 	 */
-
-	/*
-	 * Note: Store feedback msg before you return memory back to UI
-	 */
-
-	public Memory displayToUI(Memory mem) throws ParseException,
-			FileNotFoundException {
+	public Memory displayToUI(Memory mem) {
 		// storage.addTasks(mem);
 		// storage.loadAllTasks();
 		return executeCommand("display", mem);
 	}
 
 	public static Memory executeCommand(String command, Memory mem) {
-		ProTaskStorage storage1 = new ProTaskStorage();
+		ProTaskStorage initializeStorage = new ProTaskStorage();
 		Interpreter input = new Interpreter();
 
 		try {
@@ -63,10 +49,10 @@ public class LogicMain {
 
 		switch (commandInfo) {
 		case ADD:
-			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator()); 
+			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
 			break;
 		case AMEND:
-			Amend.determineAmend(input, mem); 
+			Amend.determineAmend(input, mem);
 			break;
 		case DELETE:
 			Obliterator.deleteTask(input.getTaskID(), mem.getBuffer());
@@ -78,10 +64,10 @@ public class LogicMain {
 			Printer.executePrint(mem.getBuffer());
 			break;
 		case SEARCH:
-			SearchEngine.determineSearch(input.getKey().toLowerCase(), mem);
+			SearchEngine.determineSearch(input.getKey(), mem);
 			break;
 		case SORT:
-			Organizer.sort(mem.getBuffer(), mem);
+			Organizer.sort(mem);
 		case UNDO:
 			// incomplete
 			break;
@@ -100,32 +86,7 @@ public class LogicMain {
 			Printer.printToUser(Message.INVALID_COMMAND);
 			break;
 		}
-		// Save to file
-		storage1.writeToFile(mem);
-		System.out.println(mem.getBuffer());
+		initializeStorage.writeToFile(mem);
 		return mem;
 	}
-	/*
-	 * public ArrayList<Floating> userInput(Floating userInput) {
-	 * ArrayList<Floating> arrayList = new ArrayList<Floating>();
-	 * arrayList.add(userInput); return arrayList; }
-	 * 
-	 * 
-	 * public static String deleteTask() {
-	 * System.out.println("input index of text to be deleted here"); String
-	 * indexNum = sc.nextLine(); int index = Integer.parseInt(indexNum);
-	 * myList.remove(index-1); return MESSAGE_TEXT_DELETED; }
-	 * 
-	 * public static String displayTask() { for(int i=0; i < myList.size(); i++)
-	 * { System.out.println(myList.get(i)); } System.out.println(); return ""; }
-	 * 
-	 * public String updateTask(String taskName) { return MESSAGE_TEXT_UPDATED;
-	 * }
-	 * 
-	 * public static void main(String args[]) throws IOException {
-	 * 
-	 * while(true){ System.out.println("Hi! Input command first: "); String
-	 * input = sc.nextLine(); String command = input.trim().split("\\s+")[0];
-	 * identifyCommand(command); } }
-	 */
 }
