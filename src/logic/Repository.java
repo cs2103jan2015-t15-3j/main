@@ -1,22 +1,22 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Stack;
 
 public class Repository {
 
 	private ArrayList<Task> buffer;
 	private ArrayList<Task> tempBuffer;
-	private Scanner scanner;
 	private int currentID;
 	private String feedbackMsg;
-
-	// private Stack<History> action;
+	private Stack<History> undoAction;
+	private Stack<History> redoAction;
 
 	public Repository() {
 		buffer = new ArrayList<Task>();
-		scanner = new Scanner(System.in);
 		currentID = 0;
+		undoAction = new Stack<History>();
+		redoAction = new Stack<History>();
 	}
 
 	public ArrayList<Task> getBuffer() {
@@ -40,13 +40,20 @@ public class Repository {
 		return this.feedbackMsg;
 	}
 
-	/*
-	 * public Stack<History> getAction() { return this.action; }
-	 */
-	public Scanner getScanner() {
-		return this.scanner;
+	public Stack<History> getUndoAction() {
+		if(this.undoAction == null) {
+			Printer.printToUser(Message.UNDO_UNSUCCESSFUL);
+		}
+		return this.undoAction;
 	}
-
+	
+	public Stack<History> getRedoAction() {
+		if(this.undoAction == null) {
+			Printer.printToUser(Message.REDO_UNSUCCESSFUL);
+		}
+		return this.redoAction;
+	}
+	
 	public void setBuffer(ArrayList<Task> buffer) {
 		this.buffer = buffer;
 	}
@@ -59,10 +66,39 @@ public class Repository {
 		this.currentID = currentID;
 	}
 
-	/*
-	 * public void setAction(Stack<History> action) { this.action = action; }
-	 */
+	public void setUndoAction(Stack<History> undoAction) {
+		this.undoAction = undoAction;
+	}
+	
+	public void setRedoAction(Stack<History> redoAction) {
+		this.redoAction = redoAction;
+	}
+
 	public void setFeedbackMsg(String feedbackMsg) {
 		this.feedbackMsg = feedbackMsg;
+	}
+	
+	public void undoActionPush(History history) {
+		undoAction.push(history);
+	}
+	
+	public History undoActionPop() {
+		return undoAction.pop();
+	}
+	
+	public History redoActionPeek() {
+		return undoAction.peek();
+	}
+	
+	public void redoActionPush(History history) {
+		redoAction.push(history);
+	}
+	
+	public History redoActionPop() {
+		return redoAction.pop();
+	}
+	
+	public History undoActionPeek() {
+		return redoAction.peek();
 	}
 }

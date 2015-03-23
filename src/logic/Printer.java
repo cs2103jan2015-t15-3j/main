@@ -13,8 +13,6 @@ public class Printer {
 	}
 
 	public static void printToUser(String output) {
-		if (!output.equals("")) {
 			System.out.println(output);
-		}
 	}
 }
