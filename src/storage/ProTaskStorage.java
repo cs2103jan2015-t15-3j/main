@@ -29,9 +29,10 @@ public class ProTaskStorage {
 	private final String tempDataBase = "temp.csv";
 
 	protected ArrayList<Appointment> allAppointments;
-	protected ArrayList<Task> allTasks;
+	private ArrayList<Task> allTasks;
 	private String[] dataBaseColumns;
 	private int idCounter;
+	private boolean justLaunched; 
 
 	/*
 	 * public static void main(String args[]) throws
@@ -82,6 +83,8 @@ public class ProTaskStorage {
 		}
 		try {
 			loadAllTasks();
+			justLaunched = true;
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 
@@ -286,15 +289,14 @@ public class ProTaskStorage {
 		ArrayList<Task> obtainedTasks = buffer.getBuffer();
 		ArrayList<Task> temp = new ArrayList<Task>();
 
-		for (Task task : obtainedTasks) {
-			System.out.println(task.getTaskName());
-			temp.add(task);
-		}
-
+		
+		temp.add(obtainedTasks.get(obtainedTasks.size()-1));
+		
 		for (Task task : temp) {
 
 			String type = task.getType().toString();
-
+			buffer.setCurrentID(idCounter);
+			
 			if (type.equals("APPOINTMENT")) {
 				Appointment item = (Appointment) task;
 				addStringTask(idCounter, task.getTaskName(),
@@ -308,14 +310,25 @@ public class ProTaskStorage {
 								.getType().toString());
 			} else {
 				task.setTaskID(idCounter);
+				
+				System.out.println("SSSSSS"+buffer.getCurrentID());
 				addStringTask(idCounter, task.getTaskName(), "", "",
 						task.getRemarks(), false, task.getType().toString());
 			}
 			idCounter++;
-			allTasks.add(task);
+			//allTasks.add(task);
 		}
-
-		buffer.setBuffer(allTasks);
+		
+		if (justLaunched)
+		{
+			justLaunched = false;
+			for (Task task : temp)
+			{
+				allTasks.add(t);
+			}
+			buffer.setBuffer(allTasks);
+		}
+		
 		return buffer;
 	}
 
@@ -401,7 +414,7 @@ public class ProTaskStorage {
 					newTask.setTaskID(Integer.parseInt(row[0]));
 					lastID = Integer.parseInt(row[0]);
 					newTask.setTaskName(row[1]);
-
+					
 					allTasks.add(newTask);
 					/*
 					 * Appointment newApmt = new Appointment();
@@ -418,6 +431,7 @@ public class ProTaskStorage {
 					// System.out.println(Arrays.toString(row));
 				}
 			}
+			
 			idCounter = lastID + 1;
 
 			reader.close();
