@@ -9,13 +9,17 @@ import parser.Interpreter;
 public class SearchEngine {
 
 	protected static void determineSearch(String input, Repository mem) {
-
 		ArrayList<Task> buffer = mem.getBuffer();
-
+		int searchResult;
+		
 		if (input.matches("\\d+")) {
 			mem.setTempBuffer(searchByTaskID(input.toLowerCase(), buffer));
+			searchResult = mem.getTempBufferSize();
+			mem.setFeedbackMsg(searchResult + Message.SEARCH);
 		} else {
 			mem.setTempBuffer(searchByKeyWords(input.toLowerCase(), buffer));
+			searchResult = mem.getTempBufferSize();
+			mem.setFeedbackMsg(searchResult + Message.SEARCH);
 		}
 	}
 
@@ -40,7 +44,7 @@ public class SearchEngine {
 		int index = searchBufferIndex(num, buffer);
 
 		searchByIDList.add(buffer.get(index));
-
+		
 		return searchByIDList;
 	}
 

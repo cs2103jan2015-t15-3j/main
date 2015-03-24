@@ -6,14 +6,14 @@ public class Message {
 	public static final String HELP_GUIDE = "For help, enter:'help' to refer to our guide!";
 	protected static final String INVALID_COMMAND = "The command does not exist. Please enter a valid command.";
 
-	protected static final String ADDED = " has been added successfully!";
+	protected static final String ADDED = "has been added successfully!";
 	protected static final String EDITED = " has been edited.";
 	protected static final String DELETED = " has been deleted.";
 	protected static final String DELETE_ALL = "All tasks have been deleted successfully!";
 	protected static final String TASK_NOT_FOUND = " is not found.";
 	protected static final String DELETE_ALL_UNSUCCESSFUL = "There is nothing to delete.";
 	
-	protected static final String SEARCH = "(s) found.";
+	protected static final String SEARCH = " search results(s) found.";
 	protected static final String SEARCH_IS_EMPTY = "There is nothing to search.";
 	protected static final String INVALID_SEARCH_PARAMETER = "Your search does not exists.";
 	

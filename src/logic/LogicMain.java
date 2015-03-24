@@ -12,14 +12,12 @@ public class LogicMain {
 
 	// For testing
 	public static void main(String[] args) {
-		Printer.printToUser(Message.WELCOME);
+
 	}
 
-	public Repository displayToUI(Repository mem) {
-		// storage.addTasks(mem);
-		// storage.loadAllTasks();
-		return executeCommand("display", mem);
-	}
+	//public static Repository displayToUI(String command, Repository mem) 
+		//return executeCommand(command, mem);
+	//}
 
 	protected static void writeToStorage(Repository mem) {
 		ProTaskStorage storage = new ProTaskStorage();
@@ -41,8 +39,8 @@ public class LogicMain {
 		switch (commandInfo) {
 		case ADD:
 			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
-			history = UndoManager.pushToAdd(input.getTaskID());
-			mem.undoActionPush(history);
+			//history = UndoManager.pushToAdd(input.getTaskID());
+			//mem.undoActionPush(history);
 			mem.setFeedbackMsg(input.getTaskName() + Message.ADDED);
 			break;
 		case AMEND:
@@ -61,7 +59,6 @@ public class LogicMain {
 			if (mem.getBuffer().isEmpty()) {
 				mem.setFeedbackMsg(Message.DELETE_ALL_UNSUCCESSFUL);
 			}
-
 			Obliterator.clearTask(input, mem.getBuffer());
 			mem.setFeedbackMsg(Message.DELETE_ALL);
 			break;
@@ -69,22 +66,16 @@ public class LogicMain {
 			Printer.executePrint(mem.getBuffer());
 			break;
 		case SEARCH:
-			if (mem.getBuffer().isEmpty()) {
-				mem.setFeedbackMsg(Message.SEARCH_IS_EMPTY);
-			}
 			SearchEngine.determineSearch(input.getKey(), mem);
-
-			int result = mem.getTempBuffer().size();
-			mem.setFeedbackMsg(result + Message.SEARCH);
-
 			break;
 		case SORT:
 			if (mem.getBuffer().isEmpty()) {
 				mem.setFeedbackMsg(Message.SORT_UNSUCCESSFUL);
 			}
-
+			else {
 			Organizer.sort(mem);
 			mem.setFeedbackMsg(Message.SORTED_BY_ID);
+			}
 		case UNDO:
 			if (mem.getUndoAction().isEmpty()) {
 				mem.setFeedbackMsg(Message.UNDO_UNSUCCESSFUL);
@@ -119,7 +110,7 @@ public class LogicMain {
 			mem.setFeedbackMsg(Message.INVALID_COMMAND);
 			break;
 		}
-		// writeToStorage(mem); incomplete
+		//writeToStorage(mem);
 		return mem;
-	}
+		}
 }

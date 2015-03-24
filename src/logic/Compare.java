@@ -1,7 +1,7 @@
 package logic;
 
+import java.sql.Date;
 import java.util.Comparator;
-//import java.util.Date;
 
 public class Compare {
 	
@@ -13,9 +13,9 @@ public class Compare {
 		}
 	};
 	
-	//public static Comparator<Date> dateComparator = new Comparator<Date>() {
-		//public int compare(Date dateOne, Date dateTwo) {
-			//return dateOne.
-		//}
-	//};
+	public static Comparator<Date> dateComparator = new Comparator<Date>() {
+		public int compare(Date dateOne, Date dateTwo) {
+				return dateOne.compareTo(dateTwo);
+		}
+	};
 }

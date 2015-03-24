@@ -14,6 +14,7 @@ public class Repository {
 
 	public Repository() {
 		buffer = new ArrayList<Task>();
+		tempBuffer = new ArrayList<Task>();
 		currentID = 0;
 		undoAction = new Stack<History>();
 		redoAction = new Stack<History>();
@@ -25,6 +26,14 @@ public class Repository {
 
 	public ArrayList<Task> getTempBuffer() {
 		return this.tempBuffer;
+	}
+	
+	public int getTempBufferSize() {
+		return this.tempBuffer.size();
+	}
+	
+	public int getBufferSize() {
+		return this.buffer.size();
 	}
 
 	public int numberGenerator() {

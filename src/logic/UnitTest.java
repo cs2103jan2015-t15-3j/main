@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import parser.Interpreter;
 
 public class UnitTest {
+	public static Repository executeCommand(String command, Repository mem) {
+		return LogicMain.executeCommand(command, mem);
+	}
+	
 	public static void addTask(Interpreter item, ArrayList<Task> buffer,
 			int index) {
 		Affix.addTask(item, buffer, index);
