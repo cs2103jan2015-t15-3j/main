@@ -311,7 +311,6 @@ public class ProTaskStorage {
 			} else {
 				task.setTaskID(idCounter);
 				
-				System.out.println("SSSSSS"+buffer.getCurrentID());
 				addStringTask(idCounter, task.getTaskName(), "", "",
 						task.getRemarks(), false, task.getType().toString());
 			}
@@ -324,7 +323,7 @@ public class ProTaskStorage {
 			justLaunched = false;
 			for (Task task : temp)
 			{
-				allTasks.add(t);
+				allTasks.add(task);
 			}
 			buffer.setBuffer(allTasks);
 		}
