@@ -1,14 +1,11 @@
 package userInterface;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
-import logic.Memory;
+import logic.Repository;
 import logic.Task;
 import logic.Appointment;
 
@@ -20,16 +17,14 @@ public class Updator extends AbstractTableModel {
 	public static final int INDEX_END = 3;
 	public static final int INDEX_REMARKS = 4;
 	//public static final int INDEX_COMPLETED = 5;
-	public static final int INDEX_HIDDEN = 6;
 
 	protected String[] columnNames;
 	protected Vector data;
-	protected Vector appt;
+	//protected Appointment appt;
 	
 	public Updator(String[] columnNames) {
 		this.columnNames = columnNames;
 		data = new Vector();
-		appt = new Vector();
 	}
 
 	public String getColumnName(int column) {
@@ -61,8 +56,7 @@ public class Updator extends AbstractTableModel {
 
 	public Object getValueAt(int row, int column) {
 		Task tableInfo = (Task) data.get(row);
-		
-		Appointment info = (Appointment) appt.get(row);
+		// Appointment info = (Appointment) data.get(row);
 		
 		switch (column) {
 		case INDEX_ID:
@@ -70,7 +64,7 @@ public class Updator extends AbstractTableModel {
 		case INDEX_TASK:
 			return tableInfo.getTaskName();
 		case INDEX_START:
-			return info.getStartDate();
+			return tableInfo.getTaskName();
 		case INDEX_END:
 			return tableInfo.getTaskName();
 		case INDEX_REMARKS:
@@ -84,8 +78,7 @@ public class Updator extends AbstractTableModel {
 
 	public void setValueAt(Object value, int row, int column) {
 		Task tableInfo = (Task) data.get(row);
-		Appointment info = (Appointment) appt.get(row);
-		
+		// Appointment info = (Appointment) data.get(row);
 		switch (column) {
 		case INDEX_ID:
 			tableInfo.setTaskID((Integer) value);
@@ -94,7 +87,7 @@ public class Updator extends AbstractTableModel {
 			tableInfo.setTaskName((String) value);
 			break;
 		case INDEX_START:
-			info.setStartDate((Date) value);
+			tableInfo.setTaskName((String) value);
 			break;
 		case INDEX_END:
 			tableInfo.setTaskName((String) value);
@@ -127,10 +120,8 @@ public class Updator extends AbstractTableModel {
 		else {
 		Task tableInfo = (Task) data.get(data.size() - 1);
 		
-		Appointment info = (Appointment) appt.get(appt.size() - 1);
-		
 		if (tableInfo.getTaskName().trim().equals("")
-				&& (info.getStartDate()).equals("")
+				&& tableInfo.getTaskName().trim().equals("")
 				&& tableInfo.getTaskName().trim().equals("")
 				&& tableInfo.getRemarks().trim().equals(""))
 			
@@ -140,21 +131,16 @@ public class Updator extends AbstractTableModel {
 			return false;
 		}
 	}
-	
-	//add a new row
+
 	public void addEmptyRow() {
-		appt.add(new Appointment());
-		fireTableRowsInserted(appt.size() - 1, appt.size() - 1);
-		
 		data.add(new Task());
 		fireTableRowsInserted(data.size() - 1, data.size() - 1);
 	}
 
-	//Update table information to Jtable
 	public void updateTable(ArrayList<Task> taskList) {
 		
-		Memory mem = new Memory();
-		Appointment a = new Appointment();
+		Repository mem = new Repository();
+		//Appointment a = new Appointment();
 		
 		int row = 0;
 
@@ -166,13 +152,6 @@ public class Updator extends AbstractTableModel {
 			}
 		}
 		 
-		 // sort the table in alphabetical order
-        Collections.sort(taskList, new Comparator<Task>() {
-            public int compare(Task t1, Task t2) {
-                return t1.getTaskName().compareToIgnoreCase(
-                        t2.getTaskName());
-            }
-        });
 			for (Task task : taskList) {
 				if (!this.hasEmptyRow()) {
 					this.addEmptyRow();
@@ -180,8 +159,7 @@ public class Updator extends AbstractTableModel {
 				
 					this.setValueAt(task.getTaskID(), row, INDEX_ID);
 					this.setValueAt(task.getTaskName(), row, INDEX_TASK);
-					
-					this.setValueAt(a.getStartDate(), row, INDEX_START);
+					this.setValueAt(task.getTaskName(), row, INDEX_START);
 					this.setValueAt(task.getTaskName(), row, INDEX_END);
 					this.setValueAt(task.getRemarks(), row, INDEX_REMARKS);
 					
@@ -205,34 +183,12 @@ public class Updator extends AbstractTableModel {
 				}
 			}
 	
-	
 	public void clearRows() {
 		data.clear();
-		appt.clear();
+	}
+
+	public void tempTable(ArrayList<Task> tempList) {
+		
 		
 	}
-	
-	//testing 
-	/*public void loadTable(ArrayList<Task> list) {
-		// TODO Auto-generated method stub
-		
-		int row = 0;
-		
-		Task task = new Task();
-		
-		Iterator<Task> itr = list.iterator();
-		
-		while(itr.hasNext()){
-			this.addEmptyRow();
-			
-			this.setValueAt(task.getTaskID(), row, 0);
-			this.setValueAt(task.getTaskName(), row, 1);
-			this.setValueAt(task.getTaskName(), row, 2);
-			this.setValueAt(task.getTaskName(), row, 3);
-			this.setValueAt(task.getTaskName(), row, 4);
-			row++;
-			}
-			
-			
-		}*/
 }	

@@ -7,12 +7,9 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import logic.Task;
-
 
 
 //create table connect to main
@@ -32,13 +29,13 @@ public class Creator extends JPanel{
 	//update table class
 	protected Updator tableModel;
 	
-	//testing
-	public void loadTable(ArrayList<Task> list){
-		tableModel.loadTable(list);		
-	}
-	
 	public void updateTable(ArrayList<Task> taskList) {
 		tableModel.updateTable(taskList);
+	}
+	
+	public void tempTable(ArrayList<Task> tempList) {
+		tableModel.tempTable(tempList);
+		
 	}
 	
 	public Creator() {
@@ -48,26 +45,20 @@ public class Creator extends JPanel{
 	public void initComponent(){
 	
 		tableModel = new Updator(columnNames);
-		tableModel.addTableModelListener(new Creator.UpdatorListener());
+		//tableModel.addTableModelListener(new InteractiveForm.InteractiveTableModelListener());
 		
 		table = new JTable();
 		table.setModel(tableModel);
-		table.setOpaque(true);
-		table.setVisible(true);
-		table.setRowSelectionAllowed(true);
 		
 		//set table width scroll
 		table.setPreferredScrollableViewportSize(new Dimension(550, 200));
 		table.setFillsViewportHeight(true);
-		
 		
 		table.setSurrendersFocusOnKeystroke(true);
 		if (!tableModel.hasEmptyRow()) {
 			tableModel.addEmptyRow();
 		}
 		scroller = new JScrollPane(table);
-		
-		
 		
 		TableColumn taskID = table.getColumnModel().getColumn(Updator.INDEX_ID);
 		TableColumn taskName = table.getColumnModel().getColumn(Updator.INDEX_TASK);
@@ -83,22 +74,8 @@ public class Creator extends JPanel{
 			
 		setLayout(new BorderLayout());
 		add(scroller, BorderLayout.CENTER);
-		
-
 	}
-	
-	public class UpdatorListener implements TableModelListener {
-		public void tableChanged(TableModelEvent evt) {
-			if (evt.getType() == TableModelEvent.UPDATE) {
-				int column = evt.getColumn();
-				int row = evt.getFirstRow();
-				//test print here
-				System.out.println("row: " + row + " column: " + column);
-			}
-		}
-	}
-	
 
+	
+	
 }
-	
-

@@ -18,17 +18,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-<<<<<<< HEAD
 import logic.LogicMain;
-import logic.Memory;
-=======
-
-import java.util.Iterator;
-import java.util.ListIterator;
-
-import logic.LogicMain; //import LogicMain
 import logic.Repository;
->>>>>>> 3c0847496984621ffd2cff02d068f853e1643c1b
 import logic.Task;
 
 public class UserInterfaceMain extends JPanel{
@@ -36,11 +27,6 @@ public class UserInterfaceMain extends JPanel{
 	private JFrame frame;
 	private static String userInput = new String();
 	public static JTextField textFieldInput;
-<<<<<<< HEAD
-=======
-	
-	Repository mem = new Repository();
->>>>>>> 3c0847496984621ffd2cff02d068f853e1643c1b
 
 	/**
 	 * Launch the application.
@@ -48,7 +34,7 @@ public class UserInterfaceMain extends JPanel{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				Memory mem = new Memory();
+				Repository mem = new Repository();
 				try {
 					UserInterfaceMain window = new UserInterfaceMain(mem);
 					window.frame.setVisible(true);
@@ -62,14 +48,14 @@ public class UserInterfaceMain extends JPanel{
 	/**
 	 * Create the application.
 	 */
-	public UserInterfaceMain(Memory mem) {
+	public UserInterfaceMain(Repository mem) {
 		initialize(mem);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(Memory mem) {
+	private void initialize(Repository mem) {
 		proTasklogo();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -112,21 +98,29 @@ public class UserInterfaceMain extends JPanel{
 		KeyListener listener = new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
-				Memory mem = new Memory();
+				
+				Repository mem = new Repository();
 				
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 					userInput = textFieldInput.getText().toString();
+					String firstWord = getFirstWord(userInput);
+					
 
 					mem = LogicMain.executeCommand(userInput, mem);
 
 					ArrayList<Task> printList = mem.getBuffer();
-
+					ArrayList<Task> tempList = mem.getTempBuffer();
+					
 					//testing if output is correct
 					System.out.println(printList);
 
 					//pass Arraylist to Creator
 					create.updateTable(printList);
+					
+					if(firstWord.toLowerCase() == "sort"){
+					create.tempTable(tempList);
+					}
 
 					InputHistory.getInput(userInput);
 
@@ -134,11 +128,11 @@ public class UserInterfaceMain extends JPanel{
 					Logging.getInputLog(userInput);
 
 					//displayTextArea.setText(mem.getFeedback());
-					displayTextArea.setText("command accepted successfully!");
+					displayTextArea.setText(mem.getFeedback());
 
 					textFieldInput.setText(null);
 				}
-				else if(e.getKeyCode() == KeyEvent.VK_H){		
+				else if(e.getKeyCode() == KeyEvent.VK_F1){		
 					HelpGuide.main(null);				
 				}
 			}
@@ -172,4 +166,12 @@ public class UserInterfaceMain extends JPanel{
 		ImageIcon proTaskIcon = new ImageIcon("images/Purple-Pear-400px.png");
 		proTaskLabel.setIcon(proTaskIcon);
 	}
+	
+	// This method will return the command user enters.
+		public static String getFirstWord(String userCommand) {
+			String commandTypeString = userCommand.trim().split("\\s+")[0];
+			return commandTypeString;
 }
+}
+
+
