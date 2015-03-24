@@ -37,7 +37,7 @@ public class ProParser {
 			break;
 		case "delete":
 			item.setCommandType(Interpreter.CommandType.DELETE);
-			deleteTask(item, inputArray);
+			ParserDelete.deleteTask(item, inputArray);
 			break;
 		case "clear":
 			item.setCommandType(Interpreter.CommandType.CLEAR);
@@ -47,23 +47,22 @@ public class ProParser {
 			break;
 		case "search":
 			item.setCommandType(Interpreter.CommandType.SEARCH);
-			searchTask(item, inputArray);
+			ParserSearch.searchTask(item, inputArray);
 			break;
 		case "edit":
 			item.setCommandType(Interpreter.CommandType.AMEND);
-			editTask(item, inputArray);
+			ParserEdit.editTask(item, inputArray);
 			break;
 		case "undo":
 			item.setCommandType(Interpreter.CommandType.UNDO);
-			
 			break;
 		case "complete":
 			item.setCommandType(Interpreter.CommandType.COMPLETE);
-			completeTask(item, inputArray);
+			ParserCompleteTask.completeTask(item, inputArray);
 			break;
 		case "uncomplete":
 			item.setCommandType(Interpreter.CommandType.UNCOMPLETE);
-			uncompleteTask(item, inputArray);
+			ParserUncompleteTask.uncompleteTask(item, inputArray);
 			break;
 		case "powersearch":
 			item.setCommandType(Interpreter.CommandType.POWERSEARCH);
@@ -153,36 +152,10 @@ public class ProParser {
 		}
 		item.setTaskName(taskName);
 	}
-/*===========================ADD & EDIT METHODS===============================*/
-	
-	private static void deleteTask(Interpreter item, String[] inputArray) {
-		int ID = Integer.parseInt(inputArray[1]);
-		item.setTaskID(ID);
-	}
-	
-	private static void searchTask(Interpreter item, String[] inputArray) {
-		String searchKey = "";
-		int lengthSearchKey = inputArray.length-1;
-		for(int i=1; i<=lengthSearchKey; i++){
-			searchKey = searchKey.concat(inputArray[i]);
-		}
-		System.out.print("searchKey: "+searchKey);
-		item.setKey(searchKey);
-	}
-	
-	private static void completeTask(Interpreter item, String[] inputArray) {
-		int ID = Integer.parseInt(inputArray[1]);
-		item.setTaskID(ID);
-		item.setIsCompleted(true);
-	}
-	
-	private static void uncompleteTask(Interpreter item, String[] inputArray) {
-		int ID = Integer.parseInt(inputArray[1]);
-		item.setTaskID(ID);
-		item.setIsCompleted(false);
-	}
-	
-	private static void powerSearchTask(Interpreter item, String[] inputArray) {
-		
-	}
 }
+
+	
+
+	
+	
+	
