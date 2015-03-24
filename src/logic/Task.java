@@ -18,8 +18,7 @@ public class Task {
 		this.type = TaskType.FLOATING;
 	}
 
-	public Task(int taskID, String taskName, String remarks,
-			boolean isCompleted) {
+	public Task(int taskID, String taskName, String remarks, boolean isCompleted) {
 		this.taskID = taskID;
 		this.taskName = taskName;
 		this.remarks = remarks;

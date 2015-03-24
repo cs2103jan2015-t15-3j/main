@@ -8,6 +8,7 @@ import parser.ProParser;
 import storage.ProTaskStorage;
 
 public class LogicMain {
+	protected static final int MESSAGE_SYSTEM_EXIT = 0;
 
 	// For testing
 	public static void main(String[] args) {
@@ -26,7 +27,9 @@ public class LogicMain {
 	}
 
 	public static Repository executeCommand(String command, Repository mem) {
+		History history = new History();
 		Interpreter input = new Interpreter();
+		assert (!command.isEmpty());
 
 		try {
 			input = ProParser.parse(command);
@@ -38,17 +41,27 @@ public class LogicMain {
 		switch (commandInfo) {
 		case ADD:
 			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
-			mem.setFeedbackMsg(Message.ADDED);
+			history = UndoManager.pushToAdd(input.getTaskID());
+			mem.undoActionPush(history);
+			mem.setFeedbackMsg(input.getTaskName() + Message.ADDED);
 			break;
 		case AMEND:
 			Amend.determineAmend(input, mem);
-			mem.setFeedbackMsg(Message.EDITED);
+			mem.setFeedbackMsg(input.getTaskName() + Message.EDITED);
 			break;
 		case DELETE:
+			if (!mem.getBuffer().contains(input.getTaskID())) {
+				mem.setFeedbackMsg(Message.TASK_NOT_FOUND);
+			}
+
 			Obliterator.deleteTask(input.getTaskID(), mem.getBuffer());
-			mem.setFeedbackMsg(Message.DELETED);
+			mem.setFeedbackMsg(input.getTaskName() + Message.DELETED);
 			break;
 		case CLEAR:
+			if (mem.getBuffer().isEmpty()) {
+				mem.setFeedbackMsg(Message.DELETE_ALL_UNSUCCESSFUL);
+			}
+
 			Obliterator.clearTask(input, mem.getBuffer());
 			mem.setFeedbackMsg(Message.DELETE_ALL);
 			break;
@@ -56,24 +69,44 @@ public class LogicMain {
 			Printer.executePrint(mem.getBuffer());
 			break;
 		case SEARCH:
+			if (mem.getBuffer().isEmpty()) {
+				mem.setFeedbackMsg(Message.SEARCH_IS_EMPTY);
+			}
 			SearchEngine.determineSearch(input.getKey(), mem);
-			mem.setFeedbackMsg(Message.SEARCH);
+
+			int result = mem.getTempBuffer().size();
+			mem.setFeedbackMsg(result + Message.SEARCH);
+
 			break;
 		case SORT:
+			if (mem.getBuffer().isEmpty()) {
+				mem.setFeedbackMsg(Message.SORT_UNSUCCESSFUL);
+			}
+
 			Organizer.sort(mem);
 			mem.setFeedbackMsg(Message.SORTED_BY_ID);
 		case UNDO:
-			if(mem.getUndoAction().isEmpty()) {
+			if (mem.getUndoAction().isEmpty()) {
 				mem.setFeedbackMsg(Message.UNDO_UNSUCCESSFUL);
 			} else {
-				//
+				mem.undoActionPop();
+				mem.setFeedbackMsg(Message.UNDO_ACTION);
 			}
 			break;
 		case COMPLETE:
+			if (!mem.getBuffer().contains(input.getTaskID())) {
+				mem.setFeedbackMsg(input.getTaskName() + Message.TASK_NOT_FOUND);
+			}
+
 			Amend.setCompletion(input, mem.getBuffer());
 			mem.setFeedbackMsg(Message.COMPLETE_TASK);
 			break;
 		case UNCOMPLETE:
+
+			if (!mem.getBuffer().contains(input.getTaskID())) {
+				mem.setFeedbackMsg(input.getTaskName() + Message.TASK_NOT_FOUND);
+			}
+
 			Amend.setCompletion(input, mem.getBuffer());
 			mem.setFeedbackMsg(Message.INCOMPLETE_TASK);
 			break;
@@ -81,12 +114,12 @@ public class LogicMain {
 			// incomplete
 			break;
 		case EXIT:
-			System.exit(0);
+			System.exit(MESSAGE_SYSTEM_EXIT);
 		default:
-			Printer.printToUser(Message.INVALID_COMMAND);
+			mem.setFeedbackMsg(Message.INVALID_COMMAND);
 			break;
 		}
-		//writeToStorage(mem); incomplete
+		// writeToStorage(mem); incomplete
 		return mem;
 	}
 }

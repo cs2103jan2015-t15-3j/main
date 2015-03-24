@@ -13,6 +13,6 @@ public class Printer {
 	}
 
 	public static void printToUser(String output) {
-			System.out.println(output);
+		System.out.println(output);
 	}
 }

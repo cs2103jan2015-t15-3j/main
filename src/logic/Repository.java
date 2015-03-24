@@ -41,16 +41,10 @@ public class Repository {
 	}
 
 	public Stack<History> getUndoAction() {
-		if(this.undoAction == null) {
-			Printer.printToUser(Message.UNDO_UNSUCCESSFUL);
-		}
 		return this.undoAction;
 	}
 	
 	public Stack<History> getRedoAction() {
-		if(this.undoAction == null) {
-			Printer.printToUser(Message.REDO_UNSUCCESSFUL);
-		}
 		return this.redoAction;
 	}
 	

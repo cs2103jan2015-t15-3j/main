@@ -37,4 +37,8 @@ public class UnitTest {
 	public static void determineSearch(String input, Repository mem) {
 		SearchEngine.determineSearch(input, mem);
 	}
+	
+	public static Task retrieveTask(Interpreter item, ArrayList<Task> buffer) {
+		return SearchEngine.retrieveTask(item, buffer);
+	}
 }
