@@ -13,6 +13,7 @@ public class Interpreter {
 	}
 
 	private int taskID;
+	private int lastIndex;
 	private String taskName;
 	private String remarks;
 	private boolean isCompleted;
@@ -31,11 +32,15 @@ public class Interpreter {
 	public int getTaskID() {
 		return this.taskID;
 	}
+	
+	public int getLastIndexTaskName() {
+		return this.lastIndex;
+	}
 
 	public String getTaskName() {
 		return this.taskName;
 	}
-
+	
 	public String getRemarks() {
 		return this.remarks;
 	}
@@ -78,6 +83,10 @@ public class Interpreter {
 
 	public void setTaskID(int taskID) {
 		this.taskID = taskID;
+	}
+	
+	public void setLastIndexTaskName(int lastIndex) {
+		this.lastIndex = lastIndex;
 	}
 
 	public void setRemarks(String remarks) {

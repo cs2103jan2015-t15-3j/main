@@ -1,9 +1,7 @@
 package parser;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 
 import logic.Task;
 import logic.Enumerator.TaskType;
@@ -24,17 +22,16 @@ public class ParserAdd {
 	
 	public static void defineTaskName(Interpreter item, String[] inputArray) throws ParseException {
 		int inputArrayLength = inputArray.length; 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm a");
 		TaskType checkTaskType = item.getType(); 
 		switch(checkTaskType) {
 		case FLOATING:
-			defineTaskName(item, inputArray, inputArrayLength - 1);
+			defineTaskName(item, inputArray, item.getLastIndexTaskName());
 			break;
 		case DEADLINE:
-			defineTaskName(item, inputArray, inputArrayLength - 2);
+			defineTaskName(item, inputArray, item.getLastIndexTaskName());
 			break;		
 		case APPOINTMENT:
-			defineTaskName(item, inputArray, inputArrayLength - 4);
+			defineTaskName(item, inputArray, item.getLastIndexTaskName());
 			break;
 		}
 	}
@@ -42,10 +39,10 @@ public class ParserAdd {
 	public static void defineTaskName(Interpreter item, String[] inputArray, int lastIndex) {
 		String taskName = "";
 		for(int i=1; i<=lastIndex; i++){
-			if(i==1) {
-				taskName = taskName.concat(inputArray[i]); 
+			if(i==lastIndex) {
+				taskName = taskName.concat(inputArray[i] + " "); 
 			} else {
-				taskName = taskName.concat(" "+inputArray[i]);	
+				taskName = taskName.concat(inputArray[i] + " ");	
 			}			
 		}
 		item.setTaskName(taskName);
