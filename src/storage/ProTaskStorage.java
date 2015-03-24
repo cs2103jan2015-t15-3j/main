@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import logic.Appointment;
+import logic.Deadline;
 import logic.Repository;
 import logic.Task;
 import logic.Enumerator.TaskType;
@@ -30,6 +31,7 @@ public class ProTaskStorage {
 	protected ArrayList<Appointment> allAppointments;
 	protected ArrayList<Task> allTasks;
 	private String[] dataBaseColumns;
+	private int idCounter;
 
 	/*
 	 * public static void main(String args[]) throws
@@ -65,10 +67,10 @@ public class ProTaskStorage {
 
 		dataBaseColumns = new String[] { "ID", "Description", "Start", "End",
 				"Remarks", "Completed", "Type" };
+		idCounter = 1;
 		if (!checkFileExist()) {
 
 			createDataBase(taskDataBase);
-
 			// addString is just for testing purposes!
 			/*
 			 * addStringTask(1, "Complete CS2103 tut", "08 March 13:00",
@@ -168,24 +170,20 @@ public class ProTaskStorage {
 
 		return toReturnBoolean;
 	}
-	private String convertToAbbreviation(String type)
-	{
+
+	private String convertToAbbreviation(String type) {
 		String returnType = "NIL";
-		
-		if (type.equals("FLOATING"))
-		{
+
+		if (type.equals("FLOATING")) {
 			returnType = "FL";
-		}
-		else if (type.equals("APPOINTMENT"))
-		{
+		} else if (type.equals("APPOINTMENT")) {
 			returnType = "AP";
-		}
-		else if (type.equals("DEADLINE"))
-		{
+		} else if (type.equals("DEADLINE")) {
 			returnType = "DL";
 		}
 		return returnType;
 	}
+
 	private Date stringToDate(String stringDate) {
 		DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm a",
 				Locale.ENGLISH);
@@ -287,26 +285,36 @@ public class ProTaskStorage {
 	public Repository writeToFile(Repository buffer) {
 		ArrayList<Task> obtainedTasks = buffer.getBuffer();
 		ArrayList<Task> temp = new ArrayList<Task>();
-		
-		//int noOfRemainingTasks = buffer.getCurrentID() - allTasks.size();
-		int counter = 1;
-		
-		for (Task task: obtainedTasks)
-		{
-			if (counter == buffer.getCurrentID() )
-			{
-				temp.add(task);
-			}
-			else counter ++;
-		}
-		
-		for (Task task : temp) {
+
+		for (Task task : obtainedTasks) {
 			System.out.println(task.getTaskName());
-			addStringTask(buffer.getCurrentID(), task.getTaskName(), "", "",
-					task.getRemarks(), false, task.getType().toString());
+			temp.add(task);
+		}
+
+		for (Task task : temp) {
+
+			String type = task.getType().toString();
+
+			if (type.equals("APPOINTMENT")) {
+				Appointment item = (Appointment) task;
+				addStringTask(idCounter, task.getTaskName(),
+						item.getStartDateString(), item.getDueDateString(),
+						task.getRemarks(), false, task.getType().toString());
+			} else if (type.equals("DEADLINE")) {
+				Deadline item = (Deadline) task;
+				task.setTaskID(idCounter);
+				addStringTask(idCounter, task.getTaskName(), "",
+						item.getDueDateString(), task.getRemarks(), false, task
+								.getType().toString());
+			} else {
+				task.setTaskID(idCounter);
+				addStringTask(idCounter, task.getTaskName(), "", "",
+						task.getRemarks(), false, task.getType().toString());
+			}
+			idCounter++;
 			allTasks.add(task);
 		}
-		
+
 		buffer.setBuffer(allTasks);
 		return buffer;
 	}
@@ -333,6 +341,10 @@ public class ProTaskStorage {
 		replaceTempToOriginal();
 	}
 
+	public void deleteTask(Repository buffer) {
+
+	}
+
 	public void updateTask(Appointment updatedApp) {
 
 		createDataBase(tempDataBase);
@@ -352,6 +364,7 @@ public class ProTaskStorage {
 		// Build reader instance
 
 		CSVReader reader = new CSVReader(new FileReader(taskDataBase));
+		int lastID = 0;
 
 		try {
 
@@ -386,6 +399,7 @@ public class ProTaskStorage {
 
 					Task newTask = new Task();
 					newTask.setTaskID(Integer.parseInt(row[0]));
+					lastID = Integer.parseInt(row[0]);
 					newTask.setTaskName(row[1]);
 
 					allTasks.add(newTask);
@@ -404,6 +418,7 @@ public class ProTaskStorage {
 					// System.out.println(Arrays.toString(row));
 				}
 			}
+			idCounter = lastID + 1;
 
 			reader.close();
 
