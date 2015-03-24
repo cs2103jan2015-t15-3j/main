@@ -33,10 +33,6 @@ public class Creator extends JPanel{
 		tableModel.updateTable(taskList);
 	}
 	
-	public void tempTable(ArrayList<Task> tempList) {
-		tableModel.tempTable(tempList);
-		
-	}
 	
 	public Creator() {
 		initComponent();
@@ -44,10 +40,13 @@ public class Creator extends JPanel{
 			
 	public void initComponent(){
 	
-		tableModel = new Updator(columnNames);
+		
 		//tableModel.addTableModelListener(new InteractiveForm.InteractiveTableModelListener());
 		
 		table = new JTable();
+		
+
+		tableModel = new Updator(columnNames);
 		table.setModel(tableModel);
 		
 		//set table width scroll
@@ -75,7 +74,5 @@ public class Creator extends JPanel{
 		setLayout(new BorderLayout());
 		add(scroller, BorderLayout.CENTER);
 	}
-
-	
 	
 }
