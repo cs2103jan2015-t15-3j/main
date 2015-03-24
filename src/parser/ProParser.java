@@ -161,6 +161,7 @@ public class ProParser {
 		for(int i=1; i<=lengthSearchKey; i++){
 			searchKey = searchKey.concat(inputArray[i]);
 		}
+		System.out.print("searchKey: "+searchKey);
 		item.setKey(searchKey);
 	}
 	

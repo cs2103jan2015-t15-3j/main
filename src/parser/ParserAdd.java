@@ -11,7 +11,6 @@ import logic.Enumerator.TaskType;
 public class ParserAdd {
 	
 	public static void addTask(Interpreter item, String[] inputArray) throws ParseException {
-		System.out.println("definetasktype");
 		defineTaskType(item, inputArray);
 		defineTaskNameAndDate(item, inputArray);
 		item.setTaskID(0);
@@ -21,21 +20,68 @@ public class ParserAdd {
 	
 	public static void defineTaskType(Interpreter item, String[] inputArray) {
 		int inputArrayLength = inputArray.length; 
-		if(inputArrayLength < 2) {
-			System.out.print("Error. Please input again");
-		}
 		
 		for(int i=0; i<1; i++) {
-			String checkLast = inputArray[inputArrayLength - 2] + " " + inputArray[inputArrayLength - 1];
-			System.out.println("checkLast: " + checkLast);
 			
-			boolean isDateValid = isDate(checkLast);
+			if(inputArrayLength < 2) {
+				System.out.print("Error. Please input again");
+			} else if(inputArrayLength == 2) {
+				// set floating
+			} else if(inputArrayLength > 2 && inputArrayLength < 4) {
+				// check last
+				// if time--> error
+				// if !time, if date --> deadline
+				// if !time, !date --> floating
+			} else if(inputArrayLength > 2 && inputArrayLength < 5) {
+				// check last and 2ndlast
+				// if !time and !date --> floating
+				// if time and if date --> deadline
+				// if time, if !date --> error
+				// if time and if time --> error
+				// if date and if date --> appointment
+
+			} else if(inputArrayLength > 2 && inputArrayLength < 6) {
+				// check 3rdlast, 2ndlast, last
+				// ttt, dtt, tdt --> error
+				// !t!d --> floating
+				// dtd, ddt, nil dd --> appointment
+				// nil dt, nil --> deadline
+							
+			} else {
+				// else if(inputArrayLength >= 6) {	
+				// check last 4 entries
+				// nilnilnilnil --> floating
+				// nilnil dt, nilnilnil d --> deadline
+				// nilnil dd, nildtd, nilddt, dtdt --> appointment
+			}
 			
-			if(!isDateValid) {
-				item.setType(TaskType.FLOATING);
-				item.setIsDueDate(false);
-				item.setIsStartDate(false);
-				System.out.println("!isDateValid --> Floating");
+			
+			
+			
+			
+			String checkLast = inputArray[inputArrayLength - 1];
+			String check2ndLast = inputArray[inputArrayLength - 2];
+			
+			boolean isLastEntryTimeValid = isTime(checkLast);
+			boolean isLastEntryDateValid = isDate(checkLast);
+			boolean is2ndLastEntryDateValid;
+			
+			if(!isLastEntryTimeValid) {
+				if(!isLastEntryDateValid) {
+					item.setType(TaskType.FLOATING);
+					item.setIsDueDate(false);
+					item.setIsStartDate(false);
+					System.out.println("!isDateValid --> Floating");
+				} else {
+					if(inputArrayLength < 4) {
+						item.setType(TaskType.DEADLINE);
+						item.setIsStartDate(false);
+						System.out.println("isDateValid --> Deadline");
+					} else {
+						
+					}
+				}
+			
 			} else {
 				
 				if(inputArrayLength < 4) {
@@ -43,8 +89,9 @@ public class ParserAdd {
 					item.setIsStartDate(false);
 					System.out.println("isDateValid --> Deadline");
 				} else {
-					String check2ndLast = inputArray[inputArrayLength - 4] + inputArray[inputArrayLength - 3];
-					boolean checkStartDate = isDate(check2ndLast);
+					String check3rdLast = inputArray[inputArrayLength - 3];
+					String check4thLast = inputArray[inputArrayLength - 4];
+					boolean checkStartDate = isDate(check3rdLast);
 					
 					if(!checkStartDate) {
 						item.setType(TaskType.DEADLINE);
@@ -57,13 +104,10 @@ public class ParserAdd {
 				}
 			}
 		}
-	}
+	}	
 	
-	//another method is to check for the '/', split by '/', then 
-	//check if each box in the array matches the dd/mm/yy format
-	//check if the integers are valid i.e within the range
 	public static boolean isDate(String checkInput) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm a");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		sdf.setLenient(false);
 		try {
 			Date date = sdf.parse(checkInput);
@@ -72,6 +116,17 @@ public class ParserAdd {
 			return false;
 		}
 	}	
+	
+	public static boolean isTime(String checkInput) {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
+		sdf.setLenient(false);
+		try {
+			Date date = sdf.parse(checkInput);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
+	}
 	
 	public static void defineTaskNameAndDate(Interpreter item, String[] inputArray) throws ParseException {
 		int inputArrayLength = inputArray.length; 
