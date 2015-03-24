@@ -2,50 +2,61 @@ package logic;
 
 import java.util.ArrayList;
 
+import parser.Interpreter;
 import parser.Interpreter.CommandType;
-import logic.Enumerator.TaskType;;
+import logic.Enumerator.TaskType;
 
 public class History {
 
-	private Task task; 
-	private Deadline deadline; 
+	private Task task;
+	private Deadline deadline;
 	private Appointment appointment;
-	private ArrayList<Task> history;
-	private TaskType tasktype;
+	private ArrayList<Task> historyBuffer;
 
-	private CommandType command;
-	private int count;
-	
+	private TaskType tasktype;
+	private Interpreter interpret;
+
 	public History() {
+		interpret = new Interpreter();
 		this.task = new Task();
 		this.deadline = new Deadline();
 		this.appointment = new Appointment();
-		this.history = new ArrayList<Task>();
-		this.count = 0;
+		this.historyBuffer = new ArrayList<Task>();
 	}
-	
+
 	public Task getTask() {
 		return this.task;
 	}
-	
+
 	public Deadline getDeadLine() {
 		return this.deadline;
 	}
-	
+
 	public Appointment getAppointment() {
 		return this.appointment;
 	}
-	
-	public int getCount() {
-		return this.count;
-	}
-	
+
 	public CommandType getCommand() {
-		return this.command;
+		return this.interpret.getCommand();
 	}
-	
+
 	public TaskType getTaskType() {
 		return this.tasktype;
 	}
-	
+
+	public ArrayList<Task> getHistory() {
+		return this.historyBuffer;
+	}
+
+	public int getTaskID() {
+		return this.interpret.getTaskID();
+	}
+
+	public void setCommand(CommandType command) {
+		this.interpret.setCommandType(command);
+	}
+
+	public void setTaskID(int taskID) {
+		this.interpret.setTaskID(taskID);
+	}
 }

@@ -16,7 +16,7 @@ public class Amend {
 		buffer.get(index).setIsCompleted(isCompleted);
 	}
 
-	protected static void determineAmend(Interpreter item, Memory mem) {
+	protected static void determineAmend(Interpreter item, Repository mem) {
 		KEY key = Converter.KeyConverter(item.getKey().toLowerCase());
 		ArrayList<Task> buffer = mem.getBuffer();
 
@@ -36,23 +36,18 @@ public class Amend {
 	}
 
 	private static void amendName(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task task = buffer.get(index);
-
+		Task task = SearchEngine.retrieveTask(item, buffer);
 		task.setTaskName(item.getTaskName());
 	}
 
 	/*
-	 * Determines the task type. If appointment, we will be concern about the
-	 * start date. If deadline, we will store the existing data into an new
-	 * appointment object. Floating tasks are not allowed.
+	 * Determines the task type. If appointment, start date is concerned. If
+	 * deadline, we will store the existing data into an new appointment object.
+	 * Floating tasks are not allowed.
 	 */
 
 	private static void amendStartDate(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task task = buffer.get(index);
+		Task task = SearchEngine.retrieveTask(item, buffer);
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
@@ -67,21 +62,19 @@ public class Amend {
 			appt.setDate(deadline.getDate());
 			appt.setRemarks(deadline.getRemarks());
 
-			Obliterator.deleteTask(taskID, buffer);
-			ToBuffer.addAppointmentToBuffer(appt, buffer);
+			Obliterator.deleteTask(deadline.getTaskID(), buffer);
+			DataBuffer.addAppointmentToBuffer(appt, buffer);
 		}
 	}
 
 	/*
-	 * Determines the task type. If appointment or deadline, we will be concern
-	 * about the due date. If floating, we will store the existing data into an
-	 * new deadline object.
+	 * Determines the task type. If appointment or deadline, due date is
+	 * concerned. If floating, we will store the existing data into an new
+	 * deadline object.
 	 */
 
 	private static void amendDueDate(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task task = buffer.get(index);
+		Task task = SearchEngine.retrieveTask(item, buffer);
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
@@ -98,16 +91,13 @@ public class Amend {
 			deadline.setRemarks(tasks.getRemarks());
 			deadline.setDate(item.getDueDate());
 
-			Obliterator.deleteTask(taskID, buffer);
-			ToBuffer.addDeadlineToBuffer(deadline, buffer);
+			Obliterator.deleteTask(tasks.getTaskID(), buffer);
+			DataBuffer.addDeadlineToBuffer(deadline, buffer);
 		}
 	}
 
 	private static void amendRemarks(Interpreter item, ArrayList<Task> buffer) {
-		int taskID = item.getTaskID();
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		Task type = buffer.get(index);
-
-		type.setRemarks(item.getRemarks());
+		Task task = SearchEngine.retrieveTask(item, buffer);
+		task.setRemarks(item.getRemarks());
 	}
 }

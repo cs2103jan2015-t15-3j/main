@@ -1,44 +1,61 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
+import logic.Enumerator.TaskType;
 
 public class Organizer {
 
-	private static final int LENGTH_COUNT = 1;
+	protected static void sort(Repository mem) {
+		ArrayList<Task> addToTempBuffer = new ArrayList<Task>();
 
-	protected static ArrayList<Task> determineSort(String sort,
+		for (int count = 0; count < mem.getBuffer().size(); count++) {
+			addToTempBuffer.add(mem.getBuffer().get(count));
+		}
+		mem.setTempBuffer(addToTempBuffer);
+		Collections.sort(mem.getTempBuffer(), Compare.numComparator);
+	}
+
+	protected static int indexInsertion(Deadline deadline,
 			ArrayList<Task> buffer) {
-
-		ArrayList<Task> sortedList = new ArrayList<Task>();
-
-		if (sort.equalsIgnoreCase("id")) {
-			sortedList = sortById(buffer);
-		}
-		return sortedList;
-	}
-
-	private static ArrayList<Task> sortById(ArrayList<Task> buffer) {
-		ArrayList<Task> sortedListById = new ArrayList<Task>();
-		for (int count = 0; count < buffer.size(); count++) {
-
-			if (sortedListById.size() >= LENGTH_COUNT) {
-				sortedListById = stringComparator(buffer, sortedListById);
-			} else {
-				sortedListById.add(buffer.get(count));
-			}
-		}
-		return sortedListById;
-	}
-
-	private static ArrayList<Task> stringComparator(ArrayList<Task> buffer,
-			ArrayList<Task> sortedListById) {
-		return sortedListById;
-	}
-
-	protected static int indexInsertion(Deadline deadline, ArrayList<Task> buffer) {
 		int index = 0;
-		
-		
+		Iterator<Task> list = buffer.iterator();
+		while (list.hasNext()) {
+			Task task = list.next();
+			if (task.getType().equals(TaskType.FLOATING)) {
+				break;
+			} else if (task.getType().equals(TaskType.DEADLINE)
+					|| task.getType().equals(TaskType.APPOINTMENT)) {
+				Deadline item = (Deadline) task;
+				if (item.getDate().compareTo(deadline.getDate()) > 0
+						|| item.getDate().compareTo(deadline.getDate()) == 0) {
+					break;
+				}
+			}
+			index++;
+		}
+		return index;
+	}
+
+	protected static int indexInsertion(Appointment appt, ArrayList<Task> buffer) {
+		int index = 0;
+		Iterator<Task> list = buffer.iterator();
+		while (list.hasNext()) {
+			Task task = list.next();
+			if (task.getType().equals(TaskType.FLOATING)) {
+				break;
+			} else if (task.getType().equals(TaskType.DEADLINE)
+					|| task.getType().equals(TaskType.APPOINTMENT)) {
+				Deadline item = (Deadline) task;
+				if (item.getDate().compareTo(appt.getDate()) > 0
+						|| item.getDate().compareTo(appt.getDate()) == 0) {
+					break;
+				}
+			}
+			index++;
+		}
 		return index;
 	}
 }

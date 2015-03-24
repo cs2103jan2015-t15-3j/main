@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.Comparator;
+//import java.util.Date;
 
 public class Compare {
 	
@@ -11,4 +12,10 @@ public class Compare {
 			return first - second;
 		}
 	};
+	
+	//public static Comparator<Date> dateComparator = new Comparator<Date>() {
+		//public int compare(Date dateOne, Date dateTwo) {
+			//return dateOne.
+		//}
+	//};
 }

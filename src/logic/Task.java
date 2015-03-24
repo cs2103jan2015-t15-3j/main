@@ -12,14 +12,13 @@ public class Task {
 
 	public Task() {
 		this.taskID = 0;
-		this.taskName = null;
+		this.taskName = "";
 		this.isCompleted = false;
-		this.remarks = null;
+		this.remarks = "";
 		this.type = TaskType.FLOATING;
 	}
 
-	public Task(int taskID, String taskName, String remarks,
-			boolean isCompleted) {
+	public Task(int taskID, String taskName, String remarks, boolean isCompleted) {
 		this.taskID = taskID;
 		this.taskName = taskName;
 		this.remarks = remarks;
@@ -69,8 +68,8 @@ public class Task {
 
 	@Override
 	public String toString() {
-		return this.getTaskID() + "+" + this.getTaskName() + "+"
-				+ this.getRemarks() + "+" + this.getCompleted() + "+"
-				+ this.getType();
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + "]";
 	}
 }
