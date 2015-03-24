@@ -18,8 +18,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 import logic.LogicMain;
 import logic.Memory;
+=======
+
+import java.util.Iterator;
+import java.util.ListIterator;
+
+import logic.LogicMain; //import LogicMain
+import logic.Repository;
+>>>>>>> 3c0847496984621ffd2cff02d068f853e1643c1b
 import logic.Task;
 
 public class UserInterfaceMain extends JPanel{
@@ -27,6 +36,11 @@ public class UserInterfaceMain extends JPanel{
 	private JFrame frame;
 	private static String userInput = new String();
 	public static JTextField textFieldInput;
+<<<<<<< HEAD
+=======
+	
+	Repository mem = new Repository();
+>>>>>>> 3c0847496984621ffd2cff02d068f853e1643c1b
 
 	/**
 	 * Launch the application.
