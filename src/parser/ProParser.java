@@ -67,7 +67,12 @@ public class ProParser {
 			break;
 		case "powersearch":
 			item.setCommandType(Interpreter.CommandType.POWERSEARCH);
-			
+			break;
+		case "sort":
+			item.setCommandType(Interpreter.CommandType.SORT);
+			break;
+		case "exit":
+			item.setCommandType(Interpreter.CommandType.EXIT);
 			break;
 		}
 	}
