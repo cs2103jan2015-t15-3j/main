@@ -2,35 +2,59 @@ package parser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
+import logic.Task;
 import logic.Enumerator.TaskType;
 
 public class ParserAdd {
 	
 	public static void addTask(Interpreter item, String[] inputArray) throws ParseException {
+		System.out.println("definetasktype");
 		defineTaskType(item, inputArray);
 		defineTaskNameAndDate(item, inputArray);
 		item.setTaskID(0);
-		item.setIsCompleted(false);		
+		item.setIsCompleted(false);	
+		item.setCommandType(Interpreter.CommandType.ADD);
 	}
 	
 	public static void defineTaskType(Interpreter item, String[] inputArray) {
 		int inputArrayLength = inputArray.length; 
-		String checkLast = inputArray[inputArrayLength - 2] + " " + inputArray[inputArrayLength - 1];
-		boolean isDateValid = isDate(checkLast);
-		if(!isDateValid) {
-			item.setType(TaskType.FLOATING);
-			item.setIsDueDate(false);
-			item.setIsStartDate(false);
-		} else {
-			String check2ndLast = inputArray[inputArrayLength - 4] + inputArray[inputArrayLength - 3];
-			boolean checkStartDate = isDate(check2ndLast);
-			if(!checkStartDate) {
-				item.setType(TaskType.DEADLINE);
+		if(inputArrayLength < 2) {
+			System.out.print("Error. Please input again");
+		}
+		
+		for(int i=0; i<1; i++) {
+			String checkLast = inputArray[inputArrayLength - 2] + " " + inputArray[inputArrayLength - 1];
+			System.out.println("checkLast: " + checkLast);
+			
+			boolean isDateValid = isDate(checkLast);
+			
+			if(!isDateValid) {
+				item.setType(TaskType.FLOATING);
+				item.setIsDueDate(false);
 				item.setIsStartDate(false);
+				System.out.println("!isDateValid --> Floating");
 			} else {
-				item.setType(TaskType.APPOINTMENT);
+				
+				if(inputArrayLength < 4) {
+					item.setType(TaskType.DEADLINE);
+					item.setIsStartDate(false);
+					System.out.println("isDateValid --> Deadline");
+				} else {
+					String check2ndLast = inputArray[inputArrayLength - 4] + inputArray[inputArrayLength - 3];
+					boolean checkStartDate = isDate(check2ndLast);
+					
+					if(!checkStartDate) {
+						item.setType(TaskType.DEADLINE);
+						item.setIsStartDate(false);
+						System.out.println("len>4 but no start date --> Deadline");
+					} else {
+						item.setType(TaskType.APPOINTMENT);
+						System.out.println("len>4 with start date --> Appointment");
+					}	
+				}
 			}
 		}
 	}
@@ -39,7 +63,7 @@ public class ParserAdd {
 	//check if each box in the array matches the dd/mm/yy format
 	//check if the integers are valid i.e within the range
 	public static boolean isDate(String checkInput) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm a");
 		sdf.setLenient(false);
 		try {
 			Date date = sdf.parse(checkInput);
@@ -51,7 +75,7 @@ public class ParserAdd {
 	
 	public static void defineTaskNameAndDate(Interpreter item, String[] inputArray) throws ParseException {
 		int inputArrayLength = inputArray.length; 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm a");
 		TaskType checkTaskType = item.getType(); 
 		switch(checkTaskType) {
 		case FLOATING:
@@ -75,8 +99,16 @@ public class ParserAdd {
 	public static void defineTaskName(Interpreter item, String[] inputArray, int lastIndex) {
 		String taskName = "";
 		for(int i=1; i<=lastIndex; i++){
-			taskName = taskName.concat(inputArray[i]);
+			taskName = taskName.concat(inputArray[i] + " ");
 		}
 		item.setTaskName(taskName);
 	}
+	
+	public static Comparator<Task> numComparator = new Comparator<Task>() {
+		public int compare(Task bufferOne, Task bufferTwo) {
+			int first = bufferOne.getTaskID();
+			int second = bufferTwo.getTaskID();
+			return first - second;
+		}
+	};
 }
