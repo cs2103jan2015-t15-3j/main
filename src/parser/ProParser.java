@@ -22,16 +22,18 @@ public class ProParser {
 			defineCommand(item, inputArray);
 		}
 		
+		//System.out.println("ProParserGetCmd: " + item.getCommand());
 		return item;
 	}
 	
 	private static void defineCommand(Interpreter item, String[] inputArray) throws ParseException {
+	
 		String command = inputArray[0].toLowerCase();
 		
 		switch (command) {
 		case "add":
 			item.setCommandType(Interpreter.CommandType.ADD);
-			addTask(item, inputArray);
+			ParserAdd.addTask(item, inputArray);
 			break;
 		case "delete":
 			item.setCommandType(Interpreter.CommandType.DELETE);
@@ -68,13 +70,6 @@ public class ProParser {
 			
 			break;
 		}
-	}
-	
-	private static void addTask(Interpreter item, String[] inputArray) throws ParseException {
-		defineTaskType(item, inputArray);
-		defineTaskNameAndDate(item, inputArray);
-		item.setTaskID(0);
-		item.setIsCompleted(false);		
 	}
 	
 	private static void editTask(Interpreter item, String[] inputArray) throws ParseException {
