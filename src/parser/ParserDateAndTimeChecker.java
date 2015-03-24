@@ -2,7 +2,7 @@ package parser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import logic.Compare;
 import java.util.Date;
 import logic.Enumerator.TaskType;
 
@@ -223,11 +223,13 @@ public class ParserDateAndTimeChecker {
 		System.out.println("isDateValid --> Deadline");
 	}
 	
-	public static void setAppointment(String startDate, String startTime, String dueDate, String endTime, Interpreter item){
-		System.out.println("set appt");
-		item.setType(TaskType.APPOINTMENT);
+	public static void setAppointment(String startDate, String startTime, 
+			String dueDate, String endTime, Interpreter item){
+		
 		Date resultStartDate = setDate(startDate, endTime);
 		Date resultDueDate = setDate(dueDate, endTime);
+		
+		item.setType(TaskType.APPOINTMENT);
 		item.setStartDate(resultStartDate);
 		item.setDueDate(resultDueDate);
 		System.out.println("len>4 with start date --> Appointment");
