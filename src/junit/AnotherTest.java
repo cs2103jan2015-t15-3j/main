@@ -29,8 +29,14 @@ public class AnotherTest {
 		System.out.println(mem.getTempBufferSize());
 		System.out.println(mem.getFeedback());
 		
-		String test3 = "search 3";
+		String test3 = "search";
 		LogicMain.executeCommand(test3, mem);
+		System.out.println(mem.getBufferSize());
+		System.out.println(mem.getTempBufferSize());
+		System.out.println(mem.getFeedback());
+		
+		String test4 = "delete 1";
+		LogicMain.executeCommand(test4, mem);
 		System.out.println(mem.getBufferSize());
 		System.out.println(mem.getTempBufferSize());
 		System.out.println(mem.getFeedback());

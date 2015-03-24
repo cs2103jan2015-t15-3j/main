@@ -14,10 +14,9 @@ public class LogicMain {
 	public static void main(String[] args) {
 
 	}
-
-	//public static Repository displayToUI(String command, Repository mem) 
-		//return executeCommand(command, mem);
-	//}
+	// public static Repository displayToUI(String command, Repository mem)
+	// return executeCommand(command, mem);
+	// }
 
 	protected static void writeToStorage(Repository mem) {
 		ProTaskStorage storage = new ProTaskStorage();
@@ -39,8 +38,8 @@ public class LogicMain {
 		switch (commandInfo) {
 		case ADD:
 			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
-			//history = UndoManager.pushToAdd(input.getTaskID());
-			//mem.undoActionPush(history);
+			history = UndoManager.pushToAdd(input.getTaskID());
+			mem.undoActionPush(history);
 			mem.setFeedbackMsg(input.getTaskName() + Message.ADDED);
 			break;
 		case AMEND:
@@ -51,9 +50,7 @@ public class LogicMain {
 			if (!mem.getBuffer().contains(input.getTaskID())) {
 				mem.setFeedbackMsg(Message.TASK_NOT_FOUND);
 			}
-
 			Obliterator.deleteTask(input.getTaskID(), mem.getBuffer());
-			mem.setFeedbackMsg(input.getTaskName() + Message.DELETED);
 			break;
 		case CLEAR:
 			if (mem.getBuffer().isEmpty()) {
@@ -69,18 +66,14 @@ public class LogicMain {
 			SearchEngine.determineSearch(input.getKey(), mem);
 			break;
 		case SORT:
-			if (mem.getBuffer().isEmpty()) {
-				mem.setFeedbackMsg(Message.SORT_UNSUCCESSFUL);
-			}
-			else {
 			Organizer.sort(mem);
-			mem.setFeedbackMsg(Message.SORTED_BY_ID);
-			}
+			break;
 		case UNDO:
 			if (mem.getUndoAction().isEmpty()) {
 				mem.setFeedbackMsg(Message.UNDO_UNSUCCESSFUL);
 			} else {
 				mem.undoActionPop();
+				mem.getBuffer().remove(0);
 				mem.setFeedbackMsg(Message.UNDO_ACTION);
 			}
 			break;
@@ -93,11 +86,9 @@ public class LogicMain {
 			mem.setFeedbackMsg(Message.COMPLETE_TASK);
 			break;
 		case UNCOMPLETE:
-
 			if (!mem.getBuffer().contains(input.getTaskID())) {
 				mem.setFeedbackMsg(input.getTaskName() + Message.TASK_NOT_FOUND);
 			}
-
 			Amend.setCompletion(input, mem.getBuffer());
 			mem.setFeedbackMsg(Message.INCOMPLETE_TASK);
 			break;
@@ -110,7 +101,7 @@ public class LogicMain {
 			mem.setFeedbackMsg(Message.INVALID_COMMAND);
 			break;
 		}
-		//writeToStorage(mem);
+		// writeToStorage(mem);
 		return mem;
-		}
+	}
 }

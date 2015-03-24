@@ -15,11 +15,22 @@ public class SearchEngine {
 		if (input.matches("\\d+")) {
 			mem.setTempBuffer(searchByTaskID(input.toLowerCase(), buffer));
 			searchResult = mem.getTempBufferSize();
-			mem.setFeedbackMsg(searchResult + Message.SEARCH);
+			if (mem.getTempBufferSize() <= 0) {
+				mem.setFeedbackMsg(Message.SEARCH_IS_EMPTY);
+			}
+			else {
+				mem.setFeedbackMsg(searchResult + Message.SEARCH);
+			}
+
 		} else {
 			mem.setTempBuffer(searchByKeyWords(input.toLowerCase(), buffer));
 			searchResult = mem.getTempBufferSize();
-			mem.setFeedbackMsg(searchResult + Message.SEARCH);
+			if (mem.getTempBufferSize() <= 0) {
+				mem.setFeedbackMsg(Message.SEARCH_IS_EMPTY);
+			}
+			else {
+				mem.setFeedbackMsg(searchResult + Message.SEARCH);
+			}
 		}
 	}
 
@@ -44,7 +55,6 @@ public class SearchEngine {
 		int index = searchBufferIndex(num, buffer);
 
 		searchByIDList.add(buffer.get(index));
-		
 		return searchByIDList;
 	}
 

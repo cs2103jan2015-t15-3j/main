@@ -6,7 +6,7 @@ public class Message {
 	public static final String HELP_GUIDE = "For help, enter:'help' to refer to our guide!";
 	protected static final String INVALID_COMMAND = "The command does not exist. Please enter a valid command.";
 
-	protected static final String ADDED = "has been added successfully!";
+	protected static final String ADDED = " has been added successfully!";
 	protected static final String EDITED = " has been edited.";
 	protected static final String DELETED = " has been deleted.";
 	protected static final String DELETE_ALL = "All tasks have been deleted successfully!";
