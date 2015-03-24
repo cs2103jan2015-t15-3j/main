@@ -12,10 +12,9 @@ public class ParserAdd {
 	
 	public static void addTask(Interpreter item, String[] inputArray) throws ParseException {
 		defineTaskType(item, inputArray);
-		defineTaskNameAndDate(item, inputArray);
+		defineTaskName(item, inputArray);
 		item.setTaskID(0);
 		item.setIsCompleted(false);	
-		item.setCommandType(Interpreter.CommandType.ADD);
 	}
 	
 	public static void defineTaskType(Interpreter item, String[] inputArray) throws ParseException {
@@ -23,7 +22,7 @@ public class ParserAdd {
 		ParserDateAndTimeChecker.checkDateAndTime(item, inputArray, inputArrayLength);	
 	}
 	
-	public static void defineTaskNameAndDate(Interpreter item, String[] inputArray) throws ParseException {
+	public static void defineTaskName(Interpreter item, String[] inputArray) throws ParseException {
 		int inputArrayLength = inputArray.length; 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm a");
 		TaskType checkTaskType = item.getType(); 
@@ -33,15 +32,9 @@ public class ParserAdd {
 			break;
 		case DEADLINE:
 			defineTaskName(item, inputArray, inputArrayLength - 2);
-			Date date = sdf.parse(inputArray[inputArrayLength - 2] + inputArray[inputArrayLength - 1]);
-			item.setDueDate(date);
 			break;		
 		case APPOINTMENT:
 			defineTaskName(item, inputArray, inputArrayLength - 4);
-			Date dueDate = sdf.parse(inputArray[inputArrayLength - 2] + inputArray[inputArrayLength - 1]);
-			item.setDueDate(dueDate);
-			Date startDate = sdf.parse(inputArray[inputArrayLength - 4] + inputArray[inputArrayLength - 3]);
-			item.setStartDate(startDate);
 			break;
 		}
 	}
@@ -49,7 +42,11 @@ public class ParserAdd {
 	public static void defineTaskName(Interpreter item, String[] inputArray, int lastIndex) {
 		String taskName = "";
 		for(int i=1; i<=lastIndex; i++){
-			taskName = taskName.concat(inputArray[i] + " ");
+			if(i==1) {
+				taskName = taskName.concat(inputArray[i]); 
+			} else {
+				taskName = taskName.concat(" "+inputArray[i]);	
+			}			
 		}
 		item.setTaskName(taskName);
 	}

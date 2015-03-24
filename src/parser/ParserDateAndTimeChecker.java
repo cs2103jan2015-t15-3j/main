@@ -35,7 +35,7 @@ public class ParserDateAndTimeChecker {
 		for(int i=0; i<1; i++) {
 			
 			if(length < 2) {
-				System.out.print("Error. Please input again");
+				System.out.println("l<2. Error. Please input again");
 			} else if(length == 2) {
 				// set floating
 				item.setType(TaskType.FLOATING);
@@ -54,9 +54,9 @@ public class ParserDateAndTimeChecker {
 					setFloating(item);
 				//d && !t
 				} else if(!isTime(last) && isDate(last)) {
-					setDeadline(last, "11:59 pm", item);
+					setDeadline(last, "23:59", item);
 				} else {
-					System.out.print("Error. Please input again");
+					System.out.println("2<l<4. Error. Please input again");
 				}
 				
 			} else if(length > 2 && length < 5) {
@@ -73,15 +73,15 @@ public class ParserDateAndTimeChecker {
 					setFloating(item);
 				//d && !t
 				} else if(!isTime(last) && isDate(last)) {
-					setDeadline(last, "11:59 pm", item);
+					setDeadline(last, "23:59", item);
 				//d && t
 				} else if(isTime(last) && isDate(secondLast)) {
 					setDeadline(secondLast, last, item);
 				//d && d
 				} else if(isDate(last) && isDate(secondLast)){
-					setAppointment(secondLast, "11:59 pm", last, "11:59 pm", item);
+					setAppointment(secondLast, "23:59", last, "23:59", item);
 				} else {
-					System.out.print("Error. Please input again");
+					System.out.println("2<l<5 Error. Please input again");
 				}
 				
 			} else if(length > 2 && length < 6) {
@@ -99,21 +99,21 @@ public class ParserDateAndTimeChecker {
 					setFloating(item);
 				//d && !t
 				} else if(!isTime(last) && isDate(last)) {
-					setDeadline(last, "11:59 pm", item);
+					setDeadline(last, "23:59", item);
 				//0dt
 				} else if(isTime(last) && isDate(secondLast) && !isDate(thirdLast)) {
 					setDeadline(secondLast, last, item);
 				//0dd
 				} else if(isDate(last) && isDate(secondLast)) {
-					setAppointment(secondLast, "11:59 pm", last, "11:59 pm", item);
+					setAppointment(secondLast, "23:59", last, "23:59", item);
 				//ddt
 				} else if(isTime(last) && isDate(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, "11:59 pm", secondLast, last, item);
+					setAppointment(thirdLast, "23:59", secondLast, last, item);
 				//dtd
 				} else if (isDate(last) && isTime(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, secondLast, last, "11:59 pm", item);
+					setAppointment(thirdLast, secondLast, last, "23:59", item);
 				} else {
-					System.out.print("Error. Please input again");
+					System.out.println("2<l<6. Error. Please input again");
 				}
 				
 				
@@ -129,29 +129,34 @@ public class ParserDateAndTimeChecker {
 				thirdLast = input[length - 3];
 				fourthLast = input[length - 4];
 				
+				System.out.println("last: "+last);
+				System.out.println("secondLast: "+secondLast);
+				System.out.println("thirdLast: "+thirdLast);
+				System.out.println("fourthLast: "+fourthLast);
+				
 				//!t, !d
 				if(!isTime(last) && !isDate(last)) {
 					setFloating(item);
 				//000d
 				} else if(!isTime(last) && isDate(last) && !isDate(thirdLast) && !isTime(thirdLast)) {
-					setDeadline(last, "11:59 pm", item);
+					setDeadline(last, "23:59", item);
 				//00dt
 				} else if(isTime(last) && isDate(secondLast) && !isDate(thirdLast) && !isTime(thirdLast)) {
 					setDeadline(secondLast, last, item);
 				//00dd
 				} else if(isDate(last) && isDate(secondLast)) {
-					setAppointment(secondLast, "11:59 pm", last, "11:59 pm", item);
+					setAppointment(secondLast, "23:59", last, "23:59", item);
 				//0ddt
 				} else if(isTime(last) && isDate(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, "11:59 pm", secondLast, last, item);
+					setAppointment(thirdLast, "23:59", secondLast, last, item);
 				//0dtd
 				} else if (isDate(last) && isTime(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, secondLast, last, "11:59 pm", item);
+					setAppointment(thirdLast, secondLast, last, "23:59", item);
 				//dtdt
 				} else if (isDate(last) && isTime(secondLast) && isDate(thirdLast) && isTime(fourthLast)) {
 					setAppointment(fourthLast, thirdLast, secondLast, last, item);
 				} else {
-					System.out.print("Error. Please input again");
+					System.out.println("l>=6. Error. Please input again");
 				}
 				
 			}
@@ -161,6 +166,7 @@ public class ParserDateAndTimeChecker {
 	
 	public static boolean isDate(String checkInput) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		System.out.println("isDate: "+checkInput);
 		sdf.setLenient(false);
 		try {
 			Date date = sdf.parse(checkInput);
@@ -171,7 +177,8 @@ public class ParserDateAndTimeChecker {
 	}	
 	
 	public static boolean isTime(String checkInput) {
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		System.out.println("isTime: "+checkInput);
 		sdf.setLenient(false);
 		try {
 			Date date = sdf.parse(checkInput);
@@ -211,9 +218,9 @@ public class ParserDateAndTimeChecker {
 	}
 	
 	public static Date setDate(String inputDate, String inputTime) {
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
-		sdf.setLenient(false);
+		sdf.setLenient(true);
 		try {
 			Date date = sdf.parse(inputDateAndTime);
 			return date;

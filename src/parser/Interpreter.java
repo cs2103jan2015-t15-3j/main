@@ -48,6 +48,14 @@ public class Interpreter {
 		return this.type;
 	}
 
+	public boolean getIsDueDate() {
+		return this.isDueDate;
+	}
+
+	public boolean getIsStartDate() {
+		return this.isStartDate;
+	}
+	
 	public Date getDueDate() {
 		return this.dueDate;
 	}
