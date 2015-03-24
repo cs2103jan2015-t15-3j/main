@@ -115,13 +115,16 @@ public class UserInterfaceMain extends JPanel{
 					//testing if output is correct
 					System.out.println(printList);
 
+					if(firstWord.toLowerCase() == "search"){
+						create.updateTable(tempList);
+						System.out.println("search enter");
+						}
+					else 
+					{
 					//pass Arraylist to Creator
 					create.updateTable(printList);
-					
-					if(firstWord.toLowerCase() == "sort"){
-					create.tempTable(tempList);
 					}
-
+					
 					InputHistory.getInput(userInput);
 
 					//logging records

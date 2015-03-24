@@ -187,8 +187,5 @@ public class Updator extends AbstractTableModel {
 		data.clear();
 	}
 
-	public void tempTable(ArrayList<Task> tempList) {
-		
-		
-	}
+
 }	
