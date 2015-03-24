@@ -4,7 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class HelpGuide {
 
@@ -37,15 +40,30 @@ public class HelpGuide {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("HelpGuide");
 		frame.setBounds(100, 100, 484, 524);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		KeyListener listener = new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_H){
+					frame.dispose();
+				}		
+			}
+			public void keyReleased(KeyEvent e) {
+			}
+			public void keyTyped(KeyEvent e) {
+			}		
+		};
+		
+		frame.addKeyListener(listener);
 
 		JTextArea textArea = new JTextArea();
 		textArea.setEditable(false);
 		textArea.setEnabled(false);
-		textArea.setForeground(Color.BLACK);
+		textArea.setForeground(Color.WHITE);
 		textArea.setBackground(Color.DARK_GRAY);
 		textArea.setBounds(0, 0, 468, 486);
 		frame.getContentPane().add(textArea);
