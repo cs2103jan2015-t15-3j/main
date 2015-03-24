@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import logic.Task;
@@ -33,22 +35,19 @@ public class Creator extends JPanel{
 		tableModel.updateTable(taskList);
 	}
 	
-	
 	public Creator() {
 		initComponent();
 	}
 			
 	public void initComponent(){
 	
-		
+		tableModel = new Updator(columnNames);
+		tableModel.addTableModelListener(new Creator.UpdatorListener());
 		//tableModel.addTableModelListener(new InteractiveForm.InteractiveTableModelListener());
 		
 		table = new JTable();
-		
-
-		tableModel = new Updator(columnNames);
 		table.setModel(tableModel);
-		
+
 		//set table width scroll
 		table.setPreferredScrollableViewportSize(new Dimension(550, 200));
 		table.setFillsViewportHeight(true);
@@ -73,6 +72,17 @@ public class Creator extends JPanel{
 			
 		setLayout(new BorderLayout());
 		add(scroller, BorderLayout.CENTER);
+	}
+	
+	public class UpdatorListener implements TableModelListener {
+		
+		public void tableChanged(TableModelEvent evt) {
+			if (evt.getType() == TableModelEvent.UPDATE) {
+				int column = evt.getColumn();
+				int row = evt.getFirstRow();
+				System.out.println("row: " + row + " column: " + column);
+			}
+		}
 	}
 	
 }

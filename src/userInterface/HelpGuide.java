@@ -1,7 +1,7 @@
-
 package userInterface;
 
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -9,6 +9,8 @@ import javax.swing.JTextArea;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.JLabel;
 
 public class HelpGuide {
 
@@ -46,6 +48,7 @@ public class HelpGuide {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		
 		KeyListener listener = new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
@@ -71,11 +74,16 @@ public class HelpGuide {
 	
 	    frame.addKeyListener(listener);
 		
+		JLabel helpLabel = new JLabel("Press 'F1' again to exit Help Guide");
+		helpLabel.setForeground(Color.RED);
+		helpLabel.setBounds(10, 453, 267, 22);
+		frame.getContentPane().add(helpLabel);
+		
 
 		JTextArea textArea = new JTextArea();
 		textArea.setEditable(false);
 		textArea.setEnabled(false);
-		textArea.setForeground(Color.WHITE);
+		textArea.setForeground(Color.RED);
 		textArea.setBackground(Color.DARK_GRAY);
 		textArea.setBounds(0, 0, 468, 486);
 		frame.getContentPane().add(textArea);

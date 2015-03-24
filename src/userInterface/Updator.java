@@ -1,10 +1,14 @@
 package userInterface;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import logic.Deadline;
 import logic.Repository;
 import logic.Task;
 import logic.Appointment;
@@ -20,11 +24,14 @@ public class Updator extends AbstractTableModel {
 
 	protected String[] columnNames;
 	protected Vector data;
-	//protected Appointment appt;
+	protected Vector appt;
+	protected Vector due;
 	
 	public Updator(String[] columnNames) {
 		this.columnNames = columnNames;
 		data = new Vector();
+		appt = new Vector();
+		due = new Vector();
 	}
 
 	public String getColumnName(int column) {
@@ -55,8 +62,10 @@ public class Updator extends AbstractTableModel {
 	}
 
 	public Object getValueAt(int row, int column) {
+		
 		Task tableInfo = (Task) data.get(row);
-		// Appointment info = (Appointment) data.get(row);
+		Appointment info = (Appointment) appt.get(row);
+		Appointment dd = (Appointment) due.get(row);
 		
 		switch (column) {
 		case INDEX_ID:
@@ -64,9 +73,9 @@ public class Updator extends AbstractTableModel {
 		case INDEX_TASK:
 			return tableInfo.getTaskName();
 		case INDEX_START:
-			return tableInfo.getTaskName();
+			//return info.getStartDateString();
 		case INDEX_END:
-			return tableInfo.getTaskName();
+			//return tableInfo.getTaskName();
 		case INDEX_REMARKS:
 			return tableInfo.getRemarks();
 		// case INDEX_COMPLETED:
@@ -77,8 +86,11 @@ public class Updator extends AbstractTableModel {
 	}
 
 	public void setValueAt(Object value, int row, int column) {
+		
 		Task tableInfo = (Task) data.get(row);
-		// Appointment info = (Appointment) data.get(row);
+		Appointment info = (Appointment) appt.get(row);
+		Appointment dd = (Appointment) due.get(row);
+		
 		switch (column) {
 		case INDEX_ID:
 			tableInfo.setTaskID((Integer) value);
@@ -87,10 +99,10 @@ public class Updator extends AbstractTableModel {
 			tableInfo.setTaskName((String) value);
 			break;
 		case INDEX_START:
-			tableInfo.setTaskName((String) value);
+			//info.setStartDate(null);
 			break;
 		case INDEX_END:
-			tableInfo.setTaskName((String) value);
+			//dd.setDate(null); 
 			break;
 		case INDEX_REMARKS:
 			tableInfo.setRemarks((String)value);
@@ -102,6 +114,7 @@ public class Updator extends AbstractTableModel {
 			System.out.println("INVALID ! Please re-enter an index.");
 		}
 		fireTableCellUpdated(row, column);
+		//fireTableDataChanged();
 	}
 
 	@Override
@@ -117,41 +130,68 @@ public class Updator extends AbstractTableModel {
 	public boolean hasEmptyRow() {
 		if (data.size() == 0)
 			return false;
-		else {
+		
 		Task tableInfo = (Task) data.get(data.size() - 1);
+		Appointment info = (Appointment) appt.get(appt.size() - 1);
+		Appointment dd = (Appointment) due.get(due.size() - 1);
 		
 		if (tableInfo.getTaskName().trim().equals("")
-				&& tableInfo.getTaskName().trim().equals("")
-				&& tableInfo.getTaskName().trim().equals("")
+				&& info.getStartDateString().equals("")
+				//&& tableInfo.getTaskName().trim().equals("")
 				&& tableInfo.getRemarks().trim().equals(""))
-			
+		
 		{
 			return true;
-		} else
+		} 
+		else
 			return false;
-		}
 	}
-
+	
 	public void addEmptyRow() {
+		due.add(new Appointment());
+		fireTableRowsInserted(due.size() - 1, due.size() - 1);
+		//fireTableDataChanged();
+		
+		appt.add(new Appointment());
+		fireTableRowsInserted(appt.size() - 1, appt.size() - 1);
+		//fireTableDataChanged();
+
 		data.add(new Task());
 		fireTableRowsInserted(data.size() - 1, data.size() - 1);
+		//fireTableDataChanged();
+	}
+	
+	public void clearRows() {
+		data.clear();
+		appt.clear();
+		due.clear();
+		fireTableDataChanged();
 	}
 
 	public void updateTable(ArrayList<Task> taskList) {
 		
-		Repository mem = new Repository();
-		//Appointment a = new Appointment();
+		Appointment a = new Appointment();
+		Deadline d = new Deadline();
 		
 		int row = 0;
 
 		clearRows();
+		//fireTableDataChanged();
 		
-		if (taskList.isEmpty()) {
-			if (!this.hasEmptyRow()) {
-				this.addEmptyRow();
-			}
-		}
-		 
+		   if (taskList.isEmpty()) {
+	            if (!this.hasEmptyRow()) {
+	                this.addEmptyRow();
+	            }
+	        }
+
+	        // sort the table in alphabetical order
+	      /*  Collections.sort(taskList, new Comparator<Task>() {
+	            public int compare(Task t1, Task t2) {
+	                return t1.getTaskName().compareToIgnoreCase(
+	                        t2.getTaskName());
+	            }
+	        });*/
+
 			for (Task task : taskList) {
 				if (!this.hasEmptyRow()) {
 					this.addEmptyRow();
@@ -159,33 +199,26 @@ public class Updator extends AbstractTableModel {
 				
 					this.setValueAt(task.getTaskID(), row, INDEX_ID);
 					this.setValueAt(task.getTaskName(), row, INDEX_TASK);
-					this.setValueAt(task.getTaskName(), row, INDEX_START);
-					this.setValueAt(task.getTaskName(), row, INDEX_END);
-					this.setValueAt(task.getRemarks(), row, INDEX_REMARKS);
 					
-					/*
-					if (!task.getStart().equals(null){
-						this.setValueAt(task., row, INDEX_START);
-					}
-					if (!task.getEnd().equals(null){
-						this.setValueAt(task., row, INDEX_END);
-					}
-					 */			
-					/*this.setValueAt(task.getRemarks(), row, INDEX_REMARKS);
-					 if (task.getCompleted() == true) {
-			                this.setValueAt(true, row, INDEX_CHECK);
-			            }*/
-					
-					//test print ID
-					System.out.println(task.getTaskID());
+					//if(a.getStartDateString().equals("NIL"))
+					//{
+					//this.setValueAt(task.getTaskName(), row, INDEX_START);
+					//}
+					//else
+					//{
+					this.setValueAt(a.getStartDateString(), row, INDEX_START);
+					//}
+					this.setValueAt(d.getDueDateString(), row, INDEX_END);
+					this.setValueAt(task.getRemarks(), row, INDEX_REMARKS);	
+
+					//test date
+					System.out.println(a.getStartDateString());
+					System.out.println(d.getDueDateString());
+					System.out.println(data.size());
 					
 					row++;
 				}
 			}
-	
-	public void clearRows() {
-		data.clear();
-	}
 
 
 }	

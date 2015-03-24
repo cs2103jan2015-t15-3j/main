@@ -22,11 +22,13 @@ import logic.LogicMain;
 import logic.Repository;
 import logic.Task;
 
+@SuppressWarnings("serial")
 public class UserInterfaceMain extends JPanel{
 
 	private JFrame frame;
 	private static String userInput = new String();
 	public static JTextField textFieldInput;
+	Repository mem = new Repository();
 
 	/**
 	 * Launch the application.
@@ -34,9 +36,9 @@ public class UserInterfaceMain extends JPanel{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				Repository mem = new Repository();
+				//Repository mem = new Repository();
 				try {
-					UserInterfaceMain window = new UserInterfaceMain(mem);
+					UserInterfaceMain window = new UserInterfaceMain();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,14 +50,14 @@ public class UserInterfaceMain extends JPanel{
 	/**
 	 * Create the application.
 	 */
-	public UserInterfaceMain(Repository mem) {
-		initialize(mem);
+	public UserInterfaceMain() {
+		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(Repository mem) {
+	private void initialize() {
 		proTasklogo();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -68,7 +70,7 @@ public class UserInterfaceMain extends JPanel{
 		JPanel toDoPanel = new JPanel();
 		ImageIcon toDoIcon = new ImageIcon("images/toDoIcon.png");
 		
-		//add table (Creator) here
+		//add table (Creator) into toDoPanel
 		Creator create = new Creator();
 		toDoPanel.add(create);
 		
@@ -93,62 +95,71 @@ public class UserInterfaceMain extends JPanel{
 		textFieldInput.setBounds(54, 395, 600, 27);
 		frame.getContentPane().add(textFieldInput);
 		textFieldInput.setColumns(10);
-
+		
+		JLabel helpLabel = new JLabel("Press 'F1' in text field for Help Guide");
+		helpLabel.setForeground(Color.RED);
+		helpLabel.setBounds(54, 422, 329, 14);
+		frame.getContentPane().add(helpLabel);
 
 		KeyListener listener = new KeyListener() {
 
 			public void keyPressed(KeyEvent e) {
 				
-				Repository mem = new Repository();
 				
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 					userInput = textFieldInput.getText().toString();
+				
 					String firstWord = getFirstWord(userInput);
 					
+					//testing purpose
+					System.out.println(firstWord);
 
 					mem = LogicMain.executeCommand(userInput, mem);
 
 					ArrayList<Task> printList = mem.getBuffer();
-					ArrayList<Task> tempList = mem.getTempBuffer();
+					ArrayList<Task> searchList = mem.getTempBuffer();
 					
 					//testing if output is correct
 					System.out.println(printList);
 
-					if(firstWord.toLowerCase() == "search"){
-						create.updateTable(tempList);
-						System.out.println("search enter");
-						}
+					if(firstWord.toLowerCase().equals("search"))
+					{
+						create.updateTable(searchList);
+						
+						//testing prints
+						System.out.println("searchList in");
+						System.out.println(mem.getTempBuffer().size());
+						System.out.println(mem.getTempBuffer());
+						System.out.println(mem.getBuffer());
+					}
 					else 
 					{
-					//pass Arraylist to Creator
 					create.updateTable(printList);
+					System.out.println("printList in");
 					}
 					
 					InputHistory.getInput(userInput);
 
-					//logging records
+					//logging testing
 					Logging.getInputLog(userInput);
 
-					//displayTextArea.setText(mem.getFeedback());
 					displayTextArea.setText(mem.getFeedback());
 
 					textFieldInput.setText(null);
 				}
 				else if(e.getKeyCode() == KeyEvent.VK_F1){		
-					HelpGuide.main(null);				
+					HelpGuide.main(null);		
+					
 				}
 			}
 
 			public void keyReleased(KeyEvent e) {
 				InputHistory.retrieveInputText(e);
+				
 			}
 
 			public void keyTyped(KeyEvent e) {
-				
-				/*
-				 * if(e.getKeyCode() == KeyEvent.VK_F1){ HelpGuide.main(null); }
-				 */
 			}
 		};
 		textFieldInput.addKeyListener(listener);
@@ -169,7 +180,7 @@ public class UserInterfaceMain extends JPanel{
 		ImageIcon proTaskIcon = new ImageIcon("images/Purple-Pear-400px.png");
 		proTaskLabel.setIcon(proTaskIcon);
 	}
-	
+		
 	// This method will return the command user enters.
 		public static String getFirstWord(String userCommand) {
 			String commandTypeString = userCommand.trim().split("\\s+")[0];
