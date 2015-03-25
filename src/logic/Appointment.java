@@ -28,7 +28,7 @@ public class Appointment extends Deadline {
 
 	public String getStartDateString() {
 		String dateString = "";
-		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm a");
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
 		dateString = df.format(this.startDate);
 		return dateString;
 	}

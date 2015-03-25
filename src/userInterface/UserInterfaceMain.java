@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import logic.Appointment;
 import logic.LogicMain;
 import logic.Repository;
 import logic.Task;

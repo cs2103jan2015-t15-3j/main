@@ -33,7 +33,7 @@ public class Deadline extends Task {
 
 	public String getDueDateString() {
 		String dateString = "";
-		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm a");
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
 		dateString = df.format(this.dueDate);
 		return dateString;
 	}

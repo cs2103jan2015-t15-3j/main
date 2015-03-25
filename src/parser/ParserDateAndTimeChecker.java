@@ -34,12 +34,13 @@ public class ParserDateAndTimeChecker {
 			if(length < 2) {
 				System.out.println("l<2. Error. Please input again");
 			} else if(length == 2) {
-				// set floating
-				setFloating(item,length);			
-				
+				last = input[length - 1];
+				if(isDate(last)) {
+					System.out.println("Error. Pls input taskName");
+				} else {
+					setFloating(item,length);
+				}				
 			} else if(length > 2 && length < 4) {
-				System.out.println("len: "+length);
-
 				// check last
 				// if time--> error
 				// if !time, if date --> deadline
@@ -57,8 +58,6 @@ public class ParserDateAndTimeChecker {
 				}
 				
 			} else if(length > 2 && length < 5) {
-				System.out.println("len: "+length);
-
 				// check last and 2ndlast
 				// if time, if !date --> error
 				// if time and if time --> error
@@ -87,8 +86,6 @@ public class ParserDateAndTimeChecker {
 				}
 				
 			} else if(length > 2 && length < 6) {
-				System.out.println("len: "+length);
-
 				// check 3rdlast, 2ndlast, last
 				// ttt, dtt, tdt --> error
 				// !t!d --> floating
@@ -127,8 +124,6 @@ public class ParserDateAndTimeChecker {
 				
 				
 			} else {
-				System.out.println("len: "+length);
-
 				// else if(length >= 6) {	
 				// check last 4 entries
 				// nilnilnilnil --> floating
@@ -183,7 +178,6 @@ public class ParserDateAndTimeChecker {
 		sdf.setLenient(false);
 		try {
 			Date date = sdf.parse(checkInput);
-			System.out.println("isDate: "+checkInput);
 			return true;
 		} catch (ParseException e) {
 			return false;
@@ -195,7 +189,6 @@ public class ParserDateAndTimeChecker {
 		sdf.setLenient(false);
 		try {
 			Date date = sdf.parse(checkInput);
-			System.out.println("isTime: "+checkInput);
 			return true;
 		} catch (ParseException e) {
 			return false;
@@ -220,6 +213,10 @@ public class ParserDateAndTimeChecker {
 		Date resultDueDate = setDate(dueDate, endTime);
 		item.setStartDate(startDate);
 		item.setDueDate(resultDueDate);
+		
+		
+		
+		
 		System.out.println("isDateValid --> Deadline");
 	}
 	
