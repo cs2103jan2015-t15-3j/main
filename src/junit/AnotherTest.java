@@ -27,6 +27,21 @@ public class AnotherTest {
 		
 		System.out.print(mem.getBuffer());
 		
+		String test7 = "add hello3 world is nice <remarks here>";
+		LogicMain.executeCommand(test7, mem);
+		System.out.println(mem.getBufferSize());
+		System.out.println(mem.getTempBufferSize());
+		System.out.println(mem.getFeedback());
+		
+		System.out.print(mem.getBuffer());
+		
+		String test8 = "edit 3 hello3 world sfhqaof faf";
+		LogicMain.executeCommand(test8, mem);
+		System.out.println(mem.getBufferSize());
+		System.out.println(mem.getTempBufferSize());
+		System.out.println(mem.getFeedback());
+		
+		System.out.print(mem.getBuffer());
 	}
 
 }

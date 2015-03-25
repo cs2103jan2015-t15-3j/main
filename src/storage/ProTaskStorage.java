@@ -91,7 +91,7 @@ public class ProTaskStorage {
 	}
 
 	private String dateToString(Date date) {
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat df = new SimpleDateFormat("dd/MM/yy");
 		String dateString = df.format(date);
 		return dateString;
 
@@ -165,7 +165,7 @@ public class ProTaskStorage {
 	}
 	
 	private Date stringToDate(String stringDate) {
-		DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm a",
+		DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm",
 				Locale.ENGLISH);
 		Date date = new Date();
 
