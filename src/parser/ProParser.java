@@ -10,8 +10,7 @@ public class ProParser {
 		//Split the input string and check for remarks
 		if(input.contains("<")){
 			String[] splitInput = input.split("<");
-			String remarks = splitInput[1];
-			item.setRemarks(remarks);
+			defineRemarks(item, splitInput[1]);
 			String[] inputArray = splitInput[0].split(" ");
 			defineCommand(item, inputArray);
 		} else {
@@ -22,6 +21,12 @@ public class ProParser {
 		
 		//System.out.println("ProParserGetCmd: " + item.getCommand());
 		return item;
+	}
+	
+	private static void defineRemarks(Interpreter item, String remarks) {
+		String[] remarksArray = remarks.split(">");
+		System.out.println(remarksArray[0]);
+		item.setRemarks(remarksArray[0]);
 	}
 	
 	private static void defineCommand(Interpreter item, String[] inputArray) throws ParseException {

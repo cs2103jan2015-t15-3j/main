@@ -25,7 +25,6 @@ public class ParserEdit {
 		ParserDateAndTimeChecker.checkDateAndTime(item, inputArray, inputArrayLength);	
 	}
 	
-
 	public static void defineTaskName(Interpreter item, String[] inputArray) throws ParseException {
 		TaskType checkTaskType = item.getType(); 
 		switch(checkTaskType) {

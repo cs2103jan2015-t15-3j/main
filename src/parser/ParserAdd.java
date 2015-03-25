@@ -39,7 +39,7 @@ public class ParserAdd {
 		String taskName = "";
 		for(int i=1; i<=lastIndex; i++){
 			if(i==lastIndex) {
-				taskName = taskName.concat(inputArray[i] + " "); 
+				taskName = taskName.concat(inputArray[i]); 
 			} else {
 				taskName = taskName.concat(inputArray[i] + " ");	
 			}			

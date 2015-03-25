@@ -32,7 +32,10 @@ public class ParserDateAndTimeChecker{
 	
 	// Variables stand for the last, secondLast, thirdLast and fourthLast 
 	// elements of the input array respectively
-	private static String last, secondLast, thirdLast, fourthLast; 
+	private static String last, secondLast, thirdLast, fourthLast;
+	// If no time is given but a date is given,
+	// set default time to 23:59
+	public static String DEFAULT_TIME = "23:59";
 	static Comparator<Date> dateComparator;
 	
 	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
@@ -56,7 +59,7 @@ public class ParserDateAndTimeChecker{
 					setFloating(item,length);
 				//d && !t
 				} else if(!isTime(last) && isDate(last)) {
-					setDeadline(last, "23:59", item);
+					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
 				} else {
 					System.out.println("Error. Please input again");
@@ -69,22 +72,27 @@ public class ParserDateAndTimeChecker{
 				// if !time and !date --> floating
 				// if time and if date --> deadline
 				// if date and if date --> appointment
+				System.out.println("2<l<5");
 				last = input[length - 1];
 				secondLast = input[length - 2];
 				//!d,!t
 				if(!isTime(last) && !isDate(last)) {
+					System.out.println("!t!d");
 					setFloating(item,length);
 				//d && !t
-				} else if(!isTime(last) && isDate(last)) {
-					setDeadline(last, "23:59", item);
+				} else if(!isTime(last) && isDate(last) && !isDate(secondLast)) {
+					System.out.println("!t,d");
+					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
 				//d && t
 				} else if(isTime(last) && isDate(secondLast)) {
+					System.out.println("dt");
 					setDeadline(secondLast, last, item);
 					item.setLastIndexTaskName(length - 3);
 				//d && d
 				} else if(isDate(last) && isDate(secondLast)){
-					setAppointment(secondLast, "23:59", last, "23:59", item);
+					System.out.println("dd");
+					setAppointment(secondLast, DEFAULT_TIME, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 3);
 				} else {
 					System.out.println("Error. Please input again");
@@ -105,7 +113,7 @@ public class ParserDateAndTimeChecker{
 					setFloating(item,length);
 				//d && !t
 				} else if(!isTime(last) && isDate(last)) {
-					setDeadline(last, "23:59", item);
+					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
 				//0dt
 				} else if(isTime(last) && isDate(secondLast) && !isDate(thirdLast)) {
@@ -113,15 +121,15 @@ public class ParserDateAndTimeChecker{
 					item.setLastIndexTaskName(length - 3);
 				//0dd
 				} else if(isDate(last) && isDate(secondLast)) {
-					setAppointment(secondLast, "23:59", last, "23:59", item);
+					setAppointment(secondLast, DEFAULT_TIME, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 3);
 				//ddt
 				} else if(isTime(last) && isDate(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, "23:59", secondLast, last, item);
+					setAppointment(thirdLast, DEFAULT_TIME, secondLast, last, item);
 					item.setLastIndexTaskName(length - 4);
 				//dtd
 				} else if (isDate(last) && isTime(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, secondLast, last, "23:59", item);
+					setAppointment(thirdLast, secondLast, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 4);
 				} else {
 					System.out.println("Error. Please input again");
@@ -145,7 +153,7 @@ public class ParserDateAndTimeChecker{
 					setFloating(item,length);
 				//000d
 				} else if(!isTime(last) && isDate(last) && !isDate(secondLast) && !isTime(secondLast)) {
-					setDeadline(last, "23:59", item);
+					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
 				//00dt
 				} else if(isTime(last) && isDate(secondLast) && !isDate(thirdLast) && !isTime(thirdLast)) {
@@ -153,15 +161,15 @@ public class ParserDateAndTimeChecker{
 					item.setLastIndexTaskName(length - 3);
 				//00dd
 				} else if(isDate(last) && isDate(secondLast)) {
-					setAppointment(secondLast, "23:59", last, "23:59", item);
+					setAppointment(secondLast, DEFAULT_TIME, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 3);
 				//0ddt
 				} else if(isTime(last) && isDate(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, "23:59", secondLast, last, item);
+					setAppointment(thirdLast, DEFAULT_TIME, secondLast, last, item);
 					item.setLastIndexTaskName(length - 4);
 				//0dtd
 				} else if (isDate(last) && isTime(secondLast) && isDate(thirdLast)) {
-					setAppointment(thirdLast, secondLast, last, "23:59", item);
+					setAppointment(thirdLast, secondLast, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 4);
 				//dtdt
 				} else if (isTime(last) && isDate(secondLast) && isTime(thirdLast) && isDate(fourthLast)) {

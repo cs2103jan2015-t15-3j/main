@@ -7,5 +7,4 @@ public class ParserCompleteTask {
 		item.setTaskID(ID);
 		item.setIsCompleted(true);
 	}
-	
 }
