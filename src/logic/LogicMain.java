@@ -9,17 +9,18 @@ import storage.ProTaskStorage;
 
 public class LogicMain {
 	protected static final int MESSAGE_SYSTEM_EXIT = 0;
+	protected static ProTaskStorage storage;
 
 	// For testing
 	public static void main(String[] args) {
 
 	}
+
 	// public static Repository displayToUI(String command, Repository mem)
 	// return executeCommand(command, mem);
 	// }
 
 	protected static void writeToStorage(Repository mem) {
-		ProTaskStorage storage = new ProTaskStorage();
 		storage.writeToFile(mem);
 	}
 
@@ -39,6 +40,9 @@ public class LogicMain {
 		case ADD:
 			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
 			history = UndoManager.pushToAdd(input.getTaskID());
+			if(storage == null) {
+				storage = new ProTaskStorage();
+			}
 			mem.undoActionPush(history);
 			mem.setFeedbackMsg(input.getTaskName() + Message.ADDED);
 			break;
@@ -51,6 +55,7 @@ public class LogicMain {
 				mem.setFeedbackMsg(Message.TASK_NOT_FOUND);
 			}
 			Obliterator.deleteTask(input.getTaskID(), mem.getBuffer());
+			storage.updateDeleteTask(mem);
 			break;
 		case CLEAR:
 			if (mem.getBuffer().isEmpty()) {
@@ -101,7 +106,7 @@ public class LogicMain {
 			mem.setFeedbackMsg(Message.INVALID_COMMAND);
 			break;
 		}
-		// writeToStorage(mem);
+		writeToStorage(mem);
 		return mem;
 	}
 }
