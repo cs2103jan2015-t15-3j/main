@@ -11,9 +11,8 @@ public class ParserEdit {
 	public static void editTask(Interpreter item, String[] inputArray) throws ParseException {
 		int ID = Integer.parseInt(inputArray[1]);
 		item.setTaskID(ID);
-		int lengthText = inputArray.length - 2;
-		String[] newInputArray = new String[lengthText];
-		for(int i=2; i<=lengthText; i++){
+		String[] newInputArray = new String[inputArray.length - 2];
+		for(int i=2; i<=inputArray.length; i++){
 			newInputArray[i-2] = inputArray[i];
 		}
 		defineTaskType(item, newInputArray);

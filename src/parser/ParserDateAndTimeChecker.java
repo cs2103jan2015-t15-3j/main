@@ -35,7 +35,7 @@ public class ParserDateAndTimeChecker{
 	private static String last, secondLast, thirdLast, fourthLast;
 	// If no time is given but a date is given,
 	// set default time to 23:59
-	public static String DEFAULT_TIME = "23:59";
+	private static String DEFAULT_TIME = "23:59";
 	static Comparator<Date> dateComparator;
 	
 	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
@@ -181,7 +181,7 @@ public class ParserDateAndTimeChecker{
 			}
 	}
 	
-	public static boolean isDate(String checkInput) {
+	private static boolean isDate(String checkInput) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		sdf.setLenient(false);
 		try {
@@ -192,7 +192,7 @@ public class ParserDateAndTimeChecker{
 		}
 	}	
 	
-	public static boolean isTime(String checkInput) {
+	private static boolean isTime(String checkInput) {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setLenient(false);
 		try {
@@ -203,7 +203,7 @@ public class ParserDateAndTimeChecker{
 		}
 	}
 	
-	public static void setFloating(Interpreter item, int length){
+	private static void setFloating(Interpreter item, int length){
 		item.setType(TaskType.FLOATING);
 		item.setIsDueDate(false);
 		item.setIsStartDate(false);
@@ -213,7 +213,7 @@ public class ParserDateAndTimeChecker{
 		item.setLastIndexTaskName(length - 1);
 	}
 	
-	public static void setDeadline(String dueDate, String endTime, Interpreter item){
+	private static void setDeadline(String dueDate, String endTime, Interpreter item){
 		item.setType(TaskType.DEADLINE);
 		item.setIsStartDate(false);
 		Date startDate = null;
@@ -222,7 +222,7 @@ public class ParserDateAndTimeChecker{
 		item.setDueDate(resultDueDate);
 	}
 	
-	public static void setAppointment(String startDate, String startTime, 
+	private static void setAppointment(String startDate, String startTime, 
 			String dueDate, String endTime, Interpreter item){
 		
 		Date resultStartDate = setDate(startDate, startTime);
@@ -232,7 +232,7 @@ public class ParserDateAndTimeChecker{
 		item.setDueDate(resultDueDate);
 	}
 	
-	public static Date setDate(String inputDate, String inputTime) {
+	private static Date setDate(String inputDate, String inputTime) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
 		
