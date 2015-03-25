@@ -242,35 +242,6 @@ public class ProTaskStorage {
 		return buffer;
 	}
 
-	public void updateDeleteTask(Repository buffer) {
-		
-		createDataBase(tempDataBase);		
-		
-		for (Task task : buffer.getBuffer())
-		{
-			String type = task.getType().toString();
-			if (type.equals("APPOINTMENT")) {
-				
-				Appointment item = (Appointment) task;
-				addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(),
-						item.getStartDateString(), item.getDueDateString(),
-						task.getRemarks(), task.getCompleted(), task.getType().toString());
-				
-			}else if (type.equals("DEADLINE")) {
-				
-				Deadline item = (Deadline) task;
-				addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(), "",
-						item.getDueDateString(), task.getRemarks(), task.getCompleted(),
-						task.getType().toString());
-			}
-			else {
-			
-			addStringTask(tempDataBase,buffer.getCurrentID(), task.getTaskName(), "", "",
-					task.getRemarks(), task.getCompleted(), task.getType().toString());
-			}
-		}
-		replaceTempToOriginal();
-	}
 
 	public void loadAllTasks() throws FileNotFoundException {
 		// Build reader instance
@@ -329,5 +300,35 @@ public class ProTaskStorage {
 			
 			Logging.getInputLog("Exception thrown when loading tasks from database to program!");
 		}
+	}
+
+	public void updateDeleteTask(Repository buffer) {
+		
+		createDataBase(tempDataBase);		
+		
+		for (Task task : buffer.getBuffer())
+		{
+			String type = task.getType().toString();
+			if (type.equals("APPOINTMENT")) {
+				
+				Appointment item = (Appointment) task;
+				addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(),
+						item.getStartDateString(), item.getDueDateString(),
+						task.getRemarks(), task.getCompleted(), task.getType().toString());
+				
+			}else if (type.equals("DEADLINE")) {
+				
+				Deadline item = (Deadline) task;
+				addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(), "",
+						item.getDueDateString(), task.getRemarks(), task.getCompleted(),
+						task.getType().toString());
+			}
+			else {
+			
+			addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(), "", "",
+					task.getRemarks(), task.getCompleted(), task.getType().toString());
+			}
+		}
+		replaceTempToOriginal();
 	}
 }
