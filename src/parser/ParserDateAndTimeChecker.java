@@ -2,8 +2,12 @@ package parser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import logic.Compare;
+
+import java.util.Comparator;
 import java.util.Date;
+
 import logic.Enumerator.TaskType;
 
 
@@ -24,15 +28,16 @@ import logic.Enumerator.TaskType;
  *
  */
 
-public class ParserDateAndTimeChecker {
+public class ParserDateAndTimeChecker{
 	
 	// Variables stand for the last, secondLast, thirdLast and fourthLast 
 	// elements of the input array respectively
 	private static String last, secondLast, thirdLast, fourthLast; 
+	static Comparator<Date> dateComparator;
 	
 	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
 			if(length < 2) {
-				System.out.println("l<2. Error. Please input again");
+				System.out.println("Error. Please input again");
 			} else if(length == 2) {
 				last = input[length - 1];
 				if(isDate(last)) {
@@ -54,7 +59,7 @@ public class ParserDateAndTimeChecker {
 					setDeadline(last, "23:59", item);
 					item.setLastIndexTaskName(length - 2);
 				} else {
-					System.out.println("2<l<4. Error. Please input again");
+					System.out.println("Error. Please input again");
 				}
 				
 			} else if(length > 2 && length < 5) {
@@ -82,7 +87,7 @@ public class ParserDateAndTimeChecker {
 					setAppointment(secondLast, "23:59", last, "23:59", item);
 					item.setLastIndexTaskName(length - 3);
 				} else {
-					System.out.println("2<l<5 Error. Please input again");
+					System.out.println("Error. Please input again");
 				}
 				
 			} else if(length > 2 && length < 6) {
@@ -119,7 +124,7 @@ public class ParserDateAndTimeChecker {
 					setAppointment(thirdLast, secondLast, last, "23:59", item);
 					item.setLastIndexTaskName(length - 4);
 				} else {
-					System.out.println("2<l<6. Error. Please input again");
+					System.out.println("Error. Please input again");
 				}
 				
 				
@@ -134,11 +139,6 @@ public class ParserDateAndTimeChecker {
 				secondLast = input[length - 2];
 				thirdLast = input[length - 3];
 				fourthLast = input[length - 4];
-				
-				System.out.println("last: "+last);
-				System.out.println("secondLast: "+secondLast);
-				System.out.println("thirdLast: "+thirdLast);
-				System.out.println("fourthLast: "+fourthLast);
 				
 				//!t, !d
 				if(!isTime(last) && !isDate(last)) {
@@ -168,7 +168,7 @@ public class ParserDateAndTimeChecker {
 					setAppointment(fourthLast, thirdLast, secondLast, last, item);
 					item.setLastIndexTaskName(length - 5);
 				} else {
-					System.out.println("l>=6. Error. Please input again");
+					System.out.println("Error. Please input again");
 				}
 			}
 	}
@@ -203,7 +203,6 @@ public class ParserDateAndTimeChecker {
 		item.setStartDate(date);
 		item.setDueDate(date);
 		item.setLastIndexTaskName(length - 1);
-		System.out.println("!isDateValid --> Floating");
 	}
 	
 	public static void setDeadline(String dueDate, String endTime, Interpreter item){
@@ -213,28 +212,22 @@ public class ParserDateAndTimeChecker {
 		Date resultDueDate = setDate(dueDate, endTime);
 		item.setStartDate(startDate);
 		item.setDueDate(resultDueDate);
-		
-		
-		
-		
-		System.out.println("isDateValid --> Deadline");
 	}
 	
 	public static void setAppointment(String startDate, String startTime, 
 			String dueDate, String endTime, Interpreter item){
 		
-		Date resultStartDate = setDate(startDate, endTime);
+		Date resultStartDate = setDate(startDate, startTime);
 		Date resultDueDate = setDate(dueDate, endTime);
-		
 		item.setType(TaskType.APPOINTMENT);
 		item.setStartDate(resultStartDate);
 		item.setDueDate(resultDueDate);
-		System.out.println("len>4 with start date --> Appointment");
 	}
 	
 	public static Date setDate(String inputDate, String inputTime) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
+		
 		sdf.setLenient(true);
 		try {
 			Date date = sdf.parse(inputDateAndTime);
