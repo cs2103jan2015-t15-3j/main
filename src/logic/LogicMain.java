@@ -27,7 +27,7 @@ public class LogicMain {
 	public static Repository executeCommand(String command, Repository mem) {
 		History history = new History();
 		Interpreter input = new Interpreter();
-		assert (!command.isEmpty());
+		assert (command.isEmpty());
 
 		try {
 			input = ProParser.parse(command);
@@ -40,21 +40,20 @@ public class LogicMain {
 		case ADD:
 			Affix.addTask(input, mem.getBuffer(), mem.numberGenerator());
 			history = UndoManager.pushToAdd(input.getTaskID());
-			if(storage == null) {
+			if (storage == null) {
 				storage = new ProTaskStorage();
 			}
 			mem.undoActionPush(history);
 			mem.setFeedbackMsg(input.getTaskName() + Message.ADDED);
+			writeToStorage(mem);
 			break;
 		case AMEND:
 			Amend.determineAmend(input, mem);
 			mem.setFeedbackMsg(input.getTaskName() + Message.EDITED);
 			break;
 		case DELETE:
-			if (!mem.getBuffer().contains(input.getTaskID())) {
-				mem.setFeedbackMsg(Message.TASK_NOT_FOUND);
-			}
 			Obliterator.deleteTask(input.getTaskID(), mem.getBuffer());
+			mem.setFeedbackMsg(Message.DELETED);
 			storage.updateDeleteTask(mem);
 			break;
 		case CLEAR:
@@ -106,7 +105,6 @@ public class LogicMain {
 			mem.setFeedbackMsg(Message.INVALID_COMMAND);
 			break;
 		}
-		writeToStorage(mem);
 		return mem;
 	}
 }

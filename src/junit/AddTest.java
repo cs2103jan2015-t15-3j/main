@@ -33,7 +33,6 @@ public class AddTest {
 		floating.setType(TaskType.FLOATING);
 		floating.setRemarks("YO");
 		UnitTest.addTask(floating, mem.getBuffer(), mem.numberGenerator());
-		System.out.println(mem.getRedoAction().size());
 
 		// ------------ Add Deadline task -------------------
 		deadline = new Interpreter();
@@ -76,9 +75,9 @@ public class AddTest {
 		UnitTest.deleteTask(2, mem.getBuffer());
 
 		// ------------ Sort -------------------------------
-		UnitTest.sort(mem);
-		System.out.println(mem.getBuffer());
-		System.out.println(mem.getTempBuffer());
+		//UnitTest.sort(mem);
+		//System.out.println(mem.getBuffer());
+		//System.out.println(mem.getTempBuffer());
 
 		// ------------ Search ----------------------------
 		UnitTest.determineSearch("3", mem);
