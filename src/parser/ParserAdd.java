@@ -21,7 +21,6 @@ public class ParserAdd {
 	}
 	
 	public static void defineTaskName(Interpreter item, String[] inputArray) throws ParseException {
-		int inputArrayLength = inputArray.length; 
 		TaskType checkTaskType = item.getType(); 
 		switch(checkTaskType) {
 		case FLOATING:
@@ -47,12 +46,4 @@ public class ParserAdd {
 		}
 		item.setTaskName(taskName);
 	}
-	
-	public static Comparator<Task> numComparator = new Comparator<Task>() {
-		public int compare(Task bufferOne, Task bufferTwo) {
-			int first = bufferOne.getTaskID();
-			int second = bufferTwo.getTaskID();
-			return first - second;
-		}
-	};
 }
