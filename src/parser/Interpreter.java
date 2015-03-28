@@ -24,6 +24,7 @@ public class Interpreter {
 	private CommandType command;
 	private TaskType type;
 	private String key;
+	private String feedbackMsg;
 
 	public CommandType getCommand() {
 		return this.command;
@@ -71,6 +72,14 @@ public class Interpreter {
 
 	public String getKey() {
 		return this.key;
+	}
+	
+	public String getFeedbackMsg() {
+		return this.feedbackMsg;
+	}
+	
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
 	}
 
 	public void setCommandType(CommandType command) {
