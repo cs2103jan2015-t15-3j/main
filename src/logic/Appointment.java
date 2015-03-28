@@ -41,7 +41,7 @@ public class Appointment extends Deadline {
 	public String toString() {
 		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
 				+ this.getRemarks() + " " + this.getCompleted() + " "
-				+ this.getType() + " " + this.getDueDateString() + " "
-				+ this.getStartDateString() + "]";
+				+ this.getType() + " " + this.getStartDateString() + " "
+				+ this.getDueDateString() + "]";
 	}
 }

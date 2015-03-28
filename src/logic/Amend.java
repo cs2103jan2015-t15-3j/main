@@ -86,7 +86,7 @@ public class Amend {
 			appt.setDate(item.getDueDate());
 		} else if (task.getType().equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) task;
-			deadline.setDate(deadline.getDate());
+			deadline.setDate(item.getDueDate());
 		} else if (task.getType().equals(TaskType.FLOATING)) {
 			Task tasks = task;
 			Deadline deadline = new Deadline();
