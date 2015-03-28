@@ -124,6 +124,9 @@ public class Interpreter {
 	public String getDueDateString() {
 		String dateString = "";
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		if(this.dueDate == null) {
+			return "null";
+		}
 		dateString = df.format(this.dueDate);
 		return dateString;
 	}
@@ -131,6 +134,9 @@ public class Interpreter {
 	public String getStartDateString() {
 		String dateString = "";
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		if(this.startDate == null) {
+			return "null";
+		}
 		dateString = df.format(this.startDate);
 		return dateString;
 	}
