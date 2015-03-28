@@ -14,12 +14,8 @@ public class Organizer {
 		for (int count = 0; count < mem.getBuffer().size(); count++) {
 			addToTempBuffer.add(mem.getBuffer().get(count));
 		}
-		mem.setFeedbackMsg(Message.SORTED_BY_ID);
 		mem.setTempBuffer(addToTempBuffer);
-		Collections.sort(mem.getTempBuffer(), Compare.numComparator);
-		if (mem.getTempBuffer().isEmpty()) {
-			mem.setFeedbackMsg(Message.SORT_UNSUCCESSFUL);
-		} 
+		Collections.sort(mem.getTempBuffer(), Compare.StringComparator);
 	}
 
 	protected static int indexInsertion(Deadline deadline,

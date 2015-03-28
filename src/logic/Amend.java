@@ -8,12 +8,17 @@ import parser.Interpreter;
 
 public class Amend {
 
-	protected static void setCompletion(Interpreter item, ArrayList<Task> buffer) {
+	protected static void setCompletion(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
 		int taskID = item.getTaskID();
 		boolean isCompleted = item.getCompleted();
 
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		buffer.get(index).setIsCompleted(isCompleted);
+		try {
+			int index = SearchEngine.searchBufferIndex(taskID, buffer);
+			buffer.get(index).setIsCompleted(isCompleted);
+		} catch (IndexOutOfBoundsException e) {
+			repo.setFeedbackMsg(taskID + Message.TASK_NOT_FOUND);
+		}
 	}
 
 	protected static void determineAmend(Interpreter item, Repository mem) {

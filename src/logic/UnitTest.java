@@ -22,16 +22,16 @@ public class UnitTest {
 		Obliterator.clearTask(item, buffer);
 	}
 
-	public static void determineAmend(Interpreter item, Repository mem) {
-		Amend.determineAmend(item, mem);
+	public static void determineAmend(Interpreter item, Repository repo) {
+		Amend.determineAmend(item, repo);
 	}
 
 	public static void sort(Repository mem) {
 		Organizer.sort(mem);
 	}
 
-	public static void setCompletion(Interpreter item, ArrayList<Task> buffer) {
-		Amend.setCompletion(item, buffer);
+	public static void setCompletion(Interpreter item, Repository repo) {
+		Amend.setCompletion(item, repo);
 	}
 
 	public static void searchBufferIndex(int taskID, ArrayList<Task> buffer) {

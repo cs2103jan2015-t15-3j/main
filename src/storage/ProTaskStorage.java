@@ -206,29 +206,29 @@ public class ProTaskStorage {
 		}
 	}
 
-	public Repository writeToFile(Repository buffer) {
-		ArrayList<Task> obtainedTasks = buffer.getBuffer();
+	public Repository writeToFile(Repository repo) {
+		ArrayList<Task> obtainedTasks = repo.getBuffer();
 
 		Task newTask = obtainedTasks.get(obtainedTasks.size() - 1);
 
 		String type = newTask.getType().toString();
-		buffer.setCurrentID(idCounter);
+		repo.setCurrentID(idCounter);
 
 		if (type.equals("APPOINTMENT")) {
 			Appointment item = (Appointment) newTask;
-			addStringTask(taskDataBase,buffer.getCurrentID(), newTask.getTaskName(),
+			addStringTask(taskDataBase,repo.getCurrentID(), newTask.getTaskName(),
 					item.getStartDateString(), item.getDueDateString(),
 					newTask.getRemarks(), false, newTask.getType().toString());
 		} else if (type.equals("DEADLINE")) {
 			Deadline item = (Deadline) newTask;
-			newTask.setTaskID(buffer.getCurrentID());
-			addStringTask(taskDataBase,buffer.getCurrentID(), newTask.getTaskName(), "",
+			newTask.setTaskID(repo.getCurrentID());
+			addStringTask(taskDataBase,repo.getCurrentID(), newTask.getTaskName(), "",
 					item.getDueDateString(), newTask.getRemarks(), false,
 					newTask.getType().toString());
 		} else {
-			newTask.setTaskID(buffer.getCurrentID());
+			newTask.setTaskID(repo.getCurrentID());
 
-			addStringTask(taskDataBase,buffer.getCurrentID(), newTask.getTaskName(), "", "",
+			addStringTask(taskDataBase,repo.getCurrentID(), newTask.getTaskName(), "", "",
 					newTask.getRemarks(), false, newTask.getType().toString());
 		}
 		idCounter++;
@@ -236,10 +236,10 @@ public class ProTaskStorage {
 		if (justLaunched) {
 			justLaunched = false;
 			allTasks.add(newTask);
-			buffer.setBuffer(allTasks);
+			repo.setBuffer(allTasks);
 		}
 
-		return buffer;
+		return repo;
 	}
 
 
@@ -302,11 +302,11 @@ public class ProTaskStorage {
 		}
 	}
 
-	public void updateDeleteTask(Repository buffer) {
+	public void updateDeleteTask(Repository repo) {
 		
 		createDataBase(tempDataBase);		
 		
-		for (Task task : buffer.getBuffer())
+		for (Task task : repo.getBuffer())
 		{
 			String type = task.getType().toString();
 			if (type.equals("APPOINTMENT")) {

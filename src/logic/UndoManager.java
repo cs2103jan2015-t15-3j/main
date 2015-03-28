@@ -1,9 +1,20 @@
 package logic;
 
+import java.util.ArrayList;
+
 import parser.Interpreter.CommandType;
 
 public class UndoManager {
 
+	protected static void determineUndo(ArrayList<Task> buffer) {
+		Repository repo = new Repository();
+		History history = repo.undoActionPop();
+		
+		if(history.getCommand().equals(CommandType.ADD)) {
+			undoActionAdd(history.getTaskID(), buffer);
+		}
+	}
+	
 	protected static History pushToAdd(int taskID) {
 		History history = new History();
 		history.setCommand(CommandType.ADD);
@@ -11,20 +22,11 @@ public class UndoManager {
 		return history;
 	}
 
-	protected static void determineUndoAction() {
-		Repository repo = new Repository();
-		History hist = repo.undoActionPop();
-
-		if (hist.getCommand().equals(CommandType.ADD)) {
-			undoAddAction(repo.getCurrentID());
-		}
-	}
-
-	private static void undoAddAction(int taskID) {
-		Repository repo = new Repository();
+	private static void undoActionAdd(int taskID, ArrayList<Task> buffer) {
 		History hist = new History();
-		//int index = SearchEngine.searchBufferIndex(taskID, hist.getHistory());
-		repo.undoActionPush(hist);
+		
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+		buffer.remove(index);
 
 	}
 }

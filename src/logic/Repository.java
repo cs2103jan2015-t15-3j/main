@@ -18,6 +18,7 @@ public class Repository {
 		currentID = 0;
 		undoAction = new Stack<History>();
 		redoAction = new Stack<History>();
+		feedbackMsg = "";
 	}
 
 	public ArrayList<Task> getBuffer() {
