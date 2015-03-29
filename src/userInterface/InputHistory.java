@@ -42,13 +42,13 @@ public class InputHistory {
 	private static void pushToHistoryStack() {
 		getInputText = inputStack.pop();
 		historyStack.push(getInputText);
-		UserInterfaceMain.textFieldInput.setText(getInputText);
+		UserInterfaceMain.inputTextField.setText(getInputText);
 	}
 
 	private static void pushToUserInputStack() {
 		getInputText = historyStack.pop();
 		inputStack.push(getInputText);
-		UserInterfaceMain.textFieldInput.setText(getInputText);
+		UserInterfaceMain.inputTextField.setText(getInputText);
 	}
 
 }
