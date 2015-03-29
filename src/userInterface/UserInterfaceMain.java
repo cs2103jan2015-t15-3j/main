@@ -79,7 +79,6 @@ public class UserInterfaceMain extends JPanel {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setVisible(true);
-		// scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		tabbedPane.addTab("To-Do", toDoIcon, scrollPane, null);
 		scrollPane.setViewportView(toDoPanel);
@@ -126,6 +125,15 @@ public class UserInterfaceMain extends JPanel {
 
 					// pass to printTempList/printList
 					if (firstWord.toLowerCase().equals("search")) {
+
+						toDoPanel.revalidate();
+						toDoPanel.repaint();
+						toDoPanel.removeAll();
+						printTempLabel(mem);
+
+					}
+
+					else if (firstWord.toLowerCase().equals("sort")) {
 
 						toDoPanel.revalidate();
 						toDoPanel.repaint();
@@ -267,7 +275,7 @@ public class UserInterfaceMain extends JPanel {
 			toDoPanel.add(JL);
 		}
 	}
-	
+
 	private void proTasklogo() {
 
 		frame = new JFrame("ProTask");
