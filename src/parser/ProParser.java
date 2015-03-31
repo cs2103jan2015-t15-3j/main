@@ -19,7 +19,6 @@ public class ProParser {
 			defineCommand(item, inputArray);
 		}
 		
-		//System.out.println("ProParserGetCmd: " + item.getCommand());
 		return item;
 	}
 	
@@ -44,7 +43,7 @@ public class ProParser {
 		case "clear": case "clr":
 			item.setCommandType(Interpreter.CommandType.CLEAR);
 			break;	
-		case "display":
+		case "display": case "disp":
 			item.setCommandType(Interpreter.CommandType.DISPLAY);
 			break;
 		case "search": case "s":
@@ -66,8 +65,9 @@ public class ProParser {
 			item.setCommandType(Interpreter.CommandType.UNCOMPLETE);
 			ParserUncompleteTask.uncompleteTask(item, inputArray);
 			break;
-		case "powersearch":
+		case "powersearch": case "psearch": case "ps":
 			item.setCommandType(Interpreter.CommandType.POWERSEARCH);
+			ParserPowerSearch.powerSearchTask(item, inputArray);
 			break;
 		case "sort":
 			item.setCommandType(Interpreter.CommandType.SORT);
