@@ -49,15 +49,9 @@ public class ParserDateAndTimeChecker{
 					setFloating(item,length);
 				}				
 			} else if(length > 2 && length < 4) {
-				// check last
-				// if time--> error
-				// if !time, if date --> deadline
-				// if !time, !date --> floating
 				last = input[length - 1];
-				//!d,!t
 				if(!isTime(last) && !isDate(last)) {
 					setFloating(item,length);
-				//d && !t
 				} else if(!isTime(last) && isDate(last)) {
 					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
@@ -66,32 +60,20 @@ public class ParserDateAndTimeChecker{
 				}
 				
 			} else if(length > 2 && length < 5) {
-				// check last and 2ndlast
-				// if time, if !date --> error
-				// if time and if time --> error
-				// if !time and !date --> floating
-				// if time and if date --> deadline
-				// if date and if date --> appointment
-				System.out.println("2<l<5");
+								
 				last = input[length - 1];
 				secondLast = input[length - 2];
-				//!d,!t
+
 				if(!isTime(last) && !isDate(last)) {
-					System.out.println("!t!d");
 					setFloating(item,length);
-				//d && !t
 				} else if(!isTime(last) && isDate(last) && !isDate(secondLast)) {
-					System.out.println("!t,d");
 					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
-				//d && t
 				} else if(isTime(last) && isDate(secondLast)) {
-					System.out.println("dt");
 					setDeadline(secondLast, last, item);
 					item.setLastIndexTaskName(length - 3);
-				//d && d
 				} else if(isDate(last) && isDate(secondLast)){
-					System.out.println("dd");
+					
 					setAppointment(secondLast, DEFAULT_TIME, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 3);
 				} else {
@@ -99,35 +81,25 @@ public class ParserDateAndTimeChecker{
 				}
 				
 			} else if(length > 2 && length < 6) {
-				// check 3rdlast, 2ndlast, last
-				// ttt, dtt, tdt --> error
-				// !t!d --> floating
-				// dtd, ddt, nil dd --> appointment
-				// nil dt, nil nil d--> deadline
 							
 				last = input[length - 1];
 				secondLast = input[length - 2];
 				thirdLast = input[length - 3];
-				//!t,!d
+				
 				if(!isTime(last) && !isDate(last)) {
 					setFloating(item,length);
-				//d && !t
 				} else if(!isTime(last) && isDate(last)) {
 					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
-				//0dt
 				} else if(isTime(last) && isDate(secondLast) && !isDate(thirdLast)) {
 					setDeadline(secondLast, last, item);
 					item.setLastIndexTaskName(length - 3);
-				//0dd
 				} else if(isDate(last) && isDate(secondLast)) {
 					setAppointment(secondLast, DEFAULT_TIME, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 3);
-				//ddt
 				} else if(isTime(last) && isDate(secondLast) && isDate(thirdLast)) {
 					setAppointment(thirdLast, DEFAULT_TIME, secondLast, last, item);
 					item.setLastIndexTaskName(length - 4);
-				//dtd
 				} else if (isDate(last) && isTime(secondLast) && isDate(thirdLast)) {
 					setAppointment(thirdLast, secondLast, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 4);
@@ -137,41 +109,29 @@ public class ParserDateAndTimeChecker{
 				
 				
 			} else {
-				// else if(length >= 6) {	
-				// check last 4 entries
-				// nilnilnilnil --> floating
-				// nilnil dt, nilnilnil d --> deadline
-				// nilnil dd, nildtd, nilddt, dtdt --> appointment
 				
 				last = input[length - 1];
 				secondLast = input[length - 2];
 				thirdLast = input[length - 3];
 				fourthLast = input[length - 4];
 				
-				//!t, !d
 				if(!isTime(last) && !isDate(last)) {
 					setFloating(item,length);
-				//000d
 				} else if(!isTime(last) && isDate(last) && !isDate(secondLast) && !isTime(secondLast)) {
 					setDeadline(last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 2);
-				//00dt
 				} else if(isTime(last) && isDate(secondLast) && !isDate(thirdLast) && !isTime(thirdLast)) {
 					setDeadline(secondLast, last, item);
 					item.setLastIndexTaskName(length - 3);
-				//00dd
 				} else if(isDate(last) && isDate(secondLast)) {
 					setAppointment(secondLast, DEFAULT_TIME, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 3);
-				//0ddt
 				} else if(isTime(last) && isDate(secondLast) && isDate(thirdLast)) {
 					setAppointment(thirdLast, DEFAULT_TIME, secondLast, last, item);
 					item.setLastIndexTaskName(length - 4);
-				//0dtd
 				} else if (isDate(last) && isTime(secondLast) && isDate(thirdLast)) {
 					setAppointment(thirdLast, secondLast, last, DEFAULT_TIME, item);
 					item.setLastIndexTaskName(length - 4);
-				//dtdt
 				} else if (isTime(last) && isDate(secondLast) && isTime(thirdLast) && isDate(fourthLast)) {
 					setAppointment(fourthLast, thirdLast, secondLast, last, item);
 					item.setLastIndexTaskName(length - 5);
