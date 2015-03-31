@@ -25,7 +25,6 @@ public class ProParser {
 	
 	private static void defineRemarks(Interpreter item, String remarks) {
 		String[] remarksArray = remarks.split(">");
-		System.out.println(remarksArray[0]);
 		item.setRemarks(remarksArray[0]);
 	}
 	
