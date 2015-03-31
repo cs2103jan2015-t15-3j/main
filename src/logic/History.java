@@ -1,7 +1,5 @@
 package logic;
 
-import java.util.ArrayList;
-
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
 import logic.Enumerator.TaskType;
@@ -11,7 +9,7 @@ public class History {
 	private Task task;
 	private Deadline deadline;
 	private Appointment appointment;
-	private ArrayList<Task> historyBuffer;
+	private int index;
 
 	private TaskType taskType;
 	private Interpreter interpret;
@@ -21,7 +19,7 @@ public class History {
 		this.task = new Task();
 		this.deadline = new Deadline();
 		this.appointment = new Appointment();
-		this.historyBuffer = new ArrayList<Task>();
+		this.index = 0;
 		this.taskType = null;
 	}
 
@@ -45,8 +43,8 @@ public class History {
 		return this.taskType;
 	}
 
-	public ArrayList<Task> getHistory() {
-		return this.historyBuffer;
+	public int getIndex() {
+		return this.index;
 	}
 
 	public int getTaskID() {
@@ -56,6 +54,7 @@ public class History {
 	public void setTaskType(TaskType type) {
 		this.taskType = type;
 	}
+
 	public void setCommand(CommandType command) {
 		this.interpret.setCommandType(command);
 	}
@@ -64,8 +63,8 @@ public class History {
 		this.interpret.setTaskID(taskID);
 	}
 
-	public void setHistoryBuffer(ArrayList<Task> historyBuffer) {
-		this.historyBuffer = historyBuffer;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	public void setTask(Task task) {

@@ -31,23 +31,37 @@ public class LogicMain {
 		storage.writeToFile(repo);
 	}
 
-	protected static void undoAdd(Repository repo, Interpreter input) {
+	protected static void undoAdd(Interpreter input, Repository repo) {
 		History history = new History();
-		history = UndoManager.pushAddToStack(repo.getCurrentID());
+		history = UndoManager.pushAddToStack(input, repo.getCurrentID());
 		repo.undoActionPush(history);
 	}
 
-	protected static void undoDelete(int taskID, Repository repo,
-			Interpreter input) {
+	protected static void undoDelete(Interpreter input, Repository repo) {
 		History history = new History();
-		int index = SearchEngine.searchBufferIndex(taskID, repo.getBuffer());
-		history = UndoManager.pushDeleteToStack(index, repo);
+		history = UndoManager.pushDeleteToStack(input, repo);
 		repo.undoActionPush(history);
+	}
+
+	protected static void undoAmend(Interpreter input, Repository repo) {
+		History history = new History();
+		history = UndoManager.pushAmendToStack(input, repo);
+		repo.undoActionPush(history);
+	}
+	
+	protected static void undoComplete(Interpreter input, Repository repo) {
+		History history = new History();
+		history = UndoManager.pushCompleteToStack(input, repo);
+		repo.undoActionPush(history);
+	}
+	
+	protected static void initializeInterpreter() {
+		
 	}
 
 	public static Repository executeCommand(String command, Repository repo) {
 		assert (command != null);
-
+		
 		Interpreter input = new Interpreter();
 
 		try {
@@ -61,12 +75,13 @@ public class LogicMain {
 			case ADD:
 				Affix.addTask(input, repo.getBuffer(), repo.numberGenerator());
 				initializeStorage();
-				undoAdd(repo, input);
+				undoAdd(input, repo);
 				repo.setFeedbackMsg(input.getTaskName()
 						+ Message.ADDED_SUCCESSFUL);
 				writeToStorage(repo);
 				break;
 			case AMEND:
+				undoAmend(input, repo);
 				Amend.determineAmend(input, repo);
 				repo.setFeedbackMsg(input.getTaskName()
 						+ Message.EDITED_SUCCESSFUL);
@@ -74,7 +89,7 @@ public class LogicMain {
 				break;
 			case DELETE:
 				try {
-					undoDelete(input.getTaskID(), repo, input);
+					undoDelete(input, repo);
 					Obliterator.deleteTask(input.getTaskID(), repo.getBuffer());
 					repo.setFeedbackMsg(Message.DELETED_SUCCESSFUL);
 					updateStorage(repo);
