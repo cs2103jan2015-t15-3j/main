@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import logic.Deadline;
@@ -28,7 +27,7 @@ public class MainUnitTest {
 	@Test
 	public void testAddFloating() {
 		ArrayList<Task> obtainedTask = repo.getBuffer();
-		LogicMain.executeCommand("add CS2103", repo);
+		LogicMain.parseString("add CS2103", repo);
 		Task tasks = obtainedTask.get(obtainedTask.size() - 1);
 
 		assertEquals("ID", 3, tasks.getTaskID());
@@ -38,7 +37,7 @@ public class MainUnitTest {
 
 	@Test
 	public void testAddDeadline() {
-		LogicMain.executeCommand("add CS2103 21/03/15", repo);
+		LogicMain.parseString("add CS2103 21/03/15", repo);
 
 		Task tasks = obtainedTask.get(obtainedTask.size() - 1);
 		assertEquals("ID", 2, tasks.getTaskID());
@@ -52,8 +51,7 @@ public class MainUnitTest {
 
 	@Test
 	public void testAddAppointment() {
-		LogicMain.executeCommand("add CS2103 21/03/15 13:30 22/03/15 14:30",
-				repo);
+		LogicMain.parseString("add CS2103 21/03/15 13:30 22/03/15 14:30", repo);
 
 		Task tasks = obtainedTask.get(obtainedTask.size() - 1);
 		assertEquals("ID", 1, tasks.getTaskID());
@@ -68,16 +66,16 @@ public class MainUnitTest {
 
 	@Test
 	public void testWrongCommandEntered() {
-		LogicMain.executeCommand("adds Hello", repo);
+		LogicMain.parseString("adds Hello", repo);
 		assertEquals("Command does not exists.",
 				"The command you entered does not exist.", repo.getFeedback());
 	}
 
 	@Test
 	public void searchForTasks() {
-		LogicMain.executeCommand("display", repo);
+		LogicMain.parseString("display", repo);
 
-		LogicMain.executeCommand("search 1", repo);
+		LogicMain.parseString("search 1", repo);
 
 		assertEquals("Added to temp list", 1, repo.getBufferSize());
 	}

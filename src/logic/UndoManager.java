@@ -23,9 +23,13 @@ public class UndoManager {
 		if (history.getCommand().equals(CommandType.AMEND)) {
 			undoAmendAction(history, buffer);
 		}
-		
+
 		if (history.getCommand().equals(CommandType.COMPLETE)) {
 			undoCompleteAction(history, buffer);
+		}
+
+		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
+			undoUncompleteAction(history, buffer);
 		}
 	}
 
@@ -35,8 +39,9 @@ public class UndoManager {
 		history.setTaskID(taskID);
 		return history;
 	}
-	
-	protected static History pushCompleteToStack(Interpreter input, Repository repo) {
+
+	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
+			Repository repo) {
 		History history = new History();
 		history.setCommand(input.getCommand());
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
@@ -48,7 +53,7 @@ public class UndoManager {
 	protected static History pushDeleteToStack(Interpreter input,
 			Repository repo) {
 		History history = new History();
-		history.setCommand(CommandType.DELETE);
+		history.setCommand(input.getCommand());
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
 
@@ -73,7 +78,7 @@ public class UndoManager {
 		History history = new History();
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
-		history.setCommand(CommandType.AMEND);
+		history.setCommand(input.getCommand());
 		history.setIndex(index);
 		history.setTaskType(input.getType());
 
@@ -125,8 +130,14 @@ public class UndoManager {
 			DataBuffer.addAppointmentToBuffer(history.getAppointment(), buffer);
 		}
 	}
-	
-	private static void undoCompleteAction(History history, ArrayList<Task> buffer) {
+
+	private static void undoCompleteAction(History history,
+			ArrayList<Task> buffer) {
 		buffer.get(history.getIndex()).setIsCompleted(false);
+	}
+
+	private static void undoUncompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(true);
 	}
 }

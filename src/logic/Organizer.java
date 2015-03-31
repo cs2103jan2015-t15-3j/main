@@ -27,16 +27,11 @@ public class Organizer {
 			Task task = list.next();
 			if (task.getType().equals(TaskType.FLOATING)) {
 				break;
-			} else if (task.getType().equals(TaskType.DEADLINE)
-					|| task.getType().equals(TaskType.APPOINTMENT)) {
-				try {
-					Deadline item = (Deadline) task;
-					if (item.getDate().compareTo(deadline.getDate()) > 0
-							|| item.getDate().compareTo(deadline.getDate()) == 0) {
-						break;
-					}
-				} catch (ClassCastException e) {
-					Logging.getInputLog("ClassCastException for Deadline");
+			} else if (task.getType().equals(TaskType.DEADLINE)) {
+				Deadline item = (Deadline) task;
+				if (item.getDate().compareTo(deadline.getDate()) > 0
+						|| item.getDate().compareTo(deadline.getDate()) == 0) {
+					break;
 				}
 			}
 			index++;
@@ -50,18 +45,14 @@ public class Organizer {
 		Iterator<Task> list = buffer.iterator();
 		while (list.hasNext()) {
 			Task task = list.next();
-			if (task.getType().equals(TaskType.FLOATING)) {
+			if (task.getType().equals(TaskType.FLOATING)
+					|| task.getType().equals(TaskType.DEADLINE)) {
 				break;
-			} else if (task.getType().equals(TaskType.DEADLINE)
-					|| task.getType().equals(TaskType.APPOINTMENT)) {
-				try {
-					Appointment item = (Appointment) task;
-					if (item.getDate().compareTo(appt.getDate()) > 0
-							|| item.getDate().compareTo(appt.getDate()) == 0) {
-						break;
-					}
-				} catch (ClassCastException e) {
-					Logging.getInputLog("ClassCastException for Appointment");
+			} else if (task.getType().equals(TaskType.APPOINTMENT)) {
+				Appointment item = (Appointment) task;
+				if (item.getDate().compareTo(appt.getDate()) > 0
+						|| item.getDate().compareTo(appt.getDate()) == 0) {
+					break;
 				}
 			}
 			index++;
