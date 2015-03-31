@@ -1,12 +1,12 @@
 package logic;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
 import parser.ProParser;
 import storage.ProTaskStorage;
+import userInterface.Logging;
 
 public class LogicMain {
 	protected static final int MESSAGE_SYSTEM_EXIT = 0;
@@ -17,44 +17,54 @@ public class LogicMain {
 
 	}
 
-	// public static Repository displayToUI(String command, Repository repo)
-	// return executeCommand(command, repo);
-	// }
+	protected static void initializeStorage() {
+		if (storage == null) {
+			storage = new ProTaskStorage();
+		}
+	}
+
+	protected static void updateStorage(Repository repo) {
+		storage.updateDeleteTask(repo);
+	}
 
 	protected static void writeToStorage(Repository repo) {
 		storage.writeToFile(repo);
 	}
 
+	protected static void undoAdd(Repository repo, Interpreter input) {
+		History history = new History();
+		history = UndoManager.pushAddToStack(repo.getCurrentID());
+		repo.undoActionPush(history);
+	}
+
+	protected static void undoDelete(int taskID, Repository repo,
+			Interpreter input) {
+		History history = new History();
+		int index = SearchEngine.searchBufferIndex(taskID, repo.getBuffer());
+		history = UndoManager.pushDeleteToStack(index, repo);
+		repo.undoActionPush(history);
+	}
+
 	public static Repository executeCommand(String command, Repository repo) {
 		assert (command != null);
-		History history = new History();
+
 		Interpreter input = new Interpreter();
 
 		try {
 			input = ProParser.parse(command);
-		} catch (NullPointerException | ParseException e) {
-			repo.setFeedbackMsg("Hello");
-		}
-		CommandType commandInfo = input.getCommand();
+			CommandType commandInfo = input.getCommand();
 
-		if (commandInfo != CommandType.UNDO) {
-		}
+			if (commandInfo != CommandType.UNDO) {
+			}
 
 			switch (commandInfo) {
 			case ADD:
-				try {
-					Affix.addTask(input, repo.getBuffer(), repo.numberGenerator());
-					//history = UndoManager.pushToAdd(input.getTaskID());
-					if (storage == null) {
-						storage = new ProTaskStorage();
-					}
-					//repo.undoActionPush(history);
-					repo.setFeedbackMsg(input.getTaskName()
-							+ Message.ADDED_SUCCESSFUL);
-					writeToStorage(repo);
-				} catch (NullPointerException e) {
-					repo.setFeedbackMsg("Please add something");
-				}
+				Affix.addTask(input, repo.getBuffer(), repo.numberGenerator());
+				initializeStorage();
+				undoAdd(repo, input);
+				repo.setFeedbackMsg(input.getTaskName()
+						+ Message.ADDED_SUCCESSFUL);
+				writeToStorage(repo);
 				break;
 			case AMEND:
 				Amend.determineAmend(input, repo);
@@ -64,9 +74,10 @@ public class LogicMain {
 				break;
 			case DELETE:
 				try {
+					undoDelete(input.getTaskID(), repo, input);
 					Obliterator.deleteTask(input.getTaskID(), repo.getBuffer());
 					repo.setFeedbackMsg(Message.DELETED_SUCCESSFUL);
-					storage.updateDeleteTask(repo);
+					updateStorage(repo);
 				} catch (IndexOutOfBoundsException e) {
 					repo.setFeedbackMsg(input.getTaskID()
 							+ Message.TASK_NOT_FOUND);
@@ -83,7 +94,11 @@ public class LogicMain {
 				Printer.executePrint(repo.getBuffer());
 				break;
 			case SEARCH:
-				SearchEngine.determineSearch(input.getKey(), repo);
+				try {
+					SearchEngine.determineSearch(input.getKey(), repo);
+				} catch (IndexOutOfBoundsException e) {
+					repo.setFeedbackMsg(Message.SEARCH_IS_EMPTY);
+				}
 				break;
 			case SORT:
 				Organizer.sort(repo);
@@ -92,20 +107,32 @@ public class LogicMain {
 				if (repo.getUndoAction().isEmpty()) {
 					repo.setFeedbackMsg(Message.UNDO_UNSUCCESSFUL);
 				} else {
-					UndoManager.determineUndo(repo.getBuffer());
-
+					UndoManager.determineUndo(repo);
 					repo.setFeedbackMsg(Message.UNDO_ACTION);
+					storage.updateDeleteTask(repo);
 				}
 				break;
 			case COMPLETE:
-				Amend.setCompletion(input, repo);
-				repo.setFeedbackMsg(input.getTaskName() + Message.COMPLETE_TASK);
-				storage.updateDeleteTask(repo);
+				try {
+					Amend.setCompletion(input, repo);
+					repo.setFeedbackMsg(Message.COMPLETE_TASK);
+					storage.updateDeleteTask(repo);
+				} catch (IndexOutOfBoundsException e) {
+					repo.setFeedbackMsg(input.getTaskID()
+							+ Message.TASK_NOT_FOUND);
+					Logging.getInputLog(Message.COMPLETE_ERROR);
+				}
 				break;
 			case UNCOMPLETE:
-				Amend.setCompletion(input, repo);
-				repo.setFeedbackMsg(Message.INCOMPLETE_TASK);
-				storage.updateDeleteTask(repo);
+				try {
+					Amend.setCompletion(input, repo);
+					repo.setFeedbackMsg(Message.INCOMPLETE_TASK);
+					storage.updateDeleteTask(repo);
+				} catch (IndexOutOfBoundsException e) {
+					repo.setFeedbackMsg(input.getTaskID()
+							+ Message.TASK_NOT_FOUND);
+					Logging.getInputLog(Message.UNCOMPLETE_ERROR);
+				}
 				break;
 			case POWERSEARCH:
 				// incomplete
@@ -115,6 +142,9 @@ public class LogicMain {
 			default:
 				break;
 			}
+		} catch (NullPointerException | ParseException e) {
+			repo.setFeedbackMsg(Message.SPECIFIED_COMMAND);
+		}
 		return repo;
 	}
 }

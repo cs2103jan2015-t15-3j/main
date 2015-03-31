@@ -13,12 +13,8 @@ public class Amend {
 		int taskID = item.getTaskID();
 		boolean isCompleted = item.getCompleted();
 
-		try {
-			int index = SearchEngine.searchBufferIndex(taskID, buffer);
-			buffer.get(index).setIsCompleted(isCompleted);
-		} catch (IndexOutOfBoundsException e) {
-			repo.setFeedbackMsg(taskID + Message.TASK_NOT_FOUND);
-		}
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+		buffer.get(index).setIsCompleted(isCompleted);
 	}
 
 	protected static void determineAmend(Interpreter item, Repository mem) {

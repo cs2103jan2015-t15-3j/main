@@ -21,8 +21,8 @@ import parser.Interpreter;
 public class LogicUnitTest {
 	/*
 	 * The class Repository is updated and shared among the architecture. This
-	 * Logic Unit Test class will handle individual unit test for the CRUD as
-	 * well as the search operations without the use of parser and database.
+	 * LogicUnitTest class will handle individual unit test for the CRUD as well
+	 * as the search operations without the use of parser and database.
 	 */
 
 	Repository repo = new Repository();
@@ -97,7 +97,7 @@ public class LogicUnitTest {
 		assertEquals("Remarks", "Do Q1-Q5", tasks.getRemarks());
 		if (tasks.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment item = (Appointment) tasks;
-			assertEquals("Start Date", "09/06/13 00:00",
+			assertEquals("Start Date", "09/06/13 00:00 AM",
 					item.getStartDateString());
 			assertEquals("Due Date", "10/06/13 00:00 AM",
 					item.getDueDateString());
@@ -158,19 +158,20 @@ public class LogicUnitTest {
 		deadline.setRemarks("");
 		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
 
-		Task task = obtainedTask.get(obtainedTask.size() - 1);
 		deadline.setKey("TASKNAME");
 		deadline.setTaskID(1);
 		deadline.setTaskName("CS2103T");
 		UnitTest.determineAmend(deadline, repo);
+		Task task = obtainedTask.get(obtainedTask.size() - 1);
 		assertEquals("CS2103 changed to CS2103T", "CS2103T", task.getTaskName());
 
 		deadline.setKey("DUEDATE");
 		deadline.setTaskID(1);
 		deadline.setDueDate(date3);
 		UnitTest.determineAmend(deadline, repo);
-		if (task.getType().equals(TaskType.DEADLINE)) {
-			Deadline item = (Deadline) task;
+		Task taskTwo = obtainedTask.get(obtainedTask.size() - 1);
+		if (taskTwo.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) taskTwo;
 			assertEquals("Date edited", "11/06/13 00:00 AM",
 					item.getDueDateString());
 		}
@@ -185,10 +186,10 @@ public class LogicUnitTest {
 		deadline.setTaskID(1);
 		deadline.setStartDate(date);
 		UnitTest.determineAmend(deadline, repo);
-		Task taskTwo = obtainedTask.get(obtainedTask.size() - 1);
-		if (taskTwo.getType().equals(TaskType.APPOINTMENT)) {
-			Appointment item = (Appointment) taskTwo;
-			assertEquals("Deadline to Appointment", "09/06/13 00:00",
+		Task taskThree = obtainedTask.get(obtainedTask.size() - 1);
+		if (taskThree.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskThree;
+			assertEquals("Deadline to Appointment", "09/06/13 00:00 AM",
 					item.getStartDateString());
 		}
 	}
@@ -232,7 +233,7 @@ public class LogicUnitTest {
 		UnitTest.determineAmend(appt, repo);
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment item = (Appointment) task;
-			assertEquals("Start date edited", "11/06/13 00:00",
+			assertEquals("Start date edited", "11/06/13 00:00 AM",
 					item.getStartDateString());
 		}
 
@@ -271,18 +272,24 @@ public class LogicUnitTest {
 		assertEquals("Current buffer size", 2, repo.getBufferSize());
 
 		int taskID = -1;
-		UnitTest.deleteTask(taskID, repo.getBuffer());
-		assertFalse(taskID == repo.getBufferSize());
+		try {
+			UnitTest.deleteTask(taskID, repo.getBuffer());
+		} catch (IndexOutOfBoundsException e) {
+
+		}
 
 		int taskIDTwo = 10;
-		UnitTest.deleteTask(taskIDTwo, repo.getBuffer());
-		assertFalse(taskIDTwo == repo.getBufferSize());
+		try {
+			UnitTest.deleteTask(taskIDTwo, repo.getBuffer());
+		} catch (IndexOutOfBoundsException e) {
+			assertFalse(taskIDTwo == repo.getBufferSize());
+		}
 
 		int taskIDThree = 1;
 		UnitTest.deleteTask(taskIDThree, repo.getBuffer());
 		assertEquals("Current size", 1, repo.getBufferSize());
 	}
-	
+
 	@Test
 	public void testSearch() throws ParseException {
 		floating = new Interpreter();
@@ -290,13 +297,13 @@ public class LogicUnitTest {
 		floating.setType(TaskType.FLOATING);
 		floating.setRemarks("Question 1 is important.");
 		UnitTest.addTask(floating, repo.getBuffer(), repo.numberGenerator());
-		
+
 		floatingOne = new Interpreter();
 		floatingOne.setTaskName("CS2103T");
 		floatingOne.setType(TaskType.FLOATING);
 		floatingOne.setRemarks("Question 2 is important.");
 		UnitTest.addTask(floatingOne, repo.getBuffer(), repo.numberGenerator());
-		
+
 		floatingTwo = new Interpreter();
 		floatingTwo.setTaskName("EE2024");
 		floatingTwo.setType(TaskType.FLOATING);
@@ -305,25 +312,76 @@ public class LogicUnitTest {
 
 		UnitTest.determineSearch("C", repo);
 		assertEquals("Added to temp list", 2, repo.getTempBufferSize());
-		
+
 		UnitTest.determineSearch("CS", repo);
 		assertEquals("Added to temp list", 2, repo.getTempBufferSize());
-		
+
 		UnitTest.determineSearch("CS210", repo);
 		assertEquals("Added to temp list", 2, repo.getTempBufferSize());
-		
+
 		UnitTest.determineSearch("CG", repo);
 		assertEquals("Added to temp list", 0, repo.getTempBufferSize());
-		
+
 		UnitTest.determineSearch("-1", repo);
 		assertEquals("Added to temp list", 0, repo.getTempBufferSize());
-		
+
 		UnitTest.determineSearch("3", repo);
 		assertEquals("Added to temp list", 1, repo.getTempBufferSize());
-		
+
 		UnitTest.determineSearch("10", repo);
-		System.out.println(repo.getTempBuffer());
 		assertEquals("Added to temp list", 0, repo.getTempBufferSize());
 	}
 
+	@Test
+	public void testCompleteUncompleteTask() throws ParseException {
+		String dateInString = "09/06/2013";
+		String dateInStringTwo = "10/06/2013";
+		Date date = formatter.parse(dateInString);
+		Date dateTwo = formatter.parse(dateInStringTwo);
+
+		deadline = new Interpreter();
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		appt = new Interpreter();
+		appt.setTaskName("CS2103");
+		appt.setStartDate(date);
+		appt.setDueDate(dateTwo);
+		appt.setType(TaskType.APPOINTMENT);
+		appt.setRemarks("Do Q1-Q5");
+		UnitTest.addTask(appt, repo.getBuffer(), repo.numberGenerator());
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		deadline.setIsCompleted(true);
+		deadline.setTaskID(1);
+		UnitTest.setCompletion(deadline, repo);
+		Task task = obtainedTask.get(obtainedTask.size() - 2);
+		if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) task;
+			assertEquals("Set completion", true, item.getCompleted());
+		}
+
+		appt.setIsCompleted(true);
+		appt.setTaskID(2);
+		UnitTest.setCompletion(appt, repo);
+		System.out.println(repo.getBuffer());
+		Task taskTwo = obtainedTask.get(obtainedTask.size() - 1);
+		if (taskTwo.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskTwo;
+			assertEquals("Set completion", true, item.getCompleted());
+		}
+
+		appt.setIsCompleted(false);
+		appt.setTaskID(2);
+		UnitTest.setCompletion(appt, repo);
+		System.out.println(repo.getBuffer());
+		Task taskThree = obtainedTask.get(obtainedTask.size() - 1);
+		if (taskThree.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskThree;
+			assertEquals("Set completion", false, item.getCompleted());
+		}
+	}
 }

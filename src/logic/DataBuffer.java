@@ -10,13 +10,13 @@ public class DataBuffer {
 
 	protected static void addDeadlineToBuffer(Deadline deadline,
 			ArrayList<Task> buffer) {
-		int index = Organizer.indexInsertion(deadline, buffer);
+		int index = Organizer.compareIndexInsertion(deadline, buffer);
 		buffer.add(index, deadline);
 	}
 
 	protected static void addAppointmentToBuffer(Appointment appt,
 			ArrayList<Task> buffer) {
-		int index = Organizer.indexInsertion(appt, buffer);
+		int index = Organizer.compareIndexInsertion(appt, buffer);
 		buffer.add(index, appt);
 	}
 }

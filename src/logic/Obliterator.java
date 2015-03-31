@@ -1,18 +1,14 @@
 package logic;
 
 import java.util.ArrayList;
+//import java.util.Collections;
 
 import parser.Interpreter;
 
 public class Obliterator {
 	protected static void deleteTask(int taskID, ArrayList<Task> buffer) {
-		try {
 		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		buffer.remove(index);	
-		}
-		catch(IndexOutOfBoundsException e) {
-			
-		}
+		buffer.remove(index);
 	}
 
 	protected static void clearTask(Interpreter item, ArrayList<Task> buffer) {

@@ -30,5 +30,8 @@ public class Message {
 	protected static final String UNDO_ACTION = "Undo successfully.";
 	protected static final String REDO_UNSUCCESSFUL = "There is nothing to redo.";
 	protected static final String UNDO_UNSUCCESSFUL = "There is nothing to undo.";
+	
+	protected static final String COMPLETE_ERROR = "[COMPLETE] - IndexOutOfBoundsException";
+	protected static final String UNCOMPLETE_ERROR = "[UNCOMPLETE] - IndexOutOfBoundsException";
 
 }
