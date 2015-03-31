@@ -13,7 +13,7 @@ public class History {
 	private Appointment appointment;
 	private ArrayList<Task> historyBuffer;
 
-	private TaskType tasktype;
+	private TaskType taskType;
 	private Interpreter interpret;
 
 	public History() {
@@ -22,6 +22,7 @@ public class History {
 		this.deadline = new Deadline();
 		this.appointment = new Appointment();
 		this.historyBuffer = new ArrayList<Task>();
+		this.taskType = null;
 	}
 
 	public Task getTask() {
@@ -41,7 +42,7 @@ public class History {
 	}
 
 	public TaskType getTaskType() {
-		return this.tasktype;
+		return this.taskType;
 	}
 
 	public ArrayList<Task> getHistory() {
@@ -52,11 +53,30 @@ public class History {
 		return this.interpret.getTaskID();
 	}
 
+	public void setTaskType(TaskType type) {
+		this.taskType = type;
+	}
 	public void setCommand(CommandType command) {
 		this.interpret.setCommandType(command);
 	}
 
 	public void setTaskID(int taskID) {
 		this.interpret.setTaskID(taskID);
+	}
+
+	public void setHistoryBuffer(ArrayList<Task> historyBuffer) {
+		this.historyBuffer = historyBuffer;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
+	public void setDeadline(Deadline deadline) {
+		this.deadline = deadline;
+	}
+
+	public void setAppointment(Appointment appointment) {
+		this.appointment = appointment;
 	}
 }

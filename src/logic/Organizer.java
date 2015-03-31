@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import userInterface.Logging;
 import logic.Enumerator.TaskType;
 
 public class Organizer {
@@ -18,7 +19,7 @@ public class Organizer {
 		Collections.sort(mem.getTempBuffer(), Compare.StringComparator);
 	}
 
-	protected static int indexInsertion(Deadline deadline,
+	protected static int compareIndexInsertion(Deadline deadline,
 			ArrayList<Task> buffer) {
 		int index = 0;
 		Iterator<Task> list = buffer.iterator();
@@ -28,10 +29,14 @@ public class Organizer {
 				break;
 			} else if (task.getType().equals(TaskType.DEADLINE)
 					|| task.getType().equals(TaskType.APPOINTMENT)) {
-				Deadline item = (Deadline) task;
-				if (item.getDate().compareTo(deadline.getDate()) > 0
-						|| item.getDate().compareTo(deadline.getDate()) == 0) {
-					break;
+				try {
+					Deadline item = (Deadline) task;
+					if (item.getDate().compareTo(deadline.getDate()) > 0
+							|| item.getDate().compareTo(deadline.getDate()) == 0) {
+						break;
+					}
+				} catch (ClassCastException e) {
+					Logging.getInputLog("ClassCastException for Deadline");
 				}
 			}
 			index++;
@@ -39,7 +44,8 @@ public class Organizer {
 		return index;
 	}
 
-	protected static int indexInsertion(Appointment appt, ArrayList<Task> buffer) {
+	protected static int compareIndexInsertion(Appointment appt,
+			ArrayList<Task> buffer) {
 		int index = 0;
 		Iterator<Task> list = buffer.iterator();
 		while (list.hasNext()) {
@@ -48,10 +54,14 @@ public class Organizer {
 				break;
 			} else if (task.getType().equals(TaskType.DEADLINE)
 					|| task.getType().equals(TaskType.APPOINTMENT)) {
-				Deadline item = (Deadline) task;
-				if (item.getDate().compareTo(appt.getDate()) > 0
-						|| item.getDate().compareTo(appt.getDate()) == 0) {
-					break;
+				try {
+					Appointment item = (Appointment) task;
+					if (item.getDate().compareTo(appt.getDate()) > 0
+							|| item.getDate().compareTo(appt.getDate()) == 0) {
+						break;
+					}
+				} catch (ClassCastException e) {
+					Logging.getInputLog("ClassCastException for Appointment");
 				}
 			}
 			index++;

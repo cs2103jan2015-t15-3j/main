@@ -33,36 +33,36 @@ public class ProParser {
 		String command = inputArray[0].toLowerCase();
 		
 		switch (command) {
-		case "add":
+		case "add": case "a":
 			item.setCommandType(Interpreter.CommandType.ADD);
 			ParserAdd.addTask(item, inputArray);
 			break;
-		case "delete":
+		case "delete": case "del":
 			item.setCommandType(Interpreter.CommandType.DELETE);
 			ParserDelete.deleteTask(item, inputArray);
 			break;
-		case "clear":
+		case "clear": case "clr":
 			item.setCommandType(Interpreter.CommandType.CLEAR);
 			break;	
 		case "display":
 			item.setCommandType(Interpreter.CommandType.DISPLAY);
 			break;
-		case "search":
+		case "search": case "s":
 			item.setCommandType(Interpreter.CommandType.SEARCH);
 			ParserSearch.searchTask(item, inputArray);
 			break;
-		case "edit":
+		case "update": case "upd":
 			item.setCommandType(Interpreter.CommandType.AMEND);
 			ParserEdit.editTask(item, inputArray);
 			break;
-		case "undo":
+		case "undo": case "un":
 			item.setCommandType(Interpreter.CommandType.UNDO);
 			break;
-		case "complete":
+		case "complete": case "comp":
 			item.setCommandType(Interpreter.CommandType.COMPLETE);
 			ParserCompleteTask.completeTask(item, inputArray);
 			break;
-		case "uncomplete":
+		case "uncomplete": case "uncomp":
 			item.setCommandType(Interpreter.CommandType.UNCOMPLETE);
 			ParserUncompleteTask.uncompleteTask(item, inputArray);
 			break;

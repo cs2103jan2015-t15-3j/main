@@ -11,25 +11,15 @@ public class SearchEngine {
 	protected static void determineSearch(String input, Repository mem) {
 		ArrayList<Task> buffer = mem.getBuffer();
 		int searchResult;
+		if (input.matches("\\d+")) {
+			mem.setTempBuffer(searchByTaskID(input.toLowerCase(), buffer));
+			searchResult = mem.getTempBufferSize();
+			mem.setFeedbackMsg(searchResult + Message.SEARCH_FOUND);
 
-		try {
-			if (input.matches("\\d+")) {
-				try {
-					mem.setTempBuffer(searchByTaskID(input.toLowerCase(),
-							buffer));
-					searchResult = mem.getTempBufferSize();
-					mem.setFeedbackMsg(searchResult + Message.SEARCH_FOUND);
-				} catch (IndexOutOfBoundsException e) {
-					mem.setFeedbackMsg(input + Message.TASK_NOT_FOUND);
-				}
-			} else {
-				mem.setTempBuffer(searchByKeyWords(input.toLowerCase(), buffer));
-				searchResult = mem.getTempBufferSize();
-				mem.setFeedbackMsg(searchResult + Message.SEARCH_FOUND);
-			}
-
-		} catch (NullPointerException e) {
-			mem.setFeedbackMsg(Message.SEARCH_INVALID);
+		} else {
+			mem.setTempBuffer(searchByKeyWords(input.toLowerCase(), buffer));
+			searchResult = mem.getTempBufferSize();
+			mem.setFeedbackMsg(searchResult + Message.SEARCH_FOUND);
 		}
 	}
 
@@ -48,14 +38,18 @@ public class SearchEngine {
 
 	private static ArrayList<Task> searchByTaskID(String input,
 			ArrayList<Task> buffer) {
+
 		ArrayList<Task> searchByIDList = new ArrayList<Task>();
 
 		Collections.sort(buffer, Compare.numComparator);
-		int num = Converter.convertToInt(input);
-		int index = searchBufferIndex(num, buffer);
+		try {
+			int num = Converter.convertToInt(input);
+			int index = searchBufferIndex(num, buffer);
 
-		searchByIDList.add(buffer.get(index));
+			searchByIDList.add(buffer.get(index));
+		} catch (IndexOutOfBoundsException e) {
 
+		}
 		return searchByIDList;
 	}
 
