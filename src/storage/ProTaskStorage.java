@@ -45,12 +45,10 @@ public class ProTaskStorage {
 			createDataBase(taskDataBase);
 		}
 
-		try{
+		try {
 			loadAllTasks();
 			justLaunched = true;
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			Logging.getInputLog("Exception thrown when program attempst to load databsase into program!");
 		}
 
@@ -149,21 +147,17 @@ public class ProTaskStorage {
 		}
 		return returnType;
 	}
-	
-	private TaskType abbreviationToTaskType(String abb)
-	{
+
+	private TaskType abbreviationToTaskType(String abb) {
 		TaskType type = TaskType.FLOATING;
-		if (abb.equals("AP"))
-		{
+		if (abb.equals("AP")) {
 			type = TaskType.APPOINTMENT;
-		}
-		else if (abb.equals("DL"))
-		{
+		} else if (abb.equals("DL")) {
 			type = TaskType.DEADLINE;
 		}
 		return type;
 	}
-	
+
 	private Date stringToDate(String stringDate) {
 		DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm",
 				Locale.ENGLISH);
@@ -179,8 +173,9 @@ public class ProTaskStorage {
 		return date; // Sat Jan 02 00:00:00 GMT 2010
 	}
 
-	public void addStringTask(String databaseName, int id, String desc, String startTime,
-			String endTime, String remarks, boolean isCompleted, String type) {
+	public void addStringTask(String databaseName, int id, String desc,
+			String startTime, String endTime, String remarks,
+			boolean isCompleted, String type) {
 
 		try {
 			CSVWriter writer = new CSVWriter(new FileWriter(databaseName, true));
@@ -202,7 +197,8 @@ public class ProTaskStorage {
 			writer.close();
 
 		} catch (IOException e) {
-			Logging.getInputLog("Exception thrown when user wants to add new task with ID: "+intToString(id)+"; Name: "+desc);
+			Logging.getInputLog("Exception thrown when user wants to add new task with ID: "
+					+ intToString(id) + "; Name: " + desc);
 		}
 	}
 
@@ -216,20 +212,22 @@ public class ProTaskStorage {
 
 		if (type.equals("APPOINTMENT")) {
 			Appointment item = (Appointment) newTask;
-			addStringTask(taskDataBase,repo.getCurrentID(), newTask.getTaskName(),
-					item.getStartDateString(), item.getDueDateString(),
-					newTask.getRemarks(), false, newTask.getType().toString());
+			addStringTask(taskDataBase, repo.getCurrentID(),
+					newTask.getTaskName(), item.getStartDateString(),
+					item.getDueDateString(), newTask.getRemarks(), false,
+					newTask.getType().toString());
 		} else if (type.equals("DEADLINE")) {
 			Deadline item = (Deadline) newTask;
 			newTask.setTaskID(repo.getCurrentID());
-			addStringTask(taskDataBase,repo.getCurrentID(), newTask.getTaskName(), "",
-					item.getDueDateString(), newTask.getRemarks(), false,
-					newTask.getType().toString());
+			addStringTask(taskDataBase, repo.getCurrentID(),
+					newTask.getTaskName(), "", item.getDueDateString(),
+					newTask.getRemarks(), false, newTask.getType().toString());
 		} else {
 			newTask.setTaskID(repo.getCurrentID());
 
-			addStringTask(taskDataBase,repo.getCurrentID(), newTask.getTaskName(), "", "",
-					newTask.getRemarks(), false, newTask.getType().toString());
+			addStringTask(taskDataBase, repo.getCurrentID(),
+					newTask.getTaskName(), "", "", newTask.getRemarks(), false,
+					newTask.getType().toString());
 		}
 		idCounter++;
 
@@ -242,7 +240,6 @@ public class ProTaskStorage {
 		return repo;
 	}
 
-
 	public void loadAllTasks() throws FileNotFoundException {
 		// Build reader instance
 
@@ -254,7 +251,6 @@ public class ProTaskStorage {
 			boolean isColumn = true;
 
 			// Read all rows at once
-
 			List<String[]> allRows = reader.readAll();
 
 			if (allAppointments == null) {
@@ -288,7 +284,7 @@ public class ProTaskStorage {
 					newTask.setIsCompleted(stringToBoolean(row[5]));
 					newTask.setType(abbreviationToTaskType(row[6]));
 					allTasks.add(newTask);
-					
+
 				}
 			}
 
@@ -297,36 +293,37 @@ public class ProTaskStorage {
 			reader.close();
 
 		} catch (Exception e) {
-			
+
 			Logging.getInputLog("Exception thrown when loading tasks from database to program!");
 		}
 	}
 
 	public void updateDeleteTask(Repository repo) {
-		
-		createDataBase(tempDataBase);		
-		
-		for (Task task : repo.getBuffer())
-		{
+
+		createDataBase(tempDataBase);
+
+		for (Task task : repo.getBuffer()) {
 			String type = task.getType().toString();
 			if (type.equals("APPOINTMENT")) {
-				
+
 				Appointment item = (Appointment) task;
-				addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(),
-						item.getStartDateString(), item.getDueDateString(),
-						task.getRemarks(), task.getCompleted(), task.getType().toString());
-				
-			}else if (type.equals("DEADLINE")) {
-				
+				addStringTask(tempDataBase, task.getTaskID(),
+						task.getTaskName(), item.getStartDateString(),
+						item.getDueDateString(), task.getRemarks(),
+						task.getCompleted(), task.getType().toString());
+
+			} else if (type.equals("DEADLINE")) {
+
 				Deadline item = (Deadline) task;
-				addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(), "",
-						item.getDueDateString(), task.getRemarks(), task.getCompleted(),
-						task.getType().toString());
-			}
-			else {
-			
-			addStringTask(tempDataBase,task.getTaskID(), task.getTaskName(), "", "",
-					task.getRemarks(), task.getCompleted(), task.getType().toString());
+				addStringTask(tempDataBase, task.getTaskID(),
+						task.getTaskName(), "", item.getDueDateString(),
+						task.getRemarks(), task.getCompleted(), task.getType()
+								.toString());
+			} else {
+
+				addStringTask(tempDataBase, task.getTaskID(),
+						task.getTaskName(), "", "", task.getRemarks(),
+						task.getCompleted(), task.getType().toString());
 			}
 		}
 		replaceTempToOriginal();
