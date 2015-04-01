@@ -1,15 +1,12 @@
 package userInterface;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -70,18 +67,22 @@ public class UserInterfaceMain extends JPanel {
 		proTasklogo();
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(43, 74, 541, 515);
+		tabbedPane.setBounds(43, 28, 541, 561);
 		frame.getContentPane().add(tabbedPane);
 
 		completedPanel = new JPanel();
 		completedPanel.setForeground(Color.DARK_GRAY);
 		completedPanel.setBackground(Color.WHITE);
-		ImageIcon completedIcon = new ImageIcon("images/completedIcon.png");
+		ImageIcon completedIcon = new ImageIcon(
+				(UserInterfaceMain.class
+						.getResource("/userInterface/ImageIcon/completedIcon.png")));
 
 		toDoPanel = new JPanel();
 		toDoPanel.setForeground(Color.DARK_GRAY);
 		toDoPanel.setBackground(Color.WHITE);
-		ImageIcon toDoIcon = new ImageIcon("images/toDoIcon.png");
+		ImageIcon toDoIcon = new ImageIcon(
+				(UserInterfaceMain.class
+						.getResource("/userInterface/ImageIcon/toDoIcon.png")));
 
 		JScrollPane toDoScroller = new JScrollPane();
 		toDoScroller.setVisible(true);
@@ -90,14 +91,9 @@ public class UserInterfaceMain extends JPanel {
 		toDoScroller.setViewportView(toDoPanel);
 		toDoPanel.setLayout(new BoxLayout(toDoPanel, BoxLayout.Y_AXIS));
 
-		// adding Jtable
-		// Create c = new Create();
-		// completedPanel.add(c);
-
 		JScrollPane completedScroller = new JScrollPane();
 		completedScroller.setVisible(true);
 
-		// completed table tab
 		tabbedPane.addTab("Completed", completedIcon, completedScroller, null);
 		completedScroller.setViewportView(completedPanel);
 		completedPanel
@@ -114,9 +110,9 @@ public class UserInterfaceMain extends JPanel {
 		frame.getContentPane().add(inputTextField);
 		inputTextField.setColumns(10);
 
-		JLabel helpLabel = new JLabel("Press 'F1' in text field for Help Guide");
-		helpLabel.setForeground(new Color(139, 0, 0));
-		helpLabel.setBounds(43, 698, 581, 27);
+		JLabel helpLabel = new JLabel("Press 'F1' for Help Guide");
+		helpLabel.setForeground(new Color(0, 139, 139));
+		helpLabel.setBounds(43, 680, 581, 27);
 		frame.getContentPane().add(helpLabel);
 
 		KeyListener listener = new KeyListener() {
@@ -133,7 +129,7 @@ public class UserInterfaceMain extends JPanel {
 					// testing getFirstWord
 					System.out.println(firstWord);
 
-					mem = LogicMain.executeCommand(userInput, mem);
+					mem = LogicMain.parseString(userInput, mem);
 
 					// pass to printTempList/printList
 					if (firstWord.toLowerCase().equals("search")) {
@@ -361,23 +357,14 @@ public class UserInterfaceMain extends JPanel {
 	private void proTasklogo() {
 
 		frame = new JFrame("ProTask");
-		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 28));
 		frame.setResizable(false);
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(UserInterfaceMain.class.getResource("/userInterface/ImageIcon/proTaskLogo.png")));
+		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 28));
 		frame.getContentPane().setEnabled(false);
-		frame.setBounds(100, 100, 662, 817);
+		frame.setBounds(100, 100, 638, 829);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		//frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
-			//	UserInterfaceMain.class.getResource("/images/proTaskLogo.png")));
 
-		JLabel proTaskLabel = new JLabel("ProTask");
-		proTaskLabel.setForeground(Color.DARK_GRAY);
-		proTaskLabel.setFont(new Font("Tekton Pro", Font.PLAIN, 30));
-		proTaskLabel.setBounds(54, 26, 175, 57);
-		frame.getContentPane().add(proTaskLabel);
-		ImageIcon proTaskIcon = new ImageIcon("images/proTaskLogo.png");
-		proTaskLabel.setIcon(proTaskIcon);
 	}
 
 	// This method will return the command user enters.
