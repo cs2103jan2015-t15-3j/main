@@ -37,7 +37,7 @@ public class ParserDateAndTimeChecker{
 	// If no time is given but a date is given,
 	// set default time to 23:59
 	private static String DEFAULT_TIME = "23:59";
-	
+	private static Comparator<Date> dateComparator;
 	
 	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
 			if(length < 2) {
@@ -188,9 +188,12 @@ public class ParserDateAndTimeChecker{
 		
 		Date resultStartDate = setDate(startDate, startTime);
 		Date resultDueDate = setDate(dueDate, endTime);
-		item.setType(TaskType.APPOINTMENT);
-		item.setStartDate(resultStartDate);
-		item.setDueDate(resultDueDate);
+	
+			item.setType(TaskType.APPOINTMENT);
+			item.setStartDate(resultStartDate);
+			item.setDueDate(resultDueDate);
+
+		
 	}
 	
 	private static Date setDate(String inputDate, String inputTime) {
@@ -204,6 +207,5 @@ public class ParserDateAndTimeChecker{
 		} catch (ParseException e) {
 			return null;
 		}
-	}
-	
+	}	
 }
