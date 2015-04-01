@@ -1,6 +1,7 @@
 package logic;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
@@ -52,7 +53,13 @@ public class LogicMain {
 		repo.undoActionPush(history);
 	}
 
-	public static void parseString(String command, Repository repo) {
+	private static void undoClear(Interpreter input, Repository repo) {
+		History history = new History();
+		history = UndoManager.pushClearToStack(input, repo.getBuffer());
+		repo.undoActionPush(history);
+	}
+
+	public static Repository parseString(String command, Repository repo) {
 		assert (command != null);
 		Interpreter input = new Interpreter();
 
@@ -62,10 +69,10 @@ public class LogicMain {
 		} catch (NullPointerException | ParseException e) {
 			repo.setFeedbackMsg(Message.SPECIFIED_COMMAND);
 		}
+		return repo;
 	}
 
-	private static Repository executeCommand(Interpreter input,
-			Repository repo) {
+	private static void executeCommand(Interpreter input, Repository repo) {
 		CommandType commandInfo = input.getCommand();
 
 		switch (commandInfo) {
@@ -96,6 +103,7 @@ public class LogicMain {
 			if (repo.getBuffer().isEmpty()) {
 				repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
 			}
+			undoClear(input, repo);
 			Obliterator.clearTask(input, repo.getBuffer());
 			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
 			break;
@@ -151,6 +159,5 @@ public class LogicMain {
 		default:
 			break;
 		}
-		return repo;
 	}
 }
