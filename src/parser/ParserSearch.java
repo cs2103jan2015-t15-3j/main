@@ -12,6 +12,6 @@ public class ParserSearch {
 				searchKey = searchKey.concat(inputArray[i]);
 			}
 			item.setKey(searchKey);
-			}
 		}
+	}
 }

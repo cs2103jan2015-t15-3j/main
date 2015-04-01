@@ -3,9 +3,9 @@ package parser;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import logic.Compare;
+//import logic.Compare;
 
-import java.util.Comparator;
+//import java.util.Comparator;
 import java.util.Date;
 
 import logic.Enumerator.TaskType;
@@ -37,11 +37,12 @@ public class ParserDateAndTimeChecker{
 	// If no time is given but a date is given,
 	// set default time to 23:59
 	private static String DEFAULT_TIME = "23:59";
-	private static Comparator<Date> dateComparator;
+//	private static Comparator<Date> dateComparator;
 	
 	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
+		
 			if(length < 2) {
-				System.out.println("Error. Please input again");
+				System.out.println("2.Error. Please input again");
 			} else if(length == 2) {
 				last = input[length - 1];
 				if(isDate(last)) {
@@ -64,6 +65,8 @@ public class ParserDateAndTimeChecker{
 								
 				last = input[length - 1];
 				secondLast = input[length - 2];
+				
+				System.out.println(last + " " + secondLast);
 
 				if(!isTime(last) && !isDate(last)) {
 					setFloating(item,length);
@@ -143,6 +146,7 @@ public class ParserDateAndTimeChecker{
 	}
 	
 	private static boolean isDate(String checkInput) {
+		System.out.println("isDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		sdf.setLenient(false);
 		try {
@@ -154,6 +158,7 @@ public class ParserDateAndTimeChecker{
 	}	
 	
 	private static boolean isTime(String checkInput) {
+		System.out.println("isTime");
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setLenient(false);
 		try {
@@ -165,6 +170,7 @@ public class ParserDateAndTimeChecker{
 	}
 	
 	private static void setFloating(Interpreter item, int length){
+		System.out.println("setFloating");
 		item.setType(TaskType.FLOATING);
 		item.setIsDueDate(false);
 		item.setIsStartDate(false);
@@ -175,6 +181,7 @@ public class ParserDateAndTimeChecker{
 	}
 	
 	private static void setDeadline(String dueDate, String endTime, Interpreter item){
+		System.out.println("setDeadline");
 		item.setType(TaskType.DEADLINE);
 		item.setIsStartDate(false);
 		Date startDate = null;
@@ -185,18 +192,17 @@ public class ParserDateAndTimeChecker{
 	
 	private static void setAppointment(String startDate, String startTime, 
 			String dueDate, String endTime, Interpreter item){
-		
+		System.out.println("setAppointment");
 		Date resultStartDate = setDate(startDate, startTime);
 		Date resultDueDate = setDate(dueDate, endTime);
 	
 			item.setType(TaskType.APPOINTMENT);
 			item.setStartDate(resultStartDate);
 			item.setDueDate(resultDueDate);
-
-		
 	}
 	
 	private static Date setDate(String inputDate, String inputTime) {
+		System.out.println("setDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
 		

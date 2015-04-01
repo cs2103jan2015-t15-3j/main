@@ -14,10 +14,13 @@ public class ProParser {
 			defineCommand(item, inputArray);
 		} else {
 			String[] inputArray = input.split(" ");
+			for(int i=0; i<inputArray.length; i++) {
+				System.out.print(i+": "+inputArray[i]+" ");
+			}
+			System.out.println();
 			item.setRemarks("");
 			defineCommand(item, inputArray);
 		}
-
 		return item;
 	}
 
@@ -45,6 +48,7 @@ public class ProParser {
 		case "clear":
 		case "clr":
 			item.setCommandType(Interpreter.CommandType.CLEAR);
+			ParserClear.clearTask(item, inputArray);
 			break;
 		case "display":
 		case "disp":
@@ -56,7 +60,9 @@ public class ProParser {
 			ParserSearch.searchTask(item, inputArray);
 			break;
 		case "update":
+		case "edit":
 		case "upd":
+		case "ed":
 			item.setCommandType(Interpreter.CommandType.AMEND);
 			ParserEdit.editTask(item, inputArray);
 			break;
@@ -85,6 +91,9 @@ public class ProParser {
 			break;
 		case "exit":
 			item.setCommandType(Interpreter.CommandType.EXIT);
+			break;
+		default:
+			item.setCommandType(Interpreter.CommandType.INVALID);
 			break;
 		}
 	}

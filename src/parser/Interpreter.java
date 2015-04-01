@@ -3,20 +3,19 @@ package parser;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import logic.Enumerator.KEY;
 import logic.Enumerator.TaskType;
 
 public class Interpreter {
 
 	public enum CommandType {
-		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO;
+		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO, INVALID;
 	}
 
 	private int taskID;
 	private int lastIndex;
 	private String taskName;
 	private String remarks;
+	private String modeClear;
 	private boolean isCompleted;
 	private boolean isDueDate;
 	private boolean isStartDate;
@@ -78,7 +77,11 @@ public class Interpreter {
 	public String getFeedbackMsg() {
 		return this.feedbackMsg;
 	}
-
+	
+	public String getClear() {
+		return this.modeClear;
+	}
+	
 	public void setFeedbackMsg(String feedbackMsg) {
 		this.feedbackMsg = feedbackMsg;
 	}
@@ -129,6 +132,10 @@ public class Interpreter {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+	
+	public void setClear(String modeClear) {
+		this.modeClear = modeClear;
 	}
 
 	public String getDueDateString() {
