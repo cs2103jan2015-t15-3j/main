@@ -31,6 +31,7 @@ public class ProTaskStorage {
 
 	protected ArrayList<Appointment> allAppointments;
 	private ArrayList<Task> allTasks;
+	private ArrayList<Integer> allTasksIDs;
 	private String[] dataBaseColumns;
 	private int idCounter;
 	private boolean justLaunched;
@@ -193,7 +194,7 @@ public class ProTaskStorage {
 			writer.writeNext((String[])
 
 			record.toArray(new String[0]));
-
+			allTasksIDs.add(id);
 			writer.close();
 
 		} catch (IOException e) {
@@ -205,38 +206,46 @@ public class ProTaskStorage {
 	public Repository writeToFile(Repository repo) {
 		ArrayList<Task> obtainedTasks = repo.getBuffer();
 
-		Task newTask = obtainedTasks.get(obtainedTasks.size() - 1);
+		Task newTask = null;
 
-		String type = newTask.getType().toString();
-		repo.setCurrentID(idCounter);
-
-		if (type.equals("APPOINTMENT")) {
-			Appointment item = (Appointment) newTask;
-			addStringTask(taskDataBase, repo.getCurrentID(),
-					newTask.getTaskName(), item.getStartDateString(),
-					item.getDueDateString(), newTask.getRemarks(), false,
-					newTask.getType().toString());
-		} else if (type.equals("DEADLINE")) {
-			Deadline item = (Deadline) newTask;
-			newTask.setTaskID(repo.getCurrentID());
-			addStringTask(taskDataBase, repo.getCurrentID(),
-					newTask.getTaskName(), "", item.getDueDateString(),
-					newTask.getRemarks(), false, newTask.getType().toString());
-		} else {
-			newTask.setTaskID(repo.getCurrentID());
-
-			addStringTask(taskDataBase, repo.getCurrentID(),
-					newTask.getTaskName(), "", "", newTask.getRemarks(), false,
-					newTask.getType().toString());
+		for (Task task : obtainedTasks) {
+			if (!allTasksIDs.contains(task.getTaskID())) {
+				newTask = task;
+			}
 		}
-		idCounter++;
+		if (newTask != null) {
 
-		if (justLaunched) {
-			justLaunched = false;
-			allTasks.add(newTask);
-			repo.setBuffer(allTasks);
+			String type = newTask.getType().toString();
+			repo.setCurrentID(idCounter);
+
+			if (type.equals("APPOINTMENT")) {
+				Appointment item = (Appointment) newTask;
+				addStringTask(taskDataBase, repo.getCurrentID(),
+						newTask.getTaskName(), item.getStartDateString(),
+						item.getDueDateString(), newTask.getRemarks(), false,
+						newTask.getType().toString());
+			} else if (type.equals("DEADLINE")) {
+				Deadline item = (Deadline) newTask;
+				newTask.setTaskID(repo.getCurrentID());
+				addStringTask(taskDataBase, repo.getCurrentID(),
+						newTask.getTaskName(), "", item.getDueDateString(),
+						newTask.getRemarks(), false, newTask.getType()
+								.toString());
+			} else {
+				newTask.setTaskID(repo.getCurrentID());
+
+				addStringTask(taskDataBase, repo.getCurrentID(),
+						newTask.getTaskName(), "", "", newTask.getRemarks(),
+						false, newTask.getType().toString());
+			}
+			idCounter++;
+
+			if (justLaunched) {
+				justLaunched = false;
+				allTasks.add(newTask);
+				repo.setBuffer(allTasks);
+			}
 		}
-
 		return repo;
 	}
 
@@ -260,6 +269,7 @@ public class ProTaskStorage {
 			}
 			if (allTasks == null) {
 				allTasks = new ArrayList<Task>();
+				allTasksIDs = new ArrayList<Integer>();
 			}
 
 			// Read CSV line by line and use the string array as you want
@@ -278,6 +288,7 @@ public class ProTaskStorage {
 
 					Task newTask = new Task();
 					newTask.setTaskID(Integer.parseInt(row[0]));
+					allTasksIDs.add(Integer.parseInt(row[0]));
 					lastID = Integer.parseInt(row[0]);
 					newTask.setTaskName(row[1]);
 					newTask.setRemarks(row[4]);
