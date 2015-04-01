@@ -22,7 +22,7 @@ public class KeyWordStorage {
 	private final String taskDataBase = "test.csv";
 	private final Character[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 			'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-			'U', 'V', 'W', 'X', 'Y', 'Z' };
+			'U', 'V', 'W', 'X', 'Y', 'Z', '1','2','3','4','5','6','7','8','9' };
 	private ArrayList<KeyWord> allKeyWords;
 
 	public KeyWordStorage() {
@@ -52,19 +52,49 @@ public class KeyWordStorage {
 
 	}
 
-	public ArrayList<String> powerSearch(String input) {
-		ArrayList<String> results = new ArrayList<String>();
+	public ArrayList<KeyWord> powerSearch(String input) {
+		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
 		int count = 0;
 		Queue<Character> queueInput = new LinkedList<Character>();
 
 		for (int i = 0; i < input.length(); i++) {
 			queueInput.add(input.charAt(i));
 		}
-
+		results = getBestMatch(queueInput,allAlphabets.get(getAlphabetIndex(queueInput.peek())));
 		return results;
 
 	}
 
+	private void weightSearch()
+	{
+		
+		
+	}
+	private ArrayList<KeyWord> getBestMatch(Queue<Character> queueChar,KeyAlphabet alphabet)
+	{
+		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
+		queueChar.poll();
+		Character nextChar = queueChar.peek();
+		if (nextChar != null)
+		{
+			if (alphabet.getChildAlphabet(nextChar) != null)
+			{
+				results = getBestMatch(queueChar,alphabet.getChildAlphabet(nextChar));
+			}
+			else //if reached the end of the available keywords
+			{
+				ArrayList<KeyWord> wordList = alphabet.getWordList();
+				results.addAll(wordList);
+			}
+		}
+		else // if reached the end of input
+		{
+			ArrayList<KeyWord> wordList = alphabet.getWordList();
+			results.addAll(wordList);
+		}
+		return results;
+	}
+	
 	private int getAlphabetIndex(Character c) {
 		int index = 0;
 		for (int i = 0; i < letters.length; i++) {
