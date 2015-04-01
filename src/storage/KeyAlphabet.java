@@ -34,7 +34,10 @@ public class KeyAlphabet {
 	public void addWord(KeyWord word) {
 		wordList.add(word);
 	}
-
+	public ArrayList<KeyWord> getWordList()
+	{
+		return wordList;
+	}
 	public boolean checkChildExist(Character c) {
 		boolean exist = false;
 		for (KeyAlphabet alpha : children) {
