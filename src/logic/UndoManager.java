@@ -31,6 +31,10 @@ public class UndoManager {
 		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
 			undoUncompleteAction(history, buffer);
 		}
+
+		if (history.getCommand().equals(CommandType.CLEAR)) {
+			undoClearAction(history, repo);
+		}
 	}
 
 	protected static History pushAddToStack(Interpreter input, int taskID) {
@@ -98,10 +102,16 @@ public class UndoManager {
 		return history;
 	}
 
+	protected static History pushClearToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History history = new History();
+		history.setCommand(input.getCommand());
+		history.setHistoryBuffer(buffer);
+		return history;
+	}
+
 	private static void undoAddAction(int taskID, ArrayList<Task> buffer) {
 		int index = SearchEngine.searchBufferIndex(taskID, buffer);
-		System.out.println("taskID : " + taskID);
-		System.out.println("index: " + index);
 		buffer.remove(index);
 	}
 
@@ -140,4 +150,9 @@ public class UndoManager {
 			ArrayList<Task> buffer) {
 		buffer.get(history.getIndex()).setIsCompleted(true);
 	}
+
+	private static void undoClearAction(History history, Repository repo) {
+		repo.s
+	}
+
 }

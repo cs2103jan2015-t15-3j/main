@@ -44,7 +44,7 @@ public class TestCheckDate {
 		System.out.println();
 		
 		// Check if Appointment
-		String input3 = "add checking double date without time format 11/11/11 12/12/12";
+		String input3 = "add checking double date without time format 11/11/11 12/12/12<remarks>";
 		item = Pro.parse(input3);
 		System.out.println("TaskType: " + item.getType());
 		System.out.println("StartDateString: " + item.getStartDateString());
