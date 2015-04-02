@@ -85,6 +85,7 @@ public class LogicMain {
 		case AMEND:
 			undoAmend(input, repo);
 			Amend.determineAmend(input, repo);
+			
 			repo.setFeedbackMsg(Message.EDITED_SUCCESSFUL);
 			updateStorage(repo);
 			break;
@@ -110,8 +111,10 @@ public class LogicMain {
 			break;
 
 		case DISPLAY:
-			// Printer.executePrint(repo.getBuffer());
-			repo.setFeedbackMsg("");
+			// For testing purposes
+			Printer.executePrint(repo.getBuffer());
+			
+			repo.setFeedbackMsg(Message.CLEAR);
 			break;
 
 		case SEARCH:

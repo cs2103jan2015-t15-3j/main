@@ -3,12 +3,13 @@ package logic;
 public class Message {
 
 	public static final String WELCOME = "Welcome to ProTask!";
+	protected static final String CLEAR = "";
 	protected static final String HELP_GUIDE = "For help, enter:'help' to refer to our guide!";
-	public static final String SPECIFIED_COMMAND = "Please follow the specified command.";
+	protected static final String SPECIFIED_COMMAND = "Please follow the specified command.";
 
 	protected static final String INVALID_COMMAND = "The command you entered does not exist.";
 	protected static final String TASK_NOT_FOUND = " is not found.";
-
+	
 	protected static final String ADDED_SUCCESSFUL = " has been added successfully!";
 	protected static final String EDITED_SUCCESSFUL = "Your task has been edited.";
 	protected static final String DELETED_SUCCESSFUL = " has been successfully deleted.";

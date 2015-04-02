@@ -9,6 +9,7 @@ public class Repository {
 	private ArrayList<Task> tempBuffer;
 	private int currentID;
 	private String feedbackMsg;
+	private String databaseFilePath;
 	private Stack<History> undoAction;
 	private Stack<History> redoAction;
 
@@ -19,6 +20,7 @@ public class Repository {
 		this.undoAction = new Stack<History>();
 		this.redoAction = new Stack<History>();
 		this.feedbackMsg = "";
+		this.databaseFilePath = null;
 	}
 
 	public ArrayList<Task> getBuffer() {
@@ -58,6 +60,10 @@ public class Repository {
 		return this.redoAction;
 	}
 
+	public String getDatabaseFilePath() {
+		return this.databaseFilePath;
+	}
+
 	public void setBuffer(ArrayList<Task> buffer) {
 		this.buffer = buffer;
 	}
@@ -80,6 +86,10 @@ public class Repository {
 
 	public void setFeedbackMsg(String feedbackMsg) {
 		this.feedbackMsg = feedbackMsg;
+	}
+
+	public void setDatabaseFilePath(String databaseFilePath) {
+		this.databaseFilePath = databaseFilePath;
 	}
 
 	public void undoActionPush(History history) {
