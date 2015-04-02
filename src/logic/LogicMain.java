@@ -143,7 +143,6 @@ public class LogicMain {
 
 		case COMPLETE:
 			try {
-				undoCompleteOrUncomplete(input, repo);
 				Amend.setCompletion(input, repo);
 				storage.updateDeleteTask(repo);
 			} catch (IndexOutOfBoundsException e) {
@@ -154,7 +153,6 @@ public class LogicMain {
 
 		case UNCOMPLETE:
 			try {
-				undoCompleteOrUncomplete(input, repo);
 				Amend.setCompletion(input, repo);
 				storage.updateDeleteTask(repo);
 			} catch (IndexOutOfBoundsException e) {
@@ -193,7 +191,7 @@ public class LogicMain {
 		repo.undoActionPush(amendedHistory);
 	}
 
-	private static void undoCompleteOrUncomplete(Interpreter input,
+	protected static void undoCompleteOrUncomplete(Interpreter input,
 			Repository repo) {
 		History completedHistory = new History();
 		completedHistory = UndoManager.pushCompleteOrUncompleteToStack(input,

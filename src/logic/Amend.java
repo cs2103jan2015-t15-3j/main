@@ -16,12 +16,19 @@ public class Amend {
 
 		String taskName = buffer.get(index).getTaskName();
 		boolean isCompleted = item.getCompleted();
+		boolean checkCompleted = buffer.get(index).getCompleted();
 
-		buffer.get(index).setIsCompleted(isCompleted);
-
-		if (isCompleted) {
+		if (isCompleted == false && checkCompleted == false) {
+			repo.setFeedbackMsg(taskName + Message.UNCOMPLETED_TASK);
+		} else if (isCompleted == true && checkCompleted == true) {
+			repo.setFeedbackMsg(taskName + Message.COMPLETED_TASK);
+		} else if (isCompleted == true && checkCompleted == false) {
+			LogicMain.undoCompleteOrUncomplete(item, repo);
+			buffer.get(index).setIsCompleted(isCompleted);
 			repo.setFeedbackMsg(taskName + Message.COMPLETE_TASK);
 		} else {
+			LogicMain.undoCompleteOrUncomplete(item, repo);
+			buffer.get(index).setIsCompleted(isCompleted);
 			repo.setFeedbackMsg(taskName + Message.UNCOMPLETE_TASK);
 		}
 	}

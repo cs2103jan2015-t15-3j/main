@@ -25,10 +25,10 @@ public class Message {
 
 	protected static final String COMPLETE_TASK = " has been marked as completed.";
 	protected static final String UNCOMPLETE_TASK = " has been marked as uncompleted.";
-	// protected static final String UNDO_MARK_COMPLETE =
-	// " has been marked as uncompleted.";
+	protected static final String COMPLETED_TASK = " is already marked as completed. "; 
+	protected static final String UNCOMPLETED_TASK = " is already marked as uncompleted.";
 
-	protected static final String REDO_ACTION = "Redo successfully.";
+	protected static final String REDO_ACTION = " has been redo successfully.";
 	protected static final String UNDO_ACTION = " has been undo successfully.";
 	protected static final String REDO_UNSUCCESSFUL = "There is nothing to redo.";
 	protected static final String UNDO_UNSUCCESSFUL = "There is nothing to undo.";
