@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +32,7 @@ public class ProTaskStorage {
 	private ArrayList<Task> allTasks;
 	private ArrayList<Integer> allTasksIDs;
 	private String[] dataBaseColumns;
+	private ArrayList<Task> tasks;
 	private int idCounter;
 	private boolean justLaunched;
 
@@ -40,7 +40,7 @@ public class ProTaskStorage {
 
 		dataBaseColumns = new String[] { "ID", "Description", "Start", "End",
 				"Remarks", "Completed", "Type" };
-		idCounter = 1;
+		idCounter = 0;
 		if (!checkFileExist()) {
 
 			createDataBase(taskDataBase);
@@ -112,12 +112,33 @@ public class ProTaskStorage {
 
 	}
 
+	private boolean checkColumnRow(String[] dataBaseCols) {
+		if (dataBaseColumns == dataBaseCols) {
+			return true;
+		} else
+			return false;
+	}
+
+	public String getReasonForFileDeletionFailureInPlainEnglish(File file) {
+		try {
+			if (!file.exists())
+				return "It doesn't exist in the first place.";
+			else if (file.isDirectory() && file.list().length > 0)
+				return "It's a directory and it's not empty.";
+			else
+				return "Somebody else has it open, we don't have write permissions, or somebody stole my disk.";
+		} catch (SecurityException e) {
+			return "We're sandboxed and don't have filesystem access.";
+		}
+	}
+
 	private void replaceTempToOriginal() {
 		File oldfile = new File(tempDataBase);
 		File newfile = new File(taskDataBase);
 
 		newfile.delete();
-
+		System.out
+				.println(getReasonForFileDeletionFailureInPlainEnglish(newfile));
 		if (oldfile.renameTo(newfile)) {
 			System.out.println("Rename succesful");
 		} else {
@@ -144,7 +165,7 @@ public class ProTaskStorage {
 		} else if (type.equals("APPOINTMENT")) {
 			returnType = "AP";
 		} else if (type.equals("DEADLINE")) {
-			returnType = "DL";
+			returnType = "DE";
 		}
 		return returnType;
 	}
@@ -153,7 +174,7 @@ public class ProTaskStorage {
 		TaskType type = TaskType.FLOATING;
 		if (abb.equals("AP")) {
 			type = TaskType.APPOINTMENT;
-		} else if (abb.equals("DL")) {
+		} else if (abb.equals("DE")) {
 			type = TaskType.DEADLINE;
 		}
 		return type;
@@ -216,7 +237,7 @@ public class ProTaskStorage {
 		if (newTask != null) {
 
 			String type = newTask.getType().toString();
-			repo.setCurrentID(idCounter);
+			repo.setCurrentID(idCounter+1);
 
 			if (type.equals("APPOINTMENT")) {
 				Appointment item = (Appointment) newTask;
@@ -249,11 +270,92 @@ public class ProTaskStorage {
 		return repo;
 	}
 
+	public Repository getAllTasks(Repository mem) throws FileNotFoundException {
+		try {
+			CSVReader reader = new CSVReader(new FileReader(taskDataBase));
+			tasks = new ArrayList<Task>();
+
+			boolean isColumn = true;
+
+			// Read all rows at once
+			List<String[]> allRows = reader.readAll();
+			for (String[] row : allRows) {
+				if (isColumn) {
+					if (!checkColumnRow(row)) {
+
+						// Cannot continue because columns in database is
+
+						// different then in system.
+					}
+
+					isColumn = false;
+
+				} else {
+
+					Task newTask = null;
+					idCounter = Integer.parseInt(row[0]);
+					if (row[6].equals("AP")) {
+
+						newTask = new Appointment();
+						newTask.setType(TaskType.APPOINTMENT);
+						Appointment ap = (Appointment) newTask;
+						ap.setTaskID(Integer.parseInt(row[0]));
+						ap.setTaskName(row[1]);
+						ap.setStartDate(stringToDate(row[2]));
+						ap.setDate(stringToDate(row[3]));
+						ap.setRemarks(row[4]);
+						if (row[5].equalsIgnoreCase("true")) {
+							ap.setIsCompleted(true);
+						} else
+							ap.setIsCompleted(false);
+						ap.setType(TaskType.APPOINTMENT);
+						tasks.add(ap);
+
+					} else if (row[6].equals("DE")) {
+
+						newTask = new Deadline();
+						Deadline dl = (Deadline) newTask;
+						dl.setTaskID(Integer.parseInt(row[0]));
+						dl.setTaskName(row[1]);
+						dl.setDate(stringToDate(row[3]));
+						dl.setRemarks(row[4]);
+						if (row[5].equalsIgnoreCase("true")) {
+							dl.setIsCompleted(true);
+						} else
+							dl.setIsCompleted(false);
+						dl.setType(TaskType.DEADLINE);
+						tasks.add(dl);
+					} else {
+						newTask = new Task();
+						newTask.setTaskID(Integer.parseInt(row[0]));
+						newTask.setTaskName(row[1]);
+						newTask.setRemarks(row[4]);
+						if (row[5].equalsIgnoreCase("true")) {
+							newTask.setIsCompleted(true);
+						} else
+							newTask.setIsCompleted(false);
+						newTask.setType(TaskType.FLOATING);
+						tasks.add(newTask);
+					}
+
+				}
+			}
+			reader.close();
+
+		} catch (Exception e) {
+
+			Logging.getInputLog("Exception thrown when loading tasks from database to program!");
+		}
+		mem.setBuffer(tasks);
+		mem.setCurrentID(idCounter);
+		return mem;
+
+	}
+
 	public void loadAllTasks() throws FileNotFoundException {
 		// Build reader instance
 
 		CSVReader reader = new CSVReader(new FileReader(taskDataBase));
-		int lastID = 0;
 
 		try {
 
@@ -286,26 +388,71 @@ public class ProTaskStorage {
 
 				} else {
 
-					Task newTask = new Task();
-					newTask.setTaskID(Integer.parseInt(row[0]));
+					Task newTask = null;
 					allTasksIDs.add(Integer.parseInt(row[0]));
-					lastID = Integer.parseInt(row[0]);
-					newTask.setTaskName(row[1]);
-					newTask.setRemarks(row[4]);
-					newTask.setIsCompleted(stringToBoolean(row[5]));
-					newTask.setType(abbreviationToTaskType(row[6]));
-					allTasks.add(newTask);
+					if (row[6].equals("AP")) {
 
+						newTask = new Appointment();
+						newTask.setType(TaskType.APPOINTMENT);
+						Appointment ap = (Appointment) newTask;
+						ap.setTaskID(Integer.parseInt(row[0]));
+						ap.setTaskName(row[1]);
+						ap.setStartDate(stringToDate(row[2]));
+						ap.setDate(stringToDate(row[3]));
+						ap.setRemarks(row[4]);
+						if (row[5].equalsIgnoreCase("true")) {
+							ap.setIsCompleted(true);
+						} else
+							ap.setIsCompleted(false);
+						ap.setType(TaskType.APPOINTMENT);
+						allTasks.add(ap);
+
+					} else if (row[6].equals("DE")) {
+
+						newTask = new Deadline();
+						Deadline dl = (Deadline) newTask;
+						dl.setTaskID(Integer.parseInt(row[0]));
+						dl.setTaskName(row[1]);
+						dl.setDate(stringToDate(row[3]));
+						dl.setRemarks(row[4]);
+						if (row[5].equalsIgnoreCase("true")) {
+							dl.setIsCompleted(true);
+						} else
+							dl.setIsCompleted(false);
+						dl.setType(TaskType.DEADLINE);
+						allTasks.add(dl);
+					} else {
+						newTask = new Task();
+						newTask.setTaskID(Integer.parseInt(row[0]));
+						newTask.setTaskName(row[1]);
+						newTask.setRemarks(row[4]);
+						if (row[5].equalsIgnoreCase("true")) {
+							newTask.setIsCompleted(true);
+						} else
+							newTask.setIsCompleted(false);
+						newTask.setType(TaskType.FLOATING);
+						allTasks.add(newTask);
+
+					}
 				}
+
+
+				reader.close();
+
 			}
-
-			idCounter = lastID + 1;
-
-			reader.close();
-
 		} catch (Exception e) {
 
 			Logging.getInputLog("Exception thrown when loading tasks from database to program!");
+		}
+	}
+
+	public void clearAllTasks() throws FileNotFoundException {
+		File file = new File(taskDataBase);
+
+		if (file.delete()) {
+			System.out.println(file.getName() + " is deleted!");
+		} else {
+			System.out.println("Delete operation is failed.");
 		}
 	}
 
