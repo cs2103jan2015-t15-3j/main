@@ -29,13 +29,19 @@ public class LogicMain {
 		 * Printer.printToUser(repo.getFeedback()); }
 		 */
 	}
+	
+	private static void initializeStorage() {
+		if (storage == null) {
+			storage = new ProTaskStorage();
+		}
+	}
 
-	public static Repository getAllTasks() throws FileNotFoundException {
+	public static Repository loadStorage() throws FileNotFoundException {
 		initializeStorage();
 		return storage.getAllTasks();
 	}
 
-	private static void clearAllTasks() {
+	private static void updateStorageToClear() {
 		try {
 			storage.clearAllTasks();
 		} catch (FileNotFoundException e) {
@@ -43,11 +49,6 @@ public class LogicMain {
 		}
 	}
 
-	private static void initializeStorage() {
-		if (storage == null) {
-			storage = new ProTaskStorage();
-		}
-	}
 
 	private static void updateStorage(Repository repo) {
 		storage.updateDeleteTask(repo);
@@ -74,7 +75,6 @@ public class LogicMain {
 		CommandType commandInfo = input.getCommand();
 		switch (commandInfo) {
 		case ADD:
-			initializeStorage();
 			Affix.addTask(input, repo.getBuffer(), repo.numberGenerator());
 			undoAdd(input, repo);
 			repo.setFeedbackMsg(input.getTaskName() + Message.ADDED_SUCCESSFUL);
@@ -103,7 +103,7 @@ public class LogicMain {
 			undoClear(input, repo);
 			Obliterator.determineClear(input, repo.getBuffer());
 			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
-			clearAllTasks();
+			updateStorageToClear();
 			break;
 		case DISPLAY:
 			Printer.executePrint(repo.getBuffer());
