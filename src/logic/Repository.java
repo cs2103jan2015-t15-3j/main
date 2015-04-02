@@ -103,6 +103,6 @@ public class Repository {
 	}
 
 	public History undoActionPeek() {
-		return redoAction.peek();
+		return undoAction.peek();
 	}
 }

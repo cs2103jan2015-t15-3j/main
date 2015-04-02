@@ -10,7 +10,7 @@ public class Message {
 	protected static final String TASK_NOT_FOUND = " is not found.";
 
 	protected static final String ADDED_SUCCESSFUL = " has been added successfully!";
-	protected static final String EDITED_SUCCESSFUL = " has been edited.";
+	protected static final String EDITED_SUCCESSFUL = "Your task has been edited.";
 	protected static final String DELETED_SUCCESSFUL = "Your task has been deleted.";
 	protected static final String DELETE_ALL_SUCCESSFUL = "All tasks have been deleted successfully!";
 	protected static final String DELETE_UNSUCCESSFUL = "There is nothing to delete.";
@@ -19,7 +19,7 @@ public class Message {
 	protected static final String SEARCH_IS_EMPTY = "There is nothing to search.";
 	protected static final String SEARCH_INVALID = "Please follow the specified command to search.";
 
-	protected static final String SORTED_BY_ID = "Tasks are sorted by ID!";
+	protected static final String SORTED_SUCCESSFUL = "Your tasks are sorted alphabetically!";
 	protected static final String SORT_UNSUCCESSFUL = "There is nothing to be sort!";
 	// protected static final String MESSAGE_FILTER = "";
 

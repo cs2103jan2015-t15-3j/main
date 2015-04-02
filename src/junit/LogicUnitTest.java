@@ -26,11 +26,11 @@ public class LogicUnitTest {
 	 */
 
 	Repository repo = new Repository();
-	ArrayList<Task> obtainedTask = repo.getBuffer();
 	Interpreter floating, floatingOne, floatingTwo, deadline, appt;
 	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 	@Test
+	// This will cover the case of adding a floating task.
 	public void testAddFloating() {
 		floating = new Interpreter();
 		floating.setTaskName("CS2103");
@@ -40,14 +40,18 @@ public class LogicUnitTest {
 
 		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task tasks = obtainedTask.get(obtainedTask.size() - 1);
-		assertEquals("ID", 1, tasks.getTaskID());
-		assertEquals("Task name", "CS2103", tasks.getTaskName());
-		assertEquals("Task Type", TaskType.FLOATING, tasks.getType());
-		assertEquals("Remarks", "Question 1 is important.", tasks.getRemarks());
-		assertEquals("Current buffer size", 1, repo.getBufferSize());
+		assertEquals("ID should be 1", 1, tasks.getTaskID());
+		assertEquals("Task name should be CS2103", "CS2103",
+				tasks.getTaskName());
+		assertEquals("Task type is classified as floating", TaskType.FLOATING,
+				tasks.getType());
+		assertEquals("Remarks is not empty", "Question 1 is important.",
+				tasks.getRemarks());
+		assertEquals("Current buffer size should be 1", 1, repo.getBufferSize());
 	}
 
 	@Test
+	// This will cover the case of adding a deadline task.
 	public void testAddDeadline() throws ParseException {
 		String dateInString = "09/06/13";
 		Date date = formatter.parse(dateInString);
@@ -62,19 +66,22 @@ public class LogicUnitTest {
 
 		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task tasks = obtainedTask.get(obtainedTask.size() - 1);
-		assertEquals("ID", 1, tasks.getTaskID());
-		assertEquals("Task name", "CS2103", tasks.getTaskName());
-		assertEquals("Task Type", TaskType.DEADLINE, tasks.getType());
-		assertEquals("Remarks", "", tasks.getRemarks());
+		assertEquals("ID should be 1", 1, tasks.getTaskID());
+		assertEquals("Task name should be CS2103", "CS2103",
+				tasks.getTaskName());
+		assertEquals("Task type is classified as deadline", TaskType.DEADLINE,
+				tasks.getType());
+		assertEquals("Remarks is empty", "", tasks.getRemarks());
 		if (tasks.getType().equals(TaskType.DEADLINE)) {
 			Deadline item = (Deadline) tasks;
-			assertEquals("Due Date", "09/06/13 00:00 AM",
+			assertEquals("Due Date is set", "09/06/13 00:00 AM",
 					item.getDueDateString());
 		}
-		assertEquals("Current buffer size", 1, repo.getBufferSize());
+		assertEquals("Current buffer size should be 1", 1, repo.getBufferSize());
 	}
 
 	@Test
+	// This will cover the adding of an appointment task.
 	public void testAddAppointment() throws ParseException {
 		String dateInString = "09/06/2013";
 		String dateInStringTwo = "10/06/2013";
@@ -106,6 +113,7 @@ public class LogicUnitTest {
 	}
 
 	@Test
+	// This will cover the case of amending a floating task.
 	public void testAmendFloating() throws ParseException {
 		String dateInString = "09/06/2013";
 		Date date = formatter.parse(dateInString);
@@ -116,6 +124,7 @@ public class LogicUnitTest {
 		floating.setRemarks("Question 1 is important.");
 		UnitTest.addTask(floating, repo.getBuffer(), repo.numberGenerator());
 
+		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task task = obtainedTask.get(obtainedTask.size() - 1);
 		floating.setKey("TASKNAME");
 		floating.setTaskID(1);
@@ -143,6 +152,7 @@ public class LogicUnitTest {
 	}
 
 	@Test
+	// This will cover the case of amending a deadline task.
 	public void testAmendDeadline() throws ParseException {
 		String dateInString = "09/06/2013";
 		String dateInString2 = "10/06/2013";
@@ -162,6 +172,8 @@ public class LogicUnitTest {
 		deadline.setTaskID(1);
 		deadline.setTaskName("CS2103T");
 		UnitTest.determineAmend(deadline, repo);
+
+		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task task = obtainedTask.get(obtainedTask.size() - 1);
 		assertEquals("CS2103 changed to CS2103T", "CS2103T", task.getTaskName());
 
@@ -195,6 +207,7 @@ public class LogicUnitTest {
 	}
 
 	@Test
+	// This will cover the case of amending an appointment task.
 	public void testAmendAppointment() throws ParseException {
 		String dateInString = "09/06/2013";
 		String dateInString2 = "10/06/2013";
@@ -249,6 +262,7 @@ public class LogicUnitTest {
 	}
 
 	@Test
+	// This will cover the case of deleting a task.
 	public void testDelete() throws ParseException {
 		String dateInString = "09/06/2013";
 		String dateInStringTwo = "10/06/2013";
@@ -291,6 +305,7 @@ public class LogicUnitTest {
 	}
 
 	@Test
+	// This will cover the cases of search by keywords and ID.
 	public void testSearch() throws ParseException {
 		floating = new Interpreter();
 		floating.setTaskName("CS2103");
@@ -333,6 +348,7 @@ public class LogicUnitTest {
 	}
 
 	@Test
+	// This will cover the case of completion and incompletion of a task.
 	public void testCompleteUncompleteTask() throws ParseException {
 		String dateInString = "09/06/2013";
 		String dateInStringTwo = "10/06/2013";
@@ -358,6 +374,8 @@ public class LogicUnitTest {
 		deadline.setIsCompleted(true);
 		deadline.setTaskID(1);
 		UnitTest.setCompletion(deadline, repo);
+
+		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task task = obtainedTask.get(obtainedTask.size() - 2);
 		if (task.getType().equals(TaskType.DEADLINE)) {
 			Deadline item = (Deadline) task;
@@ -367,7 +385,7 @@ public class LogicUnitTest {
 		appt.setIsCompleted(true);
 		appt.setTaskID(2);
 		UnitTest.setCompletion(appt, repo);
-		System.out.println(repo.getBuffer());
+
 		Task taskTwo = obtainedTask.get(obtainedTask.size() - 1);
 		if (taskTwo.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment item = (Appointment) taskTwo;
@@ -377,7 +395,7 @@ public class LogicUnitTest {
 		appt.setIsCompleted(false);
 		appt.setTaskID(2);
 		UnitTest.setCompletion(appt, repo);
-		System.out.println(repo.getBuffer());
+
 		Task taskThree = obtainedTask.get(obtainedTask.size() - 1);
 		if (taskThree.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment item = (Appointment) taskThree;

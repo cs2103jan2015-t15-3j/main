@@ -21,8 +21,8 @@ public class UnitTest {
 		Obliterator.deleteTask(taskID, buffer);
 	}
 
-	public static void clearTask(Interpreter item, ArrayList<Task> buffer) {
-		Obliterator.clearTask(item, buffer);
+	public static void clearTask(ArrayList<Task> buffer) {
+		Obliterator.clearTask(buffer);
 	}
 
 	public static void determineAmend(Interpreter item, Repository repo) {

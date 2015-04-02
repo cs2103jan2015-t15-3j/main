@@ -17,9 +17,9 @@ public class Amend {
 		buffer.get(index).setIsCompleted(isCompleted);
 	}
 
-	protected static void determineAmend(Interpreter item, Repository mem) {
+	protected static void determineAmend(Interpreter item, Repository repo) {
 		KEY key = Converter.KeyConverter(item.getKey().toLowerCase());
-		ArrayList<Task> buffer = mem.getBuffer();
+		ArrayList<Task> buffer = repo.getBuffer();
 
 		switch (key) {
 		case TASKNAME:

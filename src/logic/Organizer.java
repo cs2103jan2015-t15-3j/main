@@ -9,14 +9,14 @@ import logic.Enumerator.TaskType;
 
 public class Organizer {
 
-	protected static void sort(Repository mem) {
+	protected static void sort(Repository repo) {
 		ArrayList<Task> addToTempBuffer = new ArrayList<Task>();
 
-		for (int count = 0; count < mem.getBuffer().size(); count++) {
-			addToTempBuffer.add(mem.getBuffer().get(count));
+		for (int count = 0; count < repo.getBuffer().size(); count++) {
+			addToTempBuffer.add(repo.getBuffer().get(count));
 		}
-		mem.setTempBuffer(addToTempBuffer);
-		Collections.sort(mem.getTempBuffer(), Compare.StringComparator);
+		repo.setTempBuffer(addToTempBuffer);
+		Collections.sort(repo.getTempBuffer(), Compare.StringComparator);
 	}
 
 	protected static int compareIndexInsertion(Deadline deadline,

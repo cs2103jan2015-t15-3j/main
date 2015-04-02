@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
@@ -33,81 +34,93 @@ public class UndoManager {
 		}
 
 		if (history.getCommand().equals(CommandType.CLEAR)) {
-			undoClearAction(history, repo);
+			undoClearAction(history.getHistoryBuffer(), repo);
+		}
+
+		if (history.getCommand().equals(CommandType.SORT)) {
+			undoSortAction(history.getHistoryBuffer(), repo);
 		}
 	}
 
 	protected static History pushAddToStack(Interpreter input, int taskID) {
-		History history = new History();
-		history.setCommand(input.getCommand());
-		history.setTaskID(taskID);
-		return history;
+		History addedHistory = new History();
+		addedHistory.setCommand(input.getCommand());
+		addedHistory.setTaskID(taskID);
+		return addedHistory;
 	}
 
 	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
 			Repository repo) {
-		History history = new History();
-		history.setCommand(input.getCommand());
+		History completedHistory = new History();
+		completedHistory.setCommand(input.getCommand());
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
-		history.setIndex(index);
-		return history;
+		completedHistory.setIndex(index);
+		return completedHistory;
 	}
 
 	protected static History pushDeleteToStack(Interpreter input,
 			Repository repo) {
-		History history = new History();
-		history.setCommand(input.getCommand());
+		History deletedHistory = new History();
+		deletedHistory.setCommand(input.getCommand());
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
 
 		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
-			history.setTask(repo.getBuffer().get(index));
-			history.setTaskType(TaskType.FLOATING);
+			deletedHistory.setTask(repo.getBuffer().get(index));
+			deletedHistory.setTaskType(TaskType.FLOATING);
 
 		} else if (repo.getBuffer().get(index).getType()
 				.equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) repo.getBuffer().get(index);
-			history.setDeadline(deadline);
+			deletedHistory.setDeadline(deadline);
 
 		} else if (repo.getBuffer().get(index).getType()
 				.equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) repo.getBuffer().get(index);
-			history.setAppointment(appt);
+			deletedHistory.setAppointment(appt);
 		}
-		return history;
+		return deletedHistory;
 	}
 
 	protected static History pushAmendToStack(Interpreter input, Repository repo) {
-		History history = new History();
+		History amendedHistory = new History();
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
-		history.setCommand(input.getCommand());
-		history.setIndex(index);
-		history.setTaskType(input.getType());
+		amendedHistory.setCommand(input.getCommand());
+		amendedHistory.setIndex(index);
+		amendedHistory.setTaskType(input.getType());
 
 		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
-			history.setTask(repo.getBuffer().get(index));
-			history.setTaskType(TaskType.FLOATING);
+			amendedHistory.setTask(repo.getBuffer().get(index));
+			amendedHistory.setTaskType(TaskType.FLOATING);
 		} else if (repo.getBuffer().get(index).getType()
 				.equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) repo.getBuffer().get(index);
-			history.setDeadline(deadline);
+			amendedHistory.setDeadline(deadline);
 
 		} else if (repo.getBuffer().get(index).getType()
 				.equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) repo.getBuffer().get(index);
-			history.setAppointment(appt);
+			amendedHistory.setAppointment(appt);
 		}
-		return history;
+		return amendedHistory;
 	}
 
 	protected static History pushClearToStack(Interpreter input,
 			ArrayList<Task> buffer) {
-		History history = new History();
-		history.setCommand(input.getCommand());
-		history.setHistoryBuffer(buffer);
-		return history;
+		History clearedHistory = new History();
+		clearedHistory.setCommand(input.getCommand());
+		clearedHistory.setHistoryBuffer(buffer);
+		return clearedHistory;
+	}
+
+	protected static History pushSortToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History sortedHistory = new History();
+		sortedHistory.setCommand(input.getCommand());
+		sortedHistory.setHistoryBuffer(buffer);
+		return sortedHistory;
 	}
 
 	private static void undoAddAction(int taskID, ArrayList<Task> buffer) {
@@ -151,8 +164,21 @@ public class UndoManager {
 		buffer.get(history.getIndex()).setIsCompleted(true);
 	}
 
-	private static void undoClearAction(History history, Repository repo) {
-		repo.s
+	private static void undoClearAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		Iterator<Task> list = historyBuffer.iterator();
+		ArrayList<Task> buffer = new ArrayList<Task>();
+		while (list.hasNext()) {
+			buffer.add(list.next());
+		}
+		repo.setBuffer(buffer);
 	}
 
+	private static void undoSortAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		ArrayList<Task> tempBuffer = repo.getTempBuffer();
+
+		tempBuffer.removeAll(tempBuffer);
+	}
 }

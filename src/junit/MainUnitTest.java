@@ -41,7 +41,7 @@ public class MainUnitTest {
 		}
 
 		System.out.println(repo.getBuffer());
-		assertEquals("ID", 1, task.getTaskID());
+		assertEquals("ID", 2, task.getTaskID());
 		assertEquals("Task Description", "CS2103", task.getTaskName());
 		assertEquals("Task Type", TaskType.FLOATING, task.getType());
 	}
@@ -61,8 +61,9 @@ public class MainUnitTest {
 				tasksIDs.add(task.getTaskID());
 			}
 		}
-
-		assertEquals("ID", 2, task.getTaskID());
+		
+		System.out.println(repo.getBuffer());
+		assertEquals("ID", 1, task.getTaskID());
 		assertEquals("Task Description", "CS2103", task.getTaskName());
 		if (task.getType().equals("DEADLINE")) {
 			Deadline item = (Deadline) task;
