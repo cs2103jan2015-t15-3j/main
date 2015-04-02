@@ -85,19 +85,18 @@ public class UserInterfaceMain extends JPanel {
 				(UserInterfaceMain.class
 						.getResource("/userInterface/ImageIcon/toDoIcon.png")));
 
-		
-		try{
-			mem = LogicMain.getAllTasks();
+		try {
+			mem = LogicMain.loadStorage();
 			toDoPanel.revalidate();
 			toDoPanel.repaint();
 			toDoPanel.removeAll();
 			printLabel(mem);
 		}
-		
-		catch(FileNotFoundException e1){
-			
+
+		catch (FileNotFoundException e1) {
+
 		}
-		
+
 		JScrollPane toDoScroller = new JScrollPane();
 		toDoScroller.setVisible(true);
 
@@ -372,7 +371,11 @@ public class UserInterfaceMain extends JPanel {
 
 		frame = new JFrame("ProTask");
 		frame.setResizable(false);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(UserInterfaceMain.class.getResource("/userInterface/ImageIcon/proTaskLogo.png")));
+		frame.setIconImage(Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						UserInterfaceMain.class
+								.getResource("/userInterface/ImageIcon/proTaskLogo.png")));
 		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 28));
 		frame.getContentPane().setEnabled(false);
 		frame.setBounds(100, 100, 638, 829);
