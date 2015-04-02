@@ -31,8 +31,9 @@ public class UserInterfaceMain extends JPanel {
 	private static String userInput = new String();
 	protected static JTextField inputTextField;
 	private static JTextArea feedbackTextArea;
-	protected JPanel completedPanel;
-	protected JPanel toDoPanel;
+	private JPanel completedPanel;
+	private JPanel toDoPanel;
+	private AdjustmentListener adjustListener;
 
 	Repository mem = new Repository();
 
@@ -54,7 +55,8 @@ public class UserInterfaceMain extends JPanel {
 
 	/**
 	 * Create the application.
-	 * @throws FileNotFoundException 
+	 * 
+	 * @throws FileNotFoundException
 	 */
 	public UserInterfaceMain() throws FileNotFoundException {
 		initialize();
@@ -62,10 +64,11 @@ public class UserInterfaceMain extends JPanel {
 
 	/**
 	 * Initialize the contents of the frame.
-	 * @throws FileNotFoundException 
+	 * 
+	 * @throws FileNotFoundException
 	 */
 	private void initialize() throws FileNotFoundException {
-		proTasklogo();
+		proTaskFrame();
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(43, 28, 541, 561);
@@ -87,8 +90,7 @@ public class UserInterfaceMain extends JPanel {
 
 		JScrollPane toDoScroller = new JScrollPane();
 		toDoScroller.setVisible(true);
-		
-		
+
 		tabbedPane.addTab("To-Do", toDoIcon, toDoScroller, null);
 		toDoScroller.setViewportView(toDoPanel);
 		toDoPanel.setLayout(new BoxLayout(toDoPanel, BoxLayout.Y_AXIS));
@@ -118,17 +120,16 @@ public class UserInterfaceMain extends JPanel {
 		frame.getContentPane().add(helpLabel);
 
 		// initial load
-			mem = LogicMain.loadStorage();
-			toDoPanel.revalidate();
-			toDoPanel.repaint();
-			toDoPanel.removeAll();
-			printLabel(mem);
+		mem = LogicMain.loadStorage();
+		toDoPanel.revalidate();
+		toDoPanel.repaint();
+		toDoPanel.removeAll();
+		printLabel(mem);
 
-			completedPanel.revalidate();
-			completedPanel.repaint();
-			completedPanel.removeAll();
-			printCompletedLabel(mem);
-			
+		completedPanel.revalidate();
+		completedPanel.repaint();
+		completedPanel.removeAll();
+		printCompletedLabel(mem);
 
 		KeyListener listener = new KeyListener() {
 
@@ -147,13 +148,15 @@ public class UserInterfaceMain extends JPanel {
 					mem = LogicMain.parseString(userInput, mem);
 
 					// pass to printTempList/printList
-					if (firstWord.toLowerCase().equals("search")) {
+					if ((firstWord.toLowerCase().equals("search"))
+							|| (firstWord.toLowerCase().equals("find"))) {
 
 						toDoPanel.revalidate();
 						toDoPanel.repaint();
 						toDoPanel.removeAll();
 						printTempLabel(mem);
 
+						tabbedPane.setSelectedIndex(0);
 					}
 
 					else if (firstWord.toLowerCase().equals("sort")) {
@@ -162,6 +165,25 @@ public class UserInterfaceMain extends JPanel {
 						toDoPanel.repaint();
 						toDoPanel.removeAll();
 						printTempLabel(mem);
+
+						tabbedPane.setSelectedIndex(0);
+
+					}
+
+					else if ((firstWord.toLowerCase().equals("complete"))
+							|| (firstWord.toLowerCase().equals("comp"))) {
+
+						completedPanel.revalidate();
+						completedPanel.repaint();
+						completedPanel.removeAll();
+						printCompletedLabel(mem);
+
+						tabbedPane.setSelectedIndex(1);
+
+						toDoPanel.revalidate();
+						toDoPanel.repaint();
+						toDoPanel.removeAll();
+						printLabel(mem);
 
 					}
 
@@ -172,20 +194,25 @@ public class UserInterfaceMain extends JPanel {
 						toDoPanel.removeAll();
 						printLabel(mem);
 
+						tabbedPane.setSelectedIndex(0);
+
 					}
 
-					completedPanel.revalidate();
-					completedPanel.repaint();
-					completedPanel.removeAll();
-					printCompletedLabel(mem);
-					
-//					toDoScroller.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-//						 
-//				        public void adjustmentValueChanged(AdjustmentEvent e) {  
-//				        	
-//				            e.getAdjustable().setValue(e.getAdjustable().getMaximum());  
-//				        }
-//				    }); 
+					// ScrollPane adjust automatically when new input is entered
+					adjustListener = new AdjustmentListener() {
+
+						public void adjustmentValueChanged(AdjustmentEvent e) {
+
+							e.getAdjustable().setValue(
+									e.getAdjustable().getMaximum());
+						}
+					};
+
+					toDoScroller.getVerticalScrollBar().addAdjustmentListener(
+							adjustListener);
+
+					completedScroller.getVerticalScrollBar()
+							.addAdjustmentListener(adjustListener);
 
 					// commandHistory/InputHistory
 					InputHistory.getInput(userInput);
@@ -203,7 +230,12 @@ public class UserInterfaceMain extends JPanel {
 			}
 
 			public void keyReleased(KeyEvent e) {
+
 				InputHistory.retrieveInputText(e);
+				toDoScroller.getVerticalScrollBar().removeAdjustmentListener(
+						adjustListener);
+				completedScroller.getVerticalScrollBar()
+						.removeAdjustmentListener(adjustListener);
 			}
 
 			public void keyTyped(KeyEvent e) {
@@ -219,8 +251,8 @@ public class UserInterfaceMain extends JPanel {
 
 			String str = printCompletedList.returnString(task);
 
-			JLabel CL = new JLabel(str);
-			completedPanel.add(CL);
+			JLabel completeLabel = new JLabel(str);
+			completedPanel.add(completeLabel);
 		}
 	}
 
@@ -231,8 +263,8 @@ public class UserInterfaceMain extends JPanel {
 
 			String str = printToDoList.returnString(task);
 
-			JLabel JL = new JLabel(str);
-			toDoPanel.add(JL);
+			JLabel toDoLabel = new JLabel(str);
+			toDoPanel.add(toDoLabel);
 		}
 	}
 
@@ -243,12 +275,12 @@ public class UserInterfaceMain extends JPanel {
 
 			String str = printTempToDoList.returnString(task);
 
-			JLabel JL = new JLabel(str);
-			toDoPanel.add(JL);
+			JLabel tempLabel = new JLabel(str);
+			toDoPanel.add(tempLabel);
 		}
 	}
 
-	private void proTasklogo() {
+	private void proTaskFrame() {
 
 		frame = new JFrame("ProTask");
 		frame.setResizable(false);
@@ -259,7 +291,7 @@ public class UserInterfaceMain extends JPanel {
 								.getResource("/userInterface/ImageIcon/proTaskLogo.png")));
 		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 28));
 		frame.getContentPane().setEnabled(false);
-		frame.setBounds(100, 100, 638, 829);
+		frame.setBounds(100, 100, 632, 783);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
