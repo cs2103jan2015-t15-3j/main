@@ -27,7 +27,7 @@ public class printTempToDoList {
 				end = appt.getDueDateString();
 				remarks = task.getRemarks();
 
-				str = "<html>" + "<font color=#5d2e8a>" + "<br>" + id + ": "
+				str = "<html>" + "<font size=4>" + "<font color=#5d2e8a>" + "<br>" + id + ": "
 						+ " " + name + "<br>" + "Start: " + start + " "
 						+ "Due: " + end + "<br>" + "Remarks: " + remarks
 						+ "</font>" + "<br>";
@@ -45,7 +45,7 @@ public class printTempToDoList {
 				end = dl.getDueDateString();
 				remarks = task.getRemarks();
 
-				str = "<html>" + "<font color=#800000" + "<br>" + +id + ": "
+				str = "<html>" + "<font size=4>" + "<font color=#800000" + "<br>" + +id + ": "
 						+ " " + name + "<br>" + "Start: " + start + " "
 						+ "Due: " + end + "<br>" + "Remarks: " + remarks
 						+ "</font>" + "<br>";
@@ -61,7 +61,7 @@ public class printTempToDoList {
 				end = " - ";
 				remarks = task.getRemarks();
 
-				str = "<html>" + "<br>" + id + ": " + " " + name + "<br>"
+				str = "<html>" + "<font size=4>" + "<br>" + id + ": " + " " + name + "<br>"
 						+ "Start: " + start + " " + "Due: " + end + "<br>"
 						+ "Remarks: " + remarks + "<br>";
 

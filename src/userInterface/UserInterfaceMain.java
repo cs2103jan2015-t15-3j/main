@@ -23,6 +23,7 @@ import javax.swing.BoxLayout;
 import logic.LogicMain;
 import logic.Repository;
 import logic.Task;
+import logic.Message;
 
 @SuppressWarnings("serial")
 public class UserInterfaceMain extends JPanel {
@@ -33,6 +34,7 @@ public class UserInterfaceMain extends JPanel {
 	private static JTextArea feedbackTextArea;
 	private JPanel completedPanel;
 	private JPanel toDoPanel;
+	private JTabbedPane tabbedPane;
 	private AdjustmentListener adjustListener;
 
 	Repository mem = new Repository();
@@ -70,20 +72,20 @@ public class UserInterfaceMain extends JPanel {
 	private void initialize() throws FileNotFoundException {
 		proTaskFrame();
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(43, 28, 541, 561);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(38, 14, 448, 561);
 		frame.getContentPane().add(tabbedPane);
 
 		completedPanel = new JPanel();
 		completedPanel.setForeground(Color.DARK_GRAY);
-		completedPanel.setBackground(Color.WHITE);
+		completedPanel.setBackground(new Color(245, 245, 245));
 		ImageIcon completedIcon = new ImageIcon(
 				(UserInterfaceMain.class
 						.getResource("/userInterface/ImageIcon/completedIcon.png")));
 
 		toDoPanel = new JPanel();
 		toDoPanel.setForeground(Color.DARK_GRAY);
-		toDoPanel.setBackground(Color.WHITE);
+		toDoPanel.setBackground(new Color(245, 245, 245));
 		ImageIcon toDoIcon = new ImageIcon(
 				(UserInterfaceMain.class
 						.getResource("/userInterface/ImageIcon/toDoIcon.png")));
@@ -104,19 +106,19 @@ public class UserInterfaceMain extends JPanel {
 				.setLayout(new BoxLayout(completedPanel, BoxLayout.Y_AXIS));
 
 		feedbackTextArea = new JTextArea();
-		feedbackTextArea.setForeground(Color.WHITE);
-		feedbackTextArea.setBackground(Color.GRAY);
-		feedbackTextArea.setBounds(43, 605, 541, 27);
+		feedbackTextArea.setForeground(Color.BLACK);
+		feedbackTextArea.setBackground(Color.LIGHT_GRAY);
+		feedbackTextArea.setBounds(38, 591, 448, 27);
 		frame.getContentPane().add(feedbackTextArea);
 
 		inputTextField = new JTextField();
-		inputTextField.setBounds(43, 649, 541, 27);
+		inputTextField.setBounds(38, 632, 448, 27);
 		frame.getContentPane().add(inputTextField);
 		inputTextField.setColumns(10);
 
 		JLabel helpLabel = new JLabel("Press 'F1' for Help Guide");
 		helpLabel.setForeground(new Color(0, 139, 139));
-		helpLabel.setBounds(43, 680, 581, 27);
+		helpLabel.setBounds(38, 668, 448, 27);
 		frame.getContentPane().add(helpLabel);
 
 		// initial load
@@ -130,14 +132,16 @@ public class UserInterfaceMain extends JPanel {
 		completedPanel.repaint();
 		completedPanel.removeAll();
 		printCompletedLabel(mem);
+		
+		feedbackTextArea.setText(Message.WELCOME);
 
 		KeyListener listener = new KeyListener() {
-
 			public void keyPressed(KeyEvent e) {
-
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
 					userInput = inputTextField.getText().toString();
+
+					// pass to logic
+					mem = LogicMain.parseString(userInput, mem);
 
 					// getFirstWord
 					String firstWord = getFirstWord(userInput);
@@ -145,58 +149,7 @@ public class UserInterfaceMain extends JPanel {
 					// testing getFirstWord
 					System.out.println(firstWord);
 
-					mem = LogicMain.parseString(userInput, mem);
-
-					// pass to printTempList/printList
-					if ((firstWord.toLowerCase().equals("search"))
-							|| (firstWord.toLowerCase().equals("find"))) {
-
-						toDoPanel.revalidate();
-						toDoPanel.repaint();
-						toDoPanel.removeAll();
-						printTempLabel(mem);
-
-						tabbedPane.setSelectedIndex(0);
-					}
-
-					else if (firstWord.toLowerCase().equals("sort")) {
-
-						toDoPanel.revalidate();
-						toDoPanel.repaint();
-						toDoPanel.removeAll();
-						printTempLabel(mem);
-
-						tabbedPane.setSelectedIndex(0);
-
-					}
-
-					else if ((firstWord.toLowerCase().equals("complete"))
-							|| (firstWord.toLowerCase().equals("comp"))) {
-
-						completedPanel.revalidate();
-						completedPanel.repaint();
-						completedPanel.removeAll();
-						printCompletedLabel(mem);
-
-						tabbedPane.setSelectedIndex(1);
-
-						toDoPanel.revalidate();
-						toDoPanel.repaint();
-						toDoPanel.removeAll();
-						printLabel(mem);
-
-					}
-
-					else {
-
-						toDoPanel.revalidate();
-						toDoPanel.repaint();
-						toDoPanel.removeAll();
-						printLabel(mem);
-
-						tabbedPane.setSelectedIndex(0);
-
-					}
+					displaySetting(firstWord);
 
 					// ScrollPane adjust automatically when new input is entered
 					adjustListener = new AdjustmentListener() {
@@ -207,7 +160,6 @@ public class UserInterfaceMain extends JPanel {
 									e.getAdjustable().getMaximum());
 						}
 					};
-
 					toDoScroller.getVerticalScrollBar().addAdjustmentListener(
 							adjustListener);
 
@@ -244,6 +196,89 @@ public class UserInterfaceMain extends JPanel {
 		inputTextField.addKeyListener(listener);
 	}
 
+	private void proTaskFrame() {
+
+		frame = new JFrame("ProTask");
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setResizable(false);
+		frame.setIconImage(Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						UserInterfaceMain.class
+								.getResource("/userInterface/ImageIcon/proTaskLogo.png")));
+		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 28));
+		frame.getContentPane().setEnabled(false);
+		frame.setBounds(100, 100, 533, 762);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+
+	}
+
+	// This method will return the command user enters.
+	protected static String getFirstWord(String userCommand) {
+		String commandTypeString = userCommand.trim().split("\\s+")[0];
+		return commandTypeString;
+	}
+
+	protected void displaySetting(String firstWord) {
+
+		// pass to printTempList/printList
+		if ((firstWord.toLowerCase().equals("search"))
+				|| (firstWord.toLowerCase().equals("find"))) {
+
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printTempLabel(mem);
+
+			tabbedPane.setSelectedIndex(0);
+		}
+
+		else if (firstWord.toLowerCase().equals("sort")) {
+
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printTempLabel(mem);
+
+			tabbedPane.setSelectedIndex(0);
+
+		}
+
+		else if ((firstWord.toLowerCase().equals("complete"))
+				|| (firstWord.toLowerCase().equals("comp"))) {
+
+			completedPanel.revalidate();
+			completedPanel.repaint();
+			completedPanel.removeAll();
+			printCompletedLabel(mem);
+
+			tabbedPane.setSelectedIndex(1);
+
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printLabel(mem);
+
+		}
+
+		else {
+
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printLabel(mem);
+
+			tabbedPane.setSelectedIndex(0);
+
+			completedPanel.revalidate();
+			completedPanel.repaint();
+			completedPanel.removeAll();
+			printCompletedLabel(mem);
+
+		}
+	}
+
 	protected void printCompletedLabel(Repository list) {
 		for (int i = 0; i < list.getBufferSize(); i++) {
 
@@ -256,7 +291,7 @@ public class UserInterfaceMain extends JPanel {
 		}
 	}
 
-	public void printLabel(Repository list) {
+	protected void printLabel(Repository list) {
 		for (int i = 0; i < list.getBufferSize(); i++) {
 
 			Task task = list.getBuffer().get(i);
@@ -268,7 +303,7 @@ public class UserInterfaceMain extends JPanel {
 		}
 	}
 
-	public void printTempLabel(Repository list) {
+	protected void printTempLabel(Repository list) {
 		for (int i = 0; i < list.getTempBufferSize(); i++) {
 
 			Task task = list.getTempBuffer().get(i);
@@ -278,28 +313,5 @@ public class UserInterfaceMain extends JPanel {
 			JLabel tempLabel = new JLabel(str);
 			toDoPanel.add(tempLabel);
 		}
-	}
-
-	private void proTaskFrame() {
-
-		frame = new JFrame("ProTask");
-		frame.setResizable(false);
-		frame.setIconImage(Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						UserInterfaceMain.class
-								.getResource("/userInterface/ImageIcon/proTaskLogo.png")));
-		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 28));
-		frame.getContentPane().setEnabled(false);
-		frame.setBounds(100, 100, 632, 783);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-
-	}
-
-	// This method will return the command user enters.
-	public static String getFirstWord(String userCommand) {
-		String commandTypeString = userCommand.trim().split("\\s+")[0];
-		return commandTypeString;
 	}
 }
