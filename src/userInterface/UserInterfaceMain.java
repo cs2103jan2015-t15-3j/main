@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
@@ -27,7 +29,7 @@ public class UserInterfaceMain extends JPanel {
 
 	private JFrame frame;
 	private static String userInput = new String();
-	private static JTextField inputTextField;
+	protected static JTextField inputTextField;
 	private static JTextArea feedbackTextArea;
 	protected JPanel completedPanel;
 	protected JPanel toDoPanel;
@@ -85,7 +87,8 @@ public class UserInterfaceMain extends JPanel {
 
 		JScrollPane toDoScroller = new JScrollPane();
 		toDoScroller.setVisible(true);
-
+		
+		
 		tabbedPane.addTab("To-Do", toDoIcon, toDoScroller, null);
 		toDoScroller.setViewportView(toDoPanel);
 		toDoPanel.setLayout(new BoxLayout(toDoPanel, BoxLayout.Y_AXIS));
@@ -175,6 +178,14 @@ public class UserInterfaceMain extends JPanel {
 					completedPanel.repaint();
 					completedPanel.removeAll();
 					printCompletedLabel(mem);
+					
+//					toDoScroller.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+//						 
+//				        public void adjustmentValueChanged(AdjustmentEvent e) {  
+//				        	
+//				            e.getAdjustable().setValue(e.getAdjustable().getMaximum());  
+//				        }
+//				    }); 
 
 					// commandHistory/InputHistory
 					InputHistory.getInput(userInput);

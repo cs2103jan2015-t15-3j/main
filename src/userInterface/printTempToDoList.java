@@ -26,6 +26,14 @@ public class printTempToDoList {
 				start = appt.getStartDateString();
 				end = appt.getDueDateString();
 				remarks = task.getRemarks();
+
+				str = "<html>" + "<font color=#5d2e8a>" + "<br>" + id + ": "
+						+ " " + name + "<br>" + "Start: " + start + " "
+						+ "Due: " + end + "<br>" + "Remarks: " + remarks
+						+ "</font>" + "<br>";
+
+				str += "____________________________________________________________________________"
+						+ "</html>";
 			}
 
 			else if (type.equals("DEADLINE")) {
@@ -37,6 +45,14 @@ public class printTempToDoList {
 				end = dl.getDueDateString();
 				remarks = task.getRemarks();
 
+				str = "<html>" + "<font color=#800000" + "<br>" + +id + ": "
+						+ " " + name + "<br>" + "Start: " + start + " "
+						+ "Due: " + end + "<br>" + "Remarks: " + remarks
+						+ "</font>" + "<br>";
+
+				str += "____________________________________________________________________________"
+						+ "</html>";
+
 			} else {
 
 				id = task.getTaskID();
@@ -44,14 +60,14 @@ public class printTempToDoList {
 				start = " - ";
 				end = " - ";
 				remarks = task.getRemarks();
+
+				str = "<html>" + "<br>" + id + ": " + " " + name + "<br>"
+						+ "Start: " + start + " " + "Due: " + end + "<br>"
+						+ "Remarks: " + remarks + "<br>";
+
+				str += "____________________________________________________________________________"
+						+ "</html>";
 			}
-
-			str = "<html>" + "<br>" + id + ": " + " " + name + "<br>"
-					+ "Start: " + start + " " + "Due: " + end + "<br>"
-					+ "Remarks: " + remarks + "<br>";
-
-			str += "____________________________________________________________________________"
-					+ "</html>";
 
 		}
 		return str;
