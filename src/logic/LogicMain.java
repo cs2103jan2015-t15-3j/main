@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.FileNotFoundException;
 import java.nio.Buffer;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -29,6 +30,15 @@ public class LogicMain {
 		 */
 	}
 
+	public static Repository getAllTasks() throws FileNotFoundException {
+		initializeStorage();
+		return storage.getAllTasks();
+	}
+
+	public static void clearAllTasks() throws FileNotFoundException {
+		storage.clearAllTasks();
+	}
+
 	private static void initializeStorage() {
 		if (storage == null) {
 			storage = new ProTaskStorage();
@@ -43,7 +53,8 @@ public class LogicMain {
 		storage.writeToFile(repo);
 	}
 
-	public static Repository parseString(String command, Repository repo) {
+	public static Repository parseString(String command, Repository repo)
+			throws FileNotFoundException {
 		assert (command != null);
 		Interpreter input = new Interpreter();
 
@@ -56,7 +67,8 @@ public class LogicMain {
 		return repo;
 	}
 
-	private static void executeCommand(Interpreter input, Repository repo) {
+	private static void executeCommand(Interpreter input, Repository repo)
+			throws FileNotFoundException {
 		CommandType commandInfo = input.getCommand();
 		switch (commandInfo) {
 		case ADD:
@@ -89,6 +101,7 @@ public class LogicMain {
 			undoClear(input, repo);
 			Obliterator.determineClear(input, repo.getBuffer());
 			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
+			clearAllTasks();
 			break;
 		case DISPLAY:
 			Printer.executePrint(repo.getBuffer());

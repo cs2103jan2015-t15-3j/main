@@ -270,7 +270,8 @@ public class ProTaskStorage {
 		return repo;
 	}
 
-	public Repository getAllTasks(Repository mem) throws FileNotFoundException {
+	public Repository getAllTasks() throws FileNotFoundException {
+		Repository mem = new Repository();
 		try {
 			CSVReader reader = new CSVReader(new FileReader(taskDataBase));
 			tasks = new ArrayList<Task>();
