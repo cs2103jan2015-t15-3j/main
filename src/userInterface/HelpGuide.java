@@ -1,108 +1,67 @@
 package userInterface;
 
-import java.awt.EventQueue;
+import java.awt.BorderLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
 
-import java.awt.Color;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.JLabel;
 
 public class HelpGuide {
-
-	private JFrame frame;
-
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					HelpGuide window = new HelpGuide();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				createAndShowGUI();
 			}
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public HelpGuide() {
-		initialize();
-	}
+	private static void createAndShowGUI() {
+		// Create and set up the window.
+		JFrame frame = new JFrame("HelpGuide");
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
+				HelpGuide.class
+						.getResource("/userInterface/ImageIcon/helpIcon.png")));
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame("HelpGuide");
-		frame.setBounds(100, 100, 484, 524);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		
-		KeyListener listener = new KeyListener() {
-
+		frame.addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if(e.getKeyCode() == KeyEvent.VK_F1){
+				if (e.getKeyCode() == KeyEvent.VK_F1) {
 					frame.dispose();
+				}
 			}
+		});
 
-			}
+		// call the method to change the appearance of the frame
+		// UserInterfaceHelpMenu.changeAppearance();
 
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+		// Create and set up the content pane.
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 468, 511);
 
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}		
-		};
-	
-	    frame.addKeyListener(listener);
-		
-		JLabel helpLabel = new JLabel("Press 'F1' again to exit Help Guide");
-		helpLabel.setForeground(Color.RED);
-		helpLabel.setBounds(10, 453, 267, 22);
-		frame.getContentPane().add(helpLabel);
-		
+		frame.getContentPane().add(HelpDesign.createTabbedPane(),
+				BorderLayout.NORTH);
+		// frame.getContentPane().add(UserInterfaceHelpMenu.createMenuTab(),
+		// BorderLayout.NORTH);
 
-		JTextArea textArea = new JTextArea();
-		textArea.setEditable(false);
-		textArea.setEnabled(false);
-		textArea.setForeground(Color.RED);
-		textArea.setBackground(Color.DARK_GRAY);
-		textArea.setBounds(0, 0, 468, 486);
-		frame.getContentPane().add(textArea);
+		// Display the window.
+		// frame.setSize(350, 378);
+		frame.setVisible(true);
 
-		textArea.setText("ProTask ReadMe \n"
-				+ "=================================\n"
-				+ "1. List Of Commands\n"
-				+ "Add	\n"
-				+ "- add <description> \n"
-				+ "- add <description> <dueDate> <startTime> <endTime> <remarks>\n"
-				+ "\n"
-				+ "Edit\n"
-				+ "- edit <ID> <dueDate> <startTime> <endTime> <remarks>\n"
-				+ "- edit <description> <dueDate> <startTime> <endTime> <remarks>\n"
-				+ "\n" + "Delete\n" + "- del <ID>  \n" + "\n" + "Undo\n"
-				+ "- undo\n" + "\n" + "Complete\n" + "- complete <ID> \n"
-				+ "- complete <description>\n" + "\n"
-				+ "Search / PowerSearch\n" + "- search <description>  \n"
-				+ "- psearch <keywords>\n");
+		// Set the location of the Help Menu on the top right corner
+		// frame.setLocation(Xcoordinate, Ycoordinate);
+
+		// Set the focus to the main frame
+		frame.setFocusable(true);
+		frame.getContentPane().setLayout(null);
+
+		frame.getContentPane().add(HelpDesign.createExitLabel());
+
 	}
 }
-

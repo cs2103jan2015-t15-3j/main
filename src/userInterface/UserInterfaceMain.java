@@ -1,6 +1,5 @@
 package userInterface;
 
-import java.util.ArrayList;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Color;
@@ -19,8 +18,6 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 
-import logic.Appointment;
-import logic.Deadline;
 import logic.LogicMain;
 import logic.Repository;
 import logic.Task;
@@ -30,13 +27,12 @@ public class UserInterfaceMain extends JPanel {
 
 	private JFrame frame;
 	private static String userInput = new String();
-	public static JTextField inputTextField;
-	Repository mem = new Repository();
-	protected static ArrayList<String> finalCloneCopy;
+	private static JTextField inputTextField;
 	private static JTextArea feedbackTextArea;
-	public static ArrayList<String> finalClone = new ArrayList<String>();
 	protected JPanel completedPanel;
 	protected JPanel toDoPanel;
+
+	Repository mem = new Repository();
 
 	/**
 	 * Launch the application.
@@ -56,15 +52,17 @@ public class UserInterfaceMain extends JPanel {
 
 	/**
 	 * Create the application.
+	 * @throws FileNotFoundException 
 	 */
-	public UserInterfaceMain() {
+	public UserInterfaceMain() throws FileNotFoundException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws FileNotFoundException 
 	 */
-	private void initialize() {
+	private void initialize() throws FileNotFoundException {
 		proTasklogo();
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -84,18 +82,6 @@ public class UserInterfaceMain extends JPanel {
 		ImageIcon toDoIcon = new ImageIcon(
 				(UserInterfaceMain.class
 						.getResource("/userInterface/ImageIcon/toDoIcon.png")));
-
-		try {
-			mem = LogicMain.loadStorage();
-			toDoPanel.revalidate();
-			toDoPanel.repaint();
-			toDoPanel.removeAll();
-			printLabel(mem);
-		}
-
-		catch (FileNotFoundException e1) {
-
-		}
 
 		JScrollPane toDoScroller = new JScrollPane();
 		toDoScroller.setVisible(true);
@@ -127,6 +113,19 @@ public class UserInterfaceMain extends JPanel {
 		helpLabel.setForeground(new Color(0, 139, 139));
 		helpLabel.setBounds(43, 680, 581, 27);
 		frame.getContentPane().add(helpLabel);
+
+		// initial load
+			mem = LogicMain.loadStorage();
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printLabel(mem);
+
+			completedPanel.revalidate();
+			completedPanel.repaint();
+			completedPanel.removeAll();
+			printCompletedLabel(mem);
+			
 
 		KeyListener listener = new KeyListener() {
 
@@ -203,167 +202,38 @@ public class UserInterfaceMain extends JPanel {
 	}
 
 	protected void printCompletedLabel(Repository list) {
+		for (int i = 0; i < list.getBufferSize(); i++) {
 
-		int id;
-		String name, start, end, remarks;
+			Task task = list.getBuffer().get(i);
 
-		for (Task task : list.getBuffer()) {
+			String str = printCompletedList.returnString(task);
 
-			boolean completed = task.getCompleted();
-
-			if (completed == true) {
-
-				String type = task.getType().toString();
-
-				if (type.equals("APPOINTMENT")) {
-
-					Appointment appt = (Appointment) task;
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = appt.getStartDateString();
-					end = appt.getDueDateString();
-					remarks = task.getRemarks();
-				}
-
-				else if (type.equals("DEADLINE")) {
-					Deadline dl = (Deadline) task;
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = " - ";
-					end = dl.getDueDateString();
-					remarks = task.getRemarks();
-
-				} else {
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = " - ";
-					end = " - ";
-					remarks = task.getRemarks();
-				}
-
-				String str = "<html>" + "<br>" + id + ": " + " " + name
-						+ "<br>" + "Start: " + start + " " + "Due: " + end
-						+ "<br>" + "Remarks: " + remarks + "<br>";
-
-				str += "____________________________________________________________________________"
-						+ "</html>";
-
-				JLabel CL = new JLabel(str);
-				completedPanel.add(CL);
-			}
+			JLabel CL = new JLabel(str);
+			completedPanel.add(CL);
 		}
 	}
 
 	public void printLabel(Repository list) {
+		for (int i = 0; i < list.getBufferSize(); i++) {
 
-		int id;
-		String name, start, end, remarks;
+			Task task = list.getBuffer().get(i);
 
-		for (Task task : list.getBuffer()) {
+			String str = printToDoList.returnString(task);
 
-			boolean completed = task.getCompleted();
-
-			if (completed == false) {
-
-				String type = task.getType().toString();
-
-				if (type.equals("APPOINTMENT")) {
-
-					Appointment appt = (Appointment) task;
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = appt.getStartDateString();
-					end = appt.getDueDateString();
-					remarks = task.getRemarks();
-				}
-
-				else if (type.equals("DEADLINE")) {
-					Deadline dl = (Deadline) task;
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = " - ";
-					end = dl.getDueDateString();
-					remarks = task.getRemarks();
-
-				} else {
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = " - ";
-					end = " - ";
-					remarks = task.getRemarks();
-				}
-
-				String str = "<html>" + "<br>" + id + ": " + " " + name
-						+ "<br>" + "Start: " + start + " " + "Due: " + end
-						+ "<br>" + "Remarks: " + remarks + "<br>";
-
-				str += "____________________________________________________________________________"
-						+ "</html>";
-
-				JLabel JL = new JLabel(str);
-				toDoPanel.add(JL);
-			}
+			JLabel JL = new JLabel(str);
+			toDoPanel.add(JL);
 		}
 	}
 
 	public void printTempLabel(Repository list) {
+		for (int i = 0; i < list.getTempBufferSize(); i++) {
 
-		int id;
-		String name, start, end, remarks;
+			Task task = list.getTempBuffer().get(i);
 
-		for (Task task : list.getTempBuffer()) {
+			String str = printTempToDoList.returnString(task);
 
-			boolean completed = task.getCompleted();
-
-			if (completed == false) {
-
-				String type = task.getType().toString();
-
-				if (type.equals("APPOINTMENT")) {
-
-					Appointment appt = (Appointment) task;
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = appt.getStartDateString();
-					end = appt.getDueDateString();
-					remarks = task.getRemarks();
-				}
-
-				else if (type.equals("DEADLINE")) {
-					Deadline dl = (Deadline) task;
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = " - ";
-					end = dl.getDueDateString();
-					remarks = task.getRemarks();
-
-				} else {
-
-					id = task.getTaskID();
-					name = task.getTaskName();
-					start = " - ";
-					end = " - ";
-					remarks = task.getRemarks();
-				}
-
-				String str = "<html>" + "<br>" + id + ": " + " " + name
-						+ "<br>" + "Start: " + start + " " + "Due: " + end
-						+ "<br>" + "Remarks: " + remarks + "<br>";
-
-				str += "____________________________________________________________________________"
-						+ "</html>";
-
-				JLabel JL = new JLabel(str);
-				toDoPanel.add(JL);
-			}
+			JLabel JL = new JLabel(str);
+			toDoPanel.add(JL);
 		}
 	}
 

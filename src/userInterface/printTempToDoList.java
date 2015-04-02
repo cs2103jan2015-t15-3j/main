@@ -4,7 +4,7 @@ import logic.Appointment;
 import logic.Deadline;
 import logic.Task;
 
-public class printToDoList {
+public class printTempToDoList {
 
 	public static String returnString(Task task) {
 

@@ -4,7 +4,7 @@ import logic.Appointment;
 import logic.Deadline;
 import logic.Task;
 
-public class printToDoList {
+public class printCompletedList {
 
 	public static String returnString(Task task) {
 
@@ -13,7 +13,7 @@ public class printToDoList {
 
 		boolean completed = task.getCompleted();
 
-		if (completed == false) {
+		if (completed == true) {
 
 			String type = task.getType().toString();
 
