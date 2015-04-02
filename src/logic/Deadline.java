@@ -44,4 +44,10 @@ public class Deadline extends Task {
 				+ this.getRemarks() + " " + this.getCompleted() + " "
 				+ this.getType() + " " + this.getDueDateString() + "]";
 	}
+
+	public void setDueDateString(String dueDateString) {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.dueDate);
+	}
 }
