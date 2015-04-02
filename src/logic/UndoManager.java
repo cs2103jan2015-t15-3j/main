@@ -154,13 +154,13 @@ public class UndoManager {
 
 	private static void undoDeleteAction(History history, ArrayList<Task> buffer) {
 		if (history.getTaskType().equals(TaskType.FLOATING)) {
-			DataBuffer.addTaskToBuffer(history.getTask(), buffer);
+			Affix.addToBuffer(history.getTask(), buffer);
 
 		} else if (history.getTaskType().equals(TaskType.DEADLINE)) {
-			DataBuffer.addDeadlineToBuffer(history.getDeadLine(), buffer);
+			Affix.addToBuffer(history.getDeadLine(), buffer);
 
 		} else if (history.getTaskType().equals(TaskType.APPOINTMENT)) {
-			DataBuffer.addAppointmentToBuffer(history.getAppointment(), buffer);
+			Affix.addToBuffer(history.getAppointment(), buffer);
 		}
 	}
 
@@ -168,13 +168,13 @@ public class UndoManager {
 		buffer.remove(history.getIndex());
 
 		if (history.getTaskType().equals(TaskType.FLOATING)) {
-			DataBuffer.addTaskToBuffer(history.getTask(), buffer);
+			Affix.addToBuffer(history.getTask(), buffer);
 
 		} else if (history.getTaskType().equals(TaskType.DEADLINE)) {
-			DataBuffer.addDeadlineToBuffer(history.getDeadLine(), buffer);
+			Affix.addToBuffer(history.getDeadLine(), buffer);
 
 		} else if (history.getTaskType().equals(TaskType.APPOINTMENT)) {
-			DataBuffer.addAppointmentToBuffer(history.getAppointment(), buffer);
+			Affix.addToBuffer(history.getAppointment(), buffer);
 		}
 	}
 

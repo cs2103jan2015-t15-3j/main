@@ -303,20 +303,20 @@ public class LogicUnitTest {
 		 */
 		int taskID = -1;
 		try {
-			UnitTest.deleteTask(taskID, repo.getBuffer());
+			UnitTest.deleteTask(taskID, repo);
 		} catch (IndexOutOfBoundsException e) {
 			Logging.getInputLog("ID does not exists!");
 		}
 
 		int taskIDTwo = 10;
 		try {
-			UnitTest.deleteTask(taskIDTwo, repo.getBuffer());
+			UnitTest.deleteTask(taskIDTwo, repo);
 		} catch (IndexOutOfBoundsException e) {
 			assertFalse(taskIDTwo == repo.getBufferSize());
 		}
 
 		int taskIDThree = 1;
-		UnitTest.deleteTask(taskIDThree, repo.getBuffer());
+		UnitTest.deleteTask(taskIDThree, repo);
 		assertEquals("Current size", 1, repo.getBufferSize());
 	}
 

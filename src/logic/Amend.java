@@ -74,7 +74,7 @@ public class Amend {
 			appt.setRemarks(deadline.getRemarks());
 
 			Obliterator.deleteTask(deadline.getTaskID(), repo);
-			DataBuffer.addAppointmentToBuffer(appt, buffer);
+			Affix.addToBuffer(appt, buffer);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class Amend {
 			deadline.setDate(item.getDueDate());
 
 			Obliterator.deleteTask(tasks.getTaskID(), repo);
-			DataBuffer.addDeadlineToBuffer(deadline, buffer);
+			Affix.addToBuffer(deadline, buffer);
 		}
 	}
 

@@ -32,7 +32,7 @@ public class Affix {
 		floating.setTaskName(item.getTaskName());
 		floating.setRemarks(item.getRemarks());
 
-		DataBuffer.addTaskToBuffer(floating, buffer);
+		addToBuffer(floating, buffer);
 	}
 
 	private static void addDeadlineTask(Interpreter item,
@@ -44,7 +44,7 @@ public class Affix {
 		deadline.setDate(item.getDueDate());
 		deadline.setRemarks(item.getRemarks());
 
-		DataBuffer.addDeadlineToBuffer(deadline, buffer);
+		addToBuffer(deadline, buffer);
 	}
 
 	protected static void addAppointmentTask(Interpreter item,
@@ -57,6 +57,10 @@ public class Affix {
 		appt.setDate(item.getDueDate());
 		appt.setRemarks(item.getRemarks());
 
-		DataBuffer.addAppointmentToBuffer(appt, buffer);
+		addToBuffer(appt, buffer);
+	}
+	
+	protected static void addToBuffer(Task task, ArrayList<Task> buffer) {
+		buffer.add(buffer.size(), task);
 	}
 }
