@@ -19,9 +19,15 @@ public class Obliterator {
 		}
 	}
 
-	protected static void deleteTask(int taskID, ArrayList<Task> buffer) {
+	protected static void deleteTask(int taskID, Repository repo) {
+		String taskName = "";
+		ArrayList<Task> buffer = repo.getBuffer();
+	
 		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+		taskName = buffer.get(index).getTaskName();
 		buffer.remove(index);
+		
+		repo.setFeedbackMsg(taskName + Message.DELETED_SUCCESSFUL);
 	}
 
 	protected static void clearCompletedTask(ArrayList<Task> buffer) {

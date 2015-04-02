@@ -17,6 +17,7 @@ import logic.UnitTest;
 import org.junit.Test;
 
 import parser.Interpreter;
+import userInterface.Logging;
 
 public class LogicUnitTest {
 	/*
@@ -66,6 +67,7 @@ public class LogicUnitTest {
 
 		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task tasks = obtainedTask.get(obtainedTask.size() - 1);
+
 		assertEquals("ID should be 1", 1, tasks.getTaskID());
 		assertEquals("Task name should be CS2103", "CS2103",
 				tasks.getTaskName());
@@ -98,6 +100,7 @@ public class LogicUnitTest {
 
 		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task tasks = obtainedTask.get(obtainedTask.size() - 1);
+
 		assertEquals("ID", 1, tasks.getTaskID());
 		assertEquals("Task name", "CS2103", tasks.getTaskName());
 		assertEquals("Task Type", TaskType.APPOINTMENT, tasks.getType());
@@ -139,6 +142,10 @@ public class LogicUnitTest {
 		assertEquals("Remarks edited", "Not important anymore!",
 				task.getRemarks());
 
+		/*
+		 * This will amend the floating task into a deadline task by setting the
+		 * due date.
+		 */
 		floating.setKey("DUEDATE");
 		floating.setTaskID(1);
 		floating.setDueDate(date);
@@ -176,6 +183,11 @@ public class LogicUnitTest {
 		ArrayList<Task> obtainedTask = repo.getBuffer();
 		Task task = obtainedTask.get(obtainedTask.size() - 1);
 		assertEquals("CS2103 changed to CS2103T", "CS2103T", task.getTaskName());
+
+		/*
+		 * This will ammend the deadline into an appointment task by setting the
+		 * due date.
+		 */
 
 		deadline.setKey("DUEDATE");
 		deadline.setTaskID(1);
@@ -285,11 +297,15 @@ public class LogicUnitTest {
 		UnitTest.addTask(appt, repo.getBuffer(), repo.numberGenerator());
 		assertEquals("Current buffer size", 2, repo.getBufferSize());
 
+		/*
+		 * This will cover the boundary cases testing deleting a task based on
+		 * negative values as well as positive value.
+		 */
 		int taskID = -1;
 		try {
 			UnitTest.deleteTask(taskID, repo.getBuffer());
 		} catch (IndexOutOfBoundsException e) {
-
+			Logging.getInputLog("ID does not exists!");
 		}
 
 		int taskIDTwo = 10;
@@ -325,6 +341,10 @@ public class LogicUnitTest {
 		floatingTwo.setRemarks("All questions important!");
 		UnitTest.addTask(floatingTwo, repo.getBuffer(), repo.numberGenerator());
 
+		/*
+		 * This will test the boundary cases for search based on keywords and
+		 * the ID provided.
+		 */
 		UnitTest.determineSearch("C", repo);
 		assertEquals("Added to temp list", 2, repo.getTempBufferSize());
 

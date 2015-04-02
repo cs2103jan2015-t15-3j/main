@@ -9,6 +9,7 @@ import logic.Enumerator.TaskType;
 public class History {
 
 	private int index;
+	private String feedbackMsg;
 	private ArrayList<Task> historyBuffer;
 
 	private Task task;
@@ -26,6 +27,7 @@ public class History {
 		this.index = 0;
 		this.taskType = null;
 		this.historyBuffer = new ArrayList<Task>();
+		this.feedbackMsg = "";
 	}
 
 	public Task getTask() {
@@ -60,6 +62,10 @@ public class History {
 		return this.historyBuffer;
 	}
 
+	public String getFeedbackMsg() {
+		return this.feedbackMsg;
+	}
+
 	public void setTaskType(TaskType type) {
 		this.taskType = type;
 	}
@@ -90,5 +96,9 @@ public class History {
 
 	public void setHistoryBuffer(ArrayList<Task> historyBuffer) {
 		this.historyBuffer = historyBuffer;
+	}
+
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
 	}
 }

@@ -15,56 +15,73 @@ public class UndoManager {
 
 		if (history.getCommand().equals(CommandType.ADD)) {
 			undoAddAction(history.getTaskID(), buffer);
+			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
 		}
 
 		if (history.getCommand().equals(CommandType.DELETE)) {
 			undoDeleteAction(history, buffer);
+			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
 		}
 
 		if (history.getCommand().equals(CommandType.AMEND)) {
 			undoAmendAction(history, buffer);
+			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
 		}
 
 		if (history.getCommand().equals(CommandType.COMPLETE)) {
 			undoCompleteAction(history, buffer);
+			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNCOMPLETE_TASK);
 		}
 
 		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
 			undoUncompleteAction(history, buffer);
+			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.COMPLETE_TASK);
 		}
 
 		if (history.getCommand().equals(CommandType.CLEAR)) {
 			undoClearAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
 		}
 
 		if (history.getCommand().equals(CommandType.SORT)) {
 			undoSortAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg("");
 		}
 	}
 
 	protected static History pushAddToStack(Interpreter input, int taskID) {
 		History addedHistory = new History();
+
 		addedHistory.setCommand(input.getCommand());
 		addedHistory.setTaskID(taskID);
+		addedHistory.setFeedbackMsg(input.getTaskName());
+
 		return addedHistory;
 	}
 
 	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
 			Repository repo) {
 		History completedHistory = new History();
-		completedHistory.setCommand(input.getCommand());
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
+		String taskName = repo.getBuffer().get(index).getTaskName();
+
+		completedHistory.setCommand(input.getCommand());
 		completedHistory.setIndex(index);
+		completedHistory.setFeedbackMsg(taskName);
+
 		return completedHistory;
 	}
 
 	protected static History pushDeleteToStack(Interpreter input,
 			Repository repo) {
 		History deletedHistory = new History();
-		deletedHistory.setCommand(input.getCommand());
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
+		String taskName = repo.getBuffer().get(index).getTaskName();
+
+		deletedHistory.setCommand(input.getCommand());
+		deletedHistory.setFeedbackMsg(taskName);
 
 		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
 			deletedHistory.setTask(repo.getBuffer().get(index));
@@ -80,6 +97,7 @@ public class UndoManager {
 			Appointment appt = (Appointment) repo.getBuffer().get(index);
 			deletedHistory.setAppointment(appt);
 		}
+
 		return deletedHistory;
 	}
 
@@ -87,6 +105,7 @@ public class UndoManager {
 		History amendedHistory = new History();
 		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
 				repo.getBuffer());
+
 		amendedHistory.setCommand(input.getCommand());
 		amendedHistory.setIndex(index);
 		amendedHistory.setTaskType(input.getType());
@@ -104,22 +123,27 @@ public class UndoManager {
 			Appointment appt = (Appointment) repo.getBuffer().get(index);
 			amendedHistory.setAppointment(appt);
 		}
+
 		return amendedHistory;
 	}
 
 	protected static History pushClearToStack(Interpreter input,
 			ArrayList<Task> buffer) {
 		History clearedHistory = new History();
+
 		clearedHistory.setCommand(input.getCommand());
 		clearedHistory.setHistoryBuffer(buffer);
+
 		return clearedHistory;
 	}
 
 	protected static History pushSortToStack(Interpreter input,
 			ArrayList<Task> buffer) {
 		History sortedHistory = new History();
+
 		sortedHistory.setCommand(input.getCommand());
 		sortedHistory.setHistoryBuffer(buffer);
+
 		return sortedHistory;
 	}
 
@@ -168,15 +192,16 @@ public class UndoManager {
 			Repository repo) {
 		Iterator<Task> list = historyBuffer.iterator();
 		ArrayList<Task> buffer = new ArrayList<Task>();
+
 		while (list.hasNext()) {
 			buffer.add(list.next());
 		}
+
 		repo.setBuffer(buffer);
 	}
 
 	private static void undoSortAction(ArrayList<Task> historyBuffer,
 			Repository repo) {
-		ArrayList<Task> buffer = repo.getBuffer();
 		ArrayList<Task> tempBuffer = repo.getTempBuffer();
 
 		tempBuffer.removeAll(tempBuffer);

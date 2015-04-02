@@ -30,6 +30,12 @@ public class Deadline extends Task {
 	public void setDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
+	
+	public void setDueDateString(String dueDateString) {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.dueDate);
+	}
 
 	public String getDueDateString() {
 		String dateString = "";
@@ -43,11 +49,5 @@ public class Deadline extends Task {
 		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
 				+ this.getRemarks() + " " + this.getCompleted() + " "
 				+ this.getType() + " " + this.getDueDateString() + "]";
-	}
-
-	public void setDueDateString(String dueDateString) {
-		String dateString = "";
-		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
-		dateString = df.format(this.dueDate);
 	}
 }

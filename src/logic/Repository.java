@@ -13,12 +13,12 @@ public class Repository {
 	private Stack<History> redoAction;
 
 	public Repository() {
-		buffer = new ArrayList<Task>();
-		tempBuffer = new ArrayList<Task>();
-		currentID = 0;
-		undoAction = new Stack<History>();
-		redoAction = new Stack<History>();
-		feedbackMsg = "";
+		this.buffer = new ArrayList<Task>();
+		this.tempBuffer = new ArrayList<Task>();
+		this.currentID = 0;
+		this.undoAction = new Stack<History>();
+		this.redoAction = new Stack<History>();
+		this.feedbackMsg = "";
 	}
 
 	public ArrayList<Task> getBuffer() {

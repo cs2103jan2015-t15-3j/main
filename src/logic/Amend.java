@@ -10,33 +10,42 @@ public class Amend {
 
 	protected static void setCompletion(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
+
 		int taskID = item.getTaskID();
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+
+		String taskName = buffer.get(index).getTaskName();
 		boolean isCompleted = item.getCompleted();
 
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
 		buffer.get(index).setIsCompleted(isCompleted);
+
+		if (isCompleted) {
+			repo.setFeedbackMsg(taskName + Message.COMPLETE_TASK);
+		} else {
+			repo.setFeedbackMsg(taskName + Message.UNCOMPLETE_TASK);
+		}
 	}
 
 	protected static void determineAmend(Interpreter item, Repository repo) {
 		KEY key = Converter.KeyConverter(item.getKey().toLowerCase());
-		ArrayList<Task> buffer = repo.getBuffer();
 
 		switch (key) {
 		case TASKNAME:
-			amendName(item, buffer);
+			amendName(item, repo);
 			break;
 		case STARTDATE:
-			amendStartDate(item, buffer);
+			amendStartDate(item, repo);
 			break;
 		case DUEDATE:
-			amendDueDate(item, buffer);
+			amendDueDate(item, repo);
 			break;
 		default:
-			amendRemarks(item, buffer);
+			amendRemarks(item, repo);
 		}
 	}
 
-	private static void amendName(Interpreter item, ArrayList<Task> buffer) {
+	private static void amendName(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(item, buffer);
 		task.setTaskName(item.getTaskName());
 	}
@@ -47,7 +56,8 @@ public class Amend {
 	 * Floating tasks are not allowed.
 	 */
 
-	private static void amendStartDate(Interpreter item, ArrayList<Task> buffer) {
+	private static void amendStartDate(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(item, buffer);
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
@@ -63,7 +73,7 @@ public class Amend {
 			appt.setDate(deadline.getDate());
 			appt.setRemarks(deadline.getRemarks());
 
-			Obliterator.deleteTask(deadline.getTaskID(), buffer);
+			Obliterator.deleteTask(deadline.getTaskID(), repo);
 			DataBuffer.addAppointmentToBuffer(appt, buffer);
 		}
 	}
@@ -74,7 +84,8 @@ public class Amend {
 	 * deadline object.
 	 */
 
-	private static void amendDueDate(Interpreter item, ArrayList<Task> buffer) {
+	private static void amendDueDate(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(item, buffer);
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
@@ -92,12 +103,13 @@ public class Amend {
 			deadline.setRemarks(tasks.getRemarks());
 			deadline.setDate(item.getDueDate());
 
-			Obliterator.deleteTask(tasks.getTaskID(), buffer);
+			Obliterator.deleteTask(tasks.getTaskID(), repo);
 			DataBuffer.addDeadlineToBuffer(deadline, buffer);
 		}
 	}
 
-	private static void amendRemarks(Interpreter item, ArrayList<Task> buffer) {
+	private static void amendRemarks(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(item, buffer);
 		task.setRemarks(item.getRemarks());
 	}

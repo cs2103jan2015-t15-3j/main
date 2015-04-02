@@ -17,8 +17,8 @@ public class UnitTest {
 		Affix.addTask(item, buffer, index);
 	}
 
-	public static void deleteTask(int taskID, ArrayList<Task> buffer) {
-		Obliterator.deleteTask(taskID, buffer);
+	public static void deleteTask(int taskID, Repository repo) {
+		Obliterator.deleteTask(taskID, repo);
 	}
 
 	public static void clearTask(ArrayList<Task> buffer) {

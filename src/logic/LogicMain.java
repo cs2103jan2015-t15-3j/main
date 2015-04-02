@@ -29,7 +29,7 @@ public class LogicMain {
 		 * Printer.printToUser(repo.getFeedback()); }
 		 */
 	}
-	
+
 	private static void initializeStorage() {
 		if (storage == null) {
 			storage = new ProTaskStorage();
@@ -48,7 +48,6 @@ public class LogicMain {
 			Logging.getInputLog(Message.FILE_INEXISTS);
 		}
 	}
-
 
 	private static void updateStorage(Repository repo) {
 		storage.updateDeleteTask(repo);
@@ -73,29 +72,33 @@ public class LogicMain {
 
 	private static void executeCommand(Interpreter input, Repository repo) {
 		CommandType commandInfo = input.getCommand();
+
 		switch (commandInfo) {
 		case ADD:
 			Affix.addTask(input, repo.getBuffer(), repo.numberGenerator());
 			undoAdd(input, repo);
+
 			repo.setFeedbackMsg(input.getTaskName() + Message.ADDED_SUCCESSFUL);
 			writeToStorage(repo);
 			break;
+
 		case AMEND:
 			undoAmend(input, repo);
 			Amend.determineAmend(input, repo);
 			repo.setFeedbackMsg(Message.EDITED_SUCCESSFUL);
 			updateStorage(repo);
 			break;
+
 		case DELETE:
 			try {
 				undoDelete(input, repo);
-				Obliterator.deleteTask(input.getTaskID(), repo.getBuffer());
-				repo.setFeedbackMsg(Message.DELETED_SUCCESSFUL);
+				Obliterator.deleteTask(input.getTaskID(), repo);
 				updateStorage(repo);
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(input.getTaskID() + Message.TASK_NOT_FOUND);
 			}
 			break;
+
 		case CLEAR:
 			if (repo.getBuffer().isEmpty()) {
 				repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
@@ -105,9 +108,12 @@ public class LogicMain {
 			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
 			updateStorageToClear();
 			break;
+
 		case DISPLAY:
-			Printer.executePrint(repo.getBuffer());
+			// Printer.executePrint(repo.getBuffer());
+			repo.setFeedbackMsg("");
 			break;
+
 		case SEARCH:
 			try {
 				SearchEngine.determineSearch(input.getKey(), repo);
@@ -115,6 +121,7 @@ public class LogicMain {
 				repo.setFeedbackMsg(Message.SEARCH_IS_EMPTY);
 			}
 			break;
+
 		case SORT:
 			if (repo.getBuffer().size() <= 0) {
 				repo.setFeedbackMsg(Message.SORT_UNSUCCESSFUL);
@@ -124,42 +131,45 @@ public class LogicMain {
 				repo.setFeedbackMsg(Message.SORTED_SUCCESSFUL);
 			}
 			break;
+
 		case UNDO:
 			try {
 				UndoManager.determineUndo(repo);
-				repo.setFeedbackMsg(Message.UNDO_ACTION);
 				storage.updateDeleteTask(repo);
 			} catch (EmptyStackException e) {
 				repo.setFeedbackMsg(Message.UNDO_UNSUCCESSFUL);
 			}
 			break;
+
 		case COMPLETE:
 			try {
 				undoCompleteOrUncomplete(input, repo);
 				Amend.setCompletion(input, repo);
-				repo.setFeedbackMsg(Message.COMPLETE_TASK);
 				storage.updateDeleteTask(repo);
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(input.getTaskID() + Message.TASK_NOT_FOUND);
 				Logging.getInputLog(Message.COMPLETE_ERROR);
 			}
 			break;
+
 		case UNCOMPLETE:
 			try {
 				undoCompleteOrUncomplete(input, repo);
 				Amend.setCompletion(input, repo);
-				repo.setFeedbackMsg(Message.INCOMPLETE_TASK);
 				storage.updateDeleteTask(repo);
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(input.getTaskID() + Message.TASK_NOT_FOUND);
 				Logging.getInputLog(Message.UNCOMPLETE_ERROR);
 			}
 			break;
+
 		case POWERSEARCH:
 			// incomplete
 			break;
+
 		case EXIT:
 			System.exit(MESSAGE_SYSTEM_EXIT);
+
 		default:
 			break;
 		}
