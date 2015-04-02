@@ -454,6 +454,7 @@ public class ProTaskStorage {
 		} else {
 			System.out.println("Delete operation is failed.");
 		}
+		createDataBase(taskDataBase);
 	}
 
 	public void updateDeleteTask(Repository repo) {
