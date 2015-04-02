@@ -86,17 +86,18 @@ public class UserInterfaceMain extends JPanel {
 						.getResource("/userInterface/ImageIcon/toDoIcon.png")));
 
 		
-//		try{
-//			mem = LogicMain.getAllTasks(mem);
-//			toDoPanel.revalidate();
-//			toDoPanel.repaint();
-//			toDoPanel.removeAll();
-//			printLabel(mem);
-//		}
-//		
-//		catch(FileNotFoundException e1){
-//			
-//		}
+		try{
+			mem = LogicMain.getAllTasks();
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printLabel(mem);
+		}
+		
+		catch(FileNotFoundException e1){
+			
+		}
+		
 		JScrollPane toDoScroller = new JScrollPane();
 		toDoScroller.setVisible(true);
 
