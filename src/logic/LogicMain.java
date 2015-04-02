@@ -35,8 +35,12 @@ public class LogicMain {
 		return storage.getAllTasks();
 	}
 
-	public static void clearAllTasks() throws FileNotFoundException {
-		storage.clearAllTasks();
+	private static void clearAllTasks() {
+		try {
+			storage.clearAllTasks();
+		} catch (FileNotFoundException e) {
+			Logging.getInputLog(Message.FILE_INEXISTS);
+		}
 	}
 
 	private static void initializeStorage() {
@@ -53,8 +57,7 @@ public class LogicMain {
 		storage.writeToFile(repo);
 	}
 
-	public static Repository parseString(String command, Repository repo)
-			throws FileNotFoundException {
+	public static Repository parseString(String command, Repository repo) {
 		assert (command != null);
 		Interpreter input = new Interpreter();
 
@@ -67,8 +70,7 @@ public class LogicMain {
 		return repo;
 	}
 
-	private static void executeCommand(Interpreter input, Repository repo)
-			throws FileNotFoundException {
+	private static void executeCommand(Interpreter input, Repository repo) {
 		CommandType commandInfo = input.getCommand();
 		switch (commandInfo) {
 		case ADD:
