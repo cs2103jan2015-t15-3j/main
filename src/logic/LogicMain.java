@@ -84,7 +84,7 @@ public class LogicMain {
 			undoAmend(input, repo);
 			Amend.determineAmend(input, repo);
 			repo.setFeedbackMsg(Message.EDITED_SUCCESSFUL);
-			storage.updateDeleteTask(repo);
+			updateStorage(repo);
 			break;
 		case DELETE:
 			try {
