@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -47,7 +48,7 @@ public class UserInterfaceMain extends JPanel {
 					UserInterfaceMain window = new UserInterfaceMain();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println("Application can't launched");
 				}
 			}
 		});
@@ -84,6 +85,18 @@ public class UserInterfaceMain extends JPanel {
 				(UserInterfaceMain.class
 						.getResource("/userInterface/ImageIcon/toDoIcon.png")));
 
+		
+		try{
+			mem = LogicMain.getAllTasks(mem);
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printLabel(mem);
+		}
+		
+		catch(FileNotFoundException e1){
+			
+		}
 		JScrollPane toDoScroller = new JScrollPane();
 		toDoScroller.setVisible(true);
 
