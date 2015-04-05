@@ -88,14 +88,14 @@ public class ProTaskStorage {
 			Logging.getInputLog("Exception thrown when program attemmpts to create database!");
 		}
 	}
-
+/*
 	private String dateToString(Date date) {
 		DateFormat df = new SimpleDateFormat("dd/MM/yy");
 		String dateString = df.format(date);
 		return dateString;
 
 	}
-
+*/
 	private String intToString(int id) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(id);
@@ -146,17 +146,6 @@ public class ProTaskStorage {
 		}
 	}
 
-	private boolean stringToBoolean(String rowEntry) {
-
-		boolean toReturnBoolean = false;
-
-		if (rowEntry.equalsIgnoreCase("true")) {
-			toReturnBoolean = true;
-		}
-
-		return toReturnBoolean;
-	}
-
 	private String convertToAbbreviation(String type) {
 		String returnType = "NIL";
 
@@ -169,7 +158,7 @@ public class ProTaskStorage {
 		}
 		return returnType;
 	}
-
+/*
 	private TaskType abbreviationToTaskType(String abb) {
 		TaskType type = TaskType.FLOATING;
 		if (abb.equals("AP")) {
@@ -179,7 +168,7 @@ public class ProTaskStorage {
 		}
 		return type;
 	}
-
+*/
 	private Date stringToDate(String stringDate) {
 		DateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm",
 				Locale.ENGLISH);

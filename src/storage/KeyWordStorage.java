@@ -2,8 +2,9 @@ package storage;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +23,8 @@ public class KeyWordStorage {
 	private final String taskDataBase = "test.csv";
 	private final Character[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 			'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-			'U', 'V', 'W', 'X', 'Y', 'Z', '1','2','3','4','5','6','7','8','9' };
+			'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7',
+			'8', '9' };
 	private ArrayList<KeyWord> allKeyWords;
 
 	public KeyWordStorage() {
@@ -43,7 +45,8 @@ public class KeyWordStorage {
 			populateDataBase();
 			Collections.sort(allKeyWords, KeyWord.WordNameComparator);
 			mapKeyWords();
-			System.out.println(allAlphabets);
+			System.out.println(powerSearch("ad"));
+			// System.out.println(allAlphabets);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -53,48 +56,82 @@ public class KeyWordStorage {
 	}
 
 	public ArrayList<KeyWord> powerSearch(String input) {
+
 		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
-		int count = 0;
 		Queue<Character> queueInput = new LinkedList<Character>();
 
 		for (int i = 0; i < input.length(); i++) {
 			queueInput.add(input.charAt(i));
 		}
-		results = getBestMatch(queueInput,allAlphabets.get(getAlphabetIndex(queueInput.peek())));
+		results = getBestMatch(queueInput,
+				allAlphabets.get(getAlphabetIndex(queueInput.peek())));
+		
+		ArrayList<KeyWord> secondResult = weightSearch("adamant");
+		for (KeyWord result : secondResult)
+		{
+			if(!results.contains(result))
+			{
+				results.add(result);
+			}
+		}
 		return results;
 
 	}
 
-	private void weightSearch()
-	{
-		
-		
+	private ArrayList<KeyWord> weightSearch(String input) {
+		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
+		for (KeyWord word : allKeyWords) {
+			int matchCount = 0;
+			String keyword = word.getWord();
+			ArrayList<String> tempCharWord = new ArrayList<String>();
+			for (int i = 0; i < keyword.length(); i++) {
+				tempCharWord.add(keyword.toUpperCase().split("")[i]);
+			}
+			Collections.sort(tempCharWord);
+			for (String s : input.split("")) {
+				if (tempCharWord.indexOf(s.toUpperCase()) != -1) {
+					tempCharWord.remove(tempCharWord.indexOf(s.toUpperCase()));
+					matchCount++;
+				}
+			}
+
+			int scale = 100;
+			BigDecimal num1 = new BigDecimal(matchCount);
+			BigDecimal num2 = new BigDecimal(input.length());
+			BigDecimal referenceNum = new BigDecimal("0.6");
+			BigDecimal answer = num1.divide(num2, scale, RoundingMode.HALF_UP);
+
+			if (answer.compareTo(referenceNum) >= 0) {
+				System.out.println(answer.toString());
+				System.out.println(word.getWord());
+				results.add(word);
+			}
+		}
+		return results;
 	}
-	private ArrayList<KeyWord> getBestMatch(Queue<Character> queueChar,KeyAlphabet alphabet)
-	{
+
+	private ArrayList<KeyWord> getBestMatch(Queue<Character> queueChar,
+			KeyAlphabet alphabet) {
 		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
 		queueChar.poll();
 		Character nextChar = queueChar.peek();
-		if (nextChar != null)
-		{
-			if (alphabet.getChildAlphabet(nextChar) != null)
-			{
-				results = getBestMatch(queueChar,alphabet.getChildAlphabet(nextChar));
-			}
-			else //if reached the end of the available keywords
+		if (nextChar != null) {
+			if (alphabet.getChildAlphabet(nextChar) != null) {
+				results = getBestMatch(queueChar,
+						alphabet.getChildAlphabet(nextChar));
+			} else // if reached the end of the available keywords
 			{
 				ArrayList<KeyWord> wordList = alphabet.getWordList();
 				results.addAll(wordList);
 			}
-		}
-		else // if reached the end of input
+		} else // if reached the end of input
 		{
 			ArrayList<KeyWord> wordList = alphabet.getWordList();
 			results.addAll(wordList);
 		}
 		return results;
 	}
-	
+
 	private int getAlphabetIndex(Character c) {
 		int index = 0;
 		for (int i = 0; i < letters.length; i++) {
@@ -162,7 +199,7 @@ public class KeyWordStorage {
 				String taskName = row[1];
 				ArrayList<Character> chars = new ArrayList<Character>();
 				for (int i = 0; i < taskName.length(); i++) {
-					chars.add(taskName.charAt(i));
+					chars.add(Character.toUpperCase(taskName.charAt(i)));
 				}
 				KeyWord keyTaskName = new KeyWord();
 				keyTaskName.setTaskID(taskID);
@@ -181,7 +218,8 @@ public class KeyWordStorage {
 						ArrayList<Character> charsRemarks = new ArrayList<Character>();
 
 						for (int j = 0; j < remark.length(); j++) {
-							charsRemarks.add(remark.charAt(j));
+							charsRemarks.add(Character.toUpperCase(remark
+									.charAt(j)));
 						}
 						keyRemarks.setTaskID(taskID);
 						keyRemarks.setWord(remark);
@@ -194,6 +232,6 @@ public class KeyWordStorage {
 
 			}
 		}
-
+		reader.close();
 	}// end of method
 }

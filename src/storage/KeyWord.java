@@ -3,7 +3,6 @@ package storage;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import logic.Task;
 
 public class KeyWord implements Comparable<KeyWord> {
 
