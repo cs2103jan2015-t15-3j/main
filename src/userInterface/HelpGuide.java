@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class HelpGuide {
 	/**
@@ -23,7 +24,6 @@ public class HelpGuide {
 	}
 
 	private static void createAndShowGUI() {
-		// Create and set up the window.
 		JFrame frame = new JFrame("HelpGuide");
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				HelpGuide.class
@@ -38,30 +38,14 @@ public class HelpGuide {
 			}
 		});
 
-		// call the method to change the appearance of the frame
-		// UserInterfaceHelpMenu.changeAppearance();
-
-		// Create and set up the content pane.
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 468, 511);
-
+		frame.setBounds(100, 100, 447, 470);
 		frame.getContentPane().add(HelpDesign.createTabbedPane(),
 				BorderLayout.NORTH);
-		// frame.getContentPane().add(UserInterfaceHelpMenu.createMenuTab(),
-		// BorderLayout.NORTH);
-
-		// Display the window.
-		// frame.setSize(350, 378);
+		frame.setSize(513, 462);
 		frame.setVisible(true);
-
-		// Set the location of the Help Menu on the top right corner
-		// frame.setLocation(Xcoordinate, Ycoordinate);
-
-		// Set the focus to the main frame
 		frame.setFocusable(true);
 		frame.getContentPane().setLayout(null);
-
-		frame.getContentPane().add(HelpDesign.createExitLabel());
-
+		// frame.getContentPane().add(HelpDesign.createExitLabel());
 	}
 }

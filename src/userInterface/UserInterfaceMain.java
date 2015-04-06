@@ -132,7 +132,7 @@ public class UserInterfaceMain extends JPanel {
 		completedPanel.repaint();
 		completedPanel.removeAll();
 		printCompletedLabel(mem);
-		
+
 		feedbackTextArea.setText(Message.WELCOME);
 
 		KeyListener listener = new KeyListener() {
