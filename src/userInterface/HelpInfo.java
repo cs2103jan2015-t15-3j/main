@@ -165,7 +165,7 @@ public class HelpInfo {
 		str.append("(You can either use ");
 		str.append(maroonFont("'uncomplete'"));
 		str.append(" or ");
-		str.append(maroonFont("'uncomp'"));
+		str.append(maroonFont("'ucomp'"));
 		str.append(" to mark a task as uncomplete)");
 		str.append(HTML_BREAK);
 
@@ -176,7 +176,7 @@ public class HelpInfo {
 		str.append(HTML_BREAK);
 		str.append(createExample("Example: 'uncomplete 9'"));
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'uncomp 18'"));
+		str.append(createExample("Example: 'ucomp 18'"));
 		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());

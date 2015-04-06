@@ -224,7 +224,8 @@ public class UserInterfaceMain extends JPanel {
 
 		// pass to printTempList/printList
 		if ((firstWord.toLowerCase().equals("search"))
-				|| (firstWord.toLowerCase().equals("find"))) {
+				|| (firstWord.toLowerCase().equals("find") || (firstWord
+						.toLowerCase().equals("sort")))) {
 
 			toDoPanel.revalidate();
 			toDoPanel.repaint();
@@ -232,17 +233,6 @@ public class UserInterfaceMain extends JPanel {
 			printTempLabel(mem);
 
 			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if (firstWord.toLowerCase().equals("sort")) {
-
-			toDoPanel.revalidate();
-			toDoPanel.repaint();
-			toDoPanel.removeAll();
-			printTempLabel(mem);
-
-			tabbedPane.setSelectedIndex(0);
-
 		}
 
 		else if ((firstWord.toLowerCase().equals("complete"))
@@ -260,6 +250,21 @@ public class UserInterfaceMain extends JPanel {
 			toDoPanel.removeAll();
 			printLabel(mem);
 
+		}
+
+		else if ((firstWord.toLowerCase().equals("clear"))) {
+
+			toDoPanel.revalidate();
+			toDoPanel.repaint();
+			toDoPanel.removeAll();
+			printLabel(mem);
+
+			tabbedPane.setSelectedIndex(0);
+
+			completedPanel.revalidate();
+			completedPanel.repaint();
+			completedPanel.removeAll();
+			printCompletedLabel(mem);
 		}
 
 		else {
