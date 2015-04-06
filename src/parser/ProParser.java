@@ -68,13 +68,17 @@ public class ProParser {
 		case "u":
 			item.setCommandType(Interpreter.CommandType.UNDO);
 			break;
+		case "redo":
+		case "r":
+			item.setCommandType(Interpreter.CommandType.REDO);
+			break;
 		case "complete":
-		case "comp":
+		case "cp":
 			item.setCommandType(Interpreter.CommandType.COMPLETE);
 			ParserCompleteTask.completeTask(item, inputArray);
 			break;
 		case "uncomplete":
-		case "ucomp":
+		case "ucp":
 			item.setCommandType(Interpreter.CommandType.UNCOMPLETE);
 			ParserUncompleteTask.uncompleteTask(item, inputArray);
 			break;

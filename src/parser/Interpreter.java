@@ -8,7 +8,7 @@ import logic.Enumerator.TaskType;
 public class Interpreter {
 
 	public enum CommandType {
-		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO, INVALID;
+		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO, INVALID, REDO;
 	}
 
 	private int taskID;
