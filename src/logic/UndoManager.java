@@ -14,11 +14,13 @@ public class UndoManager {
 		ArrayList<Task> buffer = repo.getBuffer();
 
 		if (history.getCommand().equals(CommandType.ADD)) {
-			undoAddAction(history.getTaskID(), buffer);
+			repo.redoActionPush(history);
+			undoAddAction(history.getIndex(), buffer);
 			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
 		}
 
 		if (history.getCommand().equals(CommandType.DELETE)) {
+			repo.redoActionPush(history);
 			undoDeleteAction(history, buffer);
 			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
 		}
@@ -29,33 +31,57 @@ public class UndoManager {
 		}
 
 		if (history.getCommand().equals(CommandType.COMPLETE)) {
+			repo.redoActionPush(history);
 			undoCompleteAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNCOMPLETE_TASK);
+			repo.setFeedbackMsg(history.getFeedbackMsg()
+					+ Message.UNCOMPLETE_TASK);
 		}
 
 		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
+			repo.redoActionPush(history);
 			undoUncompleteAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.COMPLETE_TASK);
+			repo.setFeedbackMsg(history.getFeedbackMsg()
+					+ Message.COMPLETE_TASK);
 		}
 
 		if (history.getCommand().equals(CommandType.CLEAR)) {
+			repo.redoActionPush(history);
 			undoClearAction(history.getHistoryBuffer(), repo);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
+			repo.setFeedbackMsg(Message.UNDO_DELETE_ALL);
 		}
 
 		if (history.getCommand().equals(CommandType.SORT)) {
 			undoSortAction(history.getHistoryBuffer(), repo);
-			repo.setFeedbackMsg("");
+			repo.setFeedbackMsg(Message.CLEAR);
 		}
 	}
 
-	protected static History pushAddToStack(Interpreter input, int taskID) {
+	protected static History pushAddToStack(Interpreter input, Repository repo) {
 		History addedHistory = new History();
+		int taskID = repo.getCurrentID();
+
+		int index = SearchEngine.searchBufferIndex(taskID, repo.getBuffer());
 
 		addedHistory.setCommand(input.getCommand());
-		addedHistory.setTaskID(taskID);
+		addedHistory.setIndex(index);
 		addedHistory.setFeedbackMsg(input.getTaskName());
 
+		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
+			addedHistory.setTask(repo.getBuffer().get(index));
+			addedHistory.setTaskType(repo.getBuffer().get(index).getType());
+
+		} else if (repo.getBuffer().get(index).getType()
+				.equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) repo.getBuffer().get(index);
+			addedHistory.setDeadline(deadline);
+			addedHistory.setTaskType(repo.getBuffer().get(index).getType());
+
+		} else if (repo.getBuffer().get(index).getType()
+				.equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) repo.getBuffer().get(index);
+			addedHistory.setAppointment(appt);
+			addedHistory.setTaskType(repo.getBuffer().get(index).getType());
+		}
 		return addedHistory;
 	}
 
@@ -82,20 +108,23 @@ public class UndoManager {
 
 		deletedHistory.setCommand(input.getCommand());
 		deletedHistory.setFeedbackMsg(taskName);
+		deletedHistory.setIndex(index);
 
 		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
 			deletedHistory.setTask(repo.getBuffer().get(index));
-			deletedHistory.setTaskType(TaskType.FLOATING);
+			deletedHistory.setTaskType(repo.getBuffer().get(index).getType());
 
 		} else if (repo.getBuffer().get(index).getType()
 				.equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) repo.getBuffer().get(index);
 			deletedHistory.setDeadline(deadline);
+			deletedHistory.setTaskType(repo.getBuffer().get(index).getType());
 
 		} else if (repo.getBuffer().get(index).getType()
 				.equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) repo.getBuffer().get(index);
 			deletedHistory.setAppointment(appt);
+			deletedHistory.setTaskType(repo.getBuffer().get(index).getType());
 		}
 
 		return deletedHistory;
@@ -147,8 +176,7 @@ public class UndoManager {
 		return sortedHistory;
 	}
 
-	private static void undoAddAction(int taskID, ArrayList<Task> buffer) {
-		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+	private static void undoAddAction(int index, ArrayList<Task> buffer) {
 		buffer.remove(index);
 	}
 
@@ -196,7 +224,6 @@ public class UndoManager {
 		while (list.hasNext()) {
 			buffer.add(list.next());
 		}
-
 		repo.setBuffer(buffer);
 	}
 

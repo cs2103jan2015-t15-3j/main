@@ -54,7 +54,8 @@ public class Amend {
 	private static void amendName(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(item, buffer);
-		task.setTaskName(item.getTaskName());
+		task.setTaskName(item.getTaskName());		
+		repo.setFeedbackMsg(item.getTaskName() + Message.EDITED_SUCCESSFUL);
 	}
 
 	/*

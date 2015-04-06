@@ -83,11 +83,13 @@ public class LogicMain {
 			break;
 
 		case AMEND:
-			undoAmend(input, repo);
-			Amend.determineAmend(input, repo);
-			
-			repo.setFeedbackMsg(Message.EDITED_SUCCESSFUL);
-			updateStorage(repo);
+			try {
+				undoAmend(input, repo);
+				Amend.determineAmend(input, repo);
+				updateStorage(repo);
+			} catch (IndexOutOfBoundsException e) {
+				repo.setFeedbackMsg(input.getTaskID() + Message.TASK_NOT_FOUND);
+			}
 			break;
 
 		case DELETE:
@@ -106,14 +108,12 @@ public class LogicMain {
 			}
 			undoClear(input, repo);
 			Obliterator.determineClear(input, repo.getBuffer());
+
 			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
 			updateStorageToClear();
 			break;
 
 		case DISPLAY:
-			// For testing purposes
-			Printer.executePrint(repo.getBuffer());
-			
 			repo.setFeedbackMsg(Message.CLEAR);
 			break;
 
@@ -138,16 +138,25 @@ public class LogicMain {
 		case UNDO:
 			try {
 				UndoManager.determineUndo(repo);
-				storage.updateDeleteTask(repo);
+				updateStorage(repo);
 			} catch (EmptyStackException e) {
 				repo.setFeedbackMsg(Message.UNDO_UNSUCCESSFUL);
+			}
+			break;
+
+		case REDO:
+			try {
+				RedoManager.determineRedo(repo);
+				updateStorage(repo);
+			} catch (EmptyStackException e) {
+				repo.setFeedbackMsg(Message.REDO_UNSUCCESSFUL);
 			}
 			break;
 
 		case COMPLETE:
 			try {
 				Amend.setCompletion(input, repo);
-				storage.updateDeleteTask(repo);
+				updateStorage(repo);
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(input.getTaskID() + Message.TASK_NOT_FOUND);
 				Logging.getInputLog(Message.COMPLETE_ERROR);
@@ -157,7 +166,7 @@ public class LogicMain {
 		case UNCOMPLETE:
 			try {
 				Amend.setCompletion(input, repo);
-				storage.updateDeleteTask(repo);
+				updateStorage(repo);
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(input.getTaskID() + Message.TASK_NOT_FOUND);
 				Logging.getInputLog(Message.UNCOMPLETE_ERROR);
@@ -178,7 +187,7 @@ public class LogicMain {
 
 	private static void undoAdd(Interpreter input, Repository repo) {
 		History addedHistory = new History();
-		addedHistory = UndoManager.pushAddToStack(input, repo.getCurrentID());
+		addedHistory = UndoManager.pushAddToStack(input, repo);
 		repo.undoActionPush(addedHistory);
 	}
 
