@@ -21,55 +21,59 @@ public class HelpInfo {
 
 		StringBuilder str = new StringBuilder();
 
-		str.append(createMainTitle("Help Command for "));
-		str.append(createCommandTitle("'Add'"));
+		str.append(createCommandTitle("Add"));
 		str.append(HTML_BREAK);
-		str.append("(You can either use ");
-		str.append(maroonFont("'add'"));
-		str.append(" or ");
-		str.append(maroonFont("'a'"));
-		str.append(" to create a new task)");
+		str.append("The add function allows you to add a new task. ");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
-		str.append("Format Type: ");
-		str.append(maroonFont(" add/a "));
-		str.append("[Description][Start][End][");
-		str.append(maroonFont("<"));
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" add "));
+		str.append("[task name][start date / time][end date / time] ");
+		str.append(maroonFont("&#9668"));
 		str.append("Remarks");
-		str.append(maroonFont(">"));
-		str.append("]");
+		str.append(maroonFont("&#9658"));
 		str.append(HTML_BREAK);
-
-		str.append(HTML_BREAK);
-		str.append(maroonFont("1. " + bold("Floating Task:")));
-		str.append(HTML_BREAK);
-		str.append("You can add a task without any date or time");
-		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'add study for upcoming exams'"));
-		str.append(HTML_BREAK);
-
-		str.append(HTML_BREAK);
-		str.append(maroonFont("2. " + bold("Deadline Task:")));
-		str.append(HTML_BREAK);
-		str.append("You can add a task with end date and time only");
-		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'add CS2103 V0.5 13/04/15 23:59'"));
-		str.append(HTML_BREAK);
-
-		str.append(HTML_BREAK);
-		str.append(maroonFont("3. " + bold("Appointment Task:")));
-		str.append(HTML_BREAK);
-		str.append("You can add a task with both start and end date together with time");
-		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'a revision class 11/04/15 08:00 11/04/15 15:00'"));
+		str.append(maroonFont(" a "));
+		str.append("[task name][start date / time][end date / time] ");
+		str.append(maroonFont("&#9668"));
+		str.append("Remarks");
+		str.append(maroonFont("&#9658"));
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
-		str.append(redFont("*NOTE*"));
+		str.append("There are ");
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append("three");
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(" types of categories of how you can add your tasks.");
 		str.append(HTML_BREAK);
-		str.append(redFont("Adding of remarks & time is optional."));
 		str.append(HTML_BREAK);
-		str.append(redFont("By default, time is set to '23:59' (24 Hours Format)"));
+		str.append(maroonFont("1. You can add a task without specifying the date or time."));
+		str.append(HTML_BREAK);
+		str.append(createExample("'add study for upcoming exams'"));
+		str.append(HTML_BREAK);
+
+		str.append(HTML_BREAK);
+		str.append(maroonFont("2. You can add a task by specifying only the end date or with time."));
+		str.append(HTML_BREAK);
+		str.append(createExample("'add CS2103 V0.5 13/04/15 23:59'"));
+		str.append(HTML_BREAK);
+
+		str.append(HTML_BREAK);
+		str.append(maroonFont("3. You can add a task by specifying both start and end date with time."));
+		str.append(HTML_BREAK);
+		str.append(createExample("'a CS2103 revision class 11/04/15 08:00 11/04/15 15:00'"));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(redFont("*Disclaimer*"));
+		str.append(HTML_BREAK);
+		str.append(redFont("Remarks & time are optional."));
+		str.append(HTML_BREAK);
+		str.append(redFont("If you do not specify a time, the time is set to '23:59' (24h format) by default."));
 		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());
@@ -79,24 +83,30 @@ public class HelpInfo {
 
 		StringBuilder str = new StringBuilder();
 
-		str.append(createMainTitle("Help Command for "));
-		str.append(createCommandTitle("'Delete'"));
+		str.append(createCommandTitle("Delete"));
 		str.append(HTML_BREAK);
-		str.append("(You can either use ");
-		str.append(maroonFont("'delete'"));
-		str.append(" or ");
-		str.append(maroonFont("'del'"));
-		str.append(" to delete a task)");
+		str.append("The delete function allows you to delete your unwanted tasks.");
+		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
-		str.append(maroonFont("1. " + bold("Delete by ID:")));
+		str.append(maroonFont(" delete "));
+		str.append("[id]");
 		str.append(HTML_BREAK);
-		str.append("You can delete a task by specifying the ID");
+		str.append(maroonFont(" d "));
+		str.append("[id]");
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'delete 11'"));
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'del 21'"));
+
+		str.append(maroonFont("1. "
+				+ bold("You can delete your task by specifying the ID.")));
+		str.append(HTML_BREAK);
+		str.append(createExample("'delete 11'"));
+		str.append(" OR ");
+		str.append(createExample("'d 1'"));
 		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());
@@ -106,28 +116,41 @@ public class HelpInfo {
 
 		StringBuilder str = new StringBuilder();
 
-		str.append(createMainTitle("Help Command for "));
-		str.append(createCommandTitle("'Edit'"));
+		str.append(createCommandTitle("Edit"));
 		str.append(HTML_BREAK);
-		str.append("(You can either use ");
-		str.append(maroonFont("'edit'"));
-		str.append(" or ");
-		str.append(maroonFont("'e'"));
-		str.append(" to edit a task)");
+		str.append("The edit function allows your to amend your tasks.");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" edit "));
+		str.append("[id]");
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" e "));
+		str.append("[id]");
+		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
 		str.append(HTML_BREAK);
-		str.append(maroonFont("1. " + bold("Edit by ID:")));
+		str.append(maroonFont("1. "
+				+ bold("You can edit your task name by specifying the ID.")));
 		str.append(HTML_BREAK);
-		str.append("You can edit a task by specifying the ID, followed by the details that you wish to edit");
-		str.append(HTML_BREAK);
-		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'edit 22 dinner with family next friday evening"));
-		str.append(HTML_BREAK);
-		str.append(createExample("17/04/15 19:00 17/04/15 22:00'"));
+		str.append(createExample("'edit 22 dinner with family next friday evening"));
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'e 12 additional revision class this week 21/04/15'"));
+		str.append(maroonFont("2. "
+				+ bold("You can edit your start and end date by specifying the ID.")));
+		str.append(HTML_BREAK);
+		str.append(createExample("'edit 11 17/04/15 19:00 17/04/15 22:00'"));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+		str.append(maroonFont("3. "
+				+ bold("You can edit your task name and dates by specifying the ID.")));
+		str.append(HTML_BREAK);
+		str.append(createExample("'e 12 additional revision class this week 21/04/15'"));
 		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());
@@ -136,47 +159,57 @@ public class HelpInfo {
 	public static String completeAndUncompleteCommandGuide() {
 
 		StringBuilder str = new StringBuilder();
-
-		str.append(createMainTitle("Help Command for "));
-		str.append(createCommandTitle("'Complete'"));
+		str.append(createCommandTitle("Complete"));
 		str.append(HTML_BREAK);
-		str.append("(You can either use ");
-		str.append(maroonFont("'complete'"));
-		str.append(" or ");
-		str.append(maroonFont("'comp'"));
-		str.append(" to mark a task as complete)");
+		str.append("The complete function allows you to mark your tasks as completed.");
+		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
-		str.append(maroonFont("1. " + bold("Mark by ID:")));
+		str.append(maroonFont(" complete "));
+		str.append("[id]");
 		str.append(HTML_BREAK);
-		str.append("You can mark a task as complete by specifying the ID");
+		str.append(maroonFont(" cp "));
+		str.append("[id]");
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'complete 9'"));
-		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'comp 18'"));
 		str.append(HTML_BREAK);
 
+		str.append(maroonFont("1. "
+				+ bold("You can mark by specifying the ID to complete your task.")));
 		str.append(HTML_BREAK);
-		str.append(HTML_BREAK);
-		str.append(createMainTitle("Help Command for "));
-		str.append(createCommandTitle("'Uncomplete'"));
-		str.append(HTML_BREAK);
-		str.append("(You can either use ");
-		str.append(maroonFont("'uncomplete'"));
-		str.append(" or ");
-		str.append(maroonFont("'ucomp'"));
-		str.append(" to mark a task as uncomplete)");
+		str.append(createExample("'complete 9'"));
+		str.append(" OR ");
+		str.append(createExample("'cp 18'"));
 		str.append(HTML_BREAK);
 
 		str.append(HTML_BREAK);
-		str.append(maroonFont("1. " + bold("Mark by ID:")));
+		str.append(createCommandTitle("Uncomplete"));
 		str.append(HTML_BREAK);
-		str.append("You can mark a task as uncomplete by specifying the ID");
+		str.append("The uncomplete function allows you to mark your tasks as uncompleted.");
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'uncomplete 9'"));
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'ucomp 18'"));
+
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" uncomplete "));
+		str.append("[id]");
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" ucp "));
+		str.append("[id]");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(maroonFont("1. "
+				+ bold("You can mark by specifying the ID to uncomplete your task.")));
+		str.append(HTML_BREAK);
+		str.append(createExample("'uncomplete 9'"));
+		str.append(" OR ");
+		str.append(createExample("'ucp 18'"));
 		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());
@@ -186,25 +219,44 @@ public class HelpInfo {
 
 		StringBuilder str = new StringBuilder();
 
-		str.append(createMainTitle("Help Command for "));
-		str.append(createCommandTitle("'Search'"));
+		str.append(createCommandTitle("Search"));
 		str.append(HTML_BREAK);
-		str.append("(You can either use ");
-		str.append(maroonFont("'search'"));
-		str.append(" or ");
-		str.append(maroonFont("'find'"));
-		str.append(" to search for a specific task)");
+		str.append("The search function allows you to search for your tasks.");
+		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
-		str.append(maroonFont("1. " + bold("Search by ID:")));
+		str.append(maroonFont(" search "));
+		str.append("[id] OR [keywords]");
 		str.append(HTML_BREAK);
-		str.append("You can search for a specific task by specifying the ID");
+		str.append(maroonFont(" find "));
+		str.append("[id] OR [keywords] ");
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'search 2'"));
 		str.append(HTML_BREAK);
-		str.append(createExample("Example: 'find 14'"));
+
+		str.append(maroonFont("1. "
+				+ bold("You can search a specific task by specifying the ID.")));
 		str.append(HTML_BREAK);
+		str.append(createExample("'search 2' OR 'find 2'"));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+		str.append(maroonFont("2. "
+				+ bold("You can search a specific task by providing keywords.")));
+		str.append(HTML_BREAK);
+		str.append("Let's say we have a task name called ");
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append("PEAR");
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(HTML_BREAK);
+		str.append("Both outcomes will return the desired results.");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+		str.append(createExample("'search pear' OR 'find pear'"));
+		str.append(HTML_BREAK);
+		str.append(createExample("'search p' OR 'find p'"));
 
 		return wrapper(str.toString());
 	}
