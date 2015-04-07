@@ -9,6 +9,7 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
+import java.util.Stack;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,6 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import logic.LogicMain;
 import logic.Repository;
@@ -123,15 +126,7 @@ public class UserInterfaceMain extends JPanel {
 
 		// initial load
 		mem = LogicMain.loadStorage();
-		toDoPanel.revalidate();
-		toDoPanel.repaint();
-		toDoPanel.removeAll();
-		printLabel(mem);
-
-		completedPanel.revalidate();
-		completedPanel.repaint();
-		completedPanel.removeAll();
-		printCompletedLabel(mem);
+		clearAndReloadBothPanel();
 
 		feedbackTextArea.setText(Message.WELCOME);
 
@@ -140,10 +135,8 @@ public class UserInterfaceMain extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					userInput = inputTextField.getText().toString();
 
-					// pass to logic
 					mem = LogicMain.parseString(userInput, mem);
 
-					// getFirstWord
 					String firstWord = getFirstWord(userInput);
 
 					// testing getFirstWord
@@ -166,10 +159,8 @@ public class UserInterfaceMain extends JPanel {
 					completedScroller.getVerticalScrollBar()
 							.addAdjustmentListener(adjustListener);
 
-					// commandHistory/InputHistory
 					InputHistory.getInput(userInput);
 
-					// logging testing
 					Logging.getInputLog(userInput);
 
 					feedbackTextArea.setText(mem.getFeedback());
@@ -214,7 +205,6 @@ public class UserInterfaceMain extends JPanel {
 
 	}
 
-	// This method will return the command user enters.
 	protected static String getFirstWord(String userCommand) {
 		String commandTypeString = userCommand.trim().split("\\s+")[0];
 		return commandTypeString;
@@ -222,66 +212,63 @@ public class UserInterfaceMain extends JPanel {
 
 	protected void displaySetting(String firstWord) {
 
-		// pass to printTempList/printList
 		if ((firstWord.toLowerCase().equals("search"))
 				|| (firstWord.toLowerCase().equals("find") || (firstWord
-						.toLowerCase().equals("sort")))) {
+						.toLowerCase().equals("sort") || (firstWord
+						.toLowerCase().equals("s"))))) {
 
-			toDoPanel.revalidate();
-			toDoPanel.repaint();
-			toDoPanel.removeAll();
-			printTempLabel(mem);
-
+			clearAndReloadBothPanelForTempList();
 			tabbedPane.setSelectedIndex(0);
 		}
 
 		else if ((firstWord.toLowerCase().equals("complete"))
-				|| (firstWord.toLowerCase().equals("comp"))) {
+				|| (firstWord.toLowerCase().equals("cp"))) {
 
-			completedPanel.revalidate();
-			completedPanel.repaint();
-			completedPanel.removeAll();
-			printCompletedLabel(mem);
-
+			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(1);
-
-			toDoPanel.revalidate();
-			toDoPanel.repaint();
-			toDoPanel.removeAll();
-			printLabel(mem);
-
 		}
 
-		else if ((firstWord.toLowerCase().equals("clear"))) {
-
-			toDoPanel.revalidate();
-			toDoPanel.repaint();
-			toDoPanel.removeAll();
-			printLabel(mem);
-
+		else if ((firstWord.toLowerCase().equals("clear") || (firstWord
+				.toLowerCase().equals("cl")))) {
+			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
-
-			completedPanel.revalidate();
-			completedPanel.repaint();
-			completedPanel.removeAll();
-			printCompletedLabel(mem);
 		}
-
+		
+		else if ((firstWord.toLowerCase().equals("add") || (firstWord
+				.toLowerCase().equals("a")))) {
+			clearAndReloadBothPanel();
+			tabbedPane.setSelectedIndex(0);
+		}
 		else {
-
-			toDoPanel.revalidate();
-			toDoPanel.repaint();
-			toDoPanel.removeAll();
-			printLabel(mem);
-
+			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
-
-			completedPanel.revalidate();
-			completedPanel.repaint();
-			completedPanel.removeAll();
-			printCompletedLabel(mem);
-
 		}
+	}
+
+	private void clearToDoPanel() {
+		toDoPanel.revalidate();
+		toDoPanel.repaint();
+		toDoPanel.removeAll();
+	}
+
+	private void clearCompletedPanel() {
+		completedPanel.revalidate();
+		completedPanel.repaint();
+		completedPanel.removeAll();
+	}
+
+	private void clearAndReloadBothPanel() {
+		clearToDoPanel();
+		clearCompletedPanel();
+		printLabel(mem);
+		printCompletedLabel(mem);
+	}
+
+	private void clearAndReloadBothPanelForTempList() {
+		clearToDoPanel();
+		clearCompletedPanel();
+		printTempLabel(mem);
+		printCompletedLabel(mem);
 	}
 
 	protected void printCompletedLabel(Repository list) {
