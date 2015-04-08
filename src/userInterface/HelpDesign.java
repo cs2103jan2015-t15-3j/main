@@ -1,8 +1,5 @@
 package userInterface;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,7 +7,7 @@ import javax.swing.JTabbedPane;
 
 public class HelpDesign {
 	
-	 public static JTabbedPane createTabbedPane() {
+	protected static JTabbedPane createTabbedPane() {
 		 
 		 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setBounds(100, 100, 447, 470);
@@ -68,14 +65,4 @@ public class HelpDesign {
 			
 			return tabbedPane;
 	 }
-	 
-	    public static JLabel createExitLabel(){
-	        JLabel exitLabel = new JLabel("Press 'F1' again to exit Help Guide");
-	        exitLabel.setFont(new Font("Times New Roman", Font.BOLD, 12));
-	    	exitLabel.setForeground(new Color(0, 139, 139));
-	        exitLabel.setBounds(26, 362, 193, 33);
-	        exitLabel.setOpaque(true);
-	        
-	        return exitLabel;
-	    }
 }

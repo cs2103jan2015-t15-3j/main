@@ -14,7 +14,7 @@ public class printTempToDoList {
 	private static final String HTML_PURPLE_COLOR = "<font color=#5d2e8a>";
 	private static final String HTML_FONT_CLOSE = "</font>";
 
-	public static String returnString(Task task) {
+	protected static String returnString(Task task) {
 
 		int id;
 		String name, start, end, remarks, str = null;

@@ -17,7 +17,7 @@ public class HelpInfo {
 	private static final String HTML_ITALIC_OPEN = "<i>";
 	private static final String HTML_ITALIC_CLOSE = "</i>";
 
-	public static String addCommandGuide() {
+	protected static String addCommandGuide() {
 
 		StringBuilder str = new StringBuilder();
 
@@ -79,7 +79,7 @@ public class HelpInfo {
 		return wrapper(str.toString());
 	}
 
-	public static String deleteCommandGuide() {
+	protected static String deleteCommandGuide() {
 
 		StringBuilder str = new StringBuilder();
 
@@ -112,7 +112,7 @@ public class HelpInfo {
 		return wrapper(str.toString());
 	}
 
-	public static String editCommandGuide() {
+	protected static String editCommandGuide() {
 
 		StringBuilder str = new StringBuilder();
 
@@ -156,7 +156,7 @@ public class HelpInfo {
 		return wrapper(str.toString());
 	}
 
-	public static String completeAndUncompleteCommandGuide() {
+	protected static String completeAndUncompleteCommandGuide() {
 
 		StringBuilder str = new StringBuilder();
 		str.append(createCommandTitle("Complete"));
@@ -215,7 +215,7 @@ public class HelpInfo {
 		return wrapper(str.toString());
 	}
 
-	public static String searchCommandGuide() {
+	protected static String searchCommandGuide() {
 
 		StringBuilder str = new StringBuilder();
 

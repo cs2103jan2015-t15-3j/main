@@ -9,6 +9,7 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 import javax.swing.ImageIcon;
@@ -20,8 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import logic.LogicMain;
 import logic.Repository;
@@ -39,6 +38,9 @@ public class UserInterfaceMain extends JPanel {
 	private JPanel toDoPanel;
 	private JTabbedPane tabbedPane;
 	private AdjustmentListener adjustListener;
+
+	private static final Stack<String> inputTypeOne = new Stack<String>();
+	private static final Stack<String> inputTypeTwo = new Stack<String>();
 
 	Repository mem = new Repository();
 
@@ -109,6 +111,7 @@ public class UserInterfaceMain extends JPanel {
 				.setLayout(new BoxLayout(completedPanel, BoxLayout.Y_AXIS));
 
 		feedbackTextArea = new JTextArea();
+		feedbackTextArea.setFont(new Font("Trebuchet MS", Font.BOLD | Font.ITALIC, 16));
 		feedbackTextArea.setForeground(Color.BLACK);
 		feedbackTextArea.setBackground(Color.LIGHT_GRAY);
 		feedbackTextArea.setBounds(38, 591, 448, 27);
@@ -142,8 +145,12 @@ public class UserInterfaceMain extends JPanel {
 					// testing getFirstWord
 					System.out.println(firstWord);
 
-					displaySetting(firstWord);
+					try {
+						displaySetting(firstWord);
 
+					} catch (EmptyStackException e1) {
+
+					}
 					// ScrollPane adjust automatically when new input is entered
 					adjustListener = new AdjustmentListener() {
 
@@ -199,7 +206,7 @@ public class UserInterfaceMain extends JPanel {
 								.getResource("/userInterface/ImageIcon/proTaskLogo.png")));
 		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 28));
 		frame.getContentPane().setEnabled(false);
-		frame.setBounds(100, 100, 533, 762);
+		frame.setBounds(100, 100, 535, 770);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -224,24 +231,100 @@ public class UserInterfaceMain extends JPanel {
 		else if ((firstWord.toLowerCase().equals("complete"))
 				|| (firstWord.toLowerCase().equals("cp"))) {
 
+			inputTypeTwo.push(firstWord);
+
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(1);
 		}
 
 		else if ((firstWord.toLowerCase().equals("clear") || (firstWord
 				.toLowerCase().equals("cl")))) {
+
+			clearAndReloadBothPanel();
+			tabbedPane.setSelectedIndex(0);
+		}
+
+		else if ((firstWord.toLowerCase().equals("add") || (firstWord
+				.toLowerCase().equals("a") || (firstWord.toLowerCase().equals(
+				"delete") || (firstWord.toLowerCase().equals("d")))))) {
+
+			clearAndReloadBothPanel();
+			tabbedPane.setSelectedIndex(0);
+		}
+
+		else if ((firstWord.toLowerCase().equals("edit") || (firstWord
+				.toLowerCase().equals("e")))) {
+
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
 		}
 		
-		else if ((firstWord.toLowerCase().equals("add") || (firstWord
-				.toLowerCase().equals("a")))) {
+		else if ((firstWord.toLowerCase().equals("display") || (firstWord
+				.toLowerCase().equals("dp")))) {
+
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
 		}
-		else {
+
+		else if ((firstWord.toLowerCase().equals("uncomplete") || (firstWord
+				.toLowerCase().equals("ucp")))) {
+
+			inputTypeOne.push(firstWord);
+			
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
+		}
+
+		else if ((firstWord.toLowerCase().equals("undo") || (firstWord
+				.toLowerCase().equals("u")))) {
+
+			clearAndReloadBothPanel();
+
+			// Case One
+			if ((!inputTypeOne.isEmpty())) {
+
+				if (inputTypeOne.peek().equals("ucp")
+						|| inputTypeOne.peek().equals("uncomplete")) {
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(1);
+					inputTypeOne.pop();
+				}
+
+				else if (!inputTypeOne.peek().equals("ucp")
+						|| (!inputTypeOne.peek().equals("uncomplete"))) {
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+				}
+			}
+			// Case Two
+			else if ((!inputTypeTwo.isEmpty())) {
+				if ((inputTypeTwo.peek().equals("cp"))
+						|| (inputTypeTwo.peek().equals("complete"))) {
+
+					inputTypeTwo.push(firstWord);
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+				}
+			}
+
+		}
+
+		else if ((firstWord.toLowerCase().equals("redo") || (firstWord
+				.toLowerCase().equals("r")))) {
+
+			clearAndReloadBothPanel();
+
+			if (!(inputTypeTwo.isEmpty())) {
+				if ((inputTypeTwo.peek().equals("undo"))
+						|| (inputTypeTwo.peek().equals("u"))) {
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(1);
+					inputTypeTwo.pop();
+
+				}
+			}
+
 		}
 	}
 

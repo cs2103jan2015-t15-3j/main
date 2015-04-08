@@ -7,8 +7,6 @@ import javax.swing.JFrame;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class HelpGuide {
 	/**
@@ -46,6 +44,5 @@ public class HelpGuide {
 		frame.setVisible(true);
 		frame.setFocusable(true);
 		frame.getContentPane().setLayout(null);
-		// frame.getContentPane().add(HelpDesign.createExitLabel());
 	}
 }
