@@ -44,6 +44,7 @@ public class UserInterfaceMain extends JPanel {
 	private static final Stack<String> tempStack = new Stack<String>();
 
 	Repository mem = new Repository();
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -110,30 +111,33 @@ public class UserInterfaceMain extends JPanel {
 		completedScroller.setViewportView(completedPanel);
 		completedPanel
 				.setLayout(new BoxLayout(completedPanel, BoxLayout.Y_AXIS));
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(38, 591, 448, 46);
+		frame.getContentPane().add(scrollPane);
 
 		feedbackTextArea = new JTextArea();
+		scrollPane.setViewportView(feedbackTextArea);
 		feedbackTextArea.setFont(new Font("Trebuchet MS", Font.BOLD
 				| Font.ITALIC, 16));
 		feedbackTextArea.setForeground(Color.BLACK);
 		feedbackTextArea.setBackground(Color.LIGHT_GRAY);
-		feedbackTextArea.setBounds(38, 591, 448, 27);
-		frame.getContentPane().add(feedbackTextArea);
+		
+				feedbackTextArea.setText(Message.WELCOME);
 
 		inputTextField = new JTextField();
-		inputTextField.setBounds(38, 632, 448, 27);
+		inputTextField.setBounds(38, 651, 448, 27);
 		frame.getContentPane().add(inputTextField);
 		inputTextField.setColumns(10);
 
 		JLabel helpLabel = new JLabel("Press 'F1' for Help Guide");
 		helpLabel.setForeground(new Color(0, 139, 139));
-		helpLabel.setBounds(38, 668, 448, 27);
+		helpLabel.setBounds(38, 679, 448, 27);
 		frame.getContentPane().add(helpLabel);
 
 		// initial load
 		mem = LogicMain.loadStorage();
 		clearAndReloadBothPanel();
-
-		feedbackTextArea.setText(Message.WELCOME);
 
 		KeyListener listener = new KeyListener() {
 			public void keyPressed(KeyEvent e) {
