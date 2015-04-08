@@ -41,6 +41,7 @@ public class UserInterfaceMain extends JPanel {
 
 	private static final Stack<String> inputTypeOne = new Stack<String>();
 	private static final Stack<String> inputTypeTwo = new Stack<String>();
+	private static final Stack<String> tempStack = new Stack<String>();
 
 	Repository mem = new Repository();
 
@@ -111,7 +112,8 @@ public class UserInterfaceMain extends JPanel {
 				.setLayout(new BoxLayout(completedPanel, BoxLayout.Y_AXIS));
 
 		feedbackTextArea = new JTextArea();
-		feedbackTextArea.setFont(new Font("Trebuchet MS", Font.BOLD | Font.ITALIC, 16));
+		feedbackTextArea.setFont(new Font("Trebuchet MS", Font.BOLD
+				| Font.ITALIC, 16));
 		feedbackTextArea.setForeground(Color.BLACK);
 		feedbackTextArea.setBackground(Color.LIGHT_GRAY);
 		feedbackTextArea.setBounds(38, 591, 448, 27);
@@ -217,6 +219,7 @@ public class UserInterfaceMain extends JPanel {
 		return commandTypeString;
 	}
 
+	// Decide which panel to refresh and reload
 	protected void displaySetting(String firstWord) {
 
 		if ((firstWord.toLowerCase().equals("search"))
@@ -248,6 +251,7 @@ public class UserInterfaceMain extends JPanel {
 				.toLowerCase().equals("a") || (firstWord.toLowerCase().equals(
 				"delete") || (firstWord.toLowerCase().equals("d")))))) {
 
+			inputTypeTwo.push(firstWord);
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
 		}
@@ -255,10 +259,11 @@ public class UserInterfaceMain extends JPanel {
 		else if ((firstWord.toLowerCase().equals("edit") || (firstWord
 				.toLowerCase().equals("e")))) {
 
+			inputTypeTwo.push(firstWord);
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
 		}
-		
+
 		else if ((firstWord.toLowerCase().equals("display") || (firstWord
 				.toLowerCase().equals("dp")))) {
 
@@ -270,7 +275,8 @@ public class UserInterfaceMain extends JPanel {
 				.toLowerCase().equals("ucp")))) {
 
 			inputTypeOne.push(firstWord);
-			
+			inputTypeTwo.push(firstWord);
+
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
 		}
@@ -281,33 +287,29 @@ public class UserInterfaceMain extends JPanel {
 			clearAndReloadBothPanel();
 
 			// Case One
-			if ((!inputTypeOne.isEmpty())) {
+			if (!(inputTypeOne.isEmpty())) {
 
-				if (inputTypeOne.peek().equals("ucp")
-						|| inputTypeOne.peek().equals("uncomplete")) {
+				if ((inputTypeOne.peek().equals("ucp"))
+						|| (inputTypeOne.peek().equals("uncomplete"))) {
 
 					clearAndReloadBothPanel();
 					tabbedPane.setSelectedIndex(1);
 					inputTypeOne.pop();
-				}
-
-				else if (!inputTypeOne.peek().equals("ucp")
-						|| (!inputTypeOne.peek().equals("uncomplete"))) {
+					inputTypeTwo.push(firstWord);
+				} else {
 					clearAndReloadBothPanel();
 					tabbedPane.setSelectedIndex(0);
+					inputTypeOne.pop();
 				}
 			}
+
 			// Case Two
 			else if ((!inputTypeTwo.isEmpty())) {
-				if ((inputTypeTwo.peek().equals("cp"))
-						|| (inputTypeTwo.peek().equals("complete"))) {
 
-					inputTypeTwo.push(firstWord);
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				}
+				inputTypeTwo.push(firstWord);
+				clearAndReloadBothPanel();
+				tabbedPane.setSelectedIndex(0);
 			}
-
 		}
 
 		else if ((firstWord.toLowerCase().equals("redo") || (firstWord
@@ -316,15 +318,49 @@ public class UserInterfaceMain extends JPanel {
 			clearAndReloadBothPanel();
 
 			if (!(inputTypeTwo.isEmpty())) {
+
 				if ((inputTypeTwo.peek().equals("undo"))
 						|| (inputTypeTwo.peek().equals("u"))) {
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+					inputTypeTwo.pop();
+					if ((inputTypeTwo.peek().equals("cp"))
+							|| (inputTypeTwo.peek().equals("complete"))) {
+						clearAndReloadBothPanel();
+						tabbedPane.setSelectedIndex(1);
+						inputTypeTwo.pop();
+					}
+
+				} else if ((inputTypeTwo.peek().equals("cp"))
+						|| (inputTypeTwo.peek().equals("complete"))) {
+
 					clearAndReloadBothPanel();
 					tabbedPane.setSelectedIndex(1);
 					inputTypeTwo.pop();
 
 				}
+
+				else if ((inputTypeTwo.peek().equals("ucp"))
+						|| (inputTypeTwo.peek().equals("uncomplete"))) {
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(1);
+					inputTypeTwo.pop();
+
+				}
+
+				else {
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+				}
 			}
 
+			else if ((inputTypeTwo.isEmpty())) {
+
+				clearAndReloadBothPanel();
+				tabbedPane.setSelectedIndex(0);
+			}
 		}
 	}
 
@@ -355,6 +391,7 @@ public class UserInterfaceMain extends JPanel {
 	}
 
 	protected void printCompletedLabel(Repository list) {
+
 		for (int i = 0; i < list.getBufferSize(); i++) {
 
 			Task task = list.getBuffer().get(i);
