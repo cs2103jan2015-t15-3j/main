@@ -11,37 +11,43 @@ public class UndoManager {
 
 	protected static void determineUndo(Repository repo) {
 		History history = repo.undoActionPop();
+		System.out.println(history.getTask());
+
 		ArrayList<Task> buffer = repo.getBuffer();
 
 		if (history.getCommand().equals(CommandType.ADD)) {
 			repo.redoActionPush(history);
 			undoAddAction(history.getIndex(), buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.DELETE)) {
 			repo.redoActionPush(history);
 			undoDeleteAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
+
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.AMEND)) {
 			undoAmendAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.UNDO_ACTION);
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.COMPLETE)) {
 			repo.redoActionPush(history);
 			undoCompleteAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg()
-					+ Message.UNCOMPLETE_TASK);
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETE_TASK,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
 			repo.redoActionPush(history);
 			undoUncompleteAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg()
-					+ Message.COMPLETE_TASK);
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.CLEAR)) {
@@ -58,29 +64,25 @@ public class UndoManager {
 
 	protected static History pushAddToStack(Interpreter input, Repository repo) {
 		History addedHistory = new History();
-		int taskID = repo.getCurrentID();
-
-		int index = SearchEngine.searchBufferIndex(taskID, repo.getBuffer());
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				repo.getCurrentID());
 
 		addedHistory.setCommand(input.getCommand());
-		addedHistory.setIndex(index);
 		addedHistory.setFeedbackMsg(input.getTaskName());
 
-		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
-			addedHistory.setTask(repo.getBuffer().get(index));
-			addedHistory.setTaskType(repo.getBuffer().get(index).getType());
+		if (task.getType().equals(TaskType.FLOATING)) {
+			addedHistory.setTask(task);
+			addedHistory.setTaskType(task.getType());
 
-		} else if (repo.getBuffer().get(index).getType()
-				.equals(TaskType.DEADLINE)) {
-			Deadline deadline = (Deadline) repo.getBuffer().get(index);
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
 			addedHistory.setDeadline(deadline);
-			addedHistory.setTaskType(repo.getBuffer().get(index).getType());
+			addedHistory.setTaskType(task.getType());
 
-		} else if (repo.getBuffer().get(index).getType()
-				.equals(TaskType.APPOINTMENT)) {
-			Appointment appt = (Appointment) repo.getBuffer().get(index);
+		} else if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
 			addedHistory.setAppointment(appt);
-			addedHistory.setTaskType(repo.getBuffer().get(index).getType());
+			addedHistory.setTaskType(task.getType());
 		}
 		return addedHistory;
 	}
@@ -88,13 +90,11 @@ public class UndoManager {
 	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
 			Repository repo) {
 		History completedHistory = new History();
-		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
-				repo.getBuffer());
-		String taskName = repo.getBuffer().get(index).getTaskName();
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				input.getTaskID());
 
 		completedHistory.setCommand(input.getCommand());
-		completedHistory.setIndex(index);
-		completedHistory.setFeedbackMsg(taskName);
+		completedHistory.setFeedbackMsg(task.getTaskName());
 
 		return completedHistory;
 	}
@@ -102,56 +102,38 @@ public class UndoManager {
 	protected static History pushDeleteToStack(Interpreter input,
 			Repository repo) {
 		History deletedHistory = new History();
-		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
-				repo.getBuffer());
-		String taskName = repo.getBuffer().get(index).getTaskName();
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				input.getTaskID());
 
 		deletedHistory.setCommand(input.getCommand());
-		deletedHistory.setFeedbackMsg(taskName);
-		deletedHistory.setIndex(index);
+		deletedHistory.setFeedbackMsg(task.getTaskName());
 
-		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
-			deletedHistory.setTask(repo.getBuffer().get(index));
-			deletedHistory.setTaskType(repo.getBuffer().get(index).getType());
+		if (task.getType().equals(TaskType.FLOATING)) {
+			deletedHistory.setTask(task);
+			deletedHistory.setTaskType(task.getType());
 
-		} else if (repo.getBuffer().get(index).getType()
-				.equals(TaskType.DEADLINE)) {
-			Deadline deadline = (Deadline) repo.getBuffer().get(index);
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
 			deletedHistory.setDeadline(deadline);
-			deletedHistory.setTaskType(repo.getBuffer().get(index).getType());
+			deletedHistory.setTaskType(task.getType());
 
-		} else if (repo.getBuffer().get(index).getType()
-				.equals(TaskType.APPOINTMENT)) {
-			Appointment appt = (Appointment) repo.getBuffer().get(index);
+		} else if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
 			deletedHistory.setAppointment(appt);
-			deletedHistory.setTaskType(repo.getBuffer().get(index).getType());
+			deletedHistory.setTaskType(task.getType());
 		}
-
 		return deletedHistory;
 	}
 
 	protected static History pushAmendToStack(Interpreter input, Repository repo) {
 		History amendedHistory = new History();
-		int index = SearchEngine.searchBufferIndex(input.getTaskID(),
-				repo.getBuffer());
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				input.getTaskID());
 
 		amendedHistory.setCommand(input.getCommand());
-		amendedHistory.setIndex(index);
-		amendedHistory.setTaskType(input.getType());
+		amendedHistory.setTask(task);
 
-		if (repo.getBuffer().get(index).getType().equals(TaskType.FLOATING)) {
-			amendedHistory.setTask(repo.getBuffer().get(index));
-			amendedHistory.setTaskType(TaskType.FLOATING);
-		} else if (repo.getBuffer().get(index).getType()
-				.equals(TaskType.DEADLINE)) {
-			Deadline deadline = (Deadline) repo.getBuffer().get(index);
-			amendedHistory.setDeadline(deadline);
-
-		} else if (repo.getBuffer().get(index).getType()
-				.equals(TaskType.APPOINTMENT)) {
-			Appointment appt = (Appointment) repo.getBuffer().get(index);
-			amendedHistory.setAppointment(appt);
-		}
+		System.out.println(amendedHistory.getHistoryBuffer().toString());
 
 		return amendedHistory;
 	}
@@ -194,16 +176,7 @@ public class UndoManager {
 
 	private static void undoAmendAction(History history, ArrayList<Task> buffer) {
 		buffer.remove(history.getIndex());
-
-		if (history.getTaskType().equals(TaskType.FLOATING)) {
-			Affix.addToBuffer(history.getTask(), buffer);
-
-		} else if (history.getTaskType().equals(TaskType.DEADLINE)) {
-			Affix.addToBuffer(history.getDeadLine(), buffer);
-
-		} else if (history.getTaskType().equals(TaskType.APPOINTMENT)) {
-			Affix.addToBuffer(history.getAppointment(), buffer);
-		}
+		buffer.add(history.getTask());
 	}
 
 	private static void undoCompleteAction(History history,

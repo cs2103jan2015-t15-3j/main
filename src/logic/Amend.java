@@ -19,17 +19,19 @@ public class Amend {
 		boolean checkCompleted = buffer.get(index).getCompleted();
 
 		if (isCompleted == false && checkCompleted == false) {
-			repo.setFeedbackMsg(taskName + Message.UNCOMPLETED_TASK);
+			repo.setFeedbackMsg(String
+					.format(Message.UNCOMPLETE_TASK, taskName));
 		} else if (isCompleted == true && checkCompleted == true) {
-			repo.setFeedbackMsg(taskName + Message.COMPLETED_TASK);
+			repo.setFeedbackMsg(String.format(Message.COMPLETED_TASK, taskName));
 		} else if (isCompleted == true && checkCompleted == false) {
 			LogicMain.undoCompleteOrUncomplete(item, repo);
 			buffer.get(index).setIsCompleted(isCompleted);
-			repo.setFeedbackMsg(taskName + Message.COMPLETE_TASK);
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK, taskName));
 		} else {
 			LogicMain.undoCompleteOrUncomplete(item, repo);
 			buffer.get(index).setIsCompleted(isCompleted);
-			repo.setFeedbackMsg(taskName + Message.UNCOMPLETE_TASK);
+			repo.setFeedbackMsg(String
+					.format(Message.UNCOMPLETE_TASK, taskName));
 		}
 	}
 
@@ -54,8 +56,9 @@ public class Amend {
 	private static void amendName(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(item, buffer);
-		task.setTaskName(item.getTaskName());		
-		repo.setFeedbackMsg(item.getTaskName() + Message.EDITED_SUCCESSFUL);
+		task.setTaskName(item.getTaskName());
+		repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
+				item.getTaskID()));
 	}
 
 	/*

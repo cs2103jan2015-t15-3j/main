@@ -20,7 +20,7 @@ public class History {
 	private Interpreter interpret;
 
 	public History() {
-		interpret = new Interpreter();
+		this.interpret = new Interpreter();
 		this.task = new Task();
 		this.deadline = new Deadline();
 		this.appointment = new Appointment();

@@ -12,29 +12,37 @@ public class RedoManager {
 
 		if (history.getCommand().equals(CommandType.ADD)) {
 			redoAddAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.REDO_ACTION);
+			repo.setFeedbackMsg(String.format(Message.REDO_ACTION,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.DELETE)) {
 			redoDeleteAction(history.getIndex(), buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg() + Message.REDO_ACTION);
+			repo.setFeedbackMsg(String.format(Message.REDO_ACTION,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.COMPLETE)) {
 			redoCompleteAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg()
-					+ Message.COMPLETE_TASK);
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
 			redoUncompleteAction(history, buffer);
-			repo.setFeedbackMsg(history.getFeedbackMsg()
-					+ Message.UNCOMPLETE_TASK);
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETE_TASK,
+					history.getFeedbackMsg()));
 		}
 
 		if (history.getCommand().equals(CommandType.CLEAR)) {
 			redoClearAction(history.getHistoryBuffer(), repo);
 			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
+		}
+
+		if (history.getCommand().equals(CommandType.AMEND)) {
+			redoClearAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
+					history.getFeedbackMsg()));
 		}
 	}
 
@@ -69,5 +77,4 @@ public class RedoManager {
 		historyBuffer.removeAll(historyBuffer);
 		repo.getBuffer().removeAll(repo.getBuffer());
 	}
-
 }
