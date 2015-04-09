@@ -30,6 +30,7 @@ public class ProTaskStorage {
 
 	protected ArrayList<Appointment> allAppointments;
 	private ArrayList<Task> allTasks;
+	private ArrayList<Task> previousBuffer;
 	private ArrayList<Integer> allTasksIDs;
 	private String[] dataBaseColumns;
 	private ArrayList<Task> tasks;
@@ -364,6 +365,10 @@ public class ProTaskStorage {
 				allTasksIDs = new ArrayList<Integer>();
 			}
 
+			if (previousBuffer == null)
+			{
+				previousBuffer = new ArrayList<Task>();
+			}
 			// Read CSV line by line and use the string array as you want
 			for (String[] row : allRows) {
 				if (isColumn) {
@@ -436,8 +441,10 @@ public class ProTaskStorage {
 		}
 	}
 
-	public void clearAllTasks() throws FileNotFoundException {
+	public Repository clearAllTasks(Repository repo) throws FileNotFoundException {
 		File file = new File(taskDataBase);
+		previousBuffer = repo.getBuffer();
+		repo.setBuffer(new ArrayList<Task>());
 
 		if (file.delete()) {
 			System.out.println(file.getName() + " is deleted!");
@@ -445,6 +452,7 @@ public class ProTaskStorage {
 			System.out.println("Delete operation is failed.");
 		}
 		createDataBase(taskDataBase);
+		return repo;
 	}
 
 	public void updateDeleteTask(Repository repo) {
