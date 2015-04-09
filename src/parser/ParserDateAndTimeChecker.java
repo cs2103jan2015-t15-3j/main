@@ -42,7 +42,7 @@ public class ParserDateAndTimeChecker{
 	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
 		
 			if(length < 2) {
-				System.out.println("2.Error. Please input again");
+				System.out.println("Error. Please input again");
 			} else if(length == 2) {
 				last = input[length - 1];
 				if(isDate(last)) {

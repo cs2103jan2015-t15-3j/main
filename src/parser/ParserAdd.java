@@ -8,16 +8,33 @@ import logic.Enumerator.TaskType;
 
 public class ParserAdd {
 	
-	public static void addTask(Interpreter item, String[] inputArray) throws ParseException {
-		defineTaskType(item, inputArray);
+	public static void addTask(Interpreter item, String input, String[] inputArray) throws ParseException {
+		String[] dateArray = null;
+		
+		if(input.contains("[")) {
+			dateArray = defineDate(input);
+			String[] newInputArray = input.split("[");
+			inputArray = newInputArray[0].split(" ");
+		}
+		defineTaskType(item, inputArray, dateArray);
 		defineTaskName(item, inputArray);
 		item.setTaskID(0);
 		item.setIsCompleted(false);	
 	}
 	
-	public static void defineTaskType(Interpreter item, String[] inputArray) throws ParseException {
-		int inputArrayLength = inputArray.length; 
-		ParserDateAndTimeChecker.checkDateAndTime(item, inputArray, inputArrayLength);	
+	public static String[] defineDate(String input) {
+			String[] splitDate = input.split("[");
+			String[] dateArray = splitDate[1].split(" ");
+			return dateArray;
+	}
+	
+	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
+		if(dateArray == null) {
+			item.setType(TaskType.FLOATING);
+		} else {
+			int dateArrayLength = dateArray.length; 
+			ParserDateAndTimeChecker.checkDateAndTime(item, dateArray, dateArrayLength);	
+		}
 	}
 	
 	public static void defineTaskName(Interpreter item, String[] inputArray) throws ParseException {

@@ -11,15 +11,13 @@ public class ProParser {
 			String[] splitInput = input.split("<");
 			defineRemarks(item, splitInput[1]);
 			String[] inputArray = splitInput[0].split(" ");
-			defineCommand(item, inputArray);
+			defineCommand(item, splitInput[0], inputArray);
+		} else if(input.equals(" ")) {
+			return null;
 		} else {
 			String[] inputArray = input.split(" ");
-			for(int i=0; i<inputArray.length; i++) {
-				System.out.print(i+": "+inputArray[i]+" ");
-			}
-			System.out.println();
 			item.setRemarks("");
-			defineCommand(item, inputArray);
+			defineCommand(item, input, inputArray);
 		}
 		return item;
 	}
@@ -29,7 +27,7 @@ public class ProParser {
 		item.setRemarks(remarksArray[0]);
 	}
 
-	private static void defineCommand(Interpreter item, String[] inputArray)
+	private static void defineCommand(Interpreter item, String input, String[] inputArray)
 			throws ParseException {
 
 		String command = inputArray[0].toLowerCase();
@@ -38,7 +36,7 @@ public class ProParser {
 		case "add":
 		case "a":
 			item.setCommandType(Interpreter.CommandType.ADD);
-			ParserAdd.addTask(item, inputArray);
+			ParserAdd.addTask(item, input, inputArray);
 			break;
 		case "delete":
 		case "d":
