@@ -9,6 +9,7 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -22,6 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 
+import logic.Compare;
 import logic.LogicMain;
 import logic.Repository;
 import logic.Task;
@@ -39,9 +41,8 @@ public class UserInterfaceMain extends JPanel {
 	private JTabbedPane tabbedPane;
 	private AdjustmentListener adjustListener;
 
-	private static final Stack<String> inputTypeOne = new Stack<String>();
-	private static final Stack<String> inputTypeTwo = new Stack<String>();
-	private static final Stack<String> tempStack = new Stack<String>();
+	private static final Stack<String> stack = new Stack<String>();
+	private static final Stack<String> temp = new Stack<String>();
 
 	Repository mem = new Repository();
 	private JScrollPane scrollPane;
@@ -111,7 +112,7 @@ public class UserInterfaceMain extends JPanel {
 		completedScroller.setViewportView(completedPanel);
 		completedPanel
 				.setLayout(new BoxLayout(completedPanel, BoxLayout.Y_AXIS));
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(38, 591, 448, 46);
 		frame.getContentPane().add(scrollPane);
@@ -122,8 +123,8 @@ public class UserInterfaceMain extends JPanel {
 				| Font.ITALIC, 16));
 		feedbackTextArea.setForeground(Color.BLACK);
 		feedbackTextArea.setBackground(Color.LIGHT_GRAY);
-		
-				feedbackTextArea.setText(Message.WELCOME);
+
+		feedbackTextArea.setText(Message.WELCOME);
 
 		inputTextField = new JTextField();
 		inputTextField.setBounds(38, 651, 448, 27);
@@ -156,6 +157,7 @@ public class UserInterfaceMain extends JPanel {
 
 					} catch (EmptyStackException e1) {
 
+						Logging.getInputLog("Empty Stack Exception from Display Setting");
 					}
 					// ScrollPane adjust automatically when new input is entered
 					adjustListener = new AdjustmentListener() {
@@ -235,35 +237,9 @@ public class UserInterfaceMain extends JPanel {
 			tabbedPane.setSelectedIndex(0);
 		}
 
-		else if ((firstWord.toLowerCase().equals("complete"))
-				|| (firstWord.toLowerCase().equals("cp"))) {
-
-			inputTypeTwo.push(firstWord);
-
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(1);
-		}
-
 		else if ((firstWord.toLowerCase().equals("clear") || (firstWord
 				.toLowerCase().equals("cl")))) {
-
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("add") || (firstWord
-				.toLowerCase().equals("a") || (firstWord.toLowerCase().equals(
-				"delete") || (firstWord.toLowerCase().equals("d")))))) {
-
-			inputTypeTwo.push(firstWord);
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("edit") || (firstWord
-				.toLowerCase().equals("e")))) {
-
-			inputTypeTwo.push(firstWord);
+			stack.push(firstWord);
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
 		}
@@ -275,14 +251,38 @@ public class UserInterfaceMain extends JPanel {
 			tabbedPane.setSelectedIndex(0);
 		}
 
+		else if ((firstWord.toLowerCase().equals("add") || (firstWord
+				.toLowerCase().equals("a") || (firstWord.toLowerCase().equals(
+				"delete") || (firstWord.toLowerCase().equals("d")))))) {
+
+			stack.push(firstWord);
+			clearAndReloadBothPanel();
+			tabbedPane.setSelectedIndex(0);
+		}
+
+		else if ((firstWord.toLowerCase().equals("edit") || (firstWord
+				.toLowerCase().equals("e")))) {
+
+			stack.push(firstWord);
+			clearAndReloadBothPanel();
+			tabbedPane.setSelectedIndex(0);
+		}
+
+		else if ((firstWord.toLowerCase().equals("complete"))
+				|| (firstWord.toLowerCase().equals("cp"))) {
+
+			stack.push(firstWord);
+			clearAndReloadBothPanel();
+			tabbedPane.setSelectedIndex(1);
+		}
+
 		else if ((firstWord.toLowerCase().equals("uncomplete") || (firstWord
 				.toLowerCase().equals("ucp")))) {
 
-			inputTypeOne.push(firstWord);
-			inputTypeTwo.push(firstWord);
-
+			stack.push(firstWord);
 			clearAndReloadBothPanel();
 			tabbedPane.setSelectedIndex(0);
+
 		}
 
 		else if ((firstWord.toLowerCase().equals("undo") || (firstWord
@@ -290,82 +290,132 @@ public class UserInterfaceMain extends JPanel {
 
 			clearAndReloadBothPanel();
 
-			// Case One
-			if (!(inputTypeOne.isEmpty())) {
+			if (!(stack.isEmpty())) {
+				if ((stack.peek().equals("uncomplete"))
+						|| (stack.peek().equals("ucp"))) {
 
-				if ((inputTypeOne.peek().equals("ucp"))
-						|| (inputTypeOne.peek().equals("uncomplete"))) {
+					stack.pop();
+					temp.push("ucp");
+					temp.push("u");
 
 					clearAndReloadBothPanel();
 					tabbedPane.setSelectedIndex(1);
-					inputTypeOne.pop();
-					inputTypeTwo.push(firstWord);
-				} else {
+				}
+
+				else if ((stack.peek().equals("complete"))
+						|| (stack.peek().equals("cp"))) {
+
+					stack.pop();
+					temp.push("cp");
+					temp.push("u");
+
 					clearAndReloadBothPanel();
 					tabbedPane.setSelectedIndex(0);
-					inputTypeOne.pop();
 				}
-			}
 
-			// Case Two
-			else if ((!inputTypeTwo.isEmpty())) {
+				else if ((stack.peek().equals("add"))
+						|| (stack.peek().equals("a"))) {
 
-				inputTypeTwo.push(firstWord);
+					stack.pop();
+					temp.push("a");
+					temp.push("u");
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+				}
+
+				else if ((stack.peek().equals("delete"))
+						|| (stack.peek().equals("d"))) {
+
+					stack.pop();
+					temp.push("d");
+					temp.push("u");
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+				} else if ((stack.peek().equals("clear"))
+						|| (stack.peek().equals("cl"))) {
+
+					stack.pop();
+					temp.push("cl");
+					temp.push("u");
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+				} else if ((stack.peek().equals("edit"))
+						|| (stack.peek().equals("e"))) {
+
+					stack.pop();
+					temp.push("e");
+					temp.push("u");
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
+				}
+
+			}// end if
+			else if (stack.isEmpty()) {
 				clearAndReloadBothPanel();
 				tabbedPane.setSelectedIndex(0);
+
 			}
-		}
+
+		}// end undo
 
 		else if ((firstWord.toLowerCase().equals("redo") || (firstWord
 				.toLowerCase().equals("r")))) {
 
 			clearAndReloadBothPanel();
 
-			if (!(inputTypeTwo.isEmpty())) {
+			if (!(temp.isEmpty())) {
+				if (temp.pop().equals("u")) {
 
-				if ((inputTypeTwo.peek().equals("undo"))
-						|| (inputTypeTwo.peek().equals("u"))) {
+					if (temp.peek().equals("cp")) {
 
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-					inputTypeTwo.pop();
-					if ((inputTypeTwo.peek().equals("cp"))
-							|| (inputTypeTwo.peek().equals("complete"))) {
+						temp.pop();
 						clearAndReloadBothPanel();
 						tabbedPane.setSelectedIndex(1);
-						inputTypeTwo.pop();
+
+					} else if (temp.peek().equals("ucp")) {
+
+						temp.pop();
+						clearAndReloadBothPanel();
+						tabbedPane.setSelectedIndex(0);
+
+					} else if (temp.peek().equals("a")) {
+
+						temp.pop();
+						clearAndReloadBothPanel();
+						tabbedPane.setSelectedIndex(0);
+
+					} else if (temp.peek().equals("d")) {
+
+						temp.pop();
+						clearAndReloadBothPanel();
+						tabbedPane.setSelectedIndex(0);
+
+					} else if (temp.peek().equals("cl")) {
+
+						temp.pop();
+						clearAndReloadBothPanel();
+						tabbedPane.setSelectedIndex(0);
+
+					} else if (temp.peek().equals("e")) {
+
+						temp.pop();
+						clearAndReloadBothPanel();
+						tabbedPane.setSelectedIndex(0);
 					}
-
-				} else if ((inputTypeTwo.peek().equals("cp"))
-						|| (inputTypeTwo.peek().equals("complete"))) {
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(1);
-					inputTypeTwo.pop();
-
 				}
 
-				else if ((inputTypeTwo.peek().equals("ucp"))
-						|| (inputTypeTwo.peek().equals("uncomplete"))) {
+			}// end of if
 
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(1);
-					inputTypeTwo.pop();
-
-				}
-
-				else {
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				}
-			}
-
-			else if ((inputTypeTwo.isEmpty())) {
-
+			else if (temp.isEmpty()) {
 				clearAndReloadBothPanel();
 				tabbedPane.setSelectedIndex(0);
 			}
-		}
+
+		}// end of Re-do
 	}
 
 	private void clearToDoPanel() {
@@ -395,6 +445,7 @@ public class UserInterfaceMain extends JPanel {
 	}
 
 	protected void printCompletedLabel(Repository list) {
+		Collections.sort(list.getBuffer(), Compare.numComparator);
 
 		for (int i = 0; i < list.getBufferSize(); i++) {
 
@@ -408,6 +459,7 @@ public class UserInterfaceMain extends JPanel {
 	}
 
 	protected void printLabel(Repository list) {
+		Collections.sort(list.getBuffer(), Compare.numComparator);
 		for (int i = 0; i < list.getBufferSize(); i++) {
 
 			Task task = list.getBuffer().get(i);
@@ -420,6 +472,7 @@ public class UserInterfaceMain extends JPanel {
 	}
 
 	protected void printTempLabel(Repository list) {
+		Collections.sort(list.getBuffer(), Compare.numComparator);
 		for (int i = 0; i < list.getTempBufferSize(); i++) {
 
 			Task task = list.getTempBuffer().get(i);
