@@ -26,7 +26,7 @@ public class TestCheckDate {
 		
 		// Check if Deadline
 		// This is a boundary case for Deadline
-		String input1 = "add checking date without time format 11/11/11 <remarks here>";
+		String input1 = "add checking date without time format [11/11/11] <remarks here>";
 		item = Pro.parse(input1);
 		System.out.println("TaskType: " + item.getType());
 		System.out.println("DueDateString: " + item.getDueDateString());
@@ -35,7 +35,7 @@ public class TestCheckDate {
 		System.out.println();
 		
 		// Check if Deadline
-		String input2 = "add checking single date with time format 11/11/11 11:11 <hello>";
+		String input2 = "add checking single date with time format [11/11/11 11:11] <hello>";
 		item = Pro.parse(input2);
 		System.out.println("TaskType: " + item.getType());
 		System.out.println("DueDateString: " + item.getDueDateString());
@@ -44,7 +44,7 @@ public class TestCheckDate {
 		System.out.println();
 		
 		// Check if Appointment
-		String input3 = "add checking double date without time format 11/11/11 12/12/12<remarks>";
+		String input3 = "add checking double date without time format [11/11/11 12/12/12]<remarks>";
 		item = Pro.parse(input3);
 		System.out.println("TaskType: " + item.getType());
 		System.out.println("StartDateString: " + item.getStartDateString());

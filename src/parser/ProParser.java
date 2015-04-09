@@ -10,8 +10,9 @@ public class ProParser {
 		if (input.contains("<")) {
 			String[] splitInput = input.split("<");
 			defineRemarks(item, splitInput[1]);
+			String inputWithoutRemarks = splitInput[0];
 			String[] inputArray = splitInput[0].split(" ");
-			defineCommand(item, splitInput[0], inputArray);
+			defineCommand(item, inputWithoutRemarks, inputArray);
 		} else if(input.equals(" ")) {
 			return null;
 		} else {

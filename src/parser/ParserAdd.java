@@ -13,9 +13,11 @@ public class ParserAdd {
 		
 		if(input.contains("[")) {
 			dateArray = defineDate(input);
-			String[] newInputArray = input.split("[");
+			String[] newInputArray = input.split("\\[");
+			System.out.println("newInputArray "+newInputArray[0]);
 			inputArray = newInputArray[0].split(" ");
 		}
+		
 		defineTaskType(item, inputArray, dateArray);
 		defineTaskName(item, inputArray);
 		item.setTaskID(0);
@@ -23,8 +25,12 @@ public class ParserAdd {
 	}
 	
 	public static String[] defineDate(String input) {
-			String[] splitDate = input.split("[");
+			System.out.println("1");
+			System.out.println("input "+input);
+			String[] splitDate = input.split("\\[");
+			System.out.println("2");
 			String[] dateArray = splitDate[1].split(" ");
+			System.out.println("3");
 			return dateArray;
 	}
 	
@@ -35,7 +41,10 @@ public class ParserAdd {
 		} else {
 			dateArrayLength = dateArray.length; 
 		}
-		ParserDateAndTimeChecker.checkDateAndTime(item, dateArray, dateArrayLength);	
+		boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);	
+		if(!isValidDateAndTime) {
+			
+		}
 	}
 	
 	public static void defineTaskName(Interpreter item, String[] inputArray) {

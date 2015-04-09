@@ -36,40 +36,49 @@ public class ParserDateAndTimeChecker{
 	private static String DEFAULT_TIME = "23:59";
 	// private static Comparator<Date> dateComparator;
 	
-	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
+	public static boolean isDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
 		
 		switch(length) {
 			case 0:
 				setFloating(item);
+				return true;
 			case 1:
 				if(isDate(input[0])) {
-					setDeadline(input[0], DEFAULT_TIME, item);
+					setDeadline(input[0], DEFAULT_TIME, item); 
+					return true;
 				} else {
-					
+					return false;
 				}
 			case 2:
 				if(isDate(input[0]) && isTime(input[1])) {
 					setDeadline(input[0], input[1], item);
+					return true;
 				} else if(isDate(input[0]) && isDate(input[1])) {
 					setAppointment(input[0], DEFAULT_TIME, input[1], DEFAULT_TIME, item);
+					return true;
 				} else {
-					
+					return false;
 				}
 			case 3:
 				if(isDate(input[0]) && isTime(input[1]) && isDate(input[2])) {
 					setAppointment(input[0], input[1], input[2], DEFAULT_TIME, item);
+					return true;
+				} else if(isDate(input[0]) && isDate(input[1]) && isTime(input[2])) {
+					setAppointment(input[0], DEFAULT_TIME, input[1], input[2], item);
+					return true;
 				} else {
-					
+					return false;
 				}
 			
 			case 4: 
 				if(isDate(input[0]) && isTime(input[1]) && isDate(input[2]) && isTime(input[3])) {
 					setAppointment(input[0], input[1], input[2], input[3], item);
+					return true;
 				} else {
-					
+					return false;
 				}
 			default:
-				
+				return false;
 		}
 		
 	}
