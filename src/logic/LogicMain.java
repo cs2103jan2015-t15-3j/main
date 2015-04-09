@@ -39,9 +39,9 @@ public class LogicMain {
 		return storage.getAllTasks();
 	}
 
-	private static void updateStorageToClear() {
+	private static void updateStorageToClear(Repository repo) {
 		try {
-			storage.clearAllTasks();
+			storage.clearAllTasks(repo);
 		} catch (FileNotFoundException e) {
 			Logging.getInputLog(Message.FILE_INEXISTS);
 		}
@@ -68,7 +68,7 @@ public class LogicMain {
 		return repo;
 	}
 
-	private static Repository executeCommand(Interpreter input, Repository repo) {
+	private static void executeCommand(Interpreter input, Repository repo) {
 		CommandType commandInfo = input.getCommand();
 
 		switch (commandInfo) {
@@ -110,7 +110,7 @@ public class LogicMain {
 				undoClear(input, repo);
 				Obliterator.determineClear(input, repo.getBuffer());
 				repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
-				updateStorageToClear();
+				updateStorageToClear(repo);
 			}
 			break;
 
@@ -187,7 +187,6 @@ public class LogicMain {
 		default:
 			break;
 		}
-		return repo;
 	}
 
 	private static void undoAdd(Interpreter input, Repository repo) {

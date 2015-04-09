@@ -64,11 +64,15 @@ public class UndoManager {
 
 	protected static History pushAddToStack(Interpreter input, Repository repo) {
 		History addedHistory = new History();
+
 		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
 				repo.getCurrentID());
+		int index = SearchEngine.searchBufferIndex(task.getTaskID(),
+				repo.getBuffer());
 
 		addedHistory.setCommand(input.getCommand());
 		addedHistory.setFeedbackMsg(input.getTaskName());
+		addedHistory.setIndex(index);
 
 		if (task.getType().equals(TaskType.FLOATING)) {
 			addedHistory.setTask(task);
@@ -90,9 +94,12 @@ public class UndoManager {
 	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
 			Repository repo) {
 		History completedHistory = new History();
+		
 		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
 				input.getTaskID());
-
+		int index = SearchEngine.searchBufferIndex(task.getTaskID(),
+				repo.getBuffer());
+		
 		completedHistory.setCommand(input.getCommand());
 		completedHistory.setFeedbackMsg(task.getTaskName());
 

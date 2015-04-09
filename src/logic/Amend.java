@@ -19,8 +19,8 @@ public class Amend {
 		boolean checkCompleted = buffer.get(index).getCompleted();
 
 		if (isCompleted == false && checkCompleted == false) {
-			repo.setFeedbackMsg(String
-					.format(Message.UNCOMPLETE_TASK, taskName));
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETED_TASK,
+					taskName));
 		} else if (isCompleted == true && checkCompleted == true) {
 			repo.setFeedbackMsg(String.format(Message.COMPLETED_TASK, taskName));
 		} else if (isCompleted == true && checkCompleted == false) {
@@ -55,7 +55,7 @@ public class Amend {
 
 	private static void amendName(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
-		Task task = SearchEngine.retrieveTask(item, buffer);
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
 		task.setTaskName(item.getTaskName());
 		repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
 				item.getTaskID()));
@@ -69,7 +69,7 @@ public class Amend {
 
 	private static void amendStartDate(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
-		Task task = SearchEngine.retrieveTask(item, buffer);
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
@@ -97,7 +97,7 @@ public class Amend {
 
 	private static void amendDueDate(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
-		Task task = SearchEngine.retrieveTask(item, buffer);
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
@@ -121,7 +121,7 @@ public class Amend {
 
 	private static void amendRemarks(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
-		Task task = SearchEngine.retrieveTask(item, buffer);
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
 		task.setRemarks(item.getRemarks());
 	}
 }
