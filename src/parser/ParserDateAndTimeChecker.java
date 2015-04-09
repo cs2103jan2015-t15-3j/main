@@ -84,7 +84,7 @@ public class ParserDateAndTimeChecker{
 	}
 	
 	private static boolean isDate(String checkInput) {
-		System.out.println("isDate");
+		//System.out.println("isDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		sdf.setLenient(false);
 		try {
@@ -96,7 +96,7 @@ public class ParserDateAndTimeChecker{
 	}	
 	
 	private static boolean isTime(String checkInput) {
-		System.out.println("isTime");
+		//System.out.println("isTime");
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setLenient(false);
 		try {
@@ -108,7 +108,7 @@ public class ParserDateAndTimeChecker{
 	}
 	
 	private static void setFloating(Interpreter item){
-		System.out.println("setFloating");
+		//System.out.println("setFloating");
 		item.setType(TaskType.FLOATING);
 		item.setIsDueDate(false);
 		item.setIsStartDate(false);
@@ -118,7 +118,7 @@ public class ParserDateAndTimeChecker{
 	}
 	
 	private static void setDeadline(String dueDate, String endTime, Interpreter item){
-		System.out.println("setDeadline");
+		//System.out.println("setDeadline");
 		item.setType(TaskType.DEADLINE);
 		item.setIsStartDate(false);
 		Date startDate = null;
@@ -129,20 +129,21 @@ public class ParserDateAndTimeChecker{
 	
 	private static void setAppointment(String startDate, String startTime, 
 			String dueDate, String endTime, Interpreter item){
-		System.out.println("setAppointment");
-		Date resultStartDate = setDate(startDate, startTime);
-		Date resultDueDate = setDate(dueDate, endTime);
+		//System.out.println("setAppointment");
 	
-			item.setType(TaskType.APPOINTMENT);
-			item.setStartDate(resultStartDate);
-			item.setDueDate(resultDueDate);
+		Date resultStartDate = setDate(startDate, startTime);
+		Date resultDueDate = setDate(dueDate, endTime);System.out.println(dueDate+" "+endTime);
+	
+		item.setType(TaskType.APPOINTMENT);
+		item.setStartDate(resultStartDate);
+		item.setDueDate(resultDueDate);
 	}
 	
 	private static Date setDate(String inputDate, String inputTime) {
-		System.out.println("setDate");
+		//System.out.println("setDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
-		
+		System.out.println(inputDate);
 		sdf.setLenient(true);
 		try {
 			Date date = sdf.parse(inputDateAndTime);

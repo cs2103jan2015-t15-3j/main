@@ -14,7 +14,6 @@ public class ParserAdd {
 		if(input.contains("[")) {
 			dateArray = defineDate(input);
 			String[] newInputArray = input.split("\\[");
-			System.out.println("newInputArray "+newInputArray[0]);
 			inputArray = newInputArray[0].split(" ");
 		}
 		
@@ -25,12 +24,9 @@ public class ParserAdd {
 	}
 	
 	public static String[] defineDate(String input) {
-			System.out.println("1");
-			System.out.println("input "+input);
-			String[] splitDate = input.split("\\[");
-			System.out.println("2");
-			String[] dateArray = splitDate[1].split(" ");
-			System.out.println("3");
+			String[] splitInput = input.split("\\[");
+			String[] splitDate = splitInput[1].split("\\]");
+			String[] dateArray = splitDate[0].split(" ");
 			return dateArray;
 	}
 	
