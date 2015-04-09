@@ -2,7 +2,7 @@ package logic;
 
 public class Message {
 
-	public static final String WELCOME = "Welcome to ProTask! Please refer to our help guide if you need help.";
+	public static final String WELCOME = "Welcome to ProTask! For first time user, please refer to\nthe help guide.";
 	protected static final String CLEAR = "";
 	protected static final String SPECIFIED_COMMAND = "Please follow the specified command.";
 

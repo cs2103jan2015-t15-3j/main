@@ -94,14 +94,15 @@ public class UndoManager {
 	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
 			Repository repo) {
 		History completedHistory = new History();
-		
+
 		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
 				input.getTaskID());
 		int index = SearchEngine.searchBufferIndex(task.getTaskID(),
 				repo.getBuffer());
-		
+
 		completedHistory.setCommand(input.getCommand());
 		completedHistory.setFeedbackMsg(task.getTaskName());
+		completedHistory.setIndex(index);
 
 		return completedHistory;
 	}
