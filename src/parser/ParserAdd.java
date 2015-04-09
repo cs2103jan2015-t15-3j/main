@@ -43,7 +43,7 @@ public class ParserAdd {
 		}
 		boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);	
 		if(!isValidDateAndTime) {
-			
+			item.setType(TaskType.INVALID);
 		}
 	}
 	
