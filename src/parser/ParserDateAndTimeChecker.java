@@ -34,7 +34,7 @@ public class ParserDateAndTimeChecker{
 	// If no time is given but a date is given,
 	// set default time to 23:59
 	private static String DEFAULT_TIME = "23:59";
-//	private static Comparator<Date> dateComparator;
+	// private static Comparator<Date> dateComparator;
 	
 	public static void checkDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
 		

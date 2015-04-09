@@ -29,31 +29,18 @@ public class ParserAdd {
 	}
 	
 	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
+		int dateArrayLength; 
 		if(dateArray == null) {
-			item.setType(TaskType.FLOATING);
+			dateArrayLength = 0;
 		} else {
-			int dateArrayLength = dateArray.length; 
-			ParserDateAndTimeChecker.checkDateAndTime(item, dateArray, dateArrayLength);	
+			dateArrayLength = dateArray.length; 
 		}
+		ParserDateAndTimeChecker.checkDateAndTime(item, dateArray, dateArrayLength);	
 	}
 	
-	public static void defineTaskName(Interpreter item, String[] inputArray) throws ParseException {
-		TaskType checkTaskType = item.getType(); 
-		switch(checkTaskType) {
-		case FLOATING:
-			defineTaskName(item, inputArray, item.getLastIndexTaskName());
-			break;
-		case DEADLINE:
-			defineTaskName(item, inputArray, item.getLastIndexTaskName());
-			break;		
-		case APPOINTMENT:
-			defineTaskName(item, inputArray, item.getLastIndexTaskName());
-			break;
-		}
-	}
-	
-	public static void defineTaskName(Interpreter item, String[] inputArray, int lastIndex) {
+	public static void defineTaskName(Interpreter item, String[] inputArray) {
 		String taskName = "";
+		int lastIndex = inputArray.length - 1;
 		for(int i=1; i<=lastIndex; i++){
 			if(i==lastIndex) {
 				taskName = taskName.concat(inputArray[i]); 
