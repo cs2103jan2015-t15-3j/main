@@ -20,15 +20,16 @@ public class KeyWordStorage {
 	ArrayList<KeyAlphabet> allAlphabets;
 	private boolean isColumn = true;
 	private int keyWordID;
-	private final String taskDataBase = "test.csv";
+	private String taskDataBase = "test.csv";
 	private final Character[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 			'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
 			'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7',
-			'8', '9' };
+			'8', '9', ' ' };
 	private ArrayList<KeyWord> allKeyWords;
 
-	public KeyWordStorage() {
+	public KeyWordStorage(String databaseName) {
 
+		taskDataBase = databaseName;
 		allAlphabets = new ArrayList<KeyAlphabet>();
 		keyWordID = 1;
 		allKeyWords = new ArrayList<KeyWord>();
@@ -45,7 +46,6 @@ public class KeyWordStorage {
 			populateDataBase();
 			Collections.sort(allKeyWords, KeyWord.WordNameComparator);
 			mapKeyWords();
-			System.out.println(powerSearch("ad"));
 			// System.out.println(allAlphabets);
 
 		} catch (IOException e) {
@@ -66,7 +66,7 @@ public class KeyWordStorage {
 		results = getBestMatch(queueInput,
 				allAlphabets.get(getAlphabetIndex(queueInput.peek())));
 		
-		ArrayList<KeyWord> secondResult = weightSearch("adamant");
+		ArrayList<KeyWord> secondResult = weightSearch(input);
 		for (KeyWord result : secondResult)
 		{
 			if(!results.contains(result))
@@ -186,7 +186,7 @@ public class KeyWordStorage {
 		}
 	}
 
-	public void populateDataBase() throws IOException {
+	private void populateDataBase() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(taskDataBase));
 		List<String[]> allRows = reader.readAll();
 
