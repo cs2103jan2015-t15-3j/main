@@ -8,7 +8,6 @@ public class ParserAdd {
 	public static void addTask(Interpreter item, String input, String[] inputArray) throws ParseException {
 		String[] dateArray = null;
 		try {
-			
 			if(input.length() < 2) {
 				throw new NullPointerException();
 			} else {
@@ -78,7 +77,7 @@ public class ParserAdd {
 			}
 		} catch (NullPointerException npe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
+			item.setErrorType(ErrorType.INVALID_TEXT);
 		}
 	}
 }

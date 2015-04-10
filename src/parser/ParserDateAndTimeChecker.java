@@ -157,7 +157,6 @@ public class ParserDateAndTimeChecker {
 		//System.out.println("setDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
-		System.out.println(inputDate);
 		sdf.setLenient(true);
 		try {
 			Date date = sdf.parse(inputDateAndTime);

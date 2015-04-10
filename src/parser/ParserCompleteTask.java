@@ -20,7 +20,7 @@ public class ParserCompleteTask {
 			
 		} catch (NumberFormatException nfe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_TEXT);
+			item.setErrorType(ErrorType.INVALID_ID);
 		}
 	}
 }

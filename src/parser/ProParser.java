@@ -100,6 +100,7 @@ public class ProParser {
 			item.setCommandType(Interpreter.CommandType.EXIT);
 			break;
 		default:
+			item.setIsError(true);
 			item.setCommandType(Interpreter.CommandType.INVALID_COMMAND);
 			break;
 		}
