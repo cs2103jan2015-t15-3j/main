@@ -130,16 +130,20 @@ public class ParserDateAndTimeChecker {
 		Date resultDueDate = setDate(item, dueDate, endTime);
 		
 		int compareResult = compareDates(resultStartDate, resultDueDate);
-		if(compareResult > 1) {
+		
+		try {	
+			if(compareResult > 1) {
+				throw new ParserException();
+			} else {
+				item.setType(TaskType.APPOINTMENT);
+				item.setStartDate(resultStartDate);
+				item.setDueDate(resultDueDate);
+			}	
+		} catch (ParserException pe){
 			item.setIsError(true);
 			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
-		} else {
-			item.setType(TaskType.APPOINTMENT);
-			item.setStartDate(resultStartDate);
-			item.setDueDate(resultDueDate);
-		}	
+		}
 	}
-	
 	
 	// Returns:
 	// value == 0 if this Date is equal to the argument Date 

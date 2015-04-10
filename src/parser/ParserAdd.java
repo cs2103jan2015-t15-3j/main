@@ -7,16 +7,26 @@ public class ParserAdd {
 	
 	public static void addTask(Interpreter item, String input, String[] inputArray) throws ParseException {
 		String[] dateArray = null;
-		
-		if(input.contains("[")) {
-			dateArray = defineDate(input);
-			String[] newInputArray = input.split("\\[");
-			inputArray = newInputArray[0].split(" ");
+		try {
+			
+			if(input.length() < 2) {
+				throw new NullPointerException();
+			} else {
+				if(input.contains("[")) {
+					dateArray = defineDate(input);
+					String[] newInputArray = input.split("\\[");
+					inputArray = newInputArray[0].split(" ");
+				}
+				
+				defineTaskType(item, inputArray, dateArray);
+				defineTaskName(item, inputArray);
+				item.setIsCompleted(false);	
+			}
+			
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_INPUT);
 		}
-		
-		defineTaskType(item, inputArray, dateArray);
-		defineTaskName(item, inputArray);
-		item.setIsCompleted(false);	
 	}
 	
 	public static String[] defineDate(String input) {
@@ -59,6 +69,16 @@ public class ParserAdd {
 				taskName = taskName.concat(inputArray[i] + " ");	
 			}			
 		}
-		item.setTaskName(taskName);
+		
+		try {
+			if(taskName.equals("") || taskName.equals(" ")) {
+				throw new NullPointerException();
+			} else {
+				item.setTaskName(taskName);
+			}
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
+		}
 	}
 }

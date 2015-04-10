@@ -1,27 +1,30 @@
 package parser;
 
 import java.text.ParseException;
-
-import logic.Enumerator.TaskType;
+import logic.Enumerator.ErrorType;
 
 public class ProParser {
 
 	public static Interpreter parse(String input) throws ParseException {
 		Interpreter item = new Interpreter();
 		
-		// Split the input string and check for remarks
-		if (input.contains("<")) {
-			String[] splitInput = input.split("<");
-			defineRemarks(item, splitInput[1]);
-			String inputWithoutRemarks = splitInput[0];
-			String[] inputArray = splitInput[0].split(" ");
-			defineCommand(item, inputWithoutRemarks, inputArray);
-		} else if(input.equals(" ")) {
-			return null;
-		} else {
-			String[] inputArray = input.split(" ");
-			item.setRemarks("");
-			defineCommand(item, input, inputArray);
+		try {
+			if (input.contains("<")) {
+				String[] splitInput = input.split("<");
+				defineRemarks(item, splitInput[1]);
+				String inputWithoutRemarks = splitInput[0];
+				String[] inputArray = splitInput[0].split(" ");
+				defineCommand(item, inputWithoutRemarks, inputArray);
+			} else if(input.equals(" ")) {
+				throw new NullPointerException();
+			} else {
+				String[] inputArray = input.split(" ");
+				item.setRemarks("");
+				defineCommand(item, input, inputArray);
+			}
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_INPUT);
 		}
 		return item;
 	}
