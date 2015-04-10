@@ -4,11 +4,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import logic.Enumerator.TaskType;
+import logic.Enumerator.ErrorType;
 
 public class Interpreter {
 
 	public enum CommandType {
-		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, UNDO, INVALID, REDO;
+		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, 
+		COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, 
+		UNDO, INVALID_COMMAND, REDO;
 	}
 
 	private int taskID;
@@ -18,10 +21,12 @@ public class Interpreter {
 	private boolean isCompleted;
 	private boolean isDueDate;
 	private boolean isStartDate;
+	private boolean isError;
 	private Date dueDate;
 	private Date startDate;
 	private CommandType command;
 	private TaskType type;
+	private ErrorType errorType;
 	private String key;
 	private String feedbackMsg;
 
@@ -75,6 +80,22 @@ public class Interpreter {
 	
 	public String getClear() {
 		return this.modeClear;
+	}
+	
+	public boolean getIsError() {
+		return this.isError;
+	}
+	
+	public ErrorType getErrorType() {
+		return this.errorType;
+	}
+	
+	public void setIsError(boolean isError) {
+		this.isError = isError;
+	}
+	
+	public void setErrorType(ErrorType errorType) {
+		this.errorType = errorType;
 	}
 	
 	public void setFeedbackMsg(String feedbackMsg) {
