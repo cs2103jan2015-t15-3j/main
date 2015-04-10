@@ -2,10 +2,13 @@ package parser;
 
 import java.text.ParseException;
 
+import logic.Enumerator.TaskType;
+
 public class ProParser {
 
 	public static Interpreter parse(String input) throws ParseException {
 		Interpreter item = new Interpreter();
+		
 		// Split the input string and check for remarks
 		if (input.contains("<")) {
 			String[] splitInput = input.split("<");
@@ -61,7 +64,7 @@ public class ProParser {
 		case "edit":
 		case "e":
 			item.setCommandType(Interpreter.CommandType.AMEND);
-			ParserEdit.editTask(item, inputArray);
+			ParserEdit.editTask(item, input, inputArray);
 			break;
 		case "undo":
 		case "u":
@@ -94,7 +97,7 @@ public class ProParser {
 			item.setCommandType(Interpreter.CommandType.EXIT);
 			break;
 		default:
-			item.setCommandType(Interpreter.CommandType.INVALID);
+			item.setCommandType(Interpreter.CommandType.INVALID_COMMAND);
 			break;
 		}
 	}

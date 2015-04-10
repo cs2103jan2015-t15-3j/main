@@ -1,35 +1,31 @@
 package parser;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 
-//import logic.Compare;
-
-//import java.util.Comparator;
-import java.util.Date;
-
+import logic.Enumerator.ErrorType;
 import logic.Enumerator.TaskType;
 
-
 /*
- *	There are several possibilities for the inputs of date and time 
+ *	There are several possibilities for adding for the inputs of date and time 
  *
  *	Floating:
  *	add taskName 
  *
  *	Deadline: 
- *	add taskName date
- *	add taskName date time
+ *	add taskName [date]
+ *	add taskName [date time]
  *
  *	Appointment:
- *	add taskName date date 
- *	add taskName date time date 
- *	add taskName date date time 
- *	add taskName date time date time
+ *	add taskName [date date] 
+ *	add taskName [date time date] 
+ *	add taskName [date date time] 
+ *	add taskName [date time date time]
  *
  */
 
-public class ParserDateAndTimeChecker{
+public class ParserDateAndTimeChecker {
 	
 	// If no time is given but a date is given,
 	// set default time to 23:59
@@ -80,7 +76,6 @@ public class ParserDateAndTimeChecker{
 			default:
 				return false;
 		}
-		
 	}
 	
 	private static boolean isDate(String checkInput) {
@@ -107,7 +102,7 @@ public class ParserDateAndTimeChecker{
 		}
 	}
 	
-	private static void setFloating(Interpreter item){
+	private static void setFloating(Interpreter item) {
 		//System.out.println("setFloating");
 		item.setType(TaskType.FLOATING);
 		item.setIsDueDate(false);
@@ -117,7 +112,7 @@ public class ParserDateAndTimeChecker{
 		item.setDueDate(date);
 	}
 	
-	private static void setDeadline(String dueDate, String endTime, Interpreter item){
+	private static void setDeadline(String dueDate, String endTime, Interpreter item) {
 		//System.out.println("setDeadline");
 		item.setType(TaskType.DEADLINE);
 		item.setIsStartDate(false);
@@ -133,10 +128,25 @@ public class ParserDateAndTimeChecker{
 	
 		Date resultStartDate = setDate(startDate, startTime);
 		Date resultDueDate = setDate(dueDate, endTime);System.out.println(dueDate+" "+endTime);
+		
+		int compareResult = compareDates(resultStartDate, resultDueDate);
+		if(compareResult > 1) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
+		} else {
+			item.setType(TaskType.APPOINTMENT);
+			item.setStartDate(resultStartDate);
+			item.setDueDate(resultDueDate);
+		}	
+	}
 	
-		item.setType(TaskType.APPOINTMENT);
-		item.setStartDate(resultStartDate);
-		item.setDueDate(resultDueDate);
+	
+	// Returns:
+	// value == 0 if this Date is equal to the argument Date 
+	// value < 0 if this Date is before the Date argument
+	// value > 0 if this Date is after the Date argument
+	private static int compareDates(Date startDate, Date dueDate) {
+		return startDate.compareTo(dueDate);
 	}
 	
 	private static Date setDate(String inputDate, String inputTime) {
