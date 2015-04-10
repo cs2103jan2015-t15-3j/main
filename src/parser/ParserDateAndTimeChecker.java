@@ -117,7 +117,7 @@ public class ParserDateAndTimeChecker {
 		item.setType(TaskType.DEADLINE);
 		item.setIsStartDate(false);
 		Date startDate = null;
-		Date resultDueDate = setDate(dueDate, endTime);
+		Date resultDueDate = setDate(item, dueDate, endTime);
 		item.setStartDate(startDate);
 		item.setDueDate(resultDueDate);
 	}
@@ -126,8 +126,8 @@ public class ParserDateAndTimeChecker {
 			String dueDate, String endTime, Interpreter item){
 		//System.out.println("setAppointment");
 	
-		Date resultStartDate = setDate(startDate, startTime);
-		Date resultDueDate = setDate(dueDate, endTime);System.out.println(dueDate+" "+endTime);
+		Date resultStartDate = setDate(item, startDate, startTime);
+		Date resultDueDate = setDate(item, dueDate, endTime);
 		
 		int compareResult = compareDates(resultStartDate, resultDueDate);
 		if(compareResult > 1) {
@@ -149,7 +149,7 @@ public class ParserDateAndTimeChecker {
 		return startDate.compareTo(dueDate);
 	}
 	
-	private static Date setDate(String inputDate, String inputTime) {
+	private static Date setDate(Interpreter item, String inputDate, String inputTime) {
 		//System.out.println("setDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
@@ -159,6 +159,8 @@ public class ParserDateAndTimeChecker {
 			Date date = sdf.parse(inputDateAndTime);
 			return date;
 		} catch (ParseException e) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
 			return null;
 		}
 	}	

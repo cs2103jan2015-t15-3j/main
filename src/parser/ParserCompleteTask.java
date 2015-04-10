@@ -6,13 +6,21 @@ public class ParserCompleteTask {
 
 	public static void completeTask(Interpreter item, String[] inputArray) {
 		
-		if(inputArray.length < 2) {
+		try {
+			if(inputArray.length < 2) {
+				throw new ParserException();
+			} else {
+				int ID = Integer.parseInt(inputArray[1]);
+				item.setTaskID(ID);
+				item.setIsCompleted(true);
+			}
+		} catch (ParserException pe) {			
 			item.setIsError(true);
 			item.setErrorType(ErrorType.INVALID_TEXT);
-		} else {
-			int ID = Integer.parseInt(inputArray[1]);
-			item.setTaskID(ID);
-			item.setIsCompleted(true);
+			
+		} catch (NumberFormatException nfe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_TEXT);
 		}
 	}
 }

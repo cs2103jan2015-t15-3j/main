@@ -36,10 +36,15 @@ public class ParserAdd {
 			dateArrayLength = dateArray.length; 
 		}
 		
-		boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
-		
-		// This will report invalid formats for date and/or time 
-		if(!isValidDateAndTime) {
+		try {
+			boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
+			
+			// This will report invalid formats for date and/or time 
+			if(!isValidDateAndTime) {
+				throw new ParserException();
+			} 
+		} catch (ParserException pe) {
+			item.setIsError(true);
 			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
 		}
 	}
