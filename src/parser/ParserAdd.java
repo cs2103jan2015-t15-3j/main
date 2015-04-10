@@ -1,10 +1,7 @@
 package parser;
 
 import java.text.ParseException;
-import java.util.Comparator;
-
-import logic.Task;
-import logic.Enumerator.TaskType;
+import logic.Enumerator.ErrorType;
 
 public class ParserAdd {
 	
@@ -30,6 +27,7 @@ public class ParserAdd {
 			return dateArray;
 	}
 	
+	// TaskType of the entry is set in ParserDateAndTimeChecker if the input is valid
 	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
 		int dateArrayLength; 
 		if(dateArray == null) {
@@ -37,9 +35,11 @@ public class ParserAdd {
 		} else {
 			dateArrayLength = dateArray.length; 
 		}
-		boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);	
+		boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
+		
+		// This will report invalid formats for date and/or time 
 		if(!isValidDateAndTime) {
-			item.setType(TaskType.INVALID);
+			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
 		}
 	}
 	
