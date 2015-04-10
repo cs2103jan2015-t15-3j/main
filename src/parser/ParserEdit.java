@@ -3,6 +3,7 @@ package parser;
 import java.text.ParseException;
 import java.util.Date;
 
+import logic.Enumerator.ErrorType;
 import logic.Enumerator.TaskType;
 
 public class ParserEdit {
@@ -10,37 +11,52 @@ public class ParserEdit {
 	public static void editTask(Interpreter item, String input, String[] inputArray)
 			throws ParseException {
 		
+		int ID;
 		String[] dateArray = null;
-		int ID = Integer.parseInt(inputArray[1]);
 		String[] editedInputArray = new String[inputArray.length - 2];
 		
-		item.setTaskID(ID);
-		
-		if(input.contains("[")) {
-			dateArray = defineDate(input);
-			String[] newInputArray = input.split("\\[");
-			inputArray = newInputArray[0].split(" ");
-		}
-		
-		
-		for (int i = 2; i < inputArray.length; i++) {
-			editedInputArray[i - 2] = inputArray[i];
-		}
-		
-		if(editedInputArray.length == 1) {
-			item.setType(TaskType.FLOATING);
-			item.setIsDueDate(false);
-			item.setIsStartDate(false);
-			Date date = null;
-			item.setStartDate(date);
-			item.setDueDate(date);
+		try {
+			ID = Integer.parseInt(inputArray[1]);
+			item.setTaskID(ID);
 			
-			defineTaskName(item, editedInputArray);
-		} else if(editedInputArray.length < 1) {
-			System.out.println("Error. Please input more information for update.");
-		} else {
-			defineTaskType(item, editedInputArray);
-			defineTaskName(item, editedInputArray);	
+			if(input.length() < 3) {
+				throw new NullPointerException();
+			}
+			
+			if(input.contains("[")) {
+				dateArray = defineDate(input);
+				String[] newInputArray = input.split("\\[");
+				inputArray = newInputArray[0].split(" ");
+			}
+			
+			for (int i = 2; i < inputArray.length; i++) {
+				editedInputArray[i - 2] = inputArray[i];
+			}
+			
+			if(editedInputArray.length == 1) {
+				item.setType(TaskType.FLOATING);
+				item.setIsDueDate(false);
+				item.setIsStartDate(false);
+				Date date = null;
+				item.setStartDate(date);
+				item.setDueDate(date);
+				
+				defineTaskName(item, editedInputArray);
+			} else if(editedInputArray.length < 1) {
+				throw new ParserException();
+			} else {
+				defineTaskType(item, editedInputArray, dateArray);
+				defineTaskName(item, editedInputArray);	
+			}
+		} catch (NumberFormatException nfe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_ID);
+		} catch (ParserException pe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_TEXT);
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_INPUT);
 		}
 	}
 	
@@ -58,25 +74,48 @@ public class ParserEdit {
 		return dateArray;
 }
 
-	public static void defineTaskType(Interpreter item, String[] inputArray)
-			throws ParseException {
-		int inputArrayLength = inputArray.length;
-		ParserDateAndTimeChecker.isDateAndTime(item, inputArray,
-				inputArrayLength);
+	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
+		int dateArrayLength; 
+		
+		if(dateArray == null) {
+			dateArrayLength = 0;
+		} else {
+			dateArrayLength = dateArray.length; 
+		}
+		
+		try {
+			boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
+			
+			// This will report invalid formats for date and/or time 
+			if(!isValidDateAndTime) {
+				throw new ParserException();
+			} 
+		} catch (ParserException pe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
+		}
 	}
 
-	public static void defineTaskName(Interpreter item, String[] inputArray)
-			throws ParseException {
+	public static void defineTaskName(Interpreter item, String[] inputArray) {
 		String taskName = "";
 		int lastIndex = inputArray.length - 1;
-		for (int i = 0; i <= lastIndex; i++) {
-			if (i == lastIndex) {
-				taskName = taskName.concat(inputArray[i] + " ");
+		for(int i=1; i<=lastIndex; i++){
+			if(i==lastIndex) {
+				taskName = taskName.concat(inputArray[i]); 
 			} else {
-				taskName = taskName.concat(inputArray[i] + " ");
-			}
+				taskName = taskName.concat(inputArray[i] + " ");	
+			}			
 		}
-		item.setTaskName(taskName);
-		item.setKey("taskname");
+		
+		try {
+			if(taskName.equals("") || taskName.equals(" ")) {
+				throw new NullPointerException();
+			} else {
+				item.setTaskName(taskName);
+			}
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setErrorType(ErrorType.INVALID_TEXT);
+		}
 	}
 }
