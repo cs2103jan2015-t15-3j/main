@@ -229,10 +229,15 @@ public class UserInterfaceMain extends JPanel {
 	protected void displaySetting(String firstWord) {
 
 		if ((firstWord.toLowerCase().equals("search"))
-				|| (firstWord.toLowerCase().equals("find") || (firstWord
-						.toLowerCase().equals("sort") || (firstWord
-						.toLowerCase().equals("s"))))) {
+				|| (firstWord.toLowerCase().equals("find"))) {
 
+			clearAndReloadBothPanelForTempList();
+			tabbedPane.setSelectedIndex(0);
+		}
+
+		if ((firstWord.toLowerCase().equals("sort"))
+				|| (firstWord.toLowerCase().equals("s"))) {
+			stack.push(firstWord);
 			clearAndReloadBothPanelForTempList();
 			tabbedPane.setSelectedIndex(0);
 		}
@@ -351,6 +356,15 @@ public class UserInterfaceMain extends JPanel {
 
 					clearAndReloadBothPanel();
 					tabbedPane.setSelectedIndex(0);
+				} else if ((stack.peek().equals("sort"))
+						|| (stack.peek().equals("s"))) {
+
+					stack.pop();
+					temp.push("s");
+					temp.push("u");
+
+					clearAndReloadBothPanel();
+					tabbedPane.setSelectedIndex(0);
 				}
 
 			}// end if
@@ -401,6 +415,11 @@ public class UserInterfaceMain extends JPanel {
 						tabbedPane.setSelectedIndex(0);
 
 					} else if (temp.peek().equals("e")) {
+
+						temp.pop();
+						clearAndReloadBothPanel();
+						tabbedPane.setSelectedIndex(0);
+					} else if (temp.peek().equals("s")) {
 
 						temp.pop();
 						clearAndReloadBothPanel();
