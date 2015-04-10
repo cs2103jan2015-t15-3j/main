@@ -16,7 +16,6 @@ public class ParserAdd {
 		
 		defineTaskType(item, inputArray, dateArray);
 		defineTaskName(item, inputArray);
-		item.setTaskID(0);
 		item.setIsCompleted(false);	
 	}
 	
@@ -30,11 +29,13 @@ public class ParserAdd {
 	// TaskType of the entry is set in ParserDateAndTimeChecker if the input is valid
 	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
 		int dateArrayLength; 
+		
 		if(dateArray == null) {
 			dateArrayLength = 0;
 		} else {
 			dateArrayLength = dateArray.length; 
 		}
+		
 		boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
 		
 		// This will report invalid formats for date and/or time 
