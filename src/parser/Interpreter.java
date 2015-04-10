@@ -13,22 +13,25 @@ public class Interpreter {
 		COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, 
 		UNDO, INVALID_COMMAND, REDO;
 	}
-
+	
+	private CommandType command;
 	private int taskID;
 	private String taskName;
 	private String remarks;
-	private String modeClear;
 	private boolean isCompleted;
+	private TaskType type;
 	private boolean isDueDate;
 	private boolean isStartDate;
-	private boolean isError;
 	private Date dueDate;
 	private Date startDate;
-	private CommandType command;
-	private TaskType type;
-	private ErrorType errorType;
 	private String key;
 	private String feedbackMsg;
+	private String modeClear;
+	private boolean isError;
+	private ErrorType errorType;
+	
+	
+	/*============GET METHODS============*/
 
 	public CommandType getCommand() {
 		return this.command;
@@ -90,13 +93,8 @@ public class Interpreter {
 		return this.errorType;
 	}
 	
-	public void setIsError(boolean isError) {
-		this.isError = isError;
-	}
 	
-	public void setErrorType(ErrorType errorType) {
-		this.errorType = errorType;
-	}
+	/*============SET METHODS============*/
 	
 	public void setFeedbackMsg(String feedbackMsg) {
 		this.feedbackMsg = feedbackMsg;
@@ -118,6 +116,10 @@ public class Interpreter {
 		this.remarks = remarks;
 	}
 
+	public void setType(TaskType type) {
+		this.type = type;
+	}
+	
 	public void setIsCompleted(boolean isCompleted) {
 		this.isCompleted = isCompleted;
 	}
@@ -128,10 +130,6 @@ public class Interpreter {
 
 	public void setIsStartDate(boolean isStartDate) {
 		this.isStartDate = isStartDate;
-	}
-
-	public void setType(TaskType type) {
-		this.type = type;
 	}
 
 	public void setDueDate(Date dueDate) {
@@ -150,6 +148,17 @@ public class Interpreter {
 		this.modeClear = modeClear;
 	}
 
+	public void setIsError(boolean isError) {
+		this.isError = isError;
+	}
+	
+	public void setErrorType(ErrorType errorType) {
+		this.errorType = errorType;
+	}
+	
+	
+	/*============DATE STRING METHODS============*/
+	
 	public String getDueDateString() {
 		String dateString = "";
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
