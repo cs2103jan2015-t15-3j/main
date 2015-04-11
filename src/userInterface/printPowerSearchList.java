@@ -4,13 +4,13 @@ import logic.Appointment;
 import logic.Deadline;
 import logic.Task;
 
-public class printTempToDoList {
+public class printPowerSearchList {
 
 	private static final String HTML_OPEN = "<html>";
 	private static final String HTML_CLOSE = "</html>";
 	private static final String HTML_BREAK = "<br>";
 	private static final String HTML_FONT_SIZE_4 = "<font size=4>";
-	private static final String HTML_MAROON_COLOR = "<font color=#800000>";
+	private static final String HTML_MAROON_COLOR = "<font color=#800000>"; 
 	private static final String HTML_PURPLE_COLOR = "<font color=#5d2e8a>";
 	private static final String HTML_FONT_CLOSE = "</font>";
 
@@ -20,7 +20,6 @@ public class printTempToDoList {
 		String name, start, end, remarks, str = null;
 
 		boolean completed = task.getCompleted();
-		if (completed == false) {
 
 			String type = task.getType().toString();
 
@@ -79,7 +78,6 @@ public class printTempToDoList {
 						HTML_CLOSE;
 			}
 
-		}
 		return str;
 	}
 }
