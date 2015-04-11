@@ -8,7 +8,7 @@ import logic.Task;
 
 public class ParserPowerSearch {
 	
-	public ArrayList<Task> powerSearch(String input) {
+	public static ArrayList<Task> powerSearch(String input) {
 		String keyWords, checkCmd;
 		KeyWordStorage storage = new KeyWordStorage(input);
 		ArrayList<Task> keyWordsList = new ArrayList<Task>();
