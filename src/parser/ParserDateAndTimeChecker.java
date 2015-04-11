@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
-import logic.Enumerator.ErrorType;
 import logic.Enumerator.TaskType;
 
 /*
@@ -30,7 +29,6 @@ public class ParserDateAndTimeChecker {
 	// If no time is given but a date is given,
 	// set default time to 23:59
 	private static String DEFAULT_TIME = "23:59";
-	// private static Comparator<Date> dateComparator;
 	
 	public static boolean isDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
 		
@@ -136,7 +134,7 @@ public class ParserDateAndTimeChecker {
 			}	
 		} catch (ParserException pe){
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
 		}
 	}
 	
@@ -158,7 +156,7 @@ public class ParserDateAndTimeChecker {
 			return date;
 		} catch (ParseException e) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
 			return null;
 		}
 	}	

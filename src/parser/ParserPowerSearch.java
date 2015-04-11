@@ -20,11 +20,13 @@ public class ParserPowerSearch {
 		
 		switch(checkCmd) {
 		case "ps ":
-			keyWords = input.substring(START_INDEX_CASE_PS, input.length() - 1);
+			keyWords = input.substring(START_INDEX_CASE_PS, input.length());
 			keyWordsList =  storage.powerSearch(keyWords);
+			break;
 		case "pse":
-			keyWords = input.substring(START_INDEX_CASE_PSEARCH, input.length() - 1);
+			keyWords = input.substring(START_INDEX_CASE_PSEARCH, input.length());
 			keyWordsList =  storage.powerSearch(keyWords);
+			break;
 		}
 		return keyWordsList;
 	}

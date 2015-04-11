@@ -26,7 +26,7 @@ public class ParserTestDateTime {
 		
 		// Check if Deadline
 		// This is a boundary case for Deadline
-		String input1 = "add checking date without time format [11/11/11] <remarks here>";
+		String input1 = "add checking date without[] [time] format [11/11/11] <remarks here>";
 		item = Pro.parse(input1);
 		System.out.println("TaskType: " + item.getType());
 		System.out.println("DueDateString: " + item.getDueDateString());

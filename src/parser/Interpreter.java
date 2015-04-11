@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import logic.Enumerator.TaskType;
-import logic.Enumerator.ErrorType;
 
 public class Interpreter {
 
@@ -28,7 +27,6 @@ public class Interpreter {
 	private String feedbackMsg;
 	private String modeClear;
 	private boolean isError;
-	private ErrorType errorType;
 	
 	
 	/*============GET METHODS============*/
@@ -89,10 +87,6 @@ public class Interpreter {
 		return this.isError;
 	}
 	
-	public ErrorType getErrorType() {
-		return this.errorType;
-	}
-	
 	
 	/*============SET METHODS============*/
 	
@@ -150,10 +144,6 @@ public class Interpreter {
 
 	public void setIsError(boolean isError) {
 		this.isError = isError;
-	}
-	
-	public void setErrorType(ErrorType errorType) {
-		this.errorType = errorType;
 	}
 	
 	
