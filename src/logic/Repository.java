@@ -9,6 +9,7 @@ public class Repository {
 	private ArrayList<Task> tempBuffer;
 	private int currentID;
 	private String feedbackMsg;
+	private boolean isError;
 	private String databaseFilePath;
 	private Stack<History> undoAction;
 	private Stack<History> redoAction;
@@ -21,6 +22,11 @@ public class Repository {
 		this.redoAction = new Stack<History>();
 		this.feedbackMsg = "";
 		this.databaseFilePath = null;
+		this.isError = false;
+	}
+
+	public boolean getIsError() {
+		return this.isError;
 	}
 
 	public ArrayList<Task> getBuffer() {
@@ -62,6 +68,10 @@ public class Repository {
 
 	public String getDatabaseFilePath() {
 		return this.databaseFilePath;
+	}
+
+	public void setIsError(boolean isError) {
+		this.isError = isError;
 	}
 
 	public void setBuffer(ArrayList<Task> buffer) {

@@ -29,7 +29,7 @@ public class UndoManager {
 		}
 
 		if (history.getCommand().equals(CommandType.AMEND)) {
-			undoAmendAction(history, buffer);
+			undoAmendAction(history.getHistoryBuffer(), repo);
 			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
 					history.getFeedbackMsg()));
 		}
@@ -132,15 +132,12 @@ public class UndoManager {
 		return deletedHistory;
 	}
 
-	protected static History pushAmendToStack(Interpreter input, Repository repo) {
+	protected static History pushAmendToStack(Interpreter input,
+			ArrayList<Task> buffer) {
 		History amendedHistory = new History();
-		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
-				input.getTaskID());
 
 		amendedHistory.setCommand(input.getCommand());
-		amendedHistory.setTask(task);
-
-		System.out.println(amendedHistory.getHistoryBuffer().toString());
+		amendedHistory.setHistoryBuffer(buffer);
 
 		return amendedHistory;
 	}
@@ -181,9 +178,15 @@ public class UndoManager {
 		}
 	}
 
-	private static void undoAmendAction(History history, ArrayList<Task> buffer) {
-		buffer.remove(history.getIndex());
-		buffer.add(history.getTask());
+	private static void undoAmendAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		Iterator<Task> list = historyBuffer.iterator();
+		ArrayList<Task> buffer = new ArrayList<Task>();
+
+		while (list.hasNext()) {
+			buffer.add(list.next());
+		}
+		repo.setBuffer(buffer);
 	}
 
 	private static void undoCompleteAction(History history,

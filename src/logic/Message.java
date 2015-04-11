@@ -4,9 +4,7 @@ public class Message {
 
 	public static final String WELCOME = "Welcome to ProTask! For first time user, please refer to\nthe help guide.";
 	protected static final String CLEAR = "";
-	protected static final String SPECIFIED_COMMAND = "Please follow the specified command.";
 
-	protected static final String INVALID_COMMAND = "The command you entered does not exist.";
 	protected static final String TASK_NOT_FOUND = "%1$s is not found.";
 
 	protected static final String ADDED_SUCCESSFUL = "%1$s has been added successfully!";
@@ -22,7 +20,6 @@ public class Message {
 
 	protected static final String SORTED_SUCCESSFUL = "Your tasks are sorted alphabetically!";
 	protected static final String SORT_UNSUCCESSFUL = "There is nothing to be sort!";
-	// protected static final String MESSAGE_FILTER = "";
 
 	protected static final String COMPLETE_TASK = "%1$s has been marked as completed.";
 	protected static final String UNCOMPLETE_TASK = "%1$s has been marked as uncompleted.";
