@@ -11,8 +11,7 @@ public class Obliterator {
 
 	protected static void determineClear(Interpreter item,
 			ArrayList<Task> buffer) {
-		System.out.println(item.getClear());
-		if (item.getClear().toLowerCase().equals("comp")) {
+		if (item.getClear().toLowerCase().equals("cp")) {
 			clearCompletedTask(buffer);
 		} else {
 			clearTask(buffer);
@@ -24,10 +23,12 @@ public class Obliterator {
 		ArrayList<Task> buffer = repo.getBuffer();
 
 		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+
 		taskName = buffer.get(index).getTaskName();
 		buffer.remove(index);
 
 		repo.setFeedbackMsg(String.format(Message.DELETED_SUCCESSFUL, taskName));
+
 	}
 
 	protected static void clearCompletedTask(ArrayList<Task> buffer) {

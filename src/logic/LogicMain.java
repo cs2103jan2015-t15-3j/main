@@ -8,6 +8,8 @@ import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import logic.Enumerator.ErrorType;
+import logic.Enumerator.TaskType;
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
 import parser.ProParser;
@@ -17,6 +19,7 @@ import userInterface.Logging;
 public class LogicMain {
 	private static final int MESSAGE_SYSTEM_EXIT = 0;
 	private static ProTaskStorage storage;
+	private static Repository repo;
 
 	public static void main(String[] args) throws ParseException {
 		Repository repo = new Repository();
@@ -32,15 +35,23 @@ public class LogicMain {
 
 	}
 
-	public static Repository loadStorage() throws FileNotFoundException {
+	private static void initializeStorage() {
 		if (storage == null) {
 			storage = new ProTaskStorage();
 		}
+	}
+
+	public static Repository loadStorage() throws FileNotFoundException {
+		initializeStorage();
 		return storage.getAllTasks();
 	}
 
 	private static void updateStorageToClear(Repository repo) {
 		try {
+			initializeStorage();
+			if (repo == null) {
+				repo = new Repository();
+			}
 			storage.clearAllTasks(repo);
 		} catch (FileNotFoundException e) {
 			Logging.getInputLog(Message.FILE_INEXISTS);
@@ -63,7 +74,7 @@ public class LogicMain {
 			input = ProParser.parse(command);
 			executeCommand(input, repo);
 		} catch (NullPointerException | ParseException e) {
-			repo.setFeedbackMsg(Message.SPECIFIED_COMMAND);
+			Logging.getInputLog("NullPointerException");
 		}
 		return repo;
 	}
@@ -97,9 +108,15 @@ public class LogicMain {
 				undoDelete(input, repo);
 				Obliterator.deleteTask(input.getTaskID(), repo);
 				updateStorage(repo);
+				if (input.getErrorType().equals(ErrorType.INVALID_TEXT)) {
+					repo.setFeedbackMsg("HI");
+				}
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
 						input.getTaskID()));
+			}
+			if (input.getErrorType().equals(ErrorType.INVALID_ID)) {
+				repo.setFeedbackMsg(Message.SPECIFIED_COMMAND);
 			}
 			break;
 
@@ -132,7 +149,6 @@ public class LogicMain {
 				repo.setFeedbackMsg(Message.SORT_UNSUCCESSFUL);
 			} else {
 				Organizer.sort(repo);
-				undoSort(input, repo);
 				repo.setFeedbackMsg(Message.SORTED_SUCCESSFUL);
 			}
 			break;
@@ -225,11 +241,5 @@ public class LogicMain {
 		}
 		clearedHistory = UndoManager.pushClearToStack(input, tempBuffer);
 		repo.undoActionPush(clearedHistory);
-	}
-
-	private static void undoSort(Interpreter input, Repository repo) {
-		History sortedHistory = new History();
-		sortedHistory = UndoManager.pushSortToStack(input, repo.getBuffer());
-		repo.undoActionPush(sortedHistory);
 	}
 }
