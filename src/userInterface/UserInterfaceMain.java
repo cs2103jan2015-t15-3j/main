@@ -185,7 +185,6 @@ public class UserInterfaceMain extends JPanel {
 					Logging.getInputLog(userInput);
 
 					feedbackTextArea.setText(mem.getFeedback());
-					printSetting.feedbackTimerReset();
 
 					inputTextField.setText(null);
 
@@ -205,10 +204,6 @@ public class UserInterfaceMain extends JPanel {
 					tabbedPane.setSelectedIndex(0);
 					psList = ParserPowerSearch.powerSearch(input);
 					printSetting.printPowerSearchLabel(psList);
-				}
-
-				else if (input.isEmpty()) {
-					printSetting.clearAndReloadBothPanel(mem);
 				}
 
 				InputHistory.retrieveInputText(e);

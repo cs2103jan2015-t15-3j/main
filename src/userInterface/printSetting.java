@@ -337,15 +337,4 @@ public class printSetting {
 			UserInterfaceMain.toDoPanel.add(psLabel);
 		}
 	}
-
-	protected static void feedbackTimerReset() {
-
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				UserInterfaceMain.feedbackTextArea.setText("");
-			}
-		}, 10000);
-	}
 }
