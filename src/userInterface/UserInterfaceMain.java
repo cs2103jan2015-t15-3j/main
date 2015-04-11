@@ -146,16 +146,16 @@ public class UserInterfaceMain extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 					userInput = inputTextField.getText().toString();
-					
+
 					String firstWord = getFirstWord(userInput);
 					System.out.println(firstWord);
 
 					mem = LogicMain.parseString(userInput, mem);
 
-					//if no error
+					// if no error
 					printSetting.clearAndReloadBothPanel(mem);
 					printSetting.clearAndReloadBothPanelForTempList(mem);
-					//else dont do anything
+					// else dont do anything
 
 					try {
 						printSetting.displaySetting(firstWord, mem);
@@ -189,8 +189,7 @@ public class UserInterfaceMain extends JPanel {
 
 					inputTextField.setText(null);
 
-				} 
-				else if (e.getKeyCode() == KeyEvent.VK_F1) {
+				} else if (e.getKeyCode() == KeyEvent.VK_F1) {
 					HelpGuide.main(null);
 				}
 			}
@@ -198,9 +197,9 @@ public class UserInterfaceMain extends JPanel {
 			public void keyReleased(KeyEvent e) {
 
 				String input = inputTextField.getText().toString();
-				System.out.println("input is " + input);
-			
-				if ((input.regionMatches(true, 0, "ps ", 0, 3))){
+				//System.out.println("input is " + input);
+
+				if ((input.regionMatches(true, 0, "ps ", 0, 3))) {
 
 					printSetting.clearToDoPanel();
 					tabbedPane.setSelectedIndex(0);
@@ -208,17 +207,16 @@ public class UserInterfaceMain extends JPanel {
 					printSetting.printPowerSearchLabel(psList);
 				}
 
-				else if(input.isEmpty()){
+				else if (input.isEmpty()) {
 					printSetting.clearAndReloadBothPanel(mem);
 				}
-				
+
 				InputHistory.retrieveInputText(e);
 				toDoScroller.getVerticalScrollBar().removeAdjustmentListener(
 						adjustListener);
 				completedScroller.getVerticalScrollBar()
 						.removeAdjustmentListener(adjustListener);
-			
-			
+
 			}
 
 			public void keyTyped(KeyEvent e) {
