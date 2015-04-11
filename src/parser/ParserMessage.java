@@ -2,11 +2,11 @@ package parser;
 
 public class ParserMessage {
 	
-	protected static final String INVALID_COMMAND = "Command invalid. Please follow the specified command format.";
-	protected static final String INVALID_INPUT = "Input invalid. Please follow the specified input format.";
-	protected static final String INVALID_TEXT  = "Text invalid. Please follow the specified text format.";
-	protected static final String INVALID_DATE_TIME_FORMAT = "Date and Time invalid. Please follow the specified date and time format.";
-	protected static final String INVALID_CATEGORY = "Category invalid. Please follow the specified category format.";
-	protected static final String INVALID_ID = "ID invalid. Please follow the specified ID format.";
+	protected static final String INVALID_COMMAND = "The command doesn't exist.";
+	protected static final String INVALID_INPUT = "The input format is invalid.";
+	protected static final String INVALID_TEXT  = "The text format is invalid.";
+	protected static final String INVALID_DATE_TIME_FORMAT = "The date and time format is invalid.";
+	protected static final String INVALID_CATEGORY = "The category format is invalid.";
+	protected static final String INVALID_ID = "The ID format is invalid.";
 			
 }
