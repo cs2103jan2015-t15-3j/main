@@ -11,8 +11,6 @@ import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -206,6 +204,8 @@ public class UserInterfaceMain extends JPanel {
 					tabbedPane.setSelectedIndex(0);
 
 					psList = ParserPowerSearch.powerSearch(input);
+					
+					System.out.println("ps list" + psList);
 
 				}
 
