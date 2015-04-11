@@ -59,13 +59,6 @@ public class ParserEdit {
 		}
 	}
 	
-	// This method checks the category targeted for edit
-	// by the user
-	public static void defineCategory() {
-		
-	}
-	
-	
 	public static String[] defineDate(String input) {
 		String[] splitInput = input.split("\\[");
 		String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
