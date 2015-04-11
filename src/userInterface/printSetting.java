@@ -320,13 +320,13 @@ public class printSetting {
 		}
 	}
 
-	protected void printPowerSearchLabel(Repository list) {
+	protected static void printPowerSearchLabel(ArrayList<Task> list) {
 
 		// Collections.sort(list.getBuffer(), Compare.numComparator);
 
-		for (int i = 0; i < list.getTempBufferSize(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 
-			Task task = list.getTempBuffer().get(i);
+			Task task = list.get(i);
 
 			String str = printPowerSearchList.returnString(task);
 
