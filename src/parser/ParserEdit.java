@@ -3,7 +3,6 @@ package parser;
 import java.text.ParseException;
 import java.util.Date;
 
-import logic.Enumerator.ErrorType;
 import logic.Enumerator.TaskType;
 
 public class ParserEdit {
@@ -50,13 +49,13 @@ public class ParserEdit {
 			}
 		} catch (NumberFormatException nfe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_ID);
+			item.setFeedbackMsg(ParserMessage.INVALID_ID);
 		} catch (ParserException pe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_TEXT);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
 		} catch (NullPointerException npe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_INPUT);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
 		}
 	}
 	
@@ -69,7 +68,7 @@ public class ParserEdit {
 	
 	public static String[] defineDate(String input) {
 		String[] splitInput = input.split("\\[");
-		String[] splitDate = splitInput[1].split("\\]");
+		String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
 		String[] dateArray = splitDate[0].split(" ");
 		return dateArray;
 }
@@ -92,7 +91,7 @@ public class ParserEdit {
 			} 
 		} catch (ParserException pe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_DATE_TIME_FORMAT);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
 		}
 	}
 
@@ -115,7 +114,7 @@ public class ParserEdit {
 			}
 		} catch (NullPointerException npe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_TEXT);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
 		}
 	}
 }

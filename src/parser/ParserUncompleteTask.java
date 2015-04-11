@@ -1,7 +1,5 @@
 package parser;
 
-import logic.Enumerator.ErrorType;
-
 public class ParserUncompleteTask {
 	public static void uncompleteTask(Interpreter item, String[] inputArray) {
 		try {
@@ -14,11 +12,11 @@ public class ParserUncompleteTask {
 			}
 		} catch (ParserException pe) {			
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_TEXT);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
 			
 		} catch (NumberFormatException nfe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_ID);
+			item.setFeedbackMsg(ParserMessage.INVALID_ID);
 		}
 	}
 }

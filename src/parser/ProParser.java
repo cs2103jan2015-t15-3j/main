@@ -1,7 +1,6 @@
 package parser;
 
 import java.text.ParseException;
-import logic.Enumerator.ErrorType;
 
 public class ProParser {
 
@@ -24,7 +23,7 @@ public class ProParser {
 			}
 		} catch (NullPointerException npe) {
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_INPUT);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
 		}
 		return item;
 	}
@@ -96,7 +95,7 @@ public class ProParser {
 			break;
 		default:
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_COMMAND);
+			item.setFeedbackMsg(ParserMessage.INVALID_COMMAND);
 			item.setCommandType(Interpreter.CommandType.INVALID_COMMAND);
 			break;
 		}

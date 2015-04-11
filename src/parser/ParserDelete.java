@@ -1,7 +1,5 @@
 package parser;
 
-import logic.Enumerator.ErrorType;
-
 public class ParserDelete {
 
 	public static void deleteTask(Interpreter item, String[] inputArray) {
@@ -17,12 +15,12 @@ public class ParserDelete {
 		} catch (ParserException pe) {			
 			System.out.println("pe");
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_TEXT);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
 			
 		} catch (NumberFormatException nfe) {
 			System.out.println("nfe");
 			item.setIsError(true);
-			item.setErrorType(ErrorType.INVALID_ID);
+			item.setFeedbackMsg(ParserMessage.INVALID_ID);
 		} 
 	}	
 }
