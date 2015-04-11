@@ -37,7 +37,7 @@ public class KeyWordStorage {
 		keyWordID = 1;
 		allKeyWords = new ArrayList<KeyWord>();
 		pStorage = new ProTaskStorage();
-		
+
 		for (int j = 0; j < letters.length; j++) {
 			KeyAlphabet alphabet = new KeyAlphabet();
 			alphabet.setAlphabet(letters[j]);
@@ -63,38 +63,39 @@ public class KeyWordStorage {
 
 		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
 		ArrayList<Task> tasksResults = new ArrayList<Task>();
-		
-		
-		Queue<Character> queueInput = new LinkedList<Character>();
 
-		for (int i = 0; i < input.length(); i++) {
-			queueInput.add(input.charAt(i));
-		}
-		results = getBestMatch(queueInput,
-				allAlphabets.get(getAlphabetIndex(queueInput.peek())));
-		
-		ArrayList<KeyWord> secondResult = weightSearch(input);
-		for (KeyWord result : secondResult)
-		{
-			if(!results.contains(result))
-			{
-				results.add(result);	
+		if (!input.equals(" ")) {
+			Queue<Character> queueInput = new LinkedList<Character>();
+
+			for (int i = 0; i < input.length(); i++) {
+
+				if (i != 0 && input.charAt(i) != ' ') {
+					queueInput.add(input.charAt(i));
+				}
+
+			}
+			results = getBestMatch(queueInput,
+					allAlphabets.get(getAlphabetIndex(queueInput.peek())));
+
+			ArrayList<KeyWord> secondResult = weightSearch(input);
+			for (KeyWord result : secondResult) {
+				if (!results.contains(result)) {
+					results.add(result);
+				}
+			}
+			for (KeyWord result : results) {
+				Task task = pStorage.getTask(result.getTaskID());
+				if (!tasksResults.contains(task)) {
+					tasksResults.add(task);
+				}
 			}
 		}
-		for (KeyWord result : results)
-		{
-			Task task = pStorage.getTask(result.getTaskID());
-			if (!tasksResults.contains(task))
-			{
-				tasksResults.add(task);
-			}
-		}
-		
 		return tasksResults;
 
 	}
 
 	private ArrayList<KeyWord> weightSearch(String input) {
+
 		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
 		for (KeyWord word : allKeyWords) {
 			int matchCount = 0;
