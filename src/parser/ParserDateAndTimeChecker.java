@@ -3,6 +3,7 @@ package parser;
 import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+
 import logic.Enumerator.TaskType;
 
 /*
@@ -133,7 +134,7 @@ public class ParserDateAndTimeChecker {
 			}	
 		} catch (ParserException pe){
 			item.setIsError(true);
-			item.setErrorType(ParserMessage.INVALID_DATE_TIME_FORMAT);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
 		}
 	}
 	
@@ -155,7 +156,7 @@ public class ParserDateAndTimeChecker {
 			return date;
 		} catch (ParseException e) {
 			item.setIsError(true);
-			item.setErrorType(ParserMessage.INVALID_DATE_TIME_FORMAT);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
 			return null;
 		}
 	}	
