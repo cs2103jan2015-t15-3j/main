@@ -73,7 +73,9 @@ public class LogicMain {
 		try {
 			input = ProParser.parse(command);
 			executeCommand(input, repo);
-		} catch (NullPointerException | ParseException e) {
+		} catch (ParseException npe) {
+			Logging.getInputLog("ParseException");
+		} catch (NullPointerException e) {
 			Logging.getInputLog("NullPointerException");
 		}
 		return repo;

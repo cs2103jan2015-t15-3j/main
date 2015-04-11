@@ -9,7 +9,7 @@ public class ParserAdd {
 		String[] dateArray = null;
 		try {
 			if(input.length() < 2) {
-				throw new NullPointerException();
+				throw new ParserException();
 			} else {
 				if(input.contains("[")) {
 					dateArray = defineDate(input);
@@ -22,7 +22,7 @@ public class ParserAdd {
 				item.setIsCompleted(false);	
 			}
 			
-		} catch (NullPointerException npe) {
+		} catch (ParserException npe) {
 			item.setIsError(true);
 			item.setErrorType(ErrorType.INVALID_INPUT);
 		}

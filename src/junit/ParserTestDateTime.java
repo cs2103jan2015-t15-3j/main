@@ -8,7 +8,7 @@ import parser.ProParser;
 import parser.Interpreter;
 import static org.junit.Assert.*;
 
-public class TestCheckDate {
+public class ParserTestDateTime {
 	
 	ProParser Pro = new ProParser();
 	Interpreter item; 

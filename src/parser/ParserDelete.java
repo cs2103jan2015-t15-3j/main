@@ -15,12 +15,14 @@ public class ParserDelete {
 			}
 			
 		} catch (ParserException pe) {			
+			System.out.println("pe");
 			item.setIsError(true);
 			item.setErrorType(ErrorType.INVALID_TEXT);
 			
 		} catch (NumberFormatException nfe) {
+			System.out.println("nfe");
 			item.setIsError(true);
 			item.setErrorType(ErrorType.INVALID_ID);
-		}
+		} 
 	}	
 }
