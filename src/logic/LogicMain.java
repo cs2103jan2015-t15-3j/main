@@ -74,6 +74,7 @@ public class LogicMain {
 			input = ProParser.parse(command);
 			executeCommand(input, repo);
 		} catch (NullPointerException | ParseException e) {
+			repo.setFeedbackMsg(Message.SPECIFIED_COMMAND);
 			Logging.getInputLog("NullPointerException");
 		}
 		return repo;
@@ -89,6 +90,10 @@ public class LogicMain {
 
 			repo.setFeedbackMsg(String.format(Message.ADDED_SUCCESSFUL,
 					input.getTaskName()));
+
+			if (input.getErrorType().equals(ErrorType.INVALID_DATE_TIME_FORMAT)) {
+				repo.setFeedbackMsg("Error date");
+			}
 			writeToStorage(repo);
 			break;
 

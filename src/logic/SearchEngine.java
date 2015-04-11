@@ -67,7 +67,7 @@ public class SearchEngine {
 	protected static Task retrieveTask(ArrayList<Task> buffer, int taskID) {
 		int index = searchBufferIndex(taskID, buffer);
 		Task retrieveType = buffer.get(index);
-		
+
 		return retrieveType;
 	}
 }
