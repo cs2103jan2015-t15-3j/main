@@ -7,8 +7,8 @@ import logic.Task;
 
 public class ParserPowerSearch {
 	
-	private static int START_INDEX_CASE_PS = 3;
-	private static int START_INDEX_CASE_PSEARCH = 8;
+	private static int START_INDEX_CASE_PS = 2;
+	private static int START_INDEX_CASE_PSEARCH = 7;
 	
 	
 	public static ArrayList<Task> powerSearch(String input) {
@@ -19,7 +19,7 @@ public class ParserPowerSearch {
 		checkCmd = input.substring(0,2);
 		
 		switch(checkCmd) {
-		case "ps ":
+		case "ps":
 			keyWords = input.substring(START_INDEX_CASE_PS, input.length());
 			keyWordsList =  storage.powerSearch(keyWords);
 			break;
