@@ -9,9 +9,10 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
-import java.util.Stack;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,11 +24,11 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 
-import logic.Compare;
 import logic.LogicMain;
 import logic.Repository;
 import logic.Task;
 import logic.Message;
+import parser.ParserPowerSearch;
 
 @SuppressWarnings("serial")
 public class UserInterfaceMain extends JPanel {
@@ -35,17 +36,15 @@ public class UserInterfaceMain extends JPanel {
 	private JFrame frame;
 	private static String userInput = new String();
 	protected static JTextField inputTextField;
-	private static JTextArea feedbackTextArea;
-	private JPanel completedPanel;
-	private JPanel toDoPanel;
-	private JTabbedPane tabbedPane;
+	static JTextArea feedbackTextArea;
+	static JPanel completedPanel;
+	static JPanel toDoPanel;
+	static JTabbedPane tabbedPane;
 	private AdjustmentListener adjustListener;
-
-	private static final Stack<String> stack = new Stack<String>();
-	private static final Stack<String> temp = new Stack<String>();
+	private JScrollPane scrollPane;
 
 	Repository mem = new Repository();
-	private JScrollPane scrollPane;
+	ArrayList<Task> psList = new ArrayList<Task>();
 
 	/**
 	 * Launch the application.
@@ -86,7 +85,7 @@ public class UserInterfaceMain extends JPanel {
 
 		completedPanel = new JPanel();
 		completedPanel.setForeground(Color.DARK_GRAY);
-		completedPanel.setBackground(new Color(245, 245, 245));
+		completedPanel.setBackground(new Color(240, 255, 240));
 		ImageIcon completedIcon = new ImageIcon(
 				(UserInterfaceMain.class
 						.getResource("/userInterface/ImageIcon/completedIcon.png")));
@@ -138,27 +137,31 @@ public class UserInterfaceMain extends JPanel {
 
 		// initial load
 		mem = LogicMain.loadStorage();
-		clearAndReloadBothPanel();
+		printSetting.clearAndReloadBothPanel(mem);
 
 		KeyListener listener = new KeyListener() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
 					userInput = inputTextField.getText().toString();
 
 					mem = LogicMain.parseString(userInput, mem);
 
-					String firstWord = getFirstWord(userInput);
+					printSetting.clearAndReloadBothPanel(mem);
+					printSetting.clearAndReloadBothPanelForTempList(mem);
 
+					String firstWord = getFirstWord(userInput);
 					// testing getFirstWord
 					System.out.println(firstWord);
 
 					try {
-						displaySetting(firstWord);
+						printSetting.displaySetting(firstWord, mem);
 
 					} catch (EmptyStackException e1) {
 
 						Logging.getInputLog("Empty Stack Exception from Display Setting");
 					}
+
 					// ScrollPane adjust automatically when new input is entered
 					adjustListener = new AdjustmentListener() {
 
@@ -179,6 +182,7 @@ public class UserInterfaceMain extends JPanel {
 					Logging.getInputLog(userInput);
 
 					feedbackTextArea.setText(mem.getFeedback());
+					printSetting.feedbackTimerReset();
 
 					inputTextField.setText(null);
 
@@ -189,6 +193,22 @@ public class UserInterfaceMain extends JPanel {
 
 			public void keyReleased(KeyEvent e) {
 
+				String input = inputTextField.getText().toString();
+				System.out.println("input is " + input);
+
+				if ((input.equals("ps ")) || (input.equals("psearch "))) {
+
+					printSetting.clearToDoPanel();
+
+					toDoPanel.add(new JLabel("ps hello"));
+
+					System.out.println("ps entered");
+					tabbedPane.setSelectedIndex(0);
+
+					psList = ParserPowerSearch.powerSearch(input);
+
+				}
+
 				InputHistory.retrieveInputText(e);
 				toDoScroller.getVerticalScrollBar().removeAdjustmentListener(
 						adjustListener);
@@ -197,6 +217,7 @@ public class UserInterfaceMain extends JPanel {
 			}
 
 			public void keyTyped(KeyEvent e) {
+
 			}
 		};
 		inputTextField.addKeyListener(listener);
@@ -223,283 +244,5 @@ public class UserInterfaceMain extends JPanel {
 	protected static String getFirstWord(String userCommand) {
 		String commandTypeString = userCommand.trim().split("\\s+")[0];
 		return commandTypeString;
-	}
-
-	// Decide which panel to refresh and reload
-	protected void displaySetting(String firstWord) {
-
-		if ((firstWord.toLowerCase().equals("search"))
-				|| (firstWord.toLowerCase().equals("find"))) {
-
-			clearAndReloadBothPanelForTempList();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		if ((firstWord.toLowerCase().equals("sort"))
-				|| (firstWord.toLowerCase().equals("s"))) {
-			stack.push(firstWord);
-			clearAndReloadBothPanelForTempList();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("clear") || (firstWord
-				.toLowerCase().equals("cl")))) {
-			stack.push(firstWord);
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("display") || (firstWord
-				.toLowerCase().equals("dp")))) {
-
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("add") || (firstWord
-				.toLowerCase().equals("a") || (firstWord.toLowerCase().equals(
-				"delete") || (firstWord.toLowerCase().equals("d")))))) {
-
-			stack.push(firstWord);
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("edit") || (firstWord
-				.toLowerCase().equals("e")))) {
-
-			stack.push(firstWord);
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("complete"))
-				|| (firstWord.toLowerCase().equals("cp"))) {
-
-			stack.push(firstWord);
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(1);
-		}
-
-		else if ((firstWord.toLowerCase().equals("uncomplete") || (firstWord
-				.toLowerCase().equals("ucp")))) {
-
-			stack.push(firstWord);
-			clearAndReloadBothPanel();
-			tabbedPane.setSelectedIndex(0);
-
-		}
-
-		else if ((firstWord.toLowerCase().equals("undo") || (firstWord
-				.toLowerCase().equals("u")))) {
-
-			clearAndReloadBothPanel();
-
-			if (!(stack.isEmpty())) {
-				if ((stack.peek().equals("uncomplete"))
-						|| (stack.peek().equals("ucp"))) {
-
-					stack.pop();
-					temp.push("ucp");
-					temp.push("u");
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(1);
-				}
-
-				else if ((stack.peek().equals("complete"))
-						|| (stack.peek().equals("cp"))) {
-
-					stack.pop();
-					temp.push("cp");
-					temp.push("u");
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				}
-
-				else if ((stack.peek().equals("add"))
-						|| (stack.peek().equals("a"))) {
-
-					stack.pop();
-					temp.push("a");
-					temp.push("u");
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				}
-
-				else if ((stack.peek().equals("delete"))
-						|| (stack.peek().equals("d"))) {
-
-					stack.pop();
-					temp.push("d");
-					temp.push("u");
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				} else if ((stack.peek().equals("clear"))
-						|| (stack.peek().equals("cl"))) {
-
-					stack.pop();
-					temp.push("cl");
-					temp.push("u");
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				} else if ((stack.peek().equals("edit"))
-						|| (stack.peek().equals("e"))) {
-
-					stack.pop();
-					temp.push("e");
-					temp.push("u");
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				} else if ((stack.peek().equals("sort"))
-						|| (stack.peek().equals("s"))) {
-
-					stack.pop();
-					temp.push("s");
-					temp.push("u");
-
-					clearAndReloadBothPanel();
-					tabbedPane.setSelectedIndex(0);
-				}
-
-			}// end if
-			else if (stack.isEmpty()) {
-				clearAndReloadBothPanel();
-				tabbedPane.setSelectedIndex(0);
-
-			}
-
-		}// end undo
-
-		else if ((firstWord.toLowerCase().equals("redo") || (firstWord
-				.toLowerCase().equals("r")))) {
-
-			clearAndReloadBothPanel();
-
-			if (!(temp.isEmpty())) {
-				if (temp.pop().equals("u")) {
-
-					if (temp.peek().equals("cp")) {
-
-						temp.pop();
-						clearAndReloadBothPanel();
-						tabbedPane.setSelectedIndex(1);
-
-					} else if (temp.peek().equals("ucp")) {
-
-						temp.pop();
-						clearAndReloadBothPanel();
-						tabbedPane.setSelectedIndex(0);
-
-					} else if (temp.peek().equals("a")) {
-
-						temp.pop();
-						clearAndReloadBothPanel();
-						tabbedPane.setSelectedIndex(0);
-
-					} else if (temp.peek().equals("d")) {
-
-						temp.pop();
-						clearAndReloadBothPanel();
-						tabbedPane.setSelectedIndex(0);
-
-					} else if (temp.peek().equals("cl")) {
-
-						temp.pop();
-						clearAndReloadBothPanel();
-						tabbedPane.setSelectedIndex(0);
-
-					} else if (temp.peek().equals("e")) {
-
-						temp.pop();
-						clearAndReloadBothPanel();
-						tabbedPane.setSelectedIndex(0);
-					} else if (temp.peek().equals("s")) {
-
-						temp.pop();
-						clearAndReloadBothPanel();
-						tabbedPane.setSelectedIndex(0);
-					}
-				}
-
-			}// end of if
-
-			else if (temp.isEmpty()) {
-				clearAndReloadBothPanel();
-				tabbedPane.setSelectedIndex(0);
-			}
-
-		}// end of Re-do
-	}
-
-	private void clearToDoPanel() {
-		toDoPanel.revalidate();
-		toDoPanel.repaint();
-		toDoPanel.removeAll();
-	}
-
-	private void clearCompletedPanel() {
-		completedPanel.revalidate();
-		completedPanel.repaint();
-		completedPanel.removeAll();
-	}
-
-	private void clearAndReloadBothPanel() {
-		clearToDoPanel();
-		clearCompletedPanel();
-		printLabel(mem);
-		printCompletedLabel(mem);
-	}
-
-	private void clearAndReloadBothPanelForTempList() {
-		clearToDoPanel();
-		clearCompletedPanel();
-		printTempLabel(mem);
-		printCompletedLabel(mem);
-	}
-
-	protected void printCompletedLabel(Repository list) {
-		Collections.sort(list.getBuffer(), Compare.numComparator);
-
-		for (int i = 0; i < list.getBufferSize(); i++) {
-
-			Task task = list.getBuffer().get(i);
-
-			String str = printCompletedList.returnString(task);
-
-			JLabel completeLabel = new JLabel(str);
-			completedPanel.add(completeLabel);
-		}
-	}
-
-	protected void printLabel(Repository list) {
-		Collections.sort(list.getBuffer(), Compare.numComparator);
-		for (int i = 0; i < list.getBufferSize(); i++) {
-
-			Task task = list.getBuffer().get(i);
-
-			String str = printToDoList.returnString(task);
-
-			JLabel toDoLabel = new JLabel(str);
-			toDoPanel.add(toDoLabel);
-		}
-	}
-
-	protected void printTempLabel(Repository list) {
-		Collections.sort(list.getBuffer(), Compare.numComparator);
-		for (int i = 0; i < list.getTempBufferSize(); i++) {
-
-			Task task = list.getTempBuffer().get(i);
-
-			String str = printTempToDoList.returnString(task);
-
-			JLabel tempLabel = new JLabel(str);
-			toDoPanel.add(tempLabel);
-		}
 	}
 }

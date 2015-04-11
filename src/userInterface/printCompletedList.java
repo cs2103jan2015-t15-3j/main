@@ -41,8 +41,8 @@ public class printCompletedList {
 						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
 						+ HTML_BREAK;
 
-				str += "____________________________________________________________________________"
-						+ HTML_CLOSE;
+				str += //"____________________________________________________________________________"
+						HTML_CLOSE;
 			}
 
 			else if (type.equals("DEADLINE")) {
@@ -60,8 +60,8 @@ public class printCompletedList {
 						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
 						+ HTML_BREAK;
 
-				str += "____________________________________________________________________________"
-						+ HTML_CLOSE;
+				str += //"____________________________________________________________________________"
+						HTML_CLOSE;
 
 			} else {
 
@@ -76,8 +76,8 @@ public class printCompletedList {
 						+ HTML_BREAK + "Due: " + end + HTML_BREAK + "Remarks: "
 						+ remarks + HTML_FONT_CLOSE + HTML_BREAK;
 
-				str += "____________________________________________________________________________"
-						+ HTML_CLOSE;
+				str += //"____________________________________________________________________________"
+						HTML_CLOSE;
 			}
 
 		}
