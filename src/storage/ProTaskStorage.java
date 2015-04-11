@@ -36,7 +36,7 @@ public class ProTaskStorage {
 	private ArrayList<Task> tasks;
 	private int idCounter;
 	private boolean justLaunched;
-
+	
 	public ProTaskStorage() {
 
 		dataBaseColumns = new String[] { "ID", "Description", "Start", "End",
@@ -342,7 +342,20 @@ public class ProTaskStorage {
 		return mem;
 
 	}
-
+	public Task getTask(int taskID)
+	{
+		Task toReturnTask = new Task();
+		for (Task task : allTasks)
+		{
+			if (task.getTaskID()==taskID)
+			{
+				toReturnTask = task;
+				break;
+			}
+		}
+		return toReturnTask;
+	}
+	
 	public void loadAllTasks() throws FileNotFoundException {
 		// Build reader instance
 

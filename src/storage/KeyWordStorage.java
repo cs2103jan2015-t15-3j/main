@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import logic.Task;
+
 import com.opencsv.CSVReader;
 
 public class KeyWordStorage {
@@ -26,6 +28,7 @@ public class KeyWordStorage {
 			'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7',
 			'8', '9', ' ' };
 	private ArrayList<KeyWord> allKeyWords;
+	private ProTaskStorage pStorage;
 
 	public KeyWordStorage(String databaseName) {
 
@@ -33,7 +36,8 @@ public class KeyWordStorage {
 		allAlphabets = new ArrayList<KeyAlphabet>();
 		keyWordID = 1;
 		allKeyWords = new ArrayList<KeyWord>();
-
+		pStorage = new ProTaskStorage();
+		
 		for (int j = 0; j < letters.length; j++) {
 			KeyAlphabet alphabet = new KeyAlphabet();
 			alphabet.setAlphabet(letters[j]);
@@ -55,9 +59,12 @@ public class KeyWordStorage {
 
 	}
 
-	public ArrayList<KeyWord> powerSearch(String input) {
+	public ArrayList<Task> powerSearch(String input) {
 
 		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
+		ArrayList<Task> tasksResults = new ArrayList<Task>();
+		
+		
 		Queue<Character> queueInput = new LinkedList<Character>();
 
 		for (int i = 0; i < input.length(); i++) {
@@ -71,10 +78,19 @@ public class KeyWordStorage {
 		{
 			if(!results.contains(result))
 			{
-				results.add(result);
+				results.add(result);	
 			}
 		}
-		return results;
+		for (KeyWord result : results)
+		{
+			Task task = pStorage.getTask(result.getTaskID());
+			if (!tasksResults.contains(task))
+			{
+				tasksResults.add(task);
+			}
+		}
+		
+		return tasksResults;
 
 	}
 
