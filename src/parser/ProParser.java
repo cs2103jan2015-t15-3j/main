@@ -87,11 +87,6 @@ public class ProParser {
 			item.setCommandType(Interpreter.CommandType.UNCOMPLETE);
 			ParserUncompleteTask.uncompleteTask(item, inputArray);
 			break;
-		case "psearch":
-		case "ps":
-			item.setCommandType(Interpreter.CommandType.POWERSEARCH);
-			ParserPowerSearch.powerSearchTask(item, inputArray);
-			break;
 		case "sort":
 		case "s":
 			item.setCommandType(Interpreter.CommandType.SORT);
