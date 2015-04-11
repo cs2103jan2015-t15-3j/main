@@ -44,6 +44,12 @@ public class RedoManager {
 			repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
 					history.getFeedbackMsg()));
 		}
+
+		if (history.getCommand().equals(CommandType.SORT)) {
+			redoSortAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(String.format(Message.SORTED_SUCCESSFUL,
+					history.getFeedbackMsg()));
+		}
 	}
 
 	private static void redoAddAction(History history, ArrayList<Task> buffer) {
@@ -76,5 +82,10 @@ public class RedoManager {
 			Repository repo) {
 		historyBuffer.removeAll(historyBuffer);
 		repo.getBuffer().removeAll(repo.getBuffer());
+	}
+
+	private static void redoSortAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setTempBuffer(historyBuffer);
 	}
 }

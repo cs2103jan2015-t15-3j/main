@@ -53,6 +53,12 @@ public class UndoManager {
 			undoClearAction(history.getHistoryBuffer(), repo);
 			repo.setFeedbackMsg(Message.UNDO_DELETE_ALL);
 		}
+
+		if (history.getCommand().equals(CommandType.SORT)) {
+			repo.redoActionPush(history);
+			undoSortAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(Message.CLEAR);
+		}
 	}
 
 	protected static History pushAddToStack(Interpreter input, Repository repo) {
@@ -149,6 +155,16 @@ public class UndoManager {
 		return clearedHistory;
 	}
 
+	protected static History pushSortToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History sortedHistory = new History();
+
+		sortedHistory.setCommand(input.getCommand());
+		sortedHistory.setHistoryBuffer(buffer);
+
+		return sortedHistory;
+	}
+
 	private static void undoAddAction(int index, ArrayList<Task> buffer) {
 		buffer.remove(index);
 	}
@@ -189,5 +205,15 @@ public class UndoManager {
 			buffer.add(list.next());
 		}
 		repo.setBuffer(buffer);
+	}
+
+	private static void undoSortAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		ArrayList<Task> tempBuffer = repo.getTempBuffer();
+
+		tempBuffer.removeAll(tempBuffer);
+
+		repo.setTempBuffer(tempBuffer);
+
 	}
 }
