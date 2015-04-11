@@ -1,12 +1,12 @@
 package logic;
 
 import java.io.FileNotFoundException;
-import java.nio.Buffer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Iterator;
-//import java.util.Scanner;
+
+import java.util.Scanner;
 
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
@@ -19,14 +19,16 @@ public class LogicMain {
 	private static ProTaskStorage storage;
 
 	public static void main(String[] args) throws ParseException {
-		/*
-		 * Repository repo = new Repository(); Scanner sc = new
-		 * Scanner(System.in); while (true) { Printer.printToUser("Command: ");
-		 * String sentence = sc.nextLine(); // parseString(sentence, repo);
-		 * Printer.executePrint(repo.getBuffer());
-		 * System.out.println(repo.getBuffer().size());
-		 * Printer.printToUser(repo.getFeedback()); }
-		 */
+		Repository repo = new Repository();
+		Scanner sc = new Scanner(System.in);
+
+		while (true) {
+			Printer.printToUser("Command: ");
+			String command = sc.nextLine();
+			Printer.executePrint(repo.getBuffer());
+			System.out.println(repo.getBuffer().size());
+			Printer.printToUser(repo.getFeedback());
+		}
 	}
 
 	private static void initializeStorage() {
@@ -204,10 +206,6 @@ public class LogicMain {
 			}
 			break;
 
-		case POWERSEARCH:
-			// incomplete
-			break;
-
 		case EXIT:
 			System.exit(MESSAGE_SYSTEM_EXIT);
 
@@ -218,12 +216,14 @@ public class LogicMain {
 
 	private static void undoAdd(Interpreter input, Repository repo) {
 		History addedHistory = new History();
+
 		addedHistory = UndoManager.pushAddToStack(input, repo);
 		repo.undoActionPush(addedHistory);
 	}
 
 	private static void undoDelete(Interpreter input, Repository repo) {
 		History deletedHistory = new History();
+
 		deletedHistory = UndoManager.pushDeleteToStack(input, repo);
 		repo.undoActionPush(deletedHistory);
 	}
@@ -231,10 +231,12 @@ public class LogicMain {
 	private static Repository undoAmend(Interpreter input, Repository repo) {
 		History amendedHistory = new History();
 		ArrayList<Task> tempBuffer = new ArrayList<Task>();
-		Iterator<Task> bufferList = repo.getBuffer().iterator();
-		while (bufferList.hasNext()) {
-			tempBuffer.add(bufferList.next());
+		Iterator<Task> list = repo.getBuffer().iterator();
+
+		while (list.hasNext()) {
+			tempBuffer.add(list.next());
 		}
+
 		amendedHistory = UndoManager.pushAmendToStack(input, tempBuffer);
 		repo.undoActionPush(amendedHistory);
 		return repo;
@@ -243,6 +245,7 @@ public class LogicMain {
 	protected static void undoCompleteOrUncomplete(Interpreter input,
 			Repository repo) {
 		History completedHistory = new History();
+
 		completedHistory = UndoManager.pushCompleteOrUncompleteToStack(input,
 				repo);
 		repo.undoActionPush(completedHistory);
@@ -250,17 +253,21 @@ public class LogicMain {
 
 	private static void undoClear(Interpreter input, Repository repo) {
 		History clearedHistory = new History();
-		ArrayList<Task> tempBuffer = new ArrayList<Task>();
-		Iterator<Task> bufferList = repo.getBuffer().iterator();
-		while (bufferList.hasNext()) {
-			tempBuffer.add(bufferList.next());
+		ArrayList<Task> tempBufferForClear = new ArrayList<Task>();
+		Iterator<Task> list = repo.getBuffer().iterator();
+
+		while (list.hasNext()) {
+			tempBufferForClear.add(list.next());
 		}
-		clearedHistory = UndoManager.pushClearToStack(input, tempBuffer);
+
+		clearedHistory = UndoManager
+				.pushClearToStack(input, tempBufferForClear);
 		repo.undoActionPush(clearedHistory);
 	}
 
 	private static void undoSort(Interpreter input, Repository repo) {
 		History sortedHistory = new History();
+
 		sortedHistory = UndoManager
 				.pushSortToStack(input, repo.getTempBuffer());
 		repo.undoActionPush(sortedHistory);

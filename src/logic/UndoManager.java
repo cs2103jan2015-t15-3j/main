@@ -13,6 +13,14 @@ public class UndoManager {
 		History history = repo.undoActionPop();
 		ArrayList<Task> buffer = repo.getBuffer();
 
+		// For redo sort
+		Iterator<Task> sortedList = repo.getTempBuffer().iterator();
+		ArrayList<Task> tempBufferForSortedList = new ArrayList<Task>();
+
+		while (sortedList.hasNext()) {
+			tempBufferForSortedList.add(sortedList.next());
+		}
+
 		if (history.getCommand().equals(CommandType.ADD)) {
 			repo.redoActionPush(history);
 			undoAddAction(history.getIndex(), buffer);
@@ -56,7 +64,7 @@ public class UndoManager {
 
 		if (history.getCommand().equals(CommandType.SORT)) {
 			repo.redoActionPush(history);
-			undoSortAction(history.getHistoryBuffer(), repo);
+			undoSortAction(history.getHistoryBuffer(), tempBufferForSortedList);
 			repo.setFeedbackMsg(Message.CLEAR);
 		}
 	}
@@ -181,12 +189,12 @@ public class UndoManager {
 	private static void undoAmendAction(ArrayList<Task> historyBuffer,
 			Repository repo) {
 		Iterator<Task> list = historyBuffer.iterator();
-		ArrayList<Task> buffer = new ArrayList<Task>();
+		ArrayList<Task> bufferForAmend = new ArrayList<Task>();
 
 		while (list.hasNext()) {
-			buffer.add(list.next());
+			bufferForAmend.add(list.next());
 		}
-		repo.setBuffer(buffer);
+		repo.setBuffer(bufferForAmend);
 	}
 
 	private static void undoCompleteAction(History history,
@@ -202,21 +210,16 @@ public class UndoManager {
 	private static void undoClearAction(ArrayList<Task> historyBuffer,
 			Repository repo) {
 		Iterator<Task> list = historyBuffer.iterator();
-		ArrayList<Task> buffer = new ArrayList<Task>();
+		ArrayList<Task> bufferForClear = new ArrayList<Task>();
 
 		while (list.hasNext()) {
-			buffer.add(list.next());
+			bufferForClear.add(list.next());
 		}
-		repo.setBuffer(buffer);
+		repo.setBuffer(bufferForClear);
 	}
 
 	private static void undoSortAction(ArrayList<Task> historyBuffer,
-			Repository repo) {
-		ArrayList<Task> tempBuffer = repo.getTempBuffer();
-
+			ArrayList<Task> tempBuffer) {
 		tempBuffer.removeAll(tempBuffer);
-
-		repo.setTempBuffer(tempBuffer);
-
 	}
 }
