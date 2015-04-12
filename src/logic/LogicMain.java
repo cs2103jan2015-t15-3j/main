@@ -19,7 +19,7 @@ public class LogicMain {
 	private static final int MESSAGE_SYSTEM_EXIT = 0;
 	private static ProTaskStorage storage;
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, FileNotFoundException {
 		Repository repo = new Repository();
 		Scanner sc = new Scanner(System.in);
 
@@ -27,6 +27,7 @@ public class LogicMain {
 			Printer.printToUser("Command: ");
 			String command = sc.nextLine();
 			parseString(command, repo);
+			sc.close();
 			Printer.executePrint(repo.getBuffer());
 			System.out.println(repo.getBuffer().size());
 			Printer.printToUser(repo.getFeedback());
@@ -44,12 +45,9 @@ public class LogicMain {
 		return storage.getAllTasks();
 	}
 
-	private static void updateStorageToClear(Repository repo) {
-		try {
-			storage.clearAllTasks(repo);
-		} catch (FileNotFoundException e) {
-			Logging.getInputLog(Message.FILE_INEXISTS);
-		}
+	private static void updateStorageToClear(Repository repo)
+			throws FileNotFoundException {
+		storage.clearAllTasks(repo);
 	}
 
 	private static void updateStorage(Repository repo) {
@@ -75,7 +73,7 @@ public class LogicMain {
 		return tempBuffer;
 	}
 
-	public static Repository parseString(String command, Repository repo) {
+	public static Repository parseString(String command, Repository repo) throws FileNotFoundException {
 		assert (command != null);
 		Interpreter input = new Interpreter();
 
@@ -90,7 +88,7 @@ public class LogicMain {
 		return repo;
 	}
 
-	private static void executeCommand(Interpreter input, Repository repo) {
+	private static void executeCommand(Interpreter input, Repository repo) throws FileNotFoundException {
 		CommandType commandInfo = input.getCommand();
 		boolean isError = input.getIsError();
 
