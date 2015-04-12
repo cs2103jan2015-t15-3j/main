@@ -125,7 +125,7 @@ public class ParserDateAndTimeChecker {
 		int compareResult = compareDates(resultStartDate, resultDueDate);
 		
 		try {	
-			if(compareResult > 1) {
+			if(compareResult > 0) {
 				throw new ParserException();
 			} else {
 				item.setType(TaskType.APPOINTMENT);
