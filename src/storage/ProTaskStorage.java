@@ -370,7 +370,7 @@ public class ProTaskStorage {
 			if (justLaunched) {
 				justLaunched = false;
 				allTasks.add(newTask);
-				repo.setBuffer(allTasks);
+				//repo.setBuffer(allTasks);
 			}
 		}
 		return repo;
@@ -571,13 +571,17 @@ public class ProTaskStorage {
 		File file = new File(currentDataBasePath+"/"+taskDataBase);
 		previousBuffer = repo.getBuffer();
 		repo.setBuffer(new ArrayList<Task>());
-
+		allTasksIDs.clear();
+		idCounter = 0 ;
+		
 		if (file.delete()) {
-			System.out.println(file.getName() + " is deleted!");
+			Logging.getInputLog(file.getName() + " is deleted!");
 		} else {
-			System.out.println("Delete operation is failed.");
+			Logging.getInputLog("Delete operation failed!");
 		}
 		createDataBase(currentDataBasePath+"/"+taskDataBase);
+		repo.setCurrentID(idCounter);
+		
 		return repo;
 	}
 
