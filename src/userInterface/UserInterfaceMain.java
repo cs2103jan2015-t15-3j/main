@@ -21,8 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import logic.LogicMain;
 import logic.Repository;
@@ -46,6 +44,7 @@ public class UserInterfaceMain extends JPanel {
 	private JScrollPane scrollPane;
 
 	Repository mem = new Repository();
+	Repository smem = new Repository();
 	ArrayList<Task> psList = new ArrayList<Task>();
 
 	/**
@@ -138,24 +137,20 @@ public class UserInterfaceMain extends JPanel {
 		frame.getContentPane().add(helpLabel);
 
 		// initial load
-		mem = LogicMain.loadStorage();
-		printSetting.clearAndReloadBothPanel(mem);
+		smem = LogicMain.loadStorage();
+		printSetting.clearAndReloadBothPanel(smem);
 
 		KeyListener listener = new KeyListener() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 					userInput = inputTextField.getText().toString();
-
 					String firstWord = getFirstWord(userInput);
-					System.out.println(firstWord);
 
-					mem = LogicMain.parseString(userInput, mem);
+					mem = LogicMain.parseString(userInput, smem);
 
-					// if no error
 					printSetting.clearAndReloadBothPanel(mem);
 					printSetting.clearAndReloadBothPanelForTempList(mem);
-					// else dont do anything
 
 					try {
 						printSetting.displaySetting(firstWord, mem);
@@ -196,7 +191,6 @@ public class UserInterfaceMain extends JPanel {
 			public void keyReleased(KeyEvent e) {
 
 				String input = inputTextField.getText().toString();
-				//System.out.println("input is " + input);
 
 				if ((input.regionMatches(true, 0, "ps ", 0, 3))) {
 
@@ -215,7 +209,6 @@ public class UserInterfaceMain extends JPanel {
 			}
 
 			public void keyTyped(KeyEvent e) {
-
 			}
 		};
 		inputTextField.addKeyListener(listener);

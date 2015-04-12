@@ -1,5 +1,7 @@
 package userInterface;
 
+//@author A0112961L
+
 public class HelpInfo {
 	private static final String STRING_WRAPPER = "%s%s%s";
 	private static final String HTML_BREAK = "<br>";
@@ -31,13 +33,13 @@ public class HelpInfo {
 		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" add "));
-		str.append("[task name][start date / time][end date / time] ");
+		str.append("task name [start date/time end date/time] ");
 		str.append(maroonFont("&#9668"));
 		str.append("Remarks");
 		str.append(maroonFont("&#9658"));
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" a "));
-		str.append("[task name][start date / time][end date / time] ");
+		str.append("task name [start date/time end date/time] ");
 		str.append(maroonFont("&#9668"));
 		str.append("Remarks");
 		str.append(maroonFont("&#9658"));
@@ -59,13 +61,17 @@ public class HelpInfo {
 		str.append(HTML_BREAK);
 		str.append(maroonFont("2. You can add a task by specifying only the end date or with time."));
 		str.append(HTML_BREAK);
-		str.append(createExample("'add CS2103 V0.5 13/04/15 23:59'"));
+		str.append(createExample("'add CS2103 V0.5 [13/04/15 23:59]'"));
 		str.append(HTML_BREAK);
 
 		str.append(HTML_BREAK);
 		str.append(maroonFont("3. You can add a task by specifying both start and end date with time."));
 		str.append(HTML_BREAK);
-		str.append(createExample("'a CS2103 revision class 11/04/15 08:00 11/04/15 15:00'"));
+		str.append(createExample("'a CS2103 revision class [11/04/15 08:00 11/04/15 15:00] "));
+		str.append(maroonFont("&#9668"));
+		str.append(createExample("remember print notes"));
+		str.append(maroonFont("&#9658"));
+		str.append(createExample("'"));
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -73,7 +79,7 @@ public class HelpInfo {
 		str.append(HTML_BREAK);
 		str.append(redFont("Remarks & time are optional."));
 		str.append(HTML_BREAK);
-		str.append(redFont("If you do not specify a time, the time is set to '23:59' (24h format) by default."));
+		str.append(redFont("If you do not specify a time, the time is set to '23:59' (24-hr format) by default."));
 		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());
@@ -94,10 +100,10 @@ public class HelpInfo {
 		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" delete "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" d "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -107,6 +113,36 @@ public class HelpInfo {
 		str.append(createExample("'delete 11'"));
 		str.append(" OR ");
 		str.append(createExample("'d 1'"));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		// undo/redo
+		str.append(createCommandTitle("Undo/Redo"));
+		str.append(HTML_BREAK);
+		str.append("The undo function allows you to revoke your last actions.");
+		str.append(HTML_BREAK);
+		str.append("The redo function allows you to revoke your previous undo actions.");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" undo "));
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" redo "));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(createExample("'undo'"));
+		str.append(" OR ");
+		str.append(createExample("'redo'"));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+		str.append(redFont("*Disclaimer*"));
+		str.append(HTML_BREAK);
+		str.append(redFont("You can only redo when you had undo."));
 		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());
@@ -127,10 +163,10 @@ public class HelpInfo {
 		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" edit "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" e "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -152,6 +188,29 @@ public class HelpInfo {
 		str.append(HTML_BREAK);
 		str.append(createExample("'e 12 additional revision class this week 21/04/15'"));
 		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		//display
+		str.append(createCommandTitle("Display"));
+		str.append(HTML_BREAK);
+		str.append("The display function allows you to display all your tasks.");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" display "));
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" dp "));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(createExample("'display'"));
+		str.append(" OR ");
+		str.append(createExample("'dp'"));
+		str.append(HTML_BREAK);
 
 		return wrapper(str.toString());
 	}
@@ -170,10 +229,10 @@ public class HelpInfo {
 		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" complete "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" cp "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -197,10 +256,10 @@ public class HelpInfo {
 		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" uncomplete "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" ucp "));
-		str.append("[id]");
+		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -230,10 +289,10 @@ public class HelpInfo {
 		str.append(HTML_UNDERLINE_CLOSE);
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" search "));
-		str.append("[id] OR [keywords]");
+		str.append("id OR keywords");
 		str.append(HTML_BREAK);
 		str.append(maroonFont(" find "));
-		str.append("[id] OR [keywords] ");
+		str.append("id OR keywords ");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -254,19 +313,63 @@ public class HelpInfo {
 		str.append("Both outcomes will return the desired results.");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
-		str.append(createExample("'search pear' OR 'find pear'"));
+		str.append(createExample("'search pear' "));
+		str.append("OR");
+		str.append(createExample(" 'find pear'"));
 		str.append(HTML_BREAK);
-		str.append(createExample("'search p' OR 'find p'"));
+		str.append(createExample("'search p' "));
+		str.append("OR");
+		str.append(createExample(" 'find p'"));
 
 		return wrapper(str.toString());
 	}
 
-	private static String createMainTitle(String str) {
-		str = bold(str);
-		str = underline(str);
-		str = titleFontSize(str);
+	protected static String psearchCommandGuide() {
 
-		return str;
+		StringBuilder str = new StringBuilder();
+
+		str.append(createCommandTitle("Power Search"));
+		str.append(HTML_BREAK);
+		str.append("The power search function allows you to search for your tasks instantly based on the ");
+		str.append(HTML_BREAK);
+		str.append("keywords that you provide");
+		str.append(HTML_BREAK);
+		str.append("*Other attributes will be filter as well (e.g. start time, end time, remarks)*");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append(maroonFont("Format"));
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(HTML_BREAK);
+		str.append(maroonFont(" ps "));
+		str.append("keywords");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+		str.append(maroonFont("1. "
+				+ bold("You can power search a specific task/tasks by specifying keywords.")));
+		str.append(HTML_BREAK);
+		str.append(createExample("ps a"));
+		str.append(HTML_BREAK);
+		str.append("The following result will reflect instantly");
+		str.append(HTML_BREAK);
+		str.append(createExample("apple 13/04/15 23:59"));
+		str.append(HTML_BREAK);
+		str.append(createExample("meet friends 15/05/15 15:00 accompany them to eat"));
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+		str.append("OR");
+		str.append(HTML_BREAK);
+		str.append(HTML_BREAK);
+		str.append(createExample("ps app"));
+		str.append(HTML_BREAK);
+		str.append("The following result will instantly reflect");
+		str.append(HTML_BREAK);
+		str.append(createExample("apple 13/04/15 23:59"));
+		str.append(HTML_BREAK);
+		str.append(createExample("application for iphone to be launched 11/05/15 08:00 "));
+
+		return wrapper(str.toString());
 	}
 
 	private static String createCommandTitle(String str) {

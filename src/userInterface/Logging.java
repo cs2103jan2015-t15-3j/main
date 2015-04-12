@@ -11,6 +11,8 @@ import java.util.Date;
 //import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+//@author A0112961L
+
 public class Logging {
 
 	private static ArrayList<String> myList = new ArrayList<String>();

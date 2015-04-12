@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -14,6 +12,8 @@ import javax.swing.border.Border;
 import logic.Compare;
 import logic.Repository;
 import logic.Task;
+
+//@author A0112961L
 
 public class printSetting {
 
@@ -33,10 +33,17 @@ public class printSetting {
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 
-		if ((firstWord.toLowerCase().equals("sort"))
+		else if ((firstWord.toLowerCase().equals("sort"))
 				|| (firstWord.toLowerCase().equals("s"))) {
 			stack.push(firstWord);
 			clearAndReloadBothPanelForTempList(mem);
+			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
+		}
+		
+		else if ((firstWord.toLowerCase().equals("move"))
+				|| (firstWord.toLowerCase().equals("mv"))) {
+			stack.push(firstWord);
+			clearAndReloadBothPanel(mem);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 

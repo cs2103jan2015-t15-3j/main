@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+//@author A0112961L
+
 public class HelpGuide {
 	/**
 	 * Launch the application.
@@ -40,7 +42,7 @@ public class HelpGuide {
 		frame.setBounds(100, 100, 447, 470);
 		frame.getContentPane().add(HelpDesign.createTabbedPane(),
 				BorderLayout.NORTH);
-		frame.setSize(513, 462);
+		frame.setSize(734, 536);
 		frame.setVisible(true);
 		frame.setFocusable(true);
 		frame.getContentPane().setLayout(null);

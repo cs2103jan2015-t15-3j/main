@@ -5,6 +5,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+//@author A0112961L
+
 public class HelpDesign {
 	
 	protected static JTabbedPane createTabbedPane() {
@@ -31,7 +33,7 @@ public class HelpDesign {
 			deleteLabel.setText(HelpInfo.deleteCommandGuide());
 			deletePanel.add(deleteLabel);			
 			
-			tabbedPane.addTab("Delete", deleteIcon, deletePanel, null);
+			tabbedPane.addTab("Delete/Undo/Redo", deleteIcon, deletePanel, null);
 			
 			//Edit Command Guide
 			JPanel editPanel = new JPanel();
@@ -41,7 +43,7 @@ public class HelpDesign {
 			editLabel.setText(HelpInfo.editCommandGuide());
 			editPanel.add(editLabel);	
 			
-			tabbedPane.addTab("Edit", editIcon, editPanel, null);
+			tabbedPane.addTab("Edit/Display", editIcon, editPanel, null);
 			
 			//Complete/Uncomplete Command Guide
 			JPanel completeAndUncompletePanel = new JPanel();
@@ -62,6 +64,17 @@ public class HelpDesign {
 			searchPanel.add(searchLabel);	
 			
 			tabbedPane.addTab("Search", searchIcon, searchPanel, null);
+			
+
+			//Power Search Command Guide
+			JPanel psearchPanel = new JPanel();
+			ImageIcon psearchIcon = new ImageIcon((UserInterfaceMain.class.getResource("/userInterface/ImageIcon/powerIcon.png")));
+			
+			JLabel psearchLabel = new JLabel();
+			psearchLabel.setText(HelpInfo.psearchCommandGuide());
+			psearchPanel.add(psearchLabel);	
+			
+			tabbedPane.addTab("PSearch", psearchIcon, psearchPanel, null);
 			
 			return tabbedPane;
 	 }

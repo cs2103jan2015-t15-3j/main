@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 
 import userInterface.UserInterfaceMain;
 
+//@author A0112961L
+
 public class InputHistory {
 
 	private static final Stack<String> inputStack = new Stack<String>();

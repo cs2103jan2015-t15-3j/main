@@ -4,6 +4,8 @@ import logic.Appointment;
 import logic.Deadline;
 import logic.Task;
 
+//@author A0112961L
+
 public class printPowerSearchList {
 
 	private static final String HTML_OPEN = "<html>";
@@ -37,10 +39,7 @@ public class printPowerSearchList {
 						+ HTML_BREAK + id + ". " + " " + name + HTML_BREAK
 						+ "Start: " + start + HTML_BREAK + "Due: " + end
 						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
-						+ HTML_BREAK;
-
-				str += //"____________________________________________________________________________"
-						HTML_CLOSE;
+						+ HTML_BREAK + HTML_CLOSE;
 			}
 
 			else if (type.equals("DEADLINE")) {
@@ -56,10 +55,7 @@ public class printPowerSearchList {
 						+ HTML_BREAK + id + ". " + " " + name + HTML_BREAK
 						+ "Start: " + start + HTML_BREAK + "Due: " + end
 						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
-						+ HTML_BREAK;
-
-				str += //"____________________________________________________________________________"
-						HTML_CLOSE;
+						+ HTML_BREAK + HTML_CLOSE;
 
 			} else {
 
@@ -72,10 +68,7 @@ public class printPowerSearchList {
 				str = HTML_OPEN + HTML_FONT_SIZE_4 + HTML_BREAK + id + ". "
 						+ " " + name + HTML_BREAK + "Start: " + start
 						+ HTML_BREAK + "Due: " + end + HTML_BREAK + "Remarks: "
-						+ remarks + HTML_FONT_CLOSE + HTML_BREAK;
-
-				str += //"____________________________________________________________________________"
-						HTML_CLOSE;
+						+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
 			}
 
 		return str;
