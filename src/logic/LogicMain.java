@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Iterator;
-
 import java.util.Scanner;
 
 import parser.Interpreter;
@@ -27,6 +26,7 @@ public class LogicMain {
 		while (true) {
 			Printer.printToUser("Command: ");
 			String command = sc.nextLine();
+			parseString(command, repo);
 			Printer.executePrint(repo.getBuffer());
 			System.out.println(repo.getBuffer().size());
 			Printer.printToUser(repo.getFeedback());
@@ -230,13 +230,14 @@ public class LogicMain {
 			}
 			break;
 
-		// case MOVE:
-		// if (isError) {
-		// catchException(input, repo);
-		// } else {
-		// initializeStorage();
-		// storage.moveDatabase(input.getDataBasePath());
-		// }
+		case MOVE:
+			if (isError) {
+				catchException(input, repo);
+			} else {
+				initializeStorage();
+				storage.moveDataBase(input.getDataBasePath());
+			}
+			break;
 
 		case EXIT:
 			System.exit(MESSAGE_SYSTEM_EXIT);
