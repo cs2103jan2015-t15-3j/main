@@ -7,6 +7,6 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ MainUnitTest.class, LogicUndoUnitTest.class,
-		LogicUnitTest.class, ParserTestDateTime.class })
+		LogicUnitTest.class, ParserTestAddDateTime.class })
 public class TestSuite {
 }

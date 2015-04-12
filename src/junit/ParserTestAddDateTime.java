@@ -12,7 +12,7 @@ import parser.Interpreter.CommandType;
 import parser.ProParser;
 import parser.Interpreter;
 
-public class ParserTestDateTime {
+public class ParserTestAddDateTime {
 	
 	ProParser Pro = new ProParser();
 	Interpreter item, item2; 
