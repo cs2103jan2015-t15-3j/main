@@ -262,9 +262,9 @@ public class ProTaskStorage {
 
 		newfile.delete();
 		if (oldfile.renameTo(newfile)) {
-			System.out.println("Rename succesful");
+			Logging.getInputLog("Rename of "+tempDataBase+" is successful.");
 		} else {
-			System.out.println("Rename failed");
+			Logging.getInputLog("Rename of "+tempDataBase+" to "+newfile.getAbsolutePath()+" unsucessful.");
 		}
 	}
 
