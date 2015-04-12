@@ -10,7 +10,7 @@ public class Interpreter {
 	public enum CommandType {
 		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, 
 		COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, 
-		UNDO, INVALID_COMMAND, REDO;
+		UNDO, INVALID_COMMAND, REDO, MOVE;
 	}
 	
 	private CommandType command;
@@ -27,6 +27,7 @@ public class Interpreter {
 	private String feedbackMsg;
 	private String modeClear;
 	private boolean isError;
+	private String dataBasePath;
 	
 	
 	/*============GET METHODS============*/
@@ -174,5 +175,13 @@ public class Interpreter {
 				+ this.getTaskName() + "+" + this.getRemarks() + "+"
 				+ this.getCompleted() + "+" + this.getType() + "+"
 				+ this.getDueDateString() + "+" + this.getStartDateString();
+	}
+
+	public String getDataBasePath() {
+		return dataBasePath;
+	}
+
+	public void setDataBasePath(String dataBasePath) {
+		this.dataBasePath = dataBasePath;
 	}
 }
