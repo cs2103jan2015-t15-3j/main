@@ -2,10 +2,8 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
-import userInterface.Logging;
-import logic.Enumerator.TaskType;
+//@author A0112643R
 
 public class Organizer {
 	

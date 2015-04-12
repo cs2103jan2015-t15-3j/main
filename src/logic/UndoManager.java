@@ -1,11 +1,12 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
+
+//@author A0112643R
 
 public class UndoManager {
 

@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import logic.Enumerator.TaskType;
 import parser.Interpreter.CommandType;
 
+//@author A0112643R
+
 public class RedoManager {
+
 	protected static void determineRedo(Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		History history = repo.redoActionPop();

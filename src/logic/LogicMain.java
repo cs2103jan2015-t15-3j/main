@@ -14,6 +14,8 @@ import parser.ProParser;
 import storage.ProTaskStorage;
 import userInterface.Logging;
 
+//@author A0112643R
+
 public class LogicMain {
 	private static final int MESSAGE_SYSTEM_EXIT = 0;
 	private static ProTaskStorage storage;

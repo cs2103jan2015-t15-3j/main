@@ -7,6 +7,8 @@ import java.util.Iterator;
 
 import parser.Interpreter;
 
+//@author A0112643R
+
 public class Obliterator {
 
 	protected static void determineClear(Interpreter item,

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
 
+//@author A0112643R
+
 public class Affix {
 
 	protected static void addTask(Interpreter item, ArrayList<Task> buffer,
@@ -59,7 +61,7 @@ public class Affix {
 
 		addToBuffer(appt, buffer);
 	}
-	
+
 	protected static void addToBuffer(Task task, ArrayList<Task> buffer) {
 		buffer.add(buffer.size(), task);
 	}

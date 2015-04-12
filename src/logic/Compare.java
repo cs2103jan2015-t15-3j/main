@@ -1,7 +1,8 @@
 package logic;
 
-import java.sql.Date;
 import java.util.Comparator;
+
+//@author A0112643R
 
 public class Compare {
 
@@ -18,12 +19,6 @@ public class Compare {
 			String first = bufferOne.getTaskName();
 			String second = bufferTwo.getTaskName();
 			return first.compareTo(second);
-		}
-	};
-
-	public static Comparator<Date> dateComparator = new Comparator<Date>() {
-		public int compare(Date dateOne, Date dateTwo) {
-			return dateOne.compareTo(dateTwo);
 		}
 	};
 }

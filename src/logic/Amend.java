@@ -6,6 +6,8 @@ import logic.Enumerator.KEY;
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
 
+//@author A0112643R
+
 public class Amend {
 
 	protected static void setCompletion(Interpreter item, Repository repo) {
@@ -21,12 +23,15 @@ public class Amend {
 		if (isCompleted == false && checkCompleted == false) {
 			repo.setFeedbackMsg(String.format(Message.UNCOMPLETED_TASK,
 					taskName));
+
 		} else if (isCompleted == true && checkCompleted == true) {
 			repo.setFeedbackMsg(String.format(Message.COMPLETED_TASK, taskName));
+
 		} else if (isCompleted == true && checkCompleted == false) {
 			LogicMain.undoCompleteOrUncomplete(item, repo);
 			buffer.get(index).setIsCompleted(isCompleted);
 			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK, taskName));
+
 		} else {
 			LogicMain.undoCompleteOrUncomplete(item, repo);
 			buffer.get(index).setIsCompleted(isCompleted);
@@ -42,12 +47,15 @@ public class Amend {
 		case TASKNAME:
 			amendName(item, repo);
 			break;
+
 		case STARTDATE:
 			amendStartDate(item, repo);
 			break;
+
 		case DUEDATE:
 			amendDueDate(item, repo);
 			break;
+
 		default:
 			amendRemarks(item, repo);
 		}
@@ -56,6 +64,7 @@ public class Amend {
 	private static void amendName(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+
 		task.setTaskName(item.getTaskName());
 		repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
 				item.getTaskID()));
@@ -74,6 +83,7 @@ public class Amend {
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
 			appt.setStartDate(item.getStartDate());
+
 		} else if (task.getType().equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) task;
 			Appointment appt = new Appointment();
@@ -101,10 +111,14 @@ public class Amend {
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
+
 			appt.setDate(item.getDueDate());
+
 		} else if (task.getType().equals(TaskType.DEADLINE)) {
 			Deadline deadline = (Deadline) task;
+
 			deadline.setDate(item.getDueDate());
+
 		} else if (task.getType().equals(TaskType.FLOATING)) {
 			Task tasks = task;
 			Deadline deadline = new Deadline();
@@ -122,6 +136,7 @@ public class Amend {
 	private static void amendRemarks(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+
 		task.setRemarks(item.getRemarks());
 	}
 }

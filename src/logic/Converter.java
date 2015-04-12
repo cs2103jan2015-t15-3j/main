@@ -2,21 +2,26 @@ package logic;
 
 import logic.Enumerator.KEY;
 
+//@author A0112643R
+
 public class Converter {
 
-	public static KEY KeyConverter(String key) {
+	protected static KEY KeyConverter(String key) {
 		KEY keyReturn;
 
 		switch (key) {
 		case "taskname":
 			keyReturn = KEY.TASKNAME;
 			break;
+
 		case "startdate":
 			keyReturn = KEY.STARTDATE;
 			break;
+
 		case "duedate":
 			keyReturn = KEY.DUEDATE;
 			break;
+
 		default:
 			keyReturn = KEY.REMARKS;
 		}
