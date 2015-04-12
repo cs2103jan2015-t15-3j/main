@@ -24,26 +24,26 @@ public class printSetting {
 	/*
 	 * Display Setting for UI
 	 */
-	protected static void displaySetting(String firstWord, Repository mem) {
+	protected static void displaySetting(String firstWord, Repository repo) {
 
 		if ((firstWord.toLowerCase().equals("search"))
 				|| (firstWord.toLowerCase().equals("find"))) {
 
-			clearAndReloadBothPanelForTempList(mem);
+			clearAndReloadBothPanelForTempList(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 
 		else if ((firstWord.toLowerCase().equals("sort"))
 				|| (firstWord.toLowerCase().equals("s"))) {
 			stack.push(firstWord);
-			clearAndReloadBothPanelForTempList(mem);
+			clearAndReloadBothPanelForTempList(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 		
 		else if ((firstWord.toLowerCase().equals("move"))
 				|| (firstWord.toLowerCase().equals("mv"))) {
 			stack.push(firstWord);
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 
@@ -58,7 +58,7 @@ public class printSetting {
 		else if ((firstWord.toLowerCase().equals("display") || (firstWord
 				.toLowerCase().equals("dp")))) {
 
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 
@@ -67,7 +67,7 @@ public class printSetting {
 				"delete") || (firstWord.toLowerCase().equals("d")))))) {
 
 			stack.push(firstWord);
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 
@@ -75,7 +75,7 @@ public class printSetting {
 				.toLowerCase().equals("e")))) {
 
 			stack.push(firstWord);
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 
@@ -83,7 +83,7 @@ public class printSetting {
 				|| (firstWord.toLowerCase().equals("cp"))) {
 
 			stack.push(firstWord);
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(1);
 		}
 
@@ -91,7 +91,7 @@ public class printSetting {
 				.toLowerCase().equals("ucp")))) {
 
 			stack.push(firstWord);
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 
 		}
@@ -99,7 +99,7 @@ public class printSetting {
 		else if ((firstWord.toLowerCase().equals("undo") || (firstWord
 				.toLowerCase().equals("u")))) {
 
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 
 			if (!(stack.isEmpty())) {
 				if ((stack.peek().equals("uncomplete"))
@@ -109,7 +109,7 @@ public class printSetting {
 					temp.push("ucp");
 					temp.push("u");
 
-					clearAndReloadBothPanel(mem);
+					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(1);
 				}
 
@@ -120,7 +120,7 @@ public class printSetting {
 					temp.push("cp");
 					temp.push("u");
 
-					clearAndReloadBothPanel(mem);
+					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 				}
 
@@ -131,7 +131,7 @@ public class printSetting {
 					temp.push("a");
 					temp.push("u");
 
-					clearAndReloadBothPanel(mem);
+					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 				}
 
@@ -142,7 +142,7 @@ public class printSetting {
 					temp.push("d");
 					temp.push("u");
 
-					clearAndReloadBothPanel(mem);
+					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 				} else if ((stack.peek().equals("clear"))
 						|| (stack.peek().equals("cl"))) {
@@ -151,7 +151,7 @@ public class printSetting {
 					temp.push("cl");
 					temp.push("u");
 
-					clearAndReloadBothPanel(mem);
+					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 				} else if ((stack.peek().equals("edit"))
 						|| (stack.peek().equals("e"))) {
@@ -160,7 +160,7 @@ public class printSetting {
 					temp.push("e");
 					temp.push("u");
 
-					clearAndReloadBothPanel(mem);
+					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 				} else if ((stack.peek().equals("sort"))
 						|| (stack.peek().equals("s"))) {
@@ -169,13 +169,13 @@ public class printSetting {
 					temp.push("s");
 					temp.push("u");
 
-					clearAndReloadBothPanel(mem);
+					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 				}
 
 			}// end if
 			else if (stack.isEmpty()) {
-				clearAndReloadBothPanel(mem);
+				clearAndReloadBothPanel(repo);
 				UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 
 			}
@@ -185,7 +185,7 @@ public class printSetting {
 		else if ((firstWord.toLowerCase().equals("redo") || (firstWord
 				.toLowerCase().equals("r")))) {
 
-			clearAndReloadBothPanel(mem);
+			clearAndReloadBothPanel(repo);
 
 			if (!(temp.isEmpty())) {
 				if (temp.pop().equals("u")) {
@@ -193,43 +193,43 @@ public class printSetting {
 					if (temp.peek().equals("cp")) {
 
 						temp.pop();
-						clearAndReloadBothPanel(mem);
+						clearAndReloadBothPanel(repo);
 						UserInterfaceMain.tabbedPane.setSelectedIndex(1);
 
 					} else if (temp.peek().equals("ucp")) {
 
 						temp.pop();
-						clearAndReloadBothPanel(mem);
+						clearAndReloadBothPanel(repo);
 						UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 
 					} else if (temp.peek().equals("a")) {
 
 						temp.pop();
-						clearAndReloadBothPanel(mem);
+						clearAndReloadBothPanel(repo);
 						UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 
 					} else if (temp.peek().equals("d")) {
 
 						temp.pop();
-						clearAndReloadBothPanel(mem);
+						clearAndReloadBothPanel(repo);
 						UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 
 					} else if (temp.peek().equals("cl")) {
 
 						temp.pop();
-						clearAndReloadBothPanel(mem);
+						clearAndReloadBothPanel(repo);
 						UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 
 					} else if (temp.peek().equals("e")) {
 
 						temp.pop();
-						clearAndReloadBothPanel(mem);
+						clearAndReloadBothPanel(repo);
 						UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 
 					} else if (temp.peek().equals("s")) {
 
 						temp.pop();
-						clearAndReloadBothPanel(mem);
+						clearAndReloadBothPanelForTempList(repo);
 						UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 					}
 				}
@@ -237,7 +237,7 @@ public class printSetting {
 			}// end of if
 
 			else if (temp.isEmpty()) {
-				clearAndReloadBothPanel(mem);
+				clearAndReloadBothPanel(repo);
 				UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 			}
 
@@ -256,18 +256,18 @@ public class printSetting {
 		UserInterfaceMain.completedPanel.removeAll();
 	}
 
-	protected static void clearAndReloadBothPanel(Repository mem) {
+	protected static void clearAndReloadBothPanel(Repository repo) {
 		clearToDoPanel();
 		clearCompletedPanel();
-		printLabel(mem);
-		printCompletedLabel(mem);
+		printLabel(repo);
+		printCompletedLabel(repo);
 	}
 
-	protected static void clearAndReloadBothPanelForTempList(Repository mem) {
+	protected static void clearAndReloadBothPanelForTempList(Repository repo) {
 		clearToDoPanel();
 		clearCompletedPanel();
-		printTempLabel(mem);
-		printCompletedLabel(mem);
+		printTempLabel(repo);
+		printCompletedLabel(repo);
 	}
 
 	protected static void printCompletedLabel(Repository list) {
