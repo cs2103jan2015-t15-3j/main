@@ -1,11 +1,14 @@
 package logic;
 
+// @author A0112643R
+
 public class Message {
 
 	public static final String WELCOME = "Welcome to ProTask! For first time user, please refer to\nthe help guide.";
 	protected static final String CLEAR = "";
 
 	protected static final String TASK_NOT_FOUND = "%1$s is not found.";
+	protected static final String INDEX_NOT_FOUND = "%1$s is not found when retrieving task object";
 
 	protected static final String ADDED_SUCCESSFUL = "%1$s has been added successfully!";
 	protected static final String EDITED_SUCCESSFUL = "%1$s has been edited.";

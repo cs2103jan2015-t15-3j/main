@@ -21,12 +21,16 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import logic.LogicMain;
 import logic.Repository;
 import logic.Task;
 import logic.Message;
 import parser.ParserPowerSearch;
+
+//@author A0112961L
 
 @SuppressWarnings("serial")
 public class UserInterfaceMain extends JPanel {
@@ -143,14 +147,15 @@ public class UserInterfaceMain extends JPanel {
 
 					userInput = inputTextField.getText().toString();
 
+					String firstWord = getFirstWord(userInput);
+					System.out.println(firstWord);
+
 					mem = LogicMain.parseString(userInput, mem);
 
+					// if no error
 					printSetting.clearAndReloadBothPanel(mem);
 					printSetting.clearAndReloadBothPanelForTempList(mem);
-
-					String firstWord = getFirstWord(userInput);
-					// testing getFirstWord
-					System.out.println(firstWord);
+					// else dont do anything
 
 					try {
 						printSetting.displaySetting(firstWord, mem);
@@ -180,7 +185,6 @@ public class UserInterfaceMain extends JPanel {
 					Logging.getInputLog(userInput);
 
 					feedbackTextArea.setText(mem.getFeedback());
-					printSetting.feedbackTimerReset();
 
 					inputTextField.setText(null);
 
@@ -192,21 +196,14 @@ public class UserInterfaceMain extends JPanel {
 			public void keyReleased(KeyEvent e) {
 
 				String input = inputTextField.getText().toString();
-				System.out.println("input is " + input);
+				//System.out.println("input is " + input);
 
-				if ((input.equals("ps ")) || (input.equals("psearch "))) {
+				if ((input.regionMatches(true, 0, "ps ", 0, 3))) {
 
 					printSetting.clearToDoPanel();
-
-					toDoPanel.add(new JLabel("ps hello"));
-
-					System.out.println("ps entered");
 					tabbedPane.setSelectedIndex(0);
-
 					psList = ParserPowerSearch.powerSearch(input);
-					
-					System.out.println("ps list" + psList);
-
+					printSetting.printPowerSearchLabel(psList);
 				}
 
 				InputHistory.retrieveInputText(e);
@@ -214,6 +211,7 @@ public class UserInterfaceMain extends JPanel {
 						adjustListener);
 				completedScroller.getVerticalScrollBar()
 						.removeAdjustmentListener(adjustListener);
+
 			}
 
 			public void keyTyped(KeyEvent e) {

@@ -320,13 +320,11 @@ public class printSetting {
 		}
 	}
 
-	protected void printPowerSearchLabel(Repository list) {
+	protected static void printPowerSearchLabel(ArrayList<Task> list) {
 
-		// Collections.sort(list.getBuffer(), Compare.numComparator);
+		for (int i = 0; i < list.size(); i++) {
 
-		for (int i = 0; i < list.getTempBufferSize(); i++) {
-
-			Task task = list.getTempBuffer().get(i);
+			Task task = list.get(i);
 
 			String str = printPowerSearchList.returnString(task);
 
@@ -338,16 +336,5 @@ public class printSetting {
 			psLabel.setBorder(border);
 			UserInterfaceMain.toDoPanel.add(psLabel);
 		}
-	}
-
-	protected static void feedbackTimerReset() {
-
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				UserInterfaceMain.feedbackTextArea.setText("");
-			}
-		}, 10000);
 	}
 }

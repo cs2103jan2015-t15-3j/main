@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import logic.Enumerator.TaskType;
 
+//@author A0112643R
+
 public class Appointment extends Deadline {
 
 	private Date startDate;

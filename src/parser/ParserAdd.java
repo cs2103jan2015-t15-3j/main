@@ -6,6 +6,7 @@ public class ParserAdd {
 	
 	public static void addTask(Interpreter item, String input, String[] inputArray) throws ParseException {
 		String[] dateArray = null;
+		int startIndex = 1;
 		try {
 			if(input.length() < 2) {
 				throw new ParserException();
@@ -13,7 +14,7 @@ public class ParserAdd {
 				if(input.contains("[")) {
 					dateArray = defineDate(input);
 					String[] newInputArray = input.split("\\[");
-					//String taskName = 
+					//String taskName = convertArrayToString(newInputArray, startIndex, newInputArray.length - 2);
 					inputArray = newInputArray[0].split(" ");
 				}
 				
@@ -60,9 +61,10 @@ public class ParserAdd {
 	
 	public static void defineTaskName(Interpreter item, String[] inputArray) {
 		String taskName = "";
+		int startIndex = 1;
 		int lastIndex = inputArray.length - 1;
 		
-		taskName = convertArrayToString(inputArray, lastIndex);
+		taskName = convertArrayToString(inputArray, startIndex, lastIndex);
 		
 		try {
 			if(taskName.equals("") || taskName.equals(" ")) {
@@ -76,9 +78,9 @@ public class ParserAdd {
 		}
 	}
 	
-	public static String convertArrayToString(String[] inputArray, int lastIndex) {
+	public static String convertArrayToString(String[] inputArray, int startIndex, int lastIndex) {
 		String taskName = "";
-		for(int i=1; i<=lastIndex; i++){
+		for(int i=startIndex; i<=lastIndex; i++){
 			if(i==lastIndex) {
 				taskName = taskName.concat(inputArray[i]); 
 			} else {

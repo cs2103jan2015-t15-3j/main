@@ -1,17 +1,19 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
 import parser.Interpreter.CommandType;
+
+//@author A0112643R
 
 public class UndoManager {
 
 	protected static void determineUndo(Repository repo) {
 		History history = repo.undoActionPop();
 		ArrayList<Task> buffer = repo.getBuffer();
+		ArrayList<Task> tempBuffer = LogicMain.createTempBuffer(repo);
 
 		if (history.getCommand().equals(CommandType.ADD)) {
 			repo.redoActionPush(history);
@@ -56,7 +58,7 @@ public class UndoManager {
 
 		if (history.getCommand().equals(CommandType.SORT)) {
 			repo.redoActionPush(history);
-			undoSortAction(history.getHistoryBuffer(), repo);
+			undoSortAction(history.getHistoryBuffer(), tempBuffer);
 			repo.setFeedbackMsg(Message.CLEAR);
 		}
 	}
@@ -180,13 +182,8 @@ public class UndoManager {
 
 	private static void undoAmendAction(ArrayList<Task> historyBuffer,
 			Repository repo) {
-		Iterator<Task> list = historyBuffer.iterator();
-		ArrayList<Task> buffer = new ArrayList<Task>();
-
-		while (list.hasNext()) {
-			buffer.add(list.next());
-		}
-		repo.setBuffer(buffer);
+		ArrayList<Task> tempBuffer = LogicMain.createTempBuffer(repo);
+		repo.setBuffer(tempBuffer);
 	}
 
 	private static void undoCompleteAction(History history,
@@ -201,22 +198,13 @@ public class UndoManager {
 
 	private static void undoClearAction(ArrayList<Task> historyBuffer,
 			Repository repo) {
-		Iterator<Task> list = historyBuffer.iterator();
-		ArrayList<Task> buffer = new ArrayList<Task>();
 
-		while (list.hasNext()) {
-			buffer.add(list.next());
-		}
-		repo.setBuffer(buffer);
+		ArrayList<Task> tempBuffer = LogicMain.createTempBuffer(repo);
+		repo.setBuffer(tempBuffer);
 	}
 
 	private static void undoSortAction(ArrayList<Task> historyBuffer,
-			Repository repo) {
-		ArrayList<Task> tempBuffer = repo.getTempBuffer();
-
+			ArrayList<Task> tempBuffer) {
 		tempBuffer.removeAll(tempBuffer);
-
-		repo.setTempBuffer(tempBuffer);
-
 	}
 }

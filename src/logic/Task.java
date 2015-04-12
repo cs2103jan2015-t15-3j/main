@@ -2,6 +2,8 @@ package logic;
 
 import logic.Enumerator.TaskType;
 
+//@author A0112643R
+
 public class Task {
 
 	private int taskID;

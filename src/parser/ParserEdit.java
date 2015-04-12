@@ -9,7 +9,6 @@ public class ParserEdit {
 
 	public static void editTask(Interpreter item, String input, String[] inputArray)
 			throws ParseException {
-		
 		int ID;
 		String[] dateArray = null;
 		String[] editedInputArray = new String[inputArray.length - 2];
@@ -38,14 +37,13 @@ public class ParserEdit {
 				item.setIsStartDate(false);
 				Date date = null;
 				item.setStartDate(date);
-				item.setDueDate(date);
-				
-				defineTaskName(item, editedInputArray);
+				item.setDueDate(date);;
+				defineTaskName(item, editedInputArray, editedInputArray.length);
 			} else if(editedInputArray.length < 1) {
 				throw new ParserException();
 			} else {
 				defineTaskType(item, editedInputArray, dateArray);
-				defineTaskName(item, editedInputArray);	
+				defineTaskName(item, editedInputArray, editedInputArray.length - dateArray.length);
 			}
 		} catch (NumberFormatException nfe) {
 			item.setIsError(true);
@@ -58,13 +56,6 @@ public class ParserEdit {
 			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
 		}
 	}
-	
-	// This method checks the category targeted for edit
-	// by the user
-	public static void defineCategory() {
-		
-	}
-	
 	
 	public static String[] defineDate(String input) {
 		String[] splitInput = input.split("\\[");
@@ -81,7 +72,6 @@ public class ParserEdit {
 		} else {
 			dateArrayLength = dateArray.length; 
 		}
-		
 		try {
 			boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
 			
@@ -95,14 +85,14 @@ public class ParserEdit {
 		}
 	}
 
-	public static void defineTaskName(Interpreter item, String[] inputArray) {
+	public static void defineTaskName(Interpreter item, String[] inputArray, int length) {
 		String taskName = "";
-		int lastIndex = inputArray.length - 1;
-		for(int i=1; i<=lastIndex; i++){
+		int lastIndex = length - 1;
+		for(int i=0; i<=lastIndex; i++){
 			if(i==lastIndex) {
-				taskName = taskName.concat(inputArray[i]); 
+				taskName = taskName.concat(inputArray[i]);
 			} else {
-				taskName = taskName.concat(inputArray[i] + " ");	
+				taskName = taskName.concat(inputArray[i] + " ");
 			}			
 		}
 		

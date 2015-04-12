@@ -5,13 +5,10 @@ import java.util.ArrayList;
 import parser.Interpreter;
 
 public class UnitTest {
-	//public static Repository executeCommand(String command, Repository mem) {
-	//	return LogicMain.executeCommand(command, mem);
-	//}
-	public static void parseString(String command, Repository repo) {
+	// public static Repository executeCommand(String command, Repository mem) {
+	// return LogicMain.executeCommand(command, mem);
+	// }
 
-	}
-	
 	public static void addTask(Interpreter item, ArrayList<Task> buffer,
 			int index) {
 		Affix.addTask(item, buffer, index);
@@ -23,10 +20,6 @@ public class UnitTest {
 
 	public static void clearTask(ArrayList<Task> buffer) {
 		Obliterator.clearTask(buffer);
-	}
-
-	public static void determineAmend(Interpreter item, Repository repo) {
-		Amend.determineAmend(item, repo);
 	}
 
 	public static void sort(Repository mem) {
@@ -41,11 +34,54 @@ public class UnitTest {
 		SearchEngine.searchBufferIndex(taskID, buffer);
 	}
 
+	public static void determineAmend(Interpreter item, Repository repo) {
+		Amend.determineAmend(item, repo);
+	}
+
+	public static void determineClear(Interpreter item, ArrayList<Task> buffer) {
+		Obliterator.determineClear(item, buffer);
+	}
+
 	public static void determineSearch(String input, Repository mem) {
 		SearchEngine.determineSearch(input, mem);
 	}
-	
-	public static Task retrieveTask(Interpreter item, ArrayList<Task> buffer) {
-		return SearchEngine.retrieveTask(item, buffer);
+
+	public static void determineUndo(Repository repo) {
+		UndoManager.determineUndo(repo);
+	}
+
+	public static History pushAddToStack(Interpreter input, Repository repo) {
+		return UndoManager.pushAddToStack(input, repo);
+	}
+
+	public static History pushDeleteToStack(Interpreter input, Repository repo) {
+		return UndoManager.pushDeleteToStack(input, repo);
+	}
+
+	public static History pushAmendToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		return UndoManager.pushAmendToStack(input, buffer);
+	}
+
+	public static History pushClearToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		return UndoManager.pushClearToStack(input, buffer);
+	}
+
+	public static History pushCompleteOrUncompleteToStack(Interpreter input,
+			Repository repo) {
+		return UndoManager.pushCompleteOrUncompleteToStack(input, repo);
+	}
+
+	public static void determineRedo(Repository repo) {
+		RedoManager.determineRedo(repo);
+	}
+
+	public static Task retrieveTask(ArrayList<Task> buffer, int taskID) {
+		return SearchEngine.retrieveTask(buffer, taskID);
+	}
+
+	public static Repository parseString(String command, Repository repo) {
+		return LogicMain.parseString(command, repo);
 	}
 }

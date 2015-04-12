@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import parser.Interpreter;
+//@author A0112643R
 
 public class SearchEngine {
 
-	protected static void determineSearch(String input, Repository mem) {
-		ArrayList<Task> buffer = mem.getBuffer();
+	protected static void determineSearch(String input, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
 		int searchResult;
 		if (input.matches("-?\\d+(\\.\\d+)?")) {
-			mem.setTempBuffer(searchByTaskID(input.toLowerCase(), buffer));
-			searchResult = mem.getTempBufferSize();
-			mem.setFeedbackMsg(String
-					.format(Message.SEARCH_FOUND, searchResult));
+			repo.setTempBuffer(searchByTaskID(input.toLowerCase(), buffer));
+			searchResult = repo.getTempBufferSize();
+			repo.setFeedbackMsg(String.format(Message.SEARCH_FOUND,
+					searchResult));
 
 		} else {
-			mem.setTempBuffer(searchByKeyWords(input.toLowerCase(), buffer));
-			searchResult = mem.getTempBufferSize();
-			mem.setFeedbackMsg(String
-					.format(Message.SEARCH_FOUND, searchResult));
+			repo.setTempBuffer(searchByKeyWords(input.toLowerCase(), buffer));
+			searchResult = repo.getTempBufferSize();
+			repo.setFeedbackMsg(String.format(Message.SEARCH_FOUND,
+					searchResult));
 		}
 	}
 
@@ -65,8 +65,10 @@ public class SearchEngine {
 	}
 
 	protected static Task retrieveTask(ArrayList<Task> buffer, int taskID) {
+		Task retrieveType;
+
 		int index = searchBufferIndex(taskID, buffer);
-		Task retrieveType = buffer.get(index);
+		retrieveType = buffer.get(index);
 
 		return retrieveType;
 	}

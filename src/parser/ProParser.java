@@ -52,7 +52,7 @@ public class ProParser {
 		case "clear":
 		case "cl":
 			item.setCommandType(Interpreter.CommandType.CLEAR);
-			ParserClear.clearTask(item, inputArray);
+			ParserClear.clearTask(item, input, inputArray);
 			break;
 		case "display":
 		case "dp":

@@ -1,5 +1,7 @@
 package logic;
 
+//@author A0112643R
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -10,7 +12,6 @@ public class Repository {
 	private int currentID;
 	private String feedbackMsg;
 	private boolean isError;
-	private String databaseFilePath;
 	private Stack<History> undoAction;
 	private Stack<History> redoAction;
 
@@ -21,7 +22,6 @@ public class Repository {
 		this.undoAction = new Stack<History>();
 		this.redoAction = new Stack<History>();
 		this.feedbackMsg = "";
-		this.databaseFilePath = null;
 		this.isError = false;
 	}
 
@@ -66,10 +66,6 @@ public class Repository {
 		return this.redoAction;
 	}
 
-	public String getDatabaseFilePath() {
-		return this.databaseFilePath;
-	}
-
 	public void setIsError(boolean isError) {
 		this.isError = isError;
 	}
@@ -96,10 +92,6 @@ public class Repository {
 
 	public void setFeedbackMsg(String feedbackMsg) {
 		this.feedbackMsg = feedbackMsg;
-	}
-
-	public void setDatabaseFilePath(String databaseFilePath) {
-		this.databaseFilePath = databaseFilePath;
 	}
 
 	public void undoActionPush(History history) {

@@ -15,7 +15,7 @@ public class ParserDelete {
 		} catch (ParserException pe) {			
 			System.out.println("pe");
 			item.setIsError(true);
-			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
 			
 		} catch (NumberFormatException nfe) {
 			System.out.println("nfe");

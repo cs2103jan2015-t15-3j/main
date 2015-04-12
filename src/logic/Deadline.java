@@ -6,6 +6,8 @@ import java.util.Date;
 
 import logic.Enumerator.TaskType;
 
+//@author A0112643R
+
 public class Deadline extends Task {
 
 	private Date dueDate;
@@ -30,7 +32,7 @@ public class Deadline extends Task {
 	public void setDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
-	
+
 	public void setDueDateString(String dueDateString) {
 		String dateString = "";
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
