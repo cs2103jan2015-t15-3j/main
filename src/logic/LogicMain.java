@@ -58,6 +58,21 @@ public class LogicMain {
 		storage.writeToFile(repo);
 	}
 
+	private static void catchException(Interpreter input, Repository repo) {
+		repo.setIsError(input.getIsError());
+		repo.setFeedbackMsg(input.getFeedbackMsg());
+	}
+
+	protected static ArrayList<Task> createTempBuffer(Repository repo) {
+		ArrayList<Task> tempBuffer = new ArrayList<Task>();
+		Iterator<Task> list = repo.getBuffer().iterator();
+
+		while (list.hasNext()) {
+			tempBuffer.add(list.next());
+		}
+		return tempBuffer;
+	}
+
 	public static Repository parseString(String command, Repository repo) {
 		assert (command != null);
 		Interpreter input = new Interpreter();
@@ -75,17 +90,16 @@ public class LogicMain {
 
 	private static void executeCommand(Interpreter input, Repository repo) {
 		CommandType commandInfo = input.getCommand();
+		boolean isError = input.getIsError();
 
-		if (input.getIsError() == true) {
-			repo.setIsError(input.getIsError());
-			repo.setFeedbackMsg(input.getFeedbackMsg());
+		if (isError) {
+			catchException(input, repo);
 		}
 
 		switch (commandInfo) {
 		case ADD:
-			if (input.getIsError() == true) {
-				repo.setIsError(input.getIsError());
-				repo.setFeedbackMsg(input.getFeedbackMsg());
+			if (isError) {
+				catchException(input, repo);
 			}
 			Affix.addTask(input, repo.getBuffer(), repo.numberGenerator());
 			undoAdd(input, repo);
@@ -97,9 +111,13 @@ public class LogicMain {
 
 		case AMEND:
 			try {
-				undoAmend(input, repo);
-				Amend.determineAmend(input, repo);
-				updateStorage(repo);
+				if (isError) {
+					catchException(input, repo);
+				} else {
+					undoAmend(input, repo);
+					Amend.determineAmend(input, repo);
+					updateStorage(repo);
+				}
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
 						input.getTaskID()));
@@ -108,9 +126,8 @@ public class LogicMain {
 
 		case DELETE:
 			try {
-				if (input.getIsError() == true) {
-					repo.setIsError(input.getIsError());
-					repo.setFeedbackMsg(input.getFeedbackMsg());
+				if (isError) {
+					catchException(input, repo);
 				} else {
 					undoDelete(input, repo);
 					Obliterator.deleteTask(input.getTaskID(), repo);
@@ -125,6 +142,9 @@ public class LogicMain {
 		case CLEAR:
 			if (repo.getBuffer().isEmpty()) {
 				repo.setFeedbackMsg("There is nothing to clear");
+			}
+			if (isError) {
+				catchException(input, repo);
 			} else {
 				undoClear(input, repo);
 				Obliterator.determineClear(input, repo.getBuffer());
@@ -139,7 +159,11 @@ public class LogicMain {
 
 		case SEARCH:
 			try {
-				SearchEngine.determineSearch(input.getKey(), repo);
+				if (isError) {
+					catchException(input, repo);
+				} else {
+					SearchEngine.determineSearch(input.getKey(), repo);
+				}
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
 						input.getKey()));
@@ -176,9 +200,8 @@ public class LogicMain {
 
 		case COMPLETE:
 			try {
-				if (input.getIsError() == true) {
-					repo.setIsError(input.getIsError());
-					repo.setFeedbackMsg(input.getFeedbackMsg());
+				if (isError) {
+					catchException(input, repo);
 				} else {
 					Amend.setCompletion(input, repo);
 					updateStorage(repo);
@@ -192,9 +215,8 @@ public class LogicMain {
 
 		case UNCOMPLETE:
 			try {
-				if (input.getIsError() == true) {
-					repo.setIsError(input.getIsError());
-					repo.setFeedbackMsg(input.getFeedbackMsg());
+				if (isError) {
+					catchException(input, repo);
 				} else {
 					Amend.setCompletion(input, repo);
 					updateStorage(repo);
@@ -205,6 +227,14 @@ public class LogicMain {
 				Logging.getInputLog(Message.UNCOMPLETE_ERROR);
 			}
 			break;
+
+		// case MOVE:
+		// if (isError) {
+		// catchException(input, repo);
+		// } else {
+		// initializeStorage();
+		// storage.moveDatabase(input.getDataBasePath());
+		// }
 
 		case EXIT:
 			System.exit(MESSAGE_SYSTEM_EXIT);
@@ -230,12 +260,7 @@ public class LogicMain {
 
 	private static Repository undoAmend(Interpreter input, Repository repo) {
 		History amendedHistory = new History();
-		ArrayList<Task> tempBuffer = new ArrayList<Task>();
-		Iterator<Task> list = repo.getBuffer().iterator();
-
-		while (list.hasNext()) {
-			tempBuffer.add(list.next());
-		}
+		ArrayList<Task> tempBuffer = createTempBuffer(repo);
 
 		amendedHistory = UndoManager.pushAmendToStack(input, tempBuffer);
 		repo.undoActionPush(amendedHistory);
@@ -253,15 +278,9 @@ public class LogicMain {
 
 	private static void undoClear(Interpreter input, Repository repo) {
 		History clearedHistory = new History();
-		ArrayList<Task> tempBufferForClear = new ArrayList<Task>();
-		Iterator<Task> list = repo.getBuffer().iterator();
+		ArrayList<Task> tempBuffer = createTempBuffer(repo);
 
-		while (list.hasNext()) {
-			tempBufferForClear.add(list.next());
-		}
-
-		clearedHistory = UndoManager
-				.pushClearToStack(input, tempBufferForClear);
+		clearedHistory = UndoManager.pushClearToStack(input, tempBuffer);
 		repo.undoActionPush(clearedHistory);
 	}
 
