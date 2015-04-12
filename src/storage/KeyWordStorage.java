@@ -1,3 +1,4 @@
+//@author A0111842R
 package storage;
 
 import java.io.FileReader;
@@ -12,6 +13,7 @@ import java.util.Queue;
 
 import logic.Task;
 
+import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 
 public class KeyWordStorage {
@@ -26,13 +28,15 @@ public class KeyWordStorage {
 	private final Character[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 			'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
 			'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7',
-			'8', '9', ' ' };
+			'8', '9', ' ', '/', ':' };
 	private ArrayList<KeyWord> allKeyWords;
 	private ProTaskStorage pStorage;
+	private final String weightPercentage = "0.6";
 
-	public KeyWordStorage(String databaseName) {
+	public KeyWordStorage() {
 
-		taskDataBase = databaseName;
+		ProTaskStorage proT = new ProTaskStorage();
+		taskDataBase = proT.getCurrentDataBasePath() + "/test.csv";
 		allAlphabets = new ArrayList<KeyAlphabet>();
 		keyWordID = 1;
 		allKeyWords = new ArrayList<KeyWord>();
@@ -96,6 +100,9 @@ public class KeyWordStorage {
 
 	private ArrayList<KeyWord> weightSearch(String input) {
 
+		if (input.charAt(0) == ' ' && input.length() > 1) {
+			input = input.substring(1, input.length());
+		}
 		ArrayList<KeyWord> results = new ArrayList<KeyWord>();
 		for (KeyWord word : allKeyWords) {
 			int matchCount = 0;
@@ -114,8 +121,8 @@ public class KeyWordStorage {
 
 			int scale = 100;
 			BigDecimal num1 = new BigDecimal(matchCount);
-			BigDecimal num2 = new BigDecimal(input.length());
-			BigDecimal referenceNum = new BigDecimal("0.6");
+			BigDecimal num2 = new BigDecimal(word.getWord().length());
+			BigDecimal referenceNum = new BigDecimal(weightPercentage);
 			BigDecimal answer = num1.divide(num2, scale, RoundingMode.HALF_UP);
 
 			if (answer.compareTo(referenceNum) >= 0) {
@@ -163,21 +170,28 @@ public class KeyWordStorage {
 	private void mapKeyWords() {
 		for (KeyWord word : allKeyWords) {
 
-			Character[] chars = word.getSplitName().toArray(new Character[0]);
-			int index = 0;
+			if (!word.getWord().isEmpty()) {
+				Character[] chars = word.getSplitName().toArray(
+						new Character[0]);
+				int index = 0;
 
-			if (allAlphabets.get(getAlphabetIndex(chars[index])) != null) {
-				allAlphabets.get(getAlphabetIndex(chars[index])).addWord(word);
+				if (allAlphabets.get(getAlphabetIndex(chars[index])) != null) {
+					allAlphabets.get(getAlphabetIndex(chars[index])).addWord(
+							word);
 
-				if (index + 1 != chars.length) {
+					if (index + 1 != chars.length) {
 
-					mapping(word, chars[index + 1], index + 1,
-							allAlphabets.get(getAlphabetIndex(chars[index])));
+						mapping(word, chars[index + 1], index + 1,
+								allAlphabets
+										.get(getAlphabetIndex(chars[index])));
 
+					}
 				}
-			} else {// create one
-			}
 
+				else {// create one
+				}
+
+			}
 		}
 
 	}
@@ -204,7 +218,9 @@ public class KeyWordStorage {
 	}
 
 	private void populateDataBase() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(taskDataBase));
+		CSVReader reader = new CSVReader(new FileReader(taskDataBase),
+				CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER,
+				'\0');
 		List<String[]> allRows = reader.readAll();
 
 		for (String[] row : allRows) {
@@ -226,6 +242,38 @@ public class KeyWordStorage {
 				keyWordID++;
 				allKeyWords.add(keyTaskName);
 
+				if (row[6] == "AP") {
+					String startDate = row[2];
+					if (!startDate.isEmpty()) {
+						KeyWord keyStartDate = new KeyWord();
+						keyStartDate.setTaskID(taskID);
+						keyStartDate.setWord(startDate);
+						chars = new ArrayList<Character>();
+						for (int i = 0; i < taskName.length(); i++) {
+							chars.add(Character.toUpperCase(startDate.charAt(i)));
+						}
+						keyStartDate.setSplitName(chars);
+						keyStartDate.setKeyWordID(keyWordID);
+						keyWordID++;
+						allKeyWords.add(keyStartDate);
+					}
+				}
+				if (row[6] == "AP" || row[6] == "DE") {
+					String endDate = row[3];
+					if (!endDate.isEmpty()) {
+						KeyWord keyEndDate = new KeyWord();
+						keyEndDate.setTaskID(taskID);
+						keyEndDate.setWord(endDate);
+						chars = new ArrayList<Character>();
+						for (int i = 0; i < taskName.length(); i++) {
+							chars.add(Character.toUpperCase(endDate.charAt(i)));
+						}
+						keyEndDate.setSplitName(chars);
+						keyEndDate.setKeyWordID(keyWordID);
+						keyWordID++;
+						allKeyWords.add(keyEndDate);
+					}
+				}
 				String remarks = row[4];
 				// if remarks is not empty
 				if (!remarks.equals("")) {
