@@ -43,8 +43,7 @@ public class UserInterfaceMain extends JPanel {
 	private AdjustmentListener adjustListener;
 	private JScrollPane scrollPane;
 
-	Repository mem = new Repository();
-	Repository smem = new Repository();
+	Repository repo = new Repository();
 	ArrayList<Task> psList = new ArrayList<Task>();
 
 	/**
@@ -69,7 +68,7 @@ public class UserInterfaceMain extends JPanel {
 	 * @throws FileNotFoundException
 	 */
 	public UserInterfaceMain() throws FileNotFoundException {
-		initialize();
+		initialUIRun();
 	}
 
 	/**
@@ -77,7 +76,7 @@ public class UserInterfaceMain extends JPanel {
 	 * 
 	 * @throws FileNotFoundException
 	 */
-	private void initialize() throws FileNotFoundException {
+	private void initialUIRun() throws FileNotFoundException {
 		proTaskFrame();
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -137,8 +136,8 @@ public class UserInterfaceMain extends JPanel {
 		frame.getContentPane().add(helpLabel);
 
 		// initial load
-		smem = LogicMain.loadStorage();
-		printSetting.clearAndReloadBothPanel(smem);
+		repo = LogicMain.loadStorage();
+		printSetting.clearAndReloadBothPanel(repo);
 
 		KeyListener listener = new KeyListener() {
 			public void keyPressed(KeyEvent e) {
@@ -147,13 +146,13 @@ public class UserInterfaceMain extends JPanel {
 					userInput = inputTextField.getText().toString();
 					String firstWord = getFirstWord(userInput);
 
-					mem = LogicMain.parseString(userInput, smem);
+					repo = LogicMain.parseString(userInput, repo);
 
-					printSetting.clearAndReloadBothPanel(mem);
-					printSetting.clearAndReloadBothPanelForTempList(mem);
+					printSetting.clearAndReloadBothPanel(repo);
+					printSetting.clearAndReloadBothPanelForTempList(repo);
 
 					try {
-						printSetting.displaySetting(firstWord, mem);
+						printSetting.displaySetting(firstWord, repo);
 
 					} catch (EmptyStackException e1) {
 
@@ -179,7 +178,7 @@ public class UserInterfaceMain extends JPanel {
 
 					Logging.getInputLog(userInput);
 
-					feedbackTextArea.setText(mem.getFeedback());
+					feedbackTextArea.setText(repo.getFeedback());
 
 					inputTextField.setText(null);
 

@@ -236,6 +236,9 @@ public class LogicMain {
 			} else {
 				initializeStorage();
 				storage.moveDataBase(input.getDataBasePath());
+				repo.setFeedbackMsg(String.format(
+						Message.FILE_SUCCESSFULLY_MOVED,
+						input.getDataBasePath()));
 			}
 			break;
 

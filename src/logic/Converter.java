@@ -6,7 +6,7 @@ import logic.Enumerator.KEY;
 
 public class Converter {
 
-	protected static KEY KeyConverter(String key) {
+	public static KEY KeyConverter(String key) {
 		KEY keyReturn;
 
 		switch (key) {
