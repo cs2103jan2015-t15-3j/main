@@ -37,5 +37,6 @@ public class Message {
 
 	protected static final String COMPLETE_ERROR = "[COMPLETE] - IndexOutOfBoundsException";
 	protected static final String UNCOMPLETE_ERROR = "[UNCOMPLETE] - IndexOutOfBoundsException";
-	protected static final String FILE_INEXISTS = "File is not found.";
+
+	protected static final String FILE_SUCCESSFULLY_MOVED = "File is successfully moved to %1$s";
 }
