@@ -93,6 +93,11 @@ public class ProParser {
 		case "exit":
 			item.setCommandType(Interpreter.CommandType.EXIT);
 			break;
+		case "move":
+		case "mv":
+			item.setCommandType(Interpreter.CommandType.MOVE);
+			ParserMove.moveDataBase(item, inputArray);
+			break;
 		default:
 			item.setIsError(true);
 			item.setFeedbackMsg(ParserMessage.INVALID_COMMAND);
