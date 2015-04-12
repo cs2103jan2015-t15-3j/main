@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import userInterface.Logging;
 import logic.Task;
 
 import com.opencsv.CSVParser;
@@ -57,8 +58,7 @@ public class KeyWordStorage {
 			// System.out.println(allAlphabets);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logging.getInputLog("Unable to populate database, please check Database file!");
 		}
 
 	}
@@ -126,8 +126,8 @@ public class KeyWordStorage {
 			BigDecimal answer = num1.divide(num2, scale, RoundingMode.HALF_UP);
 
 			if (answer.compareTo(referenceNum) >= 0) {
-				System.out.println(answer.toString());
-				System.out.println(word.getWord());
+				//System.out.println(answer.toString());
+				//System.out.println(word.getWord());
 				results.add(word);
 			}
 		}
