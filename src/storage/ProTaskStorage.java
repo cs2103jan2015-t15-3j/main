@@ -31,7 +31,7 @@ import com.opencsv.CSVWriter;
 
 public class ProTaskStorage {
 
-	private final String taskDataBase = "test.csv";
+	private final String taskDataBase = "ProTaskDatabase.csv";
 	private final String tempDataBase = "temp.csv";
 	private final String dataBaseDir = "dataBaseDir.csv";
 	private String currentDataBasePath = "";
