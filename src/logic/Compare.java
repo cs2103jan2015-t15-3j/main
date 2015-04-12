@@ -16,8 +16,8 @@ public class Compare {
 
 	public static Comparator<Task> StringComparator = new Comparator<Task>() {
 		public int compare(Task bufferOne, Task bufferTwo) {
-			String first = bufferOne.getTaskName();
-			String second = bufferTwo.getTaskName();
+			String first = bufferOne.getTaskName().toLowerCase();
+			String second = bufferTwo.getTaskName().toLowerCase();
 			return first.compareTo(second);
 		}
 	};
