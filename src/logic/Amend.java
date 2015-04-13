@@ -41,33 +41,34 @@ public class Amend {
 	}
 
 	protected static void determineAmend(Interpreter item, Repository repo) {
-		KEY key = Converter.KeyConverter(item.getKey().toLowerCase());
-
-		switch (key) {
-		case TASKNAME:
+		if (item.getIsEditTaskName() == true)
 			amendName(item, repo);
-			break;
 
-		case STARTDATE:
+		if (item.getIsEditStartDate() == true)
 			amendStartDate(item, repo);
-			break;
 
-		case DUEDATE:
+		if (item.getIsEditDueDate() == true)
 			amendDueDate(item, repo);
-			break;
 
-		default:
+		if (item.getIsRemarks() == true)
 			amendRemarks(item, repo);
-		}
 	}
 
 	private static void amendName(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
-		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+		// History amendedHistory = new History();
 
+		// amendedHistory = UndoManager.pushAmendToStack(item,
+		// LogicMain.createTempBuffer(repo));
+		// System.out.println(amendedHistory.getHistoryBuffer());
+
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+		// repo.undoActionPush(amendedHistory);
 		task.setTaskName(item.getTaskName());
 		repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
 				item.getTaskID()));
+
+		// System.out.println(amendedHistory.getHistoryBuffer());
 	}
 
 	/*

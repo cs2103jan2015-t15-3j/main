@@ -123,14 +123,14 @@ public class LogicMain {
 				if (isError) {
 					catchException(input, repo);
 				} else {
-					History clearedHistory = new History();
-					ArrayList<Task> tempBuffer = createTempBuffer(repo);
+					// History clearedHistory = new History();
+					// ArrayList<Task> tempBuffer = createTempBuffer(repo);
 
-					clearedHistory = UndoManager.pushAmendToStack(input,
-							tempBuffer);
-					System.out.println(clearedHistory.getHistoryBuffer());
+					// clearedHistory = UndoManager.pushAmendToStack(input,
+					// tempBuffer);
+					// System.out.println(clearedHistory.getHistoryBuffer());
 					Amend.determineAmend(input, repo);
-					repo.undoActionPush(clearedHistory);
+					// repo.undoActionPush(clearedHistory);
 				}
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
