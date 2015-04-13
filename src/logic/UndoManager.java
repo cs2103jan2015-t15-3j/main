@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
@@ -18,6 +19,7 @@ public class UndoManager {
 		if (history.getCommand().equals(CommandType.ADD)) {
 			repo.redoActionPush(history);
 			undoAddAction(history.getIndex(), buffer);
+
 			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
 					history.getFeedbackMsg()));
 		}
@@ -31,7 +33,9 @@ public class UndoManager {
 		}
 
 		if (history.getCommand().equals(CommandType.AMEND)) {
+			// repo.redoActionPush(history);
 			undoAmendAction(history.getHistoryBuffer(), repo);
+
 			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
 					history.getFeedbackMsg()));
 		}
@@ -39,6 +43,7 @@ public class UndoManager {
 		if (history.getCommand().equals(CommandType.COMPLETE)) {
 			repo.redoActionPush(history);
 			undoCompleteAction(history, buffer);
+
 			repo.setFeedbackMsg(String.format(Message.UNCOMPLETE_TASK,
 					history.getFeedbackMsg()));
 		}
@@ -46,6 +51,7 @@ public class UndoManager {
 		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
 			repo.redoActionPush(history);
 			undoUncompleteAction(history, buffer);
+
 			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK,
 					history.getFeedbackMsg()));
 		}
@@ -53,12 +59,14 @@ public class UndoManager {
 		if (history.getCommand().equals(CommandType.CLEAR)) {
 			repo.redoActionPush(history);
 			undoClearAction(history.getHistoryBuffer(), repo);
+
 			repo.setFeedbackMsg(Message.UNDO_DELETE_ALL);
 		}
 
 		if (history.getCommand().equals(CommandType.SORT)) {
 			repo.redoActionPush(history);
 			undoSortAction(history.getHistoryBuffer(), tempBuffer);
+
 			repo.setFeedbackMsg(Message.CLEAR);
 		}
 	}
@@ -116,6 +124,7 @@ public class UndoManager {
 
 		deletedHistory.setCommand(input.getCommand());
 		deletedHistory.setFeedbackMsg(task.getTaskName());
+		deletedHistory.setTaskID(input.getTaskID());
 
 		if (task.getType().equals(TaskType.FLOATING)) {
 			deletedHistory.setTask(task);
@@ -140,6 +149,7 @@ public class UndoManager {
 
 		amendedHistory.setCommand(input.getCommand());
 		amendedHistory.setHistoryBuffer(buffer);
+		amendedHistory.setFeedbackMsg(input.getTaskName());
 
 		return amendedHistory;
 	}
@@ -182,8 +192,10 @@ public class UndoManager {
 
 	private static void undoAmendAction(ArrayList<Task> historyBuffer,
 			Repository repo) {
-		ArrayList<Task> tempBuffer = LogicMain.createTempBuffer(repo);
-		repo.setBuffer(tempBuffer);
+		// System.out.println(repo.getBuffer());
+		repo.getBuffer().removeAll(repo.getBuffer());
+		// System.out.println(historyBuffer);
+		repo.setBuffer(historyBuffer);
 	}
 
 	private static void undoCompleteAction(History history,
@@ -198,9 +210,7 @@ public class UndoManager {
 
 	private static void undoClearAction(ArrayList<Task> historyBuffer,
 			Repository repo) {
-
-		ArrayList<Task> tempBuffer = LogicMain.createTempBuffer(repo);
-		repo.setBuffer(tempBuffer);
+		repo.setBuffer(historyBuffer);
 	}
 
 	private static void undoSortAction(ArrayList<Task> historyBuffer,

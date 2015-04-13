@@ -8,7 +8,7 @@ import parser.Interpreter.CommandType;
 //@author A0112643R
 
 public class RedoManager {
-
+	
 	protected static void determineRedo(Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		History history = repo.redoActionPop();
@@ -20,7 +20,8 @@ public class RedoManager {
 		}
 
 		if (history.getCommand().equals(CommandType.DELETE)) {
-			redoDeleteAction(history.getIndex(), buffer);
+			redoDeleteAction(history.getTaskID(), buffer);
+			repo.undoActionPop();
 			repo.setFeedbackMsg(String.format(Message.REDO_ACTION,
 					history.getFeedbackMsg()));
 		}
@@ -43,7 +44,7 @@ public class RedoManager {
 		}
 
 		if (history.getCommand().equals(CommandType.AMEND)) {
-			redoClearAction(history.getHistoryBuffer(), repo);
+			redoAmendAction(history.getHistoryBuffer(), repo);
 			repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
 					history.getFeedbackMsg()));
 		}
@@ -67,7 +68,13 @@ public class RedoManager {
 		}
 	}
 
-	private static void redoDeleteAction(int index, ArrayList<Task> buffer) {
+	private static void redoAmendAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setTempBuffer(historyBuffer);
+	}
+
+	private static void redoDeleteAction(int taskID, ArrayList<Task> buffer) {
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
 		buffer.remove(index);
 	}
 

@@ -98,7 +98,6 @@ public class LogicMain {
 	}
 
 	private static void executeCommand(Interpreter input, Repository repo) {
-
 		CommandType commandInfo = input.getCommand();
 		boolean isError = input.getIsError();
 
