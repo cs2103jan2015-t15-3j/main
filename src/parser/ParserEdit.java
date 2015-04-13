@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.Date;
 import logic.Enumerator.TaskType;
 
+//@author: A0110818M
 public class ParserEdit {
 
 	public static void editTask(Interpreter item, String input, String[] inputArray)
@@ -43,6 +44,7 @@ public class ParserEdit {
 				if (dateArray == null){
 					defineTaskName(item, editedInputArray, editedInputArray.length);
 				} else {
+					System.out.println(editedInputArray.length - dateArray.length);
 					defineTaskName(item, editedInputArray, editedInputArray.length - dateArray.length);
 				}
 			}
@@ -58,12 +60,22 @@ public class ParserEdit {
 		}
 	}
 	
-	public static String[] defineDate(String input) {
+	private static String[] defineDate(String input) {
+		String[] dateArray = null;
 		String[] splitInput = input.split("\\[");
-		String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
-		String[] dateArray = splitDate[0].split(" ");
+		if(splitInput[splitInput.length - 1].equals("]")) {
+			dateArray = null;
+			return dateArray;
+		} else {
+			if(splitInput[splitInput.length - 1].contains("]")) {
+				String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
+				dateArray = splitDate[0].split(" ");
+			} else {
+				dateArray = splitInput[splitInput.length - 1].split(" ");
+			}
 		return dateArray;
-}
+		}
+	}
 
 	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
 		int dateArrayLength; 

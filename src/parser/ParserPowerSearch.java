@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import storage.KeyWordStorage;
 import logic.Task;
 
+//@author: A0110818M
 public class ParserPowerSearch {
 	
 	private static final String commandPS = "ps";

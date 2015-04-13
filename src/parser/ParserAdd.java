@@ -2,13 +2,14 @@ package parser;
 
 import java.text.ParseException;
 
+//@author: A0110818M
 public class ParserAdd {
 	
 	public static void addTask(Interpreter item, String input, String[] inputArray) throws ParseException {
 		String[] dateArray = null;
-	
+		int secondEntry = 1;
 		try {
-			if(inputArray.length < 2) {
+			if(inputArray.length < 2 || inputArray[secondEntry].equals("[]") || inputArray[secondEntry].equals("[")) {
 				throw new ParserException();
 			} else {
 				if(input.contains("[")) {

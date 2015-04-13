@@ -1,5 +1,6 @@
 package parser;
 
+//@author: A0110818M
 public class ParserMessage {
 	protected static final String INVALID_COMMAND = "The command does not exists.";
 	protected static final String INVALID_INPUT = "The input format you entered is invalid.";
