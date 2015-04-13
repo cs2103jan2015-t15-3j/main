@@ -137,7 +137,7 @@ public class UserInterfaceMain extends JPanel {
 
 		// initial load
 		repo = LogicMain.loadStorage();
-		printSetting.clearAndReloadBothPanel(repo);
+		PrintSetting.clearAndReloadBothPanel(repo);
 
 		KeyListener listener = new KeyListener() {
 			public void keyPressed(KeyEvent e) {
@@ -152,11 +152,11 @@ public class UserInterfaceMain extends JPanel {
 						Logging.getInputLog("File Not Found Exception when passing String to Logic");
 					}
 
-					printSetting.clearAndReloadBothPanel(repo);
-					printSetting.clearAndReloadBothPanelForTempList(repo);
+					PrintSetting.clearAndReloadBothPanel(repo);
+					PrintSetting.clearAndReloadBothPanelForTempList(repo);
 
 					try {
-						printSetting.displaySetting(firstWord, repo);
+						PrintSetting.displaySetting(firstWord, repo);
 
 					} catch (EmptyStackException e1) {
 
@@ -196,10 +196,10 @@ public class UserInterfaceMain extends JPanel {
 
 				if ((input.regionMatches(true, 0, "ps ", 0, 3))) {
 
-					printSetting.clearToDoPanel();
+					PrintSetting.clearToDoPanel();
 					tabbedPane.setSelectedIndex(0);
 					psList = ParserPowerSearch.powerSearch(input);
-					printSetting.printPowerSearchLabel(psList);
+					PrintSetting.printPowerSearchLabel(psList);
 				}
 
 				InputHistory.retrieveInputText(e);

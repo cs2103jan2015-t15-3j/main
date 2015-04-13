@@ -6,7 +6,7 @@ import logic.Task;
 
 //@author A0112961L
 
-public class printCompletedList {
+public class PrintTempToDoList {
 
 	private static final String HTML_OPEN = "<html>";
 	private static final String HTML_CLOSE = "</html>";
@@ -22,8 +22,7 @@ public class printCompletedList {
 		String name, start, end, remarks, str = null;
 
 		boolean completed = task.getCompleted();
-
-		if (completed == true) {
+		if (completed == false) {
 
 			String type = task.getType().toString();
 
@@ -42,7 +41,9 @@ public class printCompletedList {
 						+ "Start: " + start + HTML_BREAK + "Due: " + end
 						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
 						+ HTML_BREAK + HTML_CLOSE;
-			} else if (type.equals("DEADLINE")) {
+			}
+
+			else if (type.equals("DEADLINE")) {
 				Deadline dl = (Deadline) task;
 
 				id = task.getTaskID();
@@ -56,6 +57,7 @@ public class printCompletedList {
 						+ "Start: " + start + HTML_BREAK + "Due: " + end
 						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
 						+ HTML_BREAK + HTML_CLOSE;
+
 			} else {
 
 				id = task.getTaskID();
@@ -69,7 +71,6 @@ public class printCompletedList {
 						+ HTML_BREAK + "Due: " + end + HTML_BREAK + "Remarks: "
 						+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
 			}
-
 		}
 		return str;
 	}

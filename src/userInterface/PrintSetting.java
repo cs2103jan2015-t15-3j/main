@@ -15,7 +15,7 @@ import logic.Task;
 
 //@author A0112961L
 
-public class printSetting {
+public class PrintSetting {
 
 	private static final Stack<String> stack = new Stack<String>();
 	private static final Stack<String> temp = new Stack<String>();
@@ -270,7 +270,7 @@ public class printSetting {
 		for (int i = 0; i < list.getBufferSize(); i++) {
 			Task task = list.getBuffer().get(i);
 
-			String str = printCompletedList.returnString(task);
+			String str = PrintCompletedList.returnString(task);
 			JLabel completeLabel = new JLabel(str);
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);
@@ -284,7 +284,7 @@ public class printSetting {
 		for (int i = 0; i < list.getBufferSize(); i++) {
 			Task task = list.getBuffer().get(i);
 			
-			String str = printToDoList.returnString(task);
+			String str = PrintToDoList.returnString(task);
 			JLabel toDoLabel = new JLabel(str);
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);
@@ -298,7 +298,7 @@ public class printSetting {
 		for (int i = 0; i < list.getTempBufferSize(); i++) {
 			Task task = list.getTempBuffer().get(i);
 
-			String str = printTempToDoList.returnString(task);
+			String str = PrintTempToDoList.returnString(task);
 			JLabel tempLabel = new JLabel(str);
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);
@@ -312,7 +312,7 @@ public class printSetting {
 		for (int i = 0; i < list.size(); i++) {
 			Task task = list.get(i);
 
-			String str = printPowerSearchList.returnString(task);
+			String str = PrintPowerSearchList.returnString(task);
 			JLabel psLabel = new JLabel(str);
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);

@@ -6,7 +6,7 @@ import logic.Task;
 
 //@author A0112961L
 
-public class printPowerSearchList {
+public class PrintPowerSearchList {
 
 	private static final String HTML_OPEN = "<html>";
 	private static final String HTML_CLOSE = "</html>";
