@@ -2,8 +2,8 @@ package parser;
 
 import java.text.ParseException;
 import java.util.Date;
-
 import logic.Enumerator.TaskType;
+import logic.Enumerator.KEY;
 
 public class ParserEdit {
 
@@ -55,6 +55,8 @@ public class ParserEdit {
 			item.setIsError(true);
 			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
 		}
+		
+		System.out.println("ParserEdit: " + item.getTaskName());
 	}
 	
 	public static String[] defineDate(String input) {
@@ -95,11 +97,13 @@ public class ParserEdit {
 				taskName = taskName.concat(inputArray[i] + " ");
 			}			
 		}
+		item.setKey("taskName");
 		
 		try {
 			if(taskName.equals("") || taskName.equals(" ")) {
 				throw new NullPointerException();
 			} else {
+				System.out.println("reach here");
 				item.setTaskName(taskName);
 			}
 		} catch (NullPointerException npe) {

@@ -13,6 +13,7 @@ public class ProParser {
 				defineRemarks(item, splitInput[1]);
 				String inputWithoutRemarks = splitInput[0];
 				String[] inputArray = splitInput[0].split(" ");
+				item.setKey("remarks");
 				defineCommand(item, inputWithoutRemarks, inputArray);
 			} else if(input.equals(" ")) {
 				throw new NullPointerException();
@@ -67,6 +68,7 @@ public class ProParser {
 		case "e":
 			item.setCommandType(Interpreter.CommandType.AMEND);
 			ParserEdit.editTask(item, input, inputArray);
+			System.out.println("ProParser: " + item.getTaskName());
 			break;
 		case "undo":
 		case "u":
