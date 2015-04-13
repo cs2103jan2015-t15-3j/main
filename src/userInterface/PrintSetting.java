@@ -26,24 +26,17 @@ public class PrintSetting {
 	 */
 	protected static void displaySetting(String firstWord, Repository repo) {
 
-		if ((firstWord.toLowerCase().equals("search"))
+		if ((firstWord.toLowerCase().equals("sort")) || (firstWord.toLowerCase().equals("s"))) {
+			
+			clearAndReloadBothPanelForTempList(repo);
+			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
+			stack.push(firstWord);
+		}
+		
+		else if ((firstWord.toLowerCase().equals("search"))
 				|| (firstWord.toLowerCase().equals("find"))) {
 
 			clearAndReloadBothPanelForTempList(repo);
-			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("sort"))
-				|| (firstWord.toLowerCase().equals("s"))) {
-			stack.push(firstWord);
-			clearAndReloadBothPanelForTempList(repo);
-			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
-		}
-
-		else if ((firstWord.toLowerCase().equals("move"))
-				|| (firstWord.toLowerCase().equals("mv"))) {
-			stack.push(firstWord);
-			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 		}
 
@@ -90,6 +83,13 @@ public class PrintSetting {
 		else if ((firstWord.toLowerCase().equals("uncomplete") || (firstWord
 				.toLowerCase().equals("ucp")))) {
 
+			stack.push(firstWord);
+			clearAndReloadBothPanel(repo);
+			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
+		}
+		
+		else if ((firstWord.toLowerCase().equals("move"))
+				|| (firstWord.toLowerCase().equals("mv"))) {
 			stack.push(firstWord);
 			clearAndReloadBothPanel(repo);
 			UserInterfaceMain.tabbedPane.setSelectedIndex(0);
@@ -281,7 +281,6 @@ public class PrintSetting {
 	}
 
 	protected static void printTempLabel(Repository list) {
-		Collections.sort(list.getTempBuffer(), Compare.numComparator);
 		for (int i = 0; i < list.getTempBufferSize(); i++) {
 			Task task = list.getTempBuffer().get(i);
 

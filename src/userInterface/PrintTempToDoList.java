@@ -71,8 +71,6 @@ public class PrintTempToDoList {
 						+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
 			}
 		}
-		//test print for sort
-		System.out.println(str);
 		return str;
 	}
 }
