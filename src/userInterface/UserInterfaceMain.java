@@ -145,24 +145,16 @@ public class UserInterfaceMain extends JPanel {
 
 					userInput = inputTextField.getText().toString();
 					String firstWord = getFirstWord(userInput);
-
 					repo = LogicMain.parseString(userInput, repo);
-
-					PrintSetting.clearAndReloadBothPanel(repo);
-					PrintSetting.clearAndReloadBothPanelForTempList(repo);
 
 					try {
 						PrintSetting.displaySetting(firstWord, repo);
-
 					} catch (EmptyStackException e1) {
-
 						Logging.getInputLog("Empty Stack Exception from Display Setting");
 					}
 
 					adjustListener = new AdjustmentListener() {
-
 						public void adjustmentValueChanged(AdjustmentEvent e) {
-
 							e.getAdjustable().setValue(
 									e.getAdjustable().getMaximum());
 						}
@@ -174,11 +166,8 @@ public class UserInterfaceMain extends JPanel {
 							.addAdjustmentListener(adjustListener);
 
 					InputHistory.getInput(userInput);
-
 					Logging.getInputLog(userInput);
-
 					feedbackTextArea.setText(repo.getFeedback());
-
 					inputTextField.setText(null);
 
 				} else if (e.getKeyCode() == KeyEvent.VK_F1) {
@@ -204,6 +193,7 @@ public class UserInterfaceMain extends JPanel {
 				completedScroller.getVerticalScrollBar()
 						.removeAdjustmentListener(adjustListener);
 			}
+
 			public void keyTyped(KeyEvent e) {
 			}
 		};
