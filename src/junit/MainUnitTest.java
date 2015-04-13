@@ -166,7 +166,7 @@ public class MainUnitTest {
 	}
 
 	@Test
-	public void testSearchForTasks() {
+	public void testSearch() {
 		Repository repo = new Repository();
 
 		// Checks for both negative and positive range
@@ -273,4 +273,39 @@ public class MainUnitTest {
 		assertEquals("Current buffer size", 0, repo.getBufferSize());
 	}
 
+	@Test
+	public void testSort() {
+		Repository repo = new Repository();
+
+		// Adding some floating tasks for sorting
+		LogicMain.parseString("add ZULU", repo);
+		LogicMain.parseString("add apple", repo);
+		LogicMain.parseString("add Charlie", repo);
+		LogicMain.parseString("add APPLE", repo);
+		LogicMain.parseString("add Zebra", repo);
+
+		// Current buffer size is 5 after adding.
+		assertEquals("Current buffer size", 5, repo.getBufferSize());
+
+		// Before sort
+		int indexBeforeSort = UnitTest.searchBufferIndex(1, repo.getBuffer());
+		assertEquals("Index of ZULU", 0, indexBeforeSort);
+
+		// Issue the sort command to sort the buffer
+		LogicMain.parseString("sort", repo);
+
+		/*
+		 * After sorting, we will append the results and show using the temp
+		 * buffer. The results are sorted according to alphabets.
+		 */
+		assertEquals("Current buffer size", 5, repo.getTempBufferSize());
+
+		/*
+		 * We will search for TASK ID '1' with task name ZULU. This task object
+		 * will reside in index 4 of the temp buffer after sorting.
+		 */
+		int indexAfterSort = UnitTest
+				.searchBufferIndex(1, repo.getTempBuffer());
+		assertEquals("Index of ZULU", 4, indexAfterSort);
+	}
 }

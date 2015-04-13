@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import parser.Interpreter;
 
+//@author A0112643R
+
 public class UnitTest {
-	// public static Repository executeCommand(String command, Repository mem) {
-	// return LogicMain.executeCommand(command, mem);
-	// }
 
 	public static void addTask(Interpreter item, ArrayList<Task> buffer,
 			int index) {
@@ -30,8 +29,8 @@ public class UnitTest {
 		Amend.setCompletion(item, repo);
 	}
 
-	public static void searchBufferIndex(int taskID, ArrayList<Task> buffer) {
-		SearchEngine.searchBufferIndex(taskID, buffer);
+	public static int searchBufferIndex(int taskID, ArrayList<Task> buffer) {
+		return SearchEngine.searchBufferIndex(taskID, buffer);
 	}
 
 	public static void determineAmend(Interpreter item, Repository repo) {
@@ -79,9 +78,5 @@ public class UnitTest {
 
 	public static Task retrieveTask(ArrayList<Task> buffer, int taskID) {
 		return SearchEngine.retrieveTask(buffer, taskID);
-	}
-
-	public static Repository parseString(String command, Repository repo) {
-		return LogicMain.parseString(command, repo);
 	}
 }

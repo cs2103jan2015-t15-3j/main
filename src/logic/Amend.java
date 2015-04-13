@@ -43,6 +43,7 @@ public class Amend {
 		if (item.getIsRemarks() == true) {
 			amendRemarks(item, repo);
 		}
+
 		if (item.getType() == TaskType.FLOATING) {
 			amendName(item, repo);
 
@@ -59,19 +60,11 @@ public class Amend {
 
 	private static void amendName(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
-		// History amendedHistory = new History();
-
-		// amendedHistory = UndoManager.pushAmendToStack(item,
-		// LogicMain.createTempBuffer(repo));
-		// System.out.println(amendedHistory.getHistoryBuffer());
-
 		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
-		// repo.undoActionPush(amendedHistory);
+
 		task.setTaskName(item.getTaskName());
 		repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
 				item.getTaskID()));
-
-		// System.out.println(amendedHistory.getHistoryBuffer());
 	}
 
 	/*
@@ -112,9 +105,6 @@ public class Amend {
 	private static void amendDueDate(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
-
-		System.out.println("getTaskName " + item.getTaskName());
-		System.out.println("getDueDateString " + item.getDueDateString());
 
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;

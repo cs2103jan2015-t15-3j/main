@@ -6,7 +6,7 @@ import java.util.Collections;
 //@author A0112643R
 
 public class Organizer {
-	
+
 	protected static void sort(Repository repo) {
 		ArrayList<Task> addToTempBuffer = new ArrayList<Task>();
 

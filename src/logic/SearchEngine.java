@@ -8,6 +8,11 @@ import java.util.Iterator;
 
 public class SearchEngine {
 
+	protected static int convertToInt(String input) {
+		int number = Integer.parseInt(input);
+		return number;
+	}
+
 	protected static void determineSearch(String input, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		int searchResult;
@@ -44,7 +49,7 @@ public class SearchEngine {
 		ArrayList<Task> searchByIDList = new ArrayList<Task>();
 
 		Collections.sort(buffer, Compare.numComparator);
-		int num = Converter.convertToInt(input);
+		int num = convertToInt(input);
 		int index = searchBufferIndex(num, buffer);
 
 		searchByIDList.add(buffer.get(index));

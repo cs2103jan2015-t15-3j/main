@@ -30,7 +30,7 @@ public class Message {
 	protected static final String UNCOMPLETED_TASK = "%1$s is already marked as uncompleted.";
 	protected static final String CLEAR_COMPLETE_TASK = "All completed tasks have been successfully cleared.";
 	protected static final String BUFFER_EMPTY = "There is nothing to clear.";
-	
+
 	protected static final String REDO_ACTION = "%1$s has been redo successfully.";
 	protected static final String UNDO_ACTION = "%1$s has been undo successfully.";
 	protected static final String REDO_UNSUCCESSFUL = "There is nothing to redo.";

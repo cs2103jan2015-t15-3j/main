@@ -202,40 +202,6 @@ public class LogicUndoUnitTest {
 				tasks.getCompleted());
 	}
 
-	/*
-	 * @Test public void testUndoForAmend() throws ParseException { String
-	 * dateInString = "09/06/2013"; Date date = formatter.parse(dateInString);
-	 * 
-	 * deadline = new Interpreter(); deadline.setTaskID(1);
-	 * deadline.setTaskName("CS2103"); deadline.setDueDate(date);
-	 * deadline.setType(TaskType.DEADLINE); deadline.setRemarks("");
-	 * UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
-	 * 
-	 * Task tasks = UnitTest.retrieveTask(repo.getBuffer(),
-	 * deadline.getTaskID()); assertEquals("task name should be CS2103",
-	 * "CS2103", tasks.getTaskName());
-	 * 
-	 * deadline.setKey("TASKNAME"); deadline.setTaskName("CS2103T");
-	 * UnitTest.determineAmend(deadline, repo);
-	 * assertEquals("task name should be CS2103T after amend", "CS2103T",
-	 * tasks.getTaskName());
-	 * 
-	 * History amendedHistory = new History();
-	 * deadline.setCommandType(CommandType.AMEND); amendedHistory =
-	 * UnitTest.pushAmendToStack(deadline, repo);
-	 * repo.undoActionPush(amendedHistory);
-	 * 
-	 * try { UnitTest.determineUndo(repo);
-	 * 
-	 * } catch (EmptyStackException e) { System.out.println("Stack is empty!");
-	 * }
-	 * 
-	 * Task tasksTwo = UnitTest.retrieveTask(repo.getBuffer(),
-	 * deadline.getTaskID());
-	 * assertEquals("task name should be CS2103 after undo", "CS2103",
-	 * tasksTwo.getTaskName()); }
-	 */
-
 	@Test
 	public void testUndoForClear() throws ParseException {
 		String dateInString = "09/06/2013";
