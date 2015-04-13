@@ -190,7 +190,7 @@ public class HelpInfo {
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
-		//display
+		// display
 		str.append(createCommandTitle("Display"));
 		str.append(HTML_BREAK);
 		str.append("The display function allows you to display all your tasks.");

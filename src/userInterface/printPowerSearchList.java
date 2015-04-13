@@ -23,54 +23,51 @@ public class printPowerSearchList {
 
 		boolean completed = task.getCompleted();
 
-			String type = task.getType().toString();
+		String type = task.getType().toString();
 
-			if (type.equals("APPOINTMENT")) {
+		if (type.equals("APPOINTMENT")) {
 
-				Appointment appt = (Appointment) task;
+			Appointment appt = (Appointment) task;
 
-				id = task.getTaskID();
-				name = task.getTaskName();
-				start = appt.getStartDateString();
-				end = appt.getDueDateString();
-				remarks = task.getRemarks();
+			id = task.getTaskID();
+			name = task.getTaskName();
+			start = appt.getStartDateString();
+			end = appt.getDueDateString();
+			remarks = task.getRemarks();
 
-				str = HTML_OPEN + HTML_FONT_SIZE_4 + HTML_PURPLE_COLOR
-						+ HTML_BREAK + id + ". " + " " + name + HTML_BREAK
-						+ "Start: " + start + HTML_BREAK + "Due: " + end
-						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
-						+ HTML_BREAK + HTML_CLOSE;
-			}
+			str = HTML_OPEN + HTML_FONT_SIZE_4 + HTML_PURPLE_COLOR + HTML_BREAK
+					+ id + ". " + " " + name + HTML_BREAK + "Start: " + start
+					+ HTML_BREAK + "Due: " + end + HTML_BREAK + "Remarks: "
+					+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
+		}
 
-			else if (type.equals("DEADLINE")) {
-				Deadline dl = (Deadline) task;
+		else if (type.equals("DEADLINE")) {
+			Deadline dl = (Deadline) task;
 
-				id = task.getTaskID();
-				name = task.getTaskName();
-				start = " - ";
-				end = dl.getDueDateString();
-				remarks = task.getRemarks();
+			id = task.getTaskID();
+			name = task.getTaskName();
+			start = " - ";
+			end = dl.getDueDateString();
+			remarks = task.getRemarks();
 
-				str = HTML_OPEN + HTML_FONT_SIZE_4 + HTML_MAROON_COLOR
-						+ HTML_BREAK + id + ". " + " " + name + HTML_BREAK
-						+ "Start: " + start + HTML_BREAK + "Due: " + end
-						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
-						+ HTML_BREAK + HTML_CLOSE;
+			str = HTML_OPEN + HTML_FONT_SIZE_4 + HTML_MAROON_COLOR + HTML_BREAK
+					+ id + ". " + " " + name + HTML_BREAK + "Start: " + start
+					+ HTML_BREAK + "Due: " + end + HTML_BREAK + "Remarks: "
+					+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
 
-			} else {
+		} else {
 
-				id = task.getTaskID();
-				name = task.getTaskName();
-				start = " - ";
-				end = " - ";
-				remarks = task.getRemarks();
+			id = task.getTaskID();
+			name = task.getTaskName();
+			start = " - ";
+			end = " - ";
+			remarks = task.getRemarks();
 
-				str = HTML_OPEN + HTML_FONT_SIZE_4 + HTML_BREAK + id + ". "
-						+ " " + name + HTML_BREAK + "Start: " + start
-						+ HTML_BREAK + "Due: " + end + HTML_BREAK + "Remarks: "
-						+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
-			}
-
+			str = HTML_OPEN + HTML_FONT_SIZE_4 + HTML_BREAK + id + ". " + " "
+					+ name + HTML_BREAK + "Start: " + start + HTML_BREAK
+					+ "Due: " + end + HTML_BREAK + "Remarks: " + remarks
+					+ HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
+		}
 		return str;
 	}
 }

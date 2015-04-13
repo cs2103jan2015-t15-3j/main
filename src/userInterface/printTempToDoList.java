@@ -71,7 +71,6 @@ public class printTempToDoList {
 						+ HTML_BREAK + "Due: " + end + HTML_BREAK + "Remarks: "
 						+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
 			}
-
 		}
 		return str;
 	}

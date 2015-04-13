@@ -2,11 +2,9 @@ package userInterface;
 
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JFrame;
 
 //@author A0112961L
 

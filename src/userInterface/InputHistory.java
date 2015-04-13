@@ -27,20 +27,16 @@ public class InputHistory {
 
 	public static void retrieveInputText(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
-			if (!inputStack.isEmpty()) 
-			{
+			if (!inputStack.isEmpty()) {
 				pushToHistoryStack();
 			}
-		}
-			else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-				if (!historyStack.isEmpty()) 
-				{
-					pushToUserInputStack();
-				}
-
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			if (!historyStack.isEmpty()) {
+				pushToUserInputStack();
 			}
 		}
-	
+	}
+
 	private static void pushToHistoryStack() {
 		getInputText = inputStack.pop();
 		historyStack.push(getInputText);
@@ -52,5 +48,4 @@ public class InputHistory {
 		inputStack.push(getInputText);
 		UserInterfaceMain.inputTextField.setText(getInputText);
 	}
-
 }

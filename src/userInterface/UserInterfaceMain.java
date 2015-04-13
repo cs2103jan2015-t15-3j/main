@@ -146,7 +146,11 @@ public class UserInterfaceMain extends JPanel {
 					userInput = inputTextField.getText().toString();
 					String firstWord = getFirstWord(userInput);
 
-					repo = LogicMain.parseString(userInput, repo);
+					try {
+						repo = LogicMain.parseString(userInput, repo);
+					} catch (FileNotFoundException e2) {
+						Logging.getInputLog("File Not Found Exception when passing String to Logic");
+					}
 
 					printSetting.clearAndReloadBothPanel(repo);
 					printSetting.clearAndReloadBothPanelForTempList(repo);
@@ -159,7 +163,6 @@ public class UserInterfaceMain extends JPanel {
 						Logging.getInputLog("Empty Stack Exception from Display Setting");
 					}
 
-					// ScrollPane adjust automatically when new input is entered
 					adjustListener = new AdjustmentListener() {
 
 						public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -204,9 +207,7 @@ public class UserInterfaceMain extends JPanel {
 						adjustListener);
 				completedScroller.getVerticalScrollBar()
 						.removeAdjustmentListener(adjustListener);
-
 			}
-
 			public void keyTyped(KeyEvent e) {
 			}
 		};
@@ -228,7 +229,6 @@ public class UserInterfaceMain extends JPanel {
 		frame.setBounds(100, 100, 535, 770);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-
 	}
 
 	protected static String getFirstWord(String userCommand) {

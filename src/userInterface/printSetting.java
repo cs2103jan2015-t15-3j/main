@@ -172,16 +172,12 @@ public class printSetting {
 					clearAndReloadBothPanel(repo);
 					UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 				}
-
-			}// end if
+			}
 			else if (stack.isEmpty()) {
 				clearAndReloadBothPanel(repo);
 				UserInterfaceMain.tabbedPane.setSelectedIndex(0);
-
 			}
-
-		}// end undo
-
+		}
 		else if ((firstWord.toLowerCase().equals("redo") || (firstWord
 				.toLowerCase().equals("r")))) {
 
@@ -233,15 +229,13 @@ public class printSetting {
 						UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 					}
 				}
-
-			}// end of if
+			}
 
 			else if (temp.isEmpty()) {
 				clearAndReloadBothPanel(repo);
 				UserInterfaceMain.tabbedPane.setSelectedIndex(0);
 			}
-
-		}// end of Re-do
+		}
 	}
 
 	protected static void clearToDoPanel() {
@@ -271,21 +265,16 @@ public class printSetting {
 	}
 
 	protected static void printCompletedLabel(Repository list) {
-		Collections.sort(list.getBuffer(), Compare.numComparator);
-
+	Collections.sort(list.getBuffer(), Compare.numComparator);
+	
 		for (int i = 0; i < list.getBufferSize(); i++) {
-
 			Task task = list.getBuffer().get(i);
 
 			String str = printCompletedList.returnString(task);
-
 			JLabel completeLabel = new JLabel(str);
-
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);
-
 			completeLabel.setBorder(border);
-
 			UserInterfaceMain.completedPanel.add(completeLabel);
 		}
 	}
@@ -293,53 +282,40 @@ public class printSetting {
 	protected static void printLabel(Repository list) {
 		Collections.sort(list.getBuffer(), Compare.numComparator);
 		for (int i = 0; i < list.getBufferSize(); i++) {
-
 			Task task = list.getBuffer().get(i);
-
+			
 			String str = printToDoList.returnString(task);
-
 			JLabel toDoLabel = new JLabel(str);
-
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);
-
 			toDoLabel.setBorder(border);
-
 			UserInterfaceMain.toDoPanel.add(toDoLabel);
 		}
 	}
 
 	protected static void printTempLabel(Repository list) {
-		Collections.sort(list.getBuffer(), Compare.numComparator);
+		Collections.sort(list.getTempBuffer(), Compare.numComparator);
 		for (int i = 0; i < list.getTempBufferSize(); i++) {
-
 			Task task = list.getTempBuffer().get(i);
 
 			String str = printTempToDoList.returnString(task);
-
 			JLabel tempLabel = new JLabel(str);
-
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);
-
 			tempLabel.setBorder(border);
 			UserInterfaceMain.toDoPanel.add(tempLabel);
 		}
 	}
 
 	protected static void printPowerSearchLabel(ArrayList<Task> list) {
-
+		Collections.sort(list, Compare.numComparator);
 		for (int i = 0; i < list.size(); i++) {
-
 			Task task = list.get(i);
 
 			String str = printPowerSearchList.returnString(task);
-
 			JLabel psLabel = new JLabel(str);
-
 			Border border = BorderFactory.createMatteBorder(0, 0, 1, 0,
 					Color.darkGray);
-
 			psLabel.setBorder(border);
 			UserInterfaceMain.toDoPanel.add(psLabel);
 		}
