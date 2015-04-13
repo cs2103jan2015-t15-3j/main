@@ -54,9 +54,9 @@ public class ProTaskStorage {
 		idCounter = 0;
 		currentDataBasePath = System.getProperty("user.dir");
 		retrieveDataBasesDir();
-		if (!isFileExists(currentDataBasePath+"/"+taskDataBase)) {
+		if (!isFileExists(currentDataBasePath + "/" + taskDataBase)) {
 
-			createDataBase(currentDataBasePath+"/"+taskDataBase);
+			createDataBase(currentDataBasePath + "/" + taskDataBase);
 		}
 
 		try {
@@ -68,44 +68,41 @@ public class ProTaskStorage {
 
 	}
 
-	private void createDataBaseDir()
-	{		
-		try{
-		FileWriter fWriter = new FileWriter(dataBaseDir);
+	private void createDataBaseDir() {
+		try {
+			FileWriter fWriter = new FileWriter(dataBaseDir);
 
-		for (int i = 0; i < dataBaseDirColumns.length; i++) {
-			fWriter.append(dataBaseDirColumns[i]);
+			for (int i = 0; i < dataBaseDirColumns.length; i++) {
+				fWriter.append(dataBaseDirColumns[i]);
 
-			if (i == dataBaseDirColumns.length - 1) {
+				if (i == dataBaseDirColumns.length - 1) {
 
-				fWriter.append('\n');
-			} else {
+					fWriter.append('\n');
+				} else {
 
-				fWriter.append(",");
+					fWriter.append(",");
+				}
 			}
-		}
-		fWriter.flush();
-		fWriter.close();
+			fWriter.flush();
+			fWriter.close();
 
-		CSVWriter writer = new CSVWriter(new FileWriter(dataBaseDir,
-				true));
+			CSVWriter writer = new CSVWriter(new FileWriter(dataBaseDir, true));
 
-		ArrayList<String> record = new ArrayList<String>();
+			ArrayList<String> record = new ArrayList<String>();
 
-		record.add(currentDataBasePath);
-		record.add("");
+			record.add(currentDataBasePath);
+			record.add("");
 
-		writer.writeNext((String[])
+			writer.writeNext((String[])
 
-		record.toArray(new String[0]));
+			record.toArray(new String[0]));
 
-		writer.close();
-		}
-		catch (IOException e) {
+			writer.close();
+		} catch (IOException e) {
 			Logging.getInputLog("Exception thrown when program attemmpts to create database!");
 		}
 	}
-	
+
 	private void retrieveDataBasesDir() {
 		boolean isColumn = true;
 		boolean firstAppLaunch = false;
@@ -116,7 +113,9 @@ public class ProTaskStorage {
 				firstAppLaunch = true;
 			}
 			if (!firstAppLaunch) {
-				CSVReader reader = new CSVReader(new FileReader(dataBaseDir),CSVParser.DEFAULT_SEPARATOR,CSVParser.DEFAULT_QUOTE_CHARACTER,'\0');
+				CSVReader reader = new CSVReader(new FileReader(dataBaseDir),
+						CSVParser.DEFAULT_SEPARATOR,
+						CSVParser.DEFAULT_QUOTE_CHARACTER, '\0');
 				List<String[]> allRows = reader.readAll();
 				for (String[] row : allRows) {
 					if (isColumn) {
@@ -133,41 +132,42 @@ public class ProTaskStorage {
 		}
 	}
 
-	public String getCurrentDataBasePath()
-	{
+	public String getCurrentDataBasePath() {
 		retrieveDataBasesDir();
 		return this.currentDataBasePath;
 	}
+
 	public boolean moveDataBase(String newPath) {
 		boolean successMove = false;
 		retrieveDataBasesDir();
 		File file = new File(newPath);
-		// 1) 
+		// 1) The user inputs the expected input (existent directory)
 		if (file.exists() && file.isDirectory()) {
-			
-			File source = new File(currentDataBasePath+"/"+taskDataBase);
+
+			File source = new File(currentDataBasePath + "/" + taskDataBase);
 			File destination = new File(newPath + "/" + taskDataBase);
 			File dataBaseDirPath = new File(dataBaseDir);
-			
-			try {
-				
-				transferFileLocation(source, destination);
-				source.delete();
-				currentDataBasePath = newPath;
-				dataBaseDirPath.delete();
-				createDataBaseDir();
-				
-			} catch (IOException e) {
-				Logging.getInputLog("IO File exceptions when attempting to move database!");
+			if (!source.equals(destination)) {
+				try {
+
+					transferFileLocation(source, destination);
+					source.delete();
+					currentDataBasePath = newPath;
+					dataBaseDirPath.delete();
+					createDataBaseDir();
+
+				} catch (IOException e) {
+					Logging.getInputLog("IO File exceptions when attempting to move database!");
+				}
+				successMove = true;
 			}
-			successMove = true;
 		}
-		// 2
-		if (file.exists() && file.isFile()) {
+		// 2 The user specifies file instead of target directory
+		else if (file.exists() && file.isFile()) {
 			Logging.getInputLog("User inputs file instead of new directory to move database!");
 		}
-		// 3
-		if (!file.exists()) {
+		// 3 The user specifies a directory that doesn't exist
+		else if (!file.exists()) {
 			Logging.getInputLog("User inputs a non existent directory to move database!");
 		}
 		return successMove;
@@ -255,16 +255,16 @@ public class ProTaskStorage {
 			return false;
 	}
 
-
 	private void replaceTempToOriginal() {
 		File oldfile = new File(tempDataBase);
-		File newfile = new File(currentDataBasePath+"/"+taskDataBase);
+		File newfile = new File(currentDataBasePath + "/" + taskDataBase);
 
 		newfile.delete();
 		if (oldfile.renameTo(newfile)) {
-			Logging.getInputLog("Rename of "+tempDataBase+" is successful.");
+			Logging.getInputLog("Rename of " + tempDataBase + " is successful.");
 		} else {
-			Logging.getInputLog("Rename of "+tempDataBase+" to "+newfile.getAbsolutePath()+" unsucessful.");
+			Logging.getInputLog("Rename of " + tempDataBase + " to "
+					+ newfile.getAbsolutePath() + " unsucessful.");
 		}
 	}
 
@@ -347,30 +347,32 @@ public class ProTaskStorage {
 
 			if (type.equals("APPOINTMENT")) {
 				Appointment item = (Appointment) newTask;
-				addStringTask(currentDataBasePath+"/"+taskDataBase, repo.getCurrentID(),
-						newTask.getTaskName(), item.getStartDateString(),
-						item.getDueDateString(), newTask.getRemarks(), false,
-						newTask.getType().toString());
+				addStringTask(currentDataBasePath + "/" + taskDataBase,
+						repo.getCurrentID(), newTask.getTaskName(),
+						item.getStartDateString(), item.getDueDateString(),
+						newTask.getRemarks(), false, newTask.getType()
+								.toString());
 			} else if (type.equals("DEADLINE")) {
 				Deadline item = (Deadline) newTask;
 				newTask.setTaskID(repo.getCurrentID());
-				addStringTask(currentDataBasePath+"/"+taskDataBase, repo.getCurrentID(),
-						newTask.getTaskName(), "", item.getDueDateString(),
-						newTask.getRemarks(), false, newTask.getType()
-								.toString());
+				addStringTask(currentDataBasePath + "/" + taskDataBase,
+						repo.getCurrentID(), newTask.getTaskName(), "",
+						item.getDueDateString(), newTask.getRemarks(), false,
+						newTask.getType().toString());
 			} else {
 				newTask.setTaskID(repo.getCurrentID());
 
-				addStringTask(currentDataBasePath+"/"+taskDataBase, repo.getCurrentID(),
-						newTask.getTaskName(), "", "", newTask.getRemarks(),
-						false, newTask.getType().toString());
+				addStringTask(currentDataBasePath + "/" + taskDataBase,
+						repo.getCurrentID(), newTask.getTaskName(), "", "",
+						newTask.getRemarks(), false, newTask.getType()
+								.toString());
 			}
 			idCounter++;
 
 			if (justLaunched) {
 				justLaunched = false;
 				allTasks.add(newTask);
-				//repo.setBuffer(allTasks);
+				// repo.setBuffer(allTasks);
 			}
 		}
 		return repo;
@@ -379,7 +381,8 @@ public class ProTaskStorage {
 	public Repository getAllTasks() throws FileNotFoundException {
 		Repository mem = new Repository();
 		try {
-			CSVReader reader = new CSVReader(new FileReader(currentDataBasePath+"/"+taskDataBase));
+			CSVReader reader = new CSVReader(new FileReader(currentDataBasePath
+					+ "/" + taskDataBase));
 			tasks = new ArrayList<Task>();
 
 			boolean isColumn = true;
@@ -473,7 +476,8 @@ public class ProTaskStorage {
 	public void loadAllTasks() throws FileNotFoundException {
 		// Build reader instance
 
-		CSVReader reader = new CSVReader(new FileReader(currentDataBasePath+"/"+taskDataBase));
+		CSVReader reader = new CSVReader(new FileReader(currentDataBasePath
+				+ "/" + taskDataBase));
 
 		try {
 
@@ -568,20 +572,20 @@ public class ProTaskStorage {
 
 	public Repository clearAllTasks(Repository repo)
 			throws FileNotFoundException {
-		File file = new File(currentDataBasePath+"/"+taskDataBase);
+		File file = new File(currentDataBasePath + "/" + taskDataBase);
 		previousBuffer = repo.getBuffer();
 		repo.setBuffer(new ArrayList<Task>());
 		allTasksIDs.clear();
-		idCounter = 0 ;
-		
+		idCounter = 0;
+
 		if (file.delete()) {
 			Logging.getInputLog(file.getName() + " is deleted!");
 		} else {
 			Logging.getInputLog("Delete operation failed!");
 		}
-		createDataBase(currentDataBasePath+"/"+taskDataBase);
+		createDataBase(currentDataBasePath + "/" + taskDataBase);
 		repo.setCurrentID(idCounter);
-		
+
 		return repo;
 	}
 
