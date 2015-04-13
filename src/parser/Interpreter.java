@@ -16,6 +16,7 @@ public class Interpreter {
 	private CommandType command;
 	private int taskID;
 	private String taskName;
+	private boolean isRemarks;
 	private String remarks;
 	private boolean isCompleted;
 	private TaskType type;
@@ -27,10 +28,6 @@ public class Interpreter {
 	private String feedbackMsg;
 	private String modeClear;
 	private boolean isError;
-	private boolean isEditTaskName;
-	private boolean isEditDueDate;
-	private boolean isEditStartDate;
-	private boolean isRemarks;
 	private String dataBasePath;
 	
 	
@@ -48,6 +45,10 @@ public class Interpreter {
 		return this.taskName;
 	}
 
+	public boolean getIsRemarks() {
+		return this.isRemarks;
+	}
+	
 	public String getRemarks() {
 		return this.remarks;
 	}
@@ -59,7 +60,7 @@ public class Interpreter {
 	public TaskType getType() {
 		return this.type;
 	}
-
+	
 	public boolean getIsDueDate() {
 		return this.isDueDate;
 	}
@@ -92,22 +93,6 @@ public class Interpreter {
 		return this.isError;
 	}
 	
-	public boolean getIsEditTaskName() {
-		return this.isEditTaskName;
-	}
-	
-	public boolean getIsEditDueDate() {
-		return this.isEditDueDate;
-	}
-	
-	public boolean getIsEditStartDate() {
-		return this.isEditStartDate;
-	}
-	
-	public boolean getIsRemarks() {
-		return this.isRemarks;
-	}
-	
 	
 	/*============SET METHODS============*/
 	
@@ -125,6 +110,10 @@ public class Interpreter {
 
 	public void setTaskID(int taskID) {
 		this.taskID = taskID;
+	}
+	
+	public void setIsRemarks(boolean isRemarks) {
+		this.isRemarks = isRemarks;
 	}
 
 	public void setRemarks(String remarks) {
@@ -165,22 +154,6 @@ public class Interpreter {
 
 	public void setIsError(boolean isError) {
 		this.isError = isError;
-	}
-	
-	public void setIsEditTaskName(boolean isEditTaskName) {
-		this.isEditTaskName = isEditTaskName;
-	}
-	
-	public void setIsEditDueDate(boolean isEditDueDate) {
-		this.isEditDueDate = isEditDueDate;
-	}
-	
-	public void setIsEditStartDate(boolean isEditStartDate) {
-		this.isEditStartDate = isEditStartDate;
-	}
-	
-	public void setIsRemarks(boolean isRemarks) {
-		this.isRemarks = isRemarks;
 	}
 	
 	

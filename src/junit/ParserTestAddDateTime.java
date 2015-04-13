@@ -27,7 +27,6 @@ public class ParserTestAddDateTime {
 		assertEquals("StartDateString: ", "null", item.getStartDateString());
 		assertEquals("DueDateString: ", "null", item.getDueDateString());
 		assertEquals("TaskName: ", "checking no date no time format", item.getTaskName());
-		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "remarks here", item.getRemarks());
 		
 		// Check if Deadline
@@ -41,7 +40,6 @@ public class ParserTestAddDateTime {
 		assertEquals("StartDateString: ", "null", item.getStartDateString());
 		assertEquals("DueDateString: ", "11/11/11 23:59", item.getDueDateString());
 		assertEquals("TaskName: ", "checking date without time format", item.getTaskName());
-		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "remarks here", item.getRemarks());
 		
 		// Check if Deadline
@@ -54,7 +52,6 @@ public class ParserTestAddDateTime {
 		assertEquals("StartDateString: ", "null", item.getStartDateString());
 		assertEquals("DueDateString: ", "11/11/11 11:11", item.getDueDateString());
 		assertEquals("TaskName: ", "checking single date with time format", item.getTaskName());
-		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "hello", item.getRemarks());
 		
 		// Check if Appointment
@@ -67,7 +64,6 @@ public class ParserTestAddDateTime {
 		assertEquals("StartDateString: ", "11/11/11 23:59", item.getStartDateString());
 		assertEquals("DueDateString: ", "12/12/12 23:59", item.getDueDateString());
 		assertEquals("TaskName: ", "checking double date without time format 11/11/11 12/12/12", item.getTaskName());
-		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "remarks", item.getRemarks());
 		
 		
@@ -80,7 +76,6 @@ public class ParserTestAddDateTime {
 		assertEquals("StartDateString: ", "11/11/11 23:59", item.getStartDateString());
 		assertEquals("DueDateString: ", "12/12/12 12:12", item.getDueDateString());
 		assertEquals("TaskName: ", "checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12", item.getTaskName());
-		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "Testing", item.getRemarks());
 		
 		
@@ -93,7 +88,6 @@ public class ParserTestAddDateTime {
 		assertEquals("StartDateString: ", "11/11/11 11:11", item.getStartDateString());
 		assertEquals("DueDateString: ", "12/12/12 23:59", item.getDueDateString());
 		assertEquals("TaskName: ", "checking double date, start date with and due date without time format 11/11/11 11:11 12/12/12", item.getTaskName());
-		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "YAYYYYYY", item.getRemarks());
 		
 		// Check if Appointment
@@ -104,7 +98,6 @@ public class ParserTestAddDateTime {
 		assertEquals("StartDateString: ", "11/11/11 11:11", item.getStartDateString());
 		assertEquals("DueDateString: ", "12/12/12 12:12", item.getDueDateString());
 		assertEquals("TaskName: ", "checking double date with double time format", item.getTaskName());
-		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "insert remarks here", item.getRemarks());
 		
 		
