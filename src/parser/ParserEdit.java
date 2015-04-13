@@ -2,6 +2,7 @@ package parser;
 
 import java.text.ParseException;
 import java.util.Date;
+
 import logic.Enumerator.TaskType;
 
 public class ParserEdit {
@@ -23,13 +24,7 @@ public class ParserEdit {
 			if(input.contains("[")) {
 				dateArray = defineDate(input);
 				String[] newInputArray = input.split("\\[");
-				inputArray = newInputArray[0].split(" ");
-				for(int i=0; i<inputArray.length; i++) {
-				System.out.print(""+inputArray[i]+" ");
-				}
-				System.out.println();
 			}
-			
 			for (int i = 2; i < inputArray.length; i++) {
 				editedInputArray[i - 2] = inputArray[i];
 			}
@@ -46,7 +41,11 @@ public class ParserEdit {
 				throw new ParserException();
 			} else {
 				defineTaskType(item, editedInputArray, dateArray);
-				defineTaskName(item, editedInputArray, editedInputArray.length - dateArray.length);
+				if (dateArray == null){
+					defineTaskName(item, editedInputArray, editedInputArray.length);
+				} else {
+					defineTaskName(item, editedInputArray, editedInputArray.length - dateArray.length);
+				}
 			}
 		} catch (NumberFormatException nfe) {
 			item.setIsError(true);
@@ -54,7 +53,7 @@ public class ParserEdit {
 		} catch (ParserException pe) {
 			item.setIsError(true);
 			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
-		} catch (NullPointerException npe) {
+	} catch (NullPointerException npe) {
 			item.setIsError(true);
 			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
 		}
@@ -69,7 +68,6 @@ public class ParserEdit {
 
 	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
 		int dateArrayLength; 
-		
 		if(dateArray == null) {
 			dateArrayLength = 0;
 		} else {

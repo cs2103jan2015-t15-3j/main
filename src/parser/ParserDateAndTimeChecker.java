@@ -31,7 +31,6 @@ public class ParserDateAndTimeChecker {
 	private static String DEFAULT_TIME = "23:59";
 	
 	public static boolean isDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
-		
 		switch(length) {
 			case 0:
 				setFloating(item);
@@ -153,7 +152,6 @@ public class ParserDateAndTimeChecker {
 	}
 	
 	private static Date setDate(Interpreter item, String inputDate, String inputTime) {
-		//System.out.println("setDate");
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
 		String inputDateAndTime = inputDate + " " + inputTime;
 		sdf.setLenient(true);
