@@ -154,7 +154,7 @@ public class HelpInfo {
 
 		str.append(createCommandTitle("Edit"));
 		str.append(HTML_BREAK);
-		str.append("The edit function allows your to amend your tasks.");
+		str.append("The edit function allows you to amend your tasks.");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -169,24 +169,30 @@ public class HelpInfo {
 		str.append("id");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
-
+		
+		str.append("There are ");
+		str.append(HTML_UNDERLINE_OPEN);
+		str.append("three");
+		str.append(HTML_UNDERLINE_CLOSE);
+		str.append(" types of way you can edit your tasks.");
+		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 		str.append(maroonFont("1. "
-				+ bold("You can edit your task name by specifying the ID.")));
+				+ bold("You can edit by specifying the ID followed by task name (Floating Task)")));
 		str.append(HTML_BREAK);
 		str.append(createExample("'edit 22 dinner with family next friday evening"));
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 		str.append(maroonFont("2. "
-				+ bold("You can edit your start and end date by specifying the ID.")));
+				+ bold("You can edit by specifying the ID followed by task name and end date/time (Deadline Task)")));
 		str.append(HTML_BREAK);
-		str.append(createExample("'edit 11 17/04/15 19:00 17/04/15 22:00'"));
+		str.append(createExample("'edit 22 dinner with family next friday evening 17/04/15 20:00'"));
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 		str.append(maroonFont("3. "
-				+ bold("You can edit your task name and dates by specifying the ID.")));
+				+ bold("You can edit by specifying the ID followed by task name, start date/time and end date/time (Appointment Task)")));
 		str.append(HTML_BREAK);
-		str.append(createExample("'e 12 additional revision class this week 21/04/15'"));
+		str.append(createExample("'e 22 dinner with family next friday evening 17/04/15 20:00 17/04/15 23:00'"));
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 
@@ -349,25 +355,31 @@ public class HelpInfo {
 		str.append(maroonFont("1. "
 				+ bold("You can power search a specific task/tasks by specifying keywords.")));
 		str.append(HTML_BREAK);
-		str.append(createExample("ps a"));
+		str.append(createExample("ps c"));
 		str.append(HTML_BREAK);
 		str.append("The following result will reflect instantly");
 		str.append(HTML_BREAK);
-		str.append(createExample("apple 13/04/15 23:59"));
+		str.append(createExample("cs2103 v0.5 due 13/04/15 23:59"));
 		str.append(HTML_BREAK);
-		str.append(createExample("meet friends 15/05/15 15:00 accompany them to eat"));
+		str.append(createExample("cg2271 lab 7 submission 13/04/15 23:59"));
+		str.append(HTML_BREAK);
+		str.append(createExample("cg2271 assignment 20/04/15 23:59 finish by recess week"));
+		str.append(HTML_BREAK);
+		str.append(createExample("study for upcoming exam 27/04/15 17:00 cg2271 exam"));
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
 		str.append("OR");
 		str.append(HTML_BREAK);
 		str.append(HTML_BREAK);
-		str.append(createExample("ps app"));
+		str.append(createExample("ps cg"));
 		str.append(HTML_BREAK);
-		str.append("The following result will instantly reflect");
+		str.append("The following result will reflect instantly");
 		str.append(HTML_BREAK);
-		str.append(createExample("apple 13/04/15 23:59"));
+		str.append(createExample("cg2271 lab 7 submission 13/04/15 23:59"));
 		str.append(HTML_BREAK);
-		str.append(createExample("application for iphone to be launched 11/05/15 08:00 "));
+		str.append(createExample("cg2271 assignment 20/04/15 23:59 finish by recess week"));
+		str.append(HTML_BREAK);
+		str.append(createExample("study for upcoming exam 27/04/15 17:00 cg2271 exam"));
 
 		return wrapper(str.toString());
 	}
