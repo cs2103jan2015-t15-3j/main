@@ -112,6 +112,8 @@ public class ParserDateAndTimeChecker {
 		item.setIsStartDate(false);
 		Date startDate = null;
 		Date resultDueDate = setDate(item, dueDate, endTime);
+		System.out.println(dueDate);
+		System.out.println(endTime);
 		item.setIsStartDate(false);
 		item.setIsDueDate(true);
 		item.setStartDate(startDate);
