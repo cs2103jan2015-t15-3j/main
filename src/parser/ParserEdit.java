@@ -10,6 +10,7 @@ public class ParserEdit {
 	public static void editTask(Interpreter item, String input, String[] inputArray)
 			throws ParseException {
 		int ID;
+		int thirdEntry = 2;
 		String[] dateArray = null;
 		String[] editedInputArray = new String[inputArray.length - 2];
 		
@@ -17,7 +18,7 @@ public class ParserEdit {
 			ID = Integer.parseInt(inputArray[1]);
 			item.setTaskID(ID);
 			
-			if(input.length() < 3) {
+			if(input.length() < 3|| inputArray[thirdEntry].equals("[]") || inputArray[thirdEntry].equals("[")) {
 				throw new NullPointerException();
 			}
 			
@@ -42,7 +43,14 @@ public class ParserEdit {
 			} else {
 				defineTaskType(item, editedInputArray, dateArray);
 				if (dateArray == null){
-					defineTaskName(item, editedInputArray, editedInputArray.length);
+					if(editedInputArray[editedInputArray.length - 1].equals("[]")) {
+						defineTaskName(item, editedInputArray, editedInputArray.length - 1);
+					} else if(editedInputArray[editedInputArray.length - 1].equals("]")) {
+						int index = input.lastIndexOf("[");
+						defineTaskName(item, editedInputArray, index);
+					} else {
+						defineTaskName(item, editedInputArray, editedInputArray.length);
+					}
 				} else {
 					System.out.println(editedInputArray.length - dateArray.length);
 					defineTaskName(item, editedInputArray, editedInputArray.length - dateArray.length);
