@@ -17,6 +17,8 @@ import org.junit.Test;
 
 import parser.Interpreter;
 
+//@author A0112643R
+
 public class LogicUnitTest {
 	/*
 	 * The class Repository is updated and shared among the architecture. This
@@ -326,6 +328,8 @@ public class LogicUnitTest {
 		} catch (IndexOutOfBoundsException e) {
 			System.out.println(taskIDThree + " does not exists!");
 		}
+
+		UnitTest.deleteTask(1, repo);
 		assertEquals("Current size should be 1", 1, repo.getBufferSize());
 	}
 
