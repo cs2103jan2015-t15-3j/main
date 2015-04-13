@@ -19,7 +19,7 @@ public class LogicMain {
 	private static final int MESSAGE_SYSTEM_EXIT = 0;
 	private static ProTaskStorage storage;
 
-	public static void main(String[] args) throws ParseException, FileNotFoundException {
+	public static void main(String[] args) throws ParseException {
 		Repository repo = new Repository();
 		Scanner sc = new Scanner(System.in);
 
@@ -27,11 +27,11 @@ public class LogicMain {
 			Printer.printToUser("Command: ");
 			String command = sc.nextLine();
 			parseString(command, repo);
-			sc.close();
 			Printer.executePrint(repo.getBuffer());
 			System.out.println(repo.getBuffer().size());
 			Printer.printToUser(repo.getFeedback());
 		}
+
 	}
 
 	private static void initializeStorage() {
@@ -40,14 +40,23 @@ public class LogicMain {
 		}
 	}
 
-	public static Repository loadStorage() throws FileNotFoundException {
-		initializeStorage();
-		return storage.getAllTasks();
+	public static Repository loadStorage() {
+		Repository repo = new Repository();
+		try {
+			initializeStorage();
+			repo = storage.getAllTasks();
+		} catch (FileNotFoundException e) {
+			Logging.getInputLog(Message.FILE_INEXISTS);
+		}
+		return repo;
 	}
 
-	private static void updateStorageToClear(Repository repo)
-			throws FileNotFoundException {
-		storage.clearAllTasks(repo);
+	private static void updateStorageToClear(Repository repo) {
+		try {
+			storage.clearAllTasks(repo);
+		} catch (FileNotFoundException e) {
+			Logging.getInputLog(Message.FILE_INEXISTS);
+		}
 	}
 
 	private static void updateStorage(Repository repo) {
@@ -73,7 +82,7 @@ public class LogicMain {
 		return tempBuffer;
 	}
 
-	public static Repository parseString(String command, Repository repo) throws FileNotFoundException {
+	public static Repository parseString(String command, Repository repo) {
 		assert (command != null);
 		Interpreter input = new Interpreter();
 
@@ -88,7 +97,8 @@ public class LogicMain {
 		return repo;
 	}
 
-	private static void executeCommand(Interpreter input, Repository repo) throws FileNotFoundException {
+	private static void executeCommand(Interpreter input, Repository repo) {
+
 		CommandType commandInfo = input.getCommand();
 		boolean isError = input.getIsError();
 
@@ -114,9 +124,14 @@ public class LogicMain {
 				if (isError) {
 					catchException(input, repo);
 				} else {
-					undoAmend(input, repo);
+					History clearedHistory = new History();
+					ArrayList<Task> tempBuffer = createTempBuffer(repo);
+
+					clearedHistory = UndoManager.pushAmendToStack(input,
+							tempBuffer);
+					System.out.println(clearedHistory.getHistoryBuffer());
 					Amend.determineAmend(input, repo);
-					updateStorage(repo);
+					repo.undoActionPush(clearedHistory);
 				}
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
@@ -140,11 +155,12 @@ public class LogicMain {
 			break;
 
 		case CLEAR:
-			if (repo.getBuffer().isEmpty()) {
-				repo.setFeedbackMsg("There is nothing to clear");
-			}
 			if (isError) {
 				catchException(input, repo);
+
+			} else if (repo.getBuffer().isEmpty()) {
+				repo.setFeedbackMsg(Message.BUFFER_EMPTY);
+
 			} else {
 				undoClear(input, repo);
 				Obliterator.determineClear(input, repo.getBuffer());
@@ -262,15 +278,6 @@ public class LogicMain {
 		repo.undoActionPush(deletedHistory);
 	}
 
-	private static Repository undoAmend(Interpreter input, Repository repo) {
-		History amendedHistory = new History();
-		ArrayList<Task> tempBuffer = createTempBuffer(repo);
-
-		amendedHistory = UndoManager.pushAmendToStack(input, tempBuffer);
-		repo.undoActionPush(amendedHistory);
-		return repo;
-	}
-
 	protected static void undoCompleteOrUncomplete(Interpreter input,
 			Repository repo) {
 		History completedHistory = new History();
@@ -278,6 +285,15 @@ public class LogicMain {
 		completedHistory = UndoManager.pushCompleteOrUncompleteToStack(input,
 				repo);
 		repo.undoActionPush(completedHistory);
+	}
+
+	protected static void undoAmend(Interpreter input, Repository repo) {
+		History clearedHistory = new History();
+		ArrayList<Task> tempBuffer = createTempBuffer(repo);
+
+		clearedHistory = UndoManager.pushAmendToStack(input, tempBuffer);
+		repo.undoActionPush(clearedHistory);
+		System.out.println(clearedHistory.getHistoryBuffer());
 	}
 
 	private static void undoClear(Interpreter input, Repository repo) {
