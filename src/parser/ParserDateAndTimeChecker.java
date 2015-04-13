@@ -31,7 +31,12 @@ public class ParserDateAndTimeChecker {
 	private static String DEFAULT_TIME = "23:59";
 	
 	public static boolean isDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
-		switch(length) {
+		if(input == null) {
+			setFloating(item);
+			return true;
+		}
+		
+		switch(length) {				
 			case 0:
 				setFloating(item);
 				return true;

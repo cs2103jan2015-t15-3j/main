@@ -14,10 +14,9 @@ public class ProParser {
 				String inputWithoutRemarks = splitInput[0];
 				String[] inputArray = splitInput[0].split(" ");
 				defineCommand(item, inputWithoutRemarks, inputArray);
-			} else if(input.equals(" ")) {
-				throw new NullPointerException();
 			} else {
 				String[] inputArray = input.split(" ");
+			
 				item.setIsRemarks(false);
 				item.setRemarks("");
 				defineCommand(item, input, inputArray);
@@ -30,9 +29,14 @@ public class ProParser {
 	}
 
 	private static void defineRemarks(Interpreter item, String remarks) {
-		String[] remarksArray = remarks.split(">");
-		item.setIsRemarks(true);
-		item.setRemarks(remarksArray[0]);
+		if(remarks == null || remarks.equals(">")) {
+			item.setIsRemarks(false);
+			item.setRemarks(" ");
+		} else {		
+			String[] remarksArray = remarks.split(">");
+			item.setIsRemarks(true);
+			item.setRemarks(remarksArray[0]);
+		}
 	}
 
 	private static void defineCommand(Interpreter item, String input, String[] inputArray)

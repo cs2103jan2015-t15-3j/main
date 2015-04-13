@@ -8,13 +8,12 @@ public class ParserAdd {
 		String[] dateArray = null;
 	
 		try {
-			if(input.length() < 2) {
+			if(inputArray.length < 2) {
 				throw new ParserException();
 			} else {
 				if(input.contains("[")) {
 					dateArray = defineDate(input);
 					String[] newInputArray = input.split("\\[");
-					//String taskName = convertArrayToString(newInputArray, startIndex, newInputArray.length - 2);
 					inputArray = newInputArray[0].split(" ");
 				}
 				
@@ -30,10 +29,20 @@ public class ParserAdd {
 	}
 	
 	private static String[] defineDate(String input) {
-			String[] splitInput = input.split("\\[");
-			String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
-			String[] dateArray = splitDate[0].split(" ");
+		String[] dateArray = null;
+		String[] splitInput = input.split("\\[");
+		if(splitInput[splitInput.length - 1].equals("]")) {
+			dateArray = null;
 			return dateArray;
+		} else {
+			if(splitInput[splitInput.length - 1].contains("]")) {
+				String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
+				dateArray = splitDate[0].split(" ");
+			} else {
+				dateArray = splitInput[splitInput.length - 1].split(" ");
+			}
+		return dateArray;
+		}
 	}
 	
 	// TaskType of the entry is set in ParserDateAndTimeChecker if the input is valid
