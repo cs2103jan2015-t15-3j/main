@@ -3,6 +3,7 @@ package logic;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -125,6 +126,7 @@ public class LogicMain {
 				} else {
 					undoAmend(input, repo);
 					Amend.determineAmend(input, repo);
+					updateStorage(repo);
 				}
 			} catch (IndexOutOfBoundsException e) {
 				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
@@ -282,13 +284,10 @@ public class LogicMain {
 
 	protected static void undoAmend(Interpreter input, Repository repo) {
 		History clearedHistory = new History();
-		// ArrayList<Task> tempBuffer = createTempBuffer(repo);
+		ArrayList<Task> tempBuffer = createTempBuffer(repo);
 
-		clearedHistory = UndoManager.pushAmendToStack(input, repo.getBuffer());
-		System.out.println(clearedHistory.getHistoryBuffer());
+		clearedHistory = UndoManager.pushAmendToStack(input, tempBuffer);
 		repo.undoActionPush(clearedHistory);
-		System.out.println(repo.getUndoAction());
-		System.out.println(clearedHistory.getHistoryBuffer());
 	}
 
 	private static void undoClear(Interpreter input, Repository repo) {
