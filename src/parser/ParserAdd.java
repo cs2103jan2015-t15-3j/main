@@ -6,7 +6,7 @@ public class ParserAdd {
 	
 	public static void addTask(Interpreter item, String input, String[] inputArray) throws ParseException {
 		String[] dateArray = null;
-		int startIndex = 1;
+	
 		try {
 			if(input.length() < 2) {
 				throw new ParserException();
@@ -29,7 +29,7 @@ public class ParserAdd {
 		}
 	}
 	
-	public static String[] defineDate(String input) {
+	private static String[] defineDate(String input) {
 			String[] splitInput = input.split("\\[");
 			String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
 			String[] dateArray = splitDate[0].split(" ");
@@ -37,7 +37,7 @@ public class ParserAdd {
 	}
 	
 	// TaskType of the entry is set in ParserDateAndTimeChecker if the input is valid
-	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
+	private static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
 		int dateArrayLength; 
 		
 		if(dateArray == null) {
@@ -59,7 +59,7 @@ public class ParserAdd {
 		}
 	}
 	
-	public static void defineTaskName(Interpreter item, String[] inputArray) {
+	private static void defineTaskName(Interpreter item, String[] inputArray) {
 		String taskName = "";
 		int startIndex = 1;
 		int lastIndex = inputArray.length - 1;
@@ -78,7 +78,7 @@ public class ParserAdd {
 		}
 	}
 	
-	public static String convertArrayToString(String[] inputArray, int startIndex, int lastIndex) {
+	private static String convertArrayToString(String[] inputArray, int startIndex, int lastIndex) {
 		String taskName = "";
 		for(int i=startIndex; i<=lastIndex; i++){
 			if(i==lastIndex) {

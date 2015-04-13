@@ -95,10 +95,6 @@ public class Interpreter {
 	
 	
 	/*============SET METHODS============*/
-	
-	public void setFeedbackMsg(String feedbackMsg) {
-		this.feedbackMsg = feedbackMsg;
-	}
 
 	public void setCommandType(CommandType command) {
 		this.command = command;
@@ -146,6 +142,10 @@ public class Interpreter {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+	
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
 	}
 	
 	public void setClear(String modeClear) {
