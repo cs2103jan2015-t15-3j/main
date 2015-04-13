@@ -2,7 +2,6 @@ package logic;
 
 import java.util.ArrayList;
 
-import logic.Enumerator.KEY;
 import logic.Enumerator.TaskType;
 import parser.Interpreter;
 
@@ -41,23 +40,20 @@ public class Amend {
 	}
 
 	protected static void determineAmend(Interpreter item, Repository repo) {
-		
-		if (item.getType() == TaskType.FLOATING) {
-			System.out.println("true1");
-			amendName(item, repo);
-		} else if (item.getType() == TaskType.APPOINTMENT) {
-			System.out.println("true2");
-			amendStartDate(item, repo);
-		} else if (item.getType() == TaskType.DEADLINE) {
-			System.out.println("true3");
-			amendDueDate(item, repo);
-		} else {
-			System.out.println("true5");
-		}
-
 		if (item.getIsRemarks() == true) {
-			System.out.println("true4");
 			amendRemarks(item, repo);
+		}
+		if (item.getType() == TaskType.FLOATING) {
+			amendName(item, repo);
+
+		} else if (item.getType() == TaskType.APPOINTMENT) {
+			amendName(item, repo);
+			amendStartDate(item, repo);
+			amendDueDate(item, repo);
+
+		} else if (item.getType() == TaskType.DEADLINE) {
+			amendName(item, repo);
+			amendDueDate(item, repo);
 		}
 	}
 
@@ -87,11 +83,7 @@ public class Amend {
 	private static void amendStartDate(Interpreter item, Repository repo) {
 		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
-		
-		System.out.println("getTaskName "+item.getTaskName());
-		System.out.println("getStartDateString "+item.getStartDateString());
-		System.out.println("getDueDateString "+item.getDueDateString());
-		
+
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
 			appt.setStartDate(item.getStartDate());
@@ -121,9 +113,9 @@ public class Amend {
 		ArrayList<Task> buffer = repo.getBuffer();
 		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
 
-		System.out.println("getTaskName "+item.getTaskName());
-		System.out.println("getDueDateString "+item.getDueDateString());
-		
+		System.out.println("getTaskName " + item.getTaskName());
+		System.out.println("getDueDateString " + item.getDueDateString());
+
 		if (task.getType().equals(TaskType.APPOINTMENT)) {
 			Appointment appt = (Appointment) task;
 
