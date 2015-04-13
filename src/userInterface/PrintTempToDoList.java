@@ -57,7 +57,6 @@ public class PrintTempToDoList {
 						+ "Start: " + start + HTML_BREAK + "Due: " + end
 						+ HTML_BREAK + "Remarks: " + remarks + HTML_FONT_CLOSE
 						+ HTML_BREAK + HTML_CLOSE;
-
 			} else {
 
 				id = task.getTaskID();
@@ -72,6 +71,8 @@ public class PrintTempToDoList {
 						+ remarks + HTML_FONT_CLOSE + HTML_BREAK + HTML_CLOSE;
 			}
 		}
+		//test print for sort
+		System.out.println(str);
 		return str;
 	}
 }

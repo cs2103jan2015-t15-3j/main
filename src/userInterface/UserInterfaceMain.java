@@ -45,7 +45,7 @@ public class UserInterfaceMain extends JPanel {
 
 	Repository repo = new Repository();
 	ArrayList<Task> psList = new ArrayList<Task>();
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -145,6 +145,7 @@ public class UserInterfaceMain extends JPanel {
 
 					userInput = inputTextField.getText().toString();
 					String firstWord = getFirstWord(userInput);
+					
 					repo = LogicMain.parseString(userInput, repo);
 
 					try {
