@@ -24,6 +24,10 @@ public class ParserEdit {
 				dateArray = defineDate(input);
 				String[] newInputArray = input.split("\\[");
 				inputArray = newInputArray[0].split(" ");
+				for(int i=0; i<inputArray.length; i++) {
+				System.out.print(""+inputArray[i]+" ");
+				}
+				System.out.println();
 			}
 			
 			for (int i = 2; i < inputArray.length; i++) {
@@ -36,7 +40,7 @@ public class ParserEdit {
 				item.setIsStartDate(false);
 				Date date = null;
 				item.setStartDate(date);
-				item.setDueDate(date);;
+				item.setDueDate(date);
 				defineTaskName(item, editedInputArray, editedInputArray.length);
 			} else if(editedInputArray.length < 1) {
 				throw new ParserException();
@@ -54,8 +58,6 @@ public class ParserEdit {
 			item.setIsError(true);
 			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
 		}
-		
-		System.out.println("ParserEdit: " + item.getTaskName());
 	}
 	
 	public static String[] defineDate(String input) {
@@ -92,6 +94,7 @@ public class ParserEdit {
 		for(int i=0; i<=lastIndex; i++){
 			if(i==lastIndex) {
 				taskName = taskName.concat(inputArray[i]);
+				
 			} else {
 				taskName = taskName.concat(inputArray[i] + " ");
 			}			
@@ -102,7 +105,6 @@ public class ParserEdit {
 			if(taskName.equals("") || taskName.equals(" ")) {
 				throw new NullPointerException();
 			} else {
-				System.out.println("reach here");
 				item.setTaskName(taskName);
 			}
 		} catch (NullPointerException npe) {

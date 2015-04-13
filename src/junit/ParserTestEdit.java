@@ -59,7 +59,8 @@ public class ParserTestEdit {
 		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "remarks", item.getRemarks());
 		
-		String input3 = "eDiT 1 checking double date without time format 11/11/11 12/12/12[11/11/11 12/12/12]<remarks>";
+		System.out.println("INPUT3<");
+		String input3 = "EdiT 1 checking double date without time format 11/11/11 12/12/12[11/11/11 12/12/12]<remarks>";
 		item = Pro.parse(input3);
 		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
 		assertEquals("ID: ", 1, item.getTaskID());
@@ -71,7 +72,7 @@ public class ParserTestEdit {
 		assertEquals("TaskName: ", "checking double date without time format 11/11/11 12/12/12", item.getTaskName());
 		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "remarks", item.getRemarks());
-		
+		System.out.println(">INPUT3");
 		
 		String input4 = "edit 1 checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12 [11/11/11 12/12/12 12:12]<Testing>";
 		item = Pro.parse(input4);
