@@ -146,11 +146,7 @@ public class UserInterfaceMain extends JPanel {
 					userInput = inputTextField.getText().toString();
 					String firstWord = getFirstWord(userInput);
 
-					try {
-						repo = LogicMain.parseString(userInput, repo);
-					} catch (FileNotFoundException e2) {
-						Logging.getInputLog("File Not Found Exception when passing String to Logic");
-					}
+					repo = LogicMain.parseString(userInput, repo);
 
 					PrintSetting.clearAndReloadBothPanel(repo);
 					PrintSetting.clearAndReloadBothPanelForTempList(repo);
