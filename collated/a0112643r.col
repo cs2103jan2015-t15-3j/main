@@ -1,0 +1,2888 @@
+//@author: a0112643r
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\LogicUndoUnitTest.java
+	 */
+
+
+public class LogicUndoUnitTest {
+
+	Repository repo = new Repository();
+	Interpreter floating, deadline, appt;
+	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+	// Create a temporary buffer to replace the original contents of the buffer
+	private static ArrayList<Task> createTempBuffer(Repository repo) {
+		ArrayList<Task> tempBuffer = new ArrayList<Task>();
+		Iterator<Task> bufferList = repo.getBuffer().iterator();
+		while (bufferList.hasNext()) {
+			tempBuffer.add(bufferList.next());
+		}
+		return tempBuffer;
+	}
+
+	@Test
+	public void testUndoForAdd() throws ParseException {
+		String dateInString = "09/06/2013";
+		Date date = formatter.parse(dateInString);
+
+		// Adding a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Current buffer size is 1 after adding
+		assertEquals("Current size", 1, repo.getBufferSize());
+
+		// Push the add action in the stack for undo
+		History addedHistory = new History();
+		deadline.setCommandType(CommandType.ADD);
+		deadline.setTaskID(1);
+		addedHistory = UnitTest.pushAddToStack(deadline, repo);
+		repo.undoActionPush(addedHistory);
+
+		try {
+			UnitTest.determineUndo(repo);
+		} catch (EmptyStackException e) {
+			System.out.println("Stack is empty!");
+		}
+
+		// Current size is 0 after we undo an item that we added
+		assertEquals("Size should be 0", 0, repo.getBufferSize());
+	}
+
+	@Test
+	public void testUndoForDelete() throws ParseException {
+		String dateInString = "09/06/2013";
+		Date date = formatter.parse(dateInString);
+		int taskID;
+
+		// Adding a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Current buffer size is 1 after adding
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+
+		History deletedHistory = new History();
+		deadline.setTaskID(1);
+		deadline.setCommandType(CommandType.DELETE);
+		deletedHistory = UnitTest.pushDeleteToStack(deadline, repo);
+		repo.undoActionPush(deletedHistory);
+
+		// Retrieving the task with ID 1 and delete
+		taskID = deadline.getTaskID();
+		try {
+			UnitTest.deleteTask(taskID, repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskID + " does not exists!");
+		}
+
+		// Current size is 0 after deleting
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+
+		// Undo the previous action
+		try {
+			UnitTest.determineUndo(repo);
+		} catch (EmptyStackException e) {
+			System.out.println("Stack is empty!");
+		}
+
+		// Current size is 1 after we undo delete
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+	}
+
+	@Test
+	public void testUndoForComplete() throws ParseException {
+		String dateInString = "09/06/2013";
+		Date date = formatter.parse(dateInString);
+
+		// Adding a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		deadline.setIsCompleted(false);
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Push the uncomplete action into the stack
+		History completedHistory = new History();
+		deadline.setTaskID(1);
+		deadline.setCommandType(CommandType.COMPLETE);
+		completedHistory = UnitTest.pushCompleteOrUncompleteToStack(deadline,
+				repo);
+		repo.undoActionPush(completedHistory);
+
+		// Retrieve the task and mark it as completed
+		Task tasks = UnitTest.retrieveTask(repo.getBuffer(),
+				deadline.getTaskID());
+		deadline.setIsCompleted(true);
+		UnitTest.setCompletion(deadline, repo);
+
+		// Current task retrieved will be mark as completed
+		assertEquals("Completed will be mark as true", true,
+				tasks.getCompleted());
+
+		// Undo the previous action for complete task
+		try {
+			UnitTest.determineUndo(repo);
+		} catch (EmptyStackException e) {
+			System.out.println("Stack is empty!");
+		}
+
+		// Current task will be mark as uncompleted after undo
+		assertEquals("Completed after undo will be mark as false", false,
+				tasks.getCompleted());
+	}
+
+	@Test
+	public void testUndoForUnComplete() throws ParseException {
+		String dateInString = "09/06/2013";
+		Date date = formatter.parse(dateInString);
+
+		// Adding a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		deadline.setIsCompleted(true);
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Push the complete action into the stack
+		History completedHistory = new History();
+		deadline.setCommandType(CommandType.UNCOMPLETE);
+		deadline.setTaskID(1);
+		completedHistory = UnitTest.pushCompleteOrUncompleteToStack(deadline,
+				repo);
+		repo.undoActionPush(completedHistory);
+
+		// Retrieve the task and set completion to be false
+		Task tasks = UnitTest.retrieveTask(repo.getBuffer(),
+				deadline.getTaskID());
+		deadline.setIsCompleted(false);
+		UnitTest.setCompletion(deadline, repo);
+
+		// Current task retrieved will be marked as uncompleted
+		assertEquals("Uncomplete the task", false, tasks.getCompleted());
+
+		// Undo the previous action for uncomplete task
+		try {
+			UnitTest.determineUndo(repo);
+		} catch (EmptyStackException e) {
+			System.out.println("Stack is empty!");
+		}
+
+		// Current task will be mark as completed after undo
+		assertEquals("Uncomplete task after undo will be mark as true", true,
+				tasks.getCompleted());
+	}
+
+	@Test
+	public void testUndoForClear() throws ParseException {
+		String dateInString = "09/06/2013";
+		Date date = formatter.parse(dateInString);
+
+		// Adding a floating task
+		floating = new Interpreter();
+		floating.setTaskID(1);
+		floating.setTaskName("CS2103");
+		floating.setType(TaskType.FLOATING);
+		floating.setRemarks("Question 1 is important.");
+		UnitTest.addTask(floating, repo.getBuffer(), repo.numberGenerator());
+
+		// Adding a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskID(2);
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Current buffer size is 2 after adding
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		History clearedHistory = new History();
+		deadline.setCommandType(CommandType.CLEAR);
+		deadline.setClear("");
+		deadline.setTaskID(2);
+
+		ArrayList<Task> tempBuffer = createTempBuffer(repo);
+		clearedHistory = UnitTest.pushClearToStack(deadline, tempBuffer);
+		repo.undoActionPush(clearedHistory);
+
+		// Clear the buffer
+		UnitTest.determineClear(deadline, repo.getBuffer());
+
+		// Current size is 0 after clear
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+
+		try {
+			UnitTest.determineUndo(repo);
+		} catch (EmptyStackException e) {
+			System.out.println("Stack is empty!");
+		}
+
+		// Since we delete an item, if we undo, the result should be 2.
+		assertEquals("Size should be 2 after we undo clear", 2,
+				repo.getBufferSize());
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\LogicUndoUnitTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\LogicUnitTest.java
+	 */
+
+
+public class LogicUnitTest {
+	/*
+	 * The class Repository is updated and shared among the architecture. This
+	 * LogicUnitTest class will handle individual unit test for the CRUD as well
+	 * as the search operations
+	 */
+
+	Repository repo = new Repository();
+	Interpreter floating, floatingOne, floatingTwo, deadline, appt;
+	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+	@Test
+	// This will cover the case of adding a floating task
+	public void testAddFloating() {
+		// Adds a floating task
+		floating = new Interpreter();
+		floating.setTaskID(1);
+		floating.setTaskName("CS2103");
+		floating.setType(TaskType.FLOATING);
+		floating.setRemarks("Question 1 is important.");
+		UnitTest.addTask(floating, repo.getBuffer(), repo.numberGenerator());
+
+		// Retrieving the floating task
+		Task tasks = UnitTest.retrieveTask(repo.getBuffer(),
+				floating.getTaskID());
+
+		assertEquals("ID should be 1", 1, tasks.getTaskID());
+		assertEquals("Task name should be CS2103", "CS2103",
+				tasks.getTaskName());
+		assertEquals("Task type is classified as floating", TaskType.FLOATING,
+				tasks.getType());
+		assertEquals("Remarks is not empty", "Question 1 is important.",
+				tasks.getRemarks());
+		assertEquals("Current buffer size should be 1", 1, repo.getBufferSize());
+	}
+
+	@Test
+	// This will cover the case of adding a deadline task
+	public void testAddDeadline() throws ParseException {
+		String dateInString = "09/06/13";
+		Date date = formatter.parse(dateInString);
+		date = formatter.parse(dateInString);
+
+		// Adds a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskID(1);
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Retrieving the deadline task
+		Task tasks = UnitTest.retrieveTask(repo.getBuffer(),
+				deadline.getTaskID());
+
+		assertEquals("ID should be 1", 1, tasks.getTaskID());
+		assertEquals("Task name should be CS2103", "CS2103",
+				tasks.getTaskName());
+		assertEquals("Task type is classified as deadline", TaskType.DEADLINE,
+				tasks.getType());
+		assertEquals("Remarks is empty", "", tasks.getRemarks());
+
+		if (tasks.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) tasks;
+			assertEquals("Due Date is set", "09/06/13 00:00",
+					item.getDueDateString());
+		}
+		assertEquals("Current size should be 1", 1, repo.getBufferSize());
+	}
+
+	@Test
+	// This will cover the adding of an appointment task
+	public void testAddAppointment() throws ParseException {
+		String dateInString = "09/06/2013";
+		String dateInStringTwo = "10/06/2013";
+		Date date = formatter.parse(dateInString);
+		Date dateTwo = formatter.parse(dateInStringTwo);
+
+		// Adding an appointment task
+		appt = new Interpreter();
+		appt.setTaskID(1);
+		appt.setTaskName("CS2103");
+		appt.setStartDate(date);
+		appt.setDueDate(dateTwo);
+		appt.setType(TaskType.APPOINTMENT);
+		appt.setRemarks("Do Q1-Q5");
+		UnitTest.addTask(appt, repo.getBuffer(), repo.numberGenerator());
+
+		// Retrieving the appointment task
+		Task tasks = UnitTest.retrieveTask(repo.getBuffer(), appt.getTaskID());
+
+		assertEquals("ID", 1, tasks.getTaskID());
+		assertEquals("Task name", "CS2103", tasks.getTaskName());
+		assertEquals("Task Type", TaskType.APPOINTMENT, tasks.getType());
+		assertEquals("Remarks", "Do Q1-Q5", tasks.getRemarks());
+		if (tasks.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) tasks;
+			assertEquals("Start Date", "09/06/13 00:00",
+					item.getStartDateString());
+			assertEquals("Due Date", "10/06/13 00:00", item.getDueDateString());
+		}
+		assertEquals("Current size is 1", 1, repo.getBufferSize());
+	}
+
+	@Test
+	// This will cover the case of amending a floating task
+	public void testAmendFloating() throws ParseException {
+		String dateInString = "09/06/2013";
+		Date date = formatter.parse(dateInString);
+
+		// Adds a floating task
+		floating = new Interpreter();
+		floating.setTaskID(1);
+		floating.setTaskName("CS2103");
+		floating.setType(TaskType.FLOATING);
+		floating.setRemarks("Question 1 is important.");
+		UnitTest.addTask(floating, repo.getBuffer(), repo.numberGenerator());
+
+		// Retrieving the floating task
+		Task task = UnitTest.retrieveTask(repo.getBuffer(),
+				floating.getTaskID());
+
+		// Amend the task name
+		floating.setTaskName("CS2103T");
+
+		// Task name amended
+		UnitTest.determineAmend(floating, repo);
+		assertEquals("CS2103 changed to CS2103T", "CS2103T", task.getTaskName());
+
+		// Amend remarks
+		floating.setIsRemarks(true);
+		floating.setRemarks("Not important anymore!");
+		UnitTest.determineAmend(floating, repo);
+		assertEquals("Remarks edited", "Not important anymore!",
+				task.getRemarks());
+
+		/*
+		 * This will amend the floating task into a deadline task by setting the
+		 * due date
+		 */
+
+		floating.setDueDate(date);
+		UnitTest.determineAmend(floating, repo);
+
+		// Retrieving the deadline task
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(),
+				floating.getTaskID());
+
+		if (taskTwo.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) taskTwo;
+			assertEquals("Due date", "09/06/13 00:00", item.getDueDateString());
+		}
+	}
+
+	@Test
+	// This will cover the case of amending a deadline task
+	public void testAmendDeadline() throws ParseException {
+		String dateInString = "09/06/2013";
+		String dateInString2 = "10/06/2013";
+		String dateInString3 = "11/06/2013";
+		Date date = formatter.parse(dateInString);
+		Date date2 = formatter.parse(dateInString2);
+		Date date3 = formatter.parse(dateInString3);
+
+		// Adds a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskID(1);
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date2);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Amend the task name
+		deadline.setTaskName("CS2103T");
+		UnitTest.determineAmend(deadline, repo);
+
+		// Retrieving the deadline task after amend
+		Task task = UnitTest.retrieveTask(repo.getBuffer(),
+				deadline.getTaskID());
+
+		assertEquals("CS2103 changed to CS2103T", "CS2103T", task.getTaskName());
+
+		/*
+		 * This will amend the deadline into an appointment task by setting the
+		 * due date
+		 */
+
+		deadline.setDueDate(date3);
+		UnitTest.determineAmend(deadline, repo);
+
+		// Retrieving the deadline task
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(),
+				deadline.getTaskID());
+
+		if (taskTwo.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) taskTwo;
+			assertEquals("Date edited", "11/06/13 00:00",
+					item.getDueDateString());
+		}
+
+		// Amend the remarks
+		deadline.setIsRemarks(true);
+		deadline.setRemarks("Do Q1-Q5!");
+		UnitTest.determineAmend(deadline, repo);
+		assertEquals("Remarks edited", "Do Q1-Q5!", task.getRemarks());
+
+		// Change into an appointment task
+		deadline.setStartDate(date);
+		UnitTest.determineAmend(deadline, repo);
+
+		Task taskThree = UnitTest.retrieveTask(repo.getBuffer(),
+				deadline.getTaskID());
+
+		if (taskThree.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskThree;
+			assertEquals("Deadline to Appointment", "09/06/13 00:00",
+					item.getStartDateString());
+		}
+	}
+
+	@Test
+	// This will cover the case of amending an appointment task
+	public void testAmendAppointment() throws ParseException {
+		String dateInString = "09/06/2013";
+		String dateInString2 = "10/06/2013";
+		String dateInString3 = "11/06/2013";
+		String dateInString4 = "12/06/2013";
+		Date date = formatter.parse(dateInString);
+		Date date2 = formatter.parse(dateInString2);
+		Date date3 = formatter.parse(dateInString3);
+		Date date4 = formatter.parse(dateInString4);
+
+		// Adds an appointment task
+		appt = new Interpreter();
+		appt.setTaskID(1);
+		appt.setTaskName("CS2103");
+		appt.setStartDate(date);
+		appt.setDueDate(date2);
+		appt.setType(TaskType.APPOINTMENT);
+		appt.setRemarks("Q3 is inheritance.");
+		UnitTest.addTask(appt, repo.getBuffer(), repo.numberGenerator());
+
+		Task task = UnitTest.retrieveTask(repo.getBuffer(), appt.getTaskID());
+
+		// Amend task name
+		appt.setTaskName("CS2103T");
+		UnitTest.determineAmend(appt, repo);
+		assertEquals("CS2103 changed to CS2103T", "CS2103T", task.getTaskName());
+
+		// Amend remarks
+		appt.setIsRemarks(true);
+		appt.setRemarks("");
+		UnitTest.determineAmend(appt, repo);
+		assertEquals("Remarks cleared", "", task.getRemarks());
+
+		// Amend start date
+		appt.setStartDate(date3);
+		UnitTest.determineAmend(appt, repo);
+		if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) task;
+			assertEquals("Start date edited", "11/06/13 00:00",
+					item.getStartDateString());
+		}
+
+		// Amend due date
+		appt.setDueDate(date4);
+		UnitTest.determineAmend(appt, repo);
+		if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) task;
+			assertEquals("Due date edited", "12/06/13 00:00",
+					item.getDueDateString());
+		}
+	}
+
+	@Test
+	// This will cover the case of deleting a task
+	public void testDelete() throws ParseException {
+		// Checks for both negative and positive range
+		int taskID = -1, taskIDTwo = 10, taskIDThree = 3;
+
+		String dateInString = "09/06/2013";
+		String dateInStringTwo = "10/06/2013";
+		Date date = formatter.parse(dateInString);
+		Date dateTwo = formatter.parse(dateInStringTwo);
+
+		// Adds an deadline task
+		deadline = new Interpreter();
+		deadline.setTaskID(1);
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Adds an appointment task
+		appt = new Interpreter();
+		appt.setTaskID(2);
+		appt.setTaskName("CS2103");
+		appt.setStartDate(date);
+		appt.setDueDate(dateTwo);
+		appt.setType(TaskType.APPOINTMENT);
+		appt.setRemarks("Do Q1-Q5");
+		UnitTest.addTask(appt, repo.getBuffer(), repo.numberGenerator());
+		assertEquals("Current size is 2", 2, repo.getBufferSize());
+
+		/*
+		 * This will cover the boundary cases testing deleting a task based on
+		 * negative values as well as positive value
+		 */
+
+		// Invalid ID
+		try {
+			UnitTest.deleteTask(taskID, repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskID + " does not exists!");
+		}
+
+		// Invalid ID
+		try {
+			UnitTest.deleteTask(taskIDTwo, repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskIDTwo + " does not exists!");
+		}
+
+		// Invalid ID
+		try {
+			UnitTest.deleteTask(taskIDThree, repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskIDThree + " does not exists!");
+		}
+
+		// Current buffer size should be 1 after deleting
+		UnitTest.deleteTask(1, repo);
+		assertEquals("Current size should be 1", 1, repo.getBufferSize());
+	}
+
+	@Test
+	// This will cover the cases of search by keywords and ID
+	public void testSearch() throws ParseException {
+		// Checks for both negative and positive range
+		int taskID = -1, taskIDTwo = 10, taskIDThree = 3;
+
+		// Adds a floating task
+		floating = new Interpreter();
+		floating.setTaskID(1);
+		floating.setTaskName("CS2103");
+		floating.setType(TaskType.FLOATING);
+		floating.setRemarks("Question 1 is important.");
+		UnitTest.addTask(floating, repo.getBuffer(), repo.numberGenerator());
+
+		// Adds a floating task
+		floatingOne = new Interpreter();
+		floatingOne.setTaskID(2);
+		floatingOne.setTaskName("CS2103T");
+		floatingOne.setType(TaskType.FLOATING);
+		floatingOne.setRemarks("Question 2 is important.");
+		UnitTest.addTask(floatingOne, repo.getBuffer(), repo.numberGenerator());
+
+		// Adds a floating task
+		floatingTwo = new Interpreter();
+		floatingTwo.setTaskID(3);
+		floatingTwo.setTaskName("EE2024");
+		floatingTwo.setType(TaskType.FLOATING);
+		floatingTwo.setRemarks("All questions important!");
+		UnitTest.addTask(floatingTwo, repo.getBuffer(), repo.numberGenerator());
+
+		/*
+		 * This will test the boundary cases for search based on keywords and
+		 * the ID provided
+		 */
+		UnitTest.determineSearch("C", repo);
+		assertEquals("Found 2 in the list.", 2, repo.getTempBufferSize());
+
+		UnitTest.determineSearch("CS", repo);
+		assertEquals("Found 2 in the list.", 2, repo.getTempBufferSize());
+
+		UnitTest.determineSearch("CS210", repo);
+		assertEquals("Found 2 in the list.", 2, repo.getTempBufferSize());
+
+		UnitTest.determineSearch("CG", repo);
+		assertEquals("None found.", 0, repo.getTempBufferSize());
+
+		// Invalid ID
+		try {
+			UnitTest.determineSearch("-1", repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskID + " is not found!");
+		}
+
+		// Invalid ID
+		try {
+			UnitTest.determineSearch("10", repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskIDTwo + " is not found!");
+		}
+
+		// Current buffer size should be 1 after searching for 3
+		try {
+			UnitTest.determineSearch("3", repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskIDThree + " is not found!");
+		}
+		assertEquals("Found 1 item.", 1, repo.getTempBufferSize());
+	}
+
+	@Test
+	// This will cover the case of completion and incompletion of a task
+	public void testCompleteUncompleteTask() throws ParseException {
+		String dateInString = "09/06/2013";
+		String dateInStringTwo = "10/06/2013";
+		Date date = formatter.parse(dateInString);
+		Date dateTwo = formatter.parse(dateInStringTwo);
+
+		// Adds a deadline task
+		deadline = new Interpreter();
+		deadline.setTaskID(1);
+		deadline.setTaskName("CS2103");
+		deadline.setDueDate(date);
+		deadline.setType(TaskType.DEADLINE);
+		deadline.setRemarks("");
+		UnitTest.addTask(deadline, repo.getBuffer(), repo.numberGenerator());
+
+		// Adds an appointment task
+		appt = new Interpreter();
+		appt.setTaskID(2);
+		appt.setTaskName("CS2103");
+		appt.setStartDate(date);
+		appt.setDueDate(dateTwo);
+		appt.setType(TaskType.APPOINTMENT);
+		appt.setRemarks("Do Q1-Q5");
+		UnitTest.addTask(appt, repo.getBuffer(), repo.numberGenerator());
+
+		// Complete deadline task
+		deadline.setIsCompleted(true);
+		UnitTest.setCompletion(deadline, repo);
+
+		Task task = UnitTest.retrieveTask(repo.getBuffer(),
+				deadline.getTaskID());
+		if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) task;
+
+			// After completing, result is true
+			assertEquals("Result is true", true, item.getCompleted());
+		}
+
+		// Complete appointment task
+		appt.setIsCompleted(true);
+		UnitTest.setCompletion(appt, repo);
+
+		Task taskTwo = UnitTest
+				.retrieveTask(repo.getBuffer(), appt.getTaskID());
+
+		if (taskTwo.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskTwo;
+
+			// After completing, result is true
+			assertEquals("Result is true", true, item.getCompleted());
+		}
+
+		// Uncomplete appointment task
+		appt.setIsCompleted(false);
+		UnitTest.setCompletion(appt, repo);
+
+		Task taskThree = UnitTest.retrieveTask(repo.getBuffer(),
+				appt.getTaskID());
+
+		if (taskThree.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskThree;
+
+			// After uncompleting, result is false
+			assertEquals("Item is uncompleted", false, item.getCompleted());
+		}
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\LogicUnitTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\MainUnitTest.java
+	 */
+
+
+public class MainUnitTest {
+	/*
+	 * This main unit testing class will test the possible output for the
+	 * commands that the user inputs.
+	 */
+
+	@Test
+	// This will cover the case of adding a floating task.
+	public void testAddFloating() {
+		Repository repo = new Repository();
+
+		// Adding a floating task with only task name
+		LogicMain.parseString("add CS2103", repo);
+
+		// Adding a floating task with task name and remarks
+		LogicMain.parseString("add EE2024 <Qn 1 important>", repo);
+
+		// Current buffer size is 2 after adding
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		// Retrieving a floating task with only task name
+		Task taskOne = UnitTest.retrieveTask(repo.getBuffer(), 1);
+		assertEquals("ID", 1, taskOne.getTaskID());
+		assertEquals("Task Description", "CS2103", taskOne.getTaskName());
+		assertEquals("Task Type", TaskType.FLOATING, taskOne.getType());
+
+		// Retrieving a floating task with task name and remarks
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(), 2);
+		assertEquals("ID", 2, taskTwo.getTaskID());
+		assertEquals("Task Description", "EE2024", taskTwo.getTaskName());
+		assertEquals("Task Type", TaskType.FLOATING, taskTwo.getType());
+		assertEquals("Remarks", "Qn 1 important", taskTwo.getRemarks());
+	}
+
+	@Test
+	// This will cover the case of adding a deadline task.
+	public void testAddDeadline() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and end date
+		LogicMain.parseString("add CS2103 [21/03/15]", repo);
+
+		// Adding a deadline task with task name and end date with remarks
+		LogicMain.parseString(
+				"add CS1020 [21/03/15 22:00] <Use linked list in Qn 5>", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		/*
+		 * Retrieving a deadline task with task name and end date. Default time
+		 * is 2359 hrs since user did not enter time.
+		 */
+		Task taskOne = UnitTest.retrieveTask(repo.getBuffer(), 1);
+		assertEquals("ID", 1, taskOne.getTaskID());
+		assertEquals("Task Description", "CS2103", taskOne.getTaskName());
+		if (taskOne.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) taskOne;
+			assertEquals("Due Date", "21/03/15 23:59", item.getDueDateString());
+		}
+		assertEquals("Task type", TaskType.DEADLINE, taskOne.getType());
+
+		// Retrieving a deadline task with task name and end date with remarks
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(), 2);
+		assertEquals("ID", 2, taskTwo.getTaskID());
+		assertEquals("Task Description", "CS1020", taskTwo.getTaskName());
+		if (taskTwo.getType().equals(TaskType.DEADLINE)) {
+			Deadline item = (Deadline) taskTwo;
+			assertEquals("Due Date", "21/03/15 22:00", item.getDueDateString());
+		}
+		assertEquals("Task type", TaskType.DEADLINE, taskTwo.getType());
+		assertEquals("Remarks", "Use linked list in Qn 5", taskTwo.getRemarks());
+	}
+
+	@Test
+	// This will cover the case of adding a appointment task.
+	public void testAddAppointment() {
+		Repository repo = new Repository();
+
+		// Adding a appointment task with task name and both start end date
+		LogicMain.parseString("add CS2103 [21/03/15 13:30 22/03/15 14:30]",
+				repo);
+
+		/*
+		 * Adding a appointment task with task name and both start end date with
+		 * remarks
+		 */
+		LogicMain.parseString(
+				"add CS1020 [21/03/15 22/03/15] <Do Qn 1 - 5 only>", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		/*
+		 * Retrieving a appointment task with task name and both start and end
+		 * date.
+		 */
+		Task taskOne = UnitTest.retrieveTask(repo.getBuffer(), 1);
+		assertEquals("ID", 1, taskOne.getTaskID());
+		assertEquals("Task Description", "CS2103", taskOne.getTaskName());
+		if (taskOne.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskOne;
+			assertEquals("Start Date", "21/03/15 13:30",
+					item.getStartDateString());
+			assertEquals("Due Date", "22/03/15 14:30", item.getDueDateString());
+		}
+		assertEquals("Task Type", TaskType.APPOINTMENT, taskOne.getType());
+
+		/*
+		 * Retrieving a appointment task with task name, both start and end date
+		 * and remarks. Default time is 2359 hrs since user did not enter time.
+		 */
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(), 2);
+		assertEquals("ID", 2, taskTwo.getTaskID());
+		assertEquals("Task Description", "CS1020", taskTwo.getTaskName());
+		if (taskTwo.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment item = (Appointment) taskTwo;
+			assertEquals("Start Date", "21/03/15 23:59",
+					item.getStartDateString());
+			assertEquals("Due Date", "22/03/15 23:59", item.getDueDateString());
+		}
+		assertEquals("Task Type", TaskType.APPOINTMENT, taskTwo.getType());
+		assertEquals("Task Type", "Do Qn 1 - 5 only", taskTwo.getRemarks());
+	}
+
+	@Test
+	// This will cover the case for wrong commands entered.
+	public void testWrongCommandEntered() {
+		Repository repo = new Repository();
+
+		// adds is an invalid command
+		LogicMain.parseString("adds", repo);
+		assertEquals("Invalid command", "The command does not exists.",
+				repo.getFeedback());
+
+		// hello is an invalid command
+		LogicMain.parseString("hello", repo);
+		assertEquals("Invalid command", "The command does not exists.",
+				repo.getFeedback());
+
+		// An empty string is also an invalid command.
+		LogicMain.parseString("", repo);
+		assertEquals("Invalid command", "The command does not exists.",
+				repo.getFeedback());
+
+		// Adding an integer first is also an invalid command.
+		LogicMain.parseString("1", repo);
+		assertEquals("Invalid command", "The command does not exists.",
+				repo.getFeedback());
+	}
+
+	@Test
+	public void testSearch() {
+		Repository repo = new Repository();
+
+		// Checks for both negative and positive range
+		int taskID = -1, taskIDTwo = 1, taskIDThree = 10;
+
+		// Adding three floating tasks with only task name
+		LogicMain.parseString("add CS2103", repo);
+		LogicMain.parseString("add CS2106", repo);
+		LogicMain.parseString("add EE2024", repo);
+
+		// Current buffer size is 3 after adding.
+		assertEquals("Current buffer size", 3, repo.getBufferSize());
+
+		// task ID -1 is invalid.
+		try {
+			LogicMain.parseString("find -1", repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskID + " is not found.");
+		}
+
+		try {
+			Task tasks = UnitTest.retrieveTask(repo.getBuffer(), taskIDTwo);
+			LogicMain.parseString("find 1", repo);
+
+			// task ID is found
+			assertEquals("ID 1 is found.", 1, tasks.getTaskID());
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskIDTwo + " is not found.");
+		}
+
+		// task ID 10 is invalid.
+		try {
+			LogicMain.parseString("find 10", repo);
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println(taskIDThree + " is not found.");
+		}
+
+		/*
+		 * The code below will cover the keywords that reside in the buffer and
+		 * return the results
+		 */
+		LogicMain.parseString("search CS", repo);
+		assertEquals("Found 2 in the list.", 2, repo.getTempBufferSize());
+
+		LogicMain.parseString("search CS21", repo);
+		assertEquals("Found 2 in the list.", 2, repo.getTempBufferSize());
+
+		LogicMain.parseString("search EE", repo);
+		assertEquals("Found 1 in the list.", 1, repo.getTempBufferSize());
+
+		LogicMain.parseString("search CG", repo);
+		assertEquals("Found 0 in the list.", 0, repo.getTempBufferSize());
+	}
+
+	@Test
+	public void testDelete() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and remarks
+		LogicMain.parseString("add CS2103 [12/05/15] <Finish report>", repo);
+
+		// Adding a appointment task with task name
+		LogicMain.parseString("add EE2020 [13/06/15 14/06/15]", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("d -1", repo);
+
+		// Current buffer size should be still 2 after an invalid ID deletion
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("delete 10", repo);
+
+		// Current buffer size should be still 2 after an invalid ID deletion
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("d 1", repo);
+
+		// Current buffer size should be 1 after deletion
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+
+		// Task ID 2 is the only remaining in the buffer upon retrieval
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(), 2);
+		assertEquals("Task ID", 2, taskTwo.getTaskID());
+	}
+
+	@Test
+	public void testClear() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and remarks
+		LogicMain.parseString("add CS2103 [12/05/15] <Finish report>", repo);
+
+		// Adding a appointment task with task name
+		LogicMain.parseString("add EE2020 [13/06/15 14/06/15]", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		// Issue the clear command to clear the current buffer
+		LogicMain.parseString("clear", repo);
+
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+	}
+
+	@Test
+	public void testSort() {
+		Repository repo = new Repository();
+
+		// Adding some floating tasks for sorting
+		LogicMain.parseString("add ZULU", repo);
+		LogicMain.parseString("add apple", repo);
+		LogicMain.parseString("add Charlie", repo);
+		LogicMain.parseString("add APPLE", repo);
+		LogicMain.parseString("add Zebra", repo);
+
+		// Current buffer size is 5 after adding.
+		assertEquals("Current buffer size", 5, repo.getBufferSize());
+
+		// Before sort
+		int indexBeforeSort = UnitTest.searchBufferIndex(1, repo.getBuffer());
+		assertEquals("Index of ZULU", 0, indexBeforeSort);
+
+		// Issue the sort command to sort the buffer
+		LogicMain.parseString("sort", repo);
+
+		/*
+		 * After sorting, we will append the results and show using the temp
+		 * buffer. The results are sorted according to alphabets.
+		 */
+		assertEquals("Current buffer size", 5, repo.getTempBufferSize());
+
+		/*
+		 * We will search for TASK ID '1' with task name ZULU. This task object
+		 * will reside in index 4 of the temp buffer after sorting.
+		 */
+		int indexAfterSort = UnitTest
+				.searchBufferIndex(1, repo.getTempBuffer());
+		assertEquals("Index of ZULU", 4, indexAfterSort);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\MainUnitTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\MainUnitUndoTest.java
+	 */
+
+
+public class MainUnitUndoTest {
+
+	/*
+	 * This main unit undo testing class will test the possible output for the
+	 * undo command for the previous action.
+	 */
+
+	@Test
+	public void testUndoAdd() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and remarks
+		LogicMain.parseString("add CS2103 [12/05/15] <Finish report>", repo);
+		// Adding a appointment task with task name
+		LogicMain.parseString("add EE2020 [13/06/15 14/06/15]", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("undo", repo);
+
+		// Current buffer size should be 1 after we undo add the second item
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+
+		LogicMain.parseString("u", repo);
+
+		// Current buffer size should be 0 after we undo add the first time
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+
+		LogicMain.parseString("redo", repo);
+
+		// Current buffer size should be 1 after we redo the undo action
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+
+		LogicMain.parseString("redo", repo);
+
+		// Current buffer size should be 2 after we redo the undo action
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+	}
+
+	@Test
+	public void testUndoDelete() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and remarks
+		LogicMain.parseString("add CS2103 [12/05/15] <Finish report>", repo);
+		// Adding a appointment task with task name
+		LogicMain.parseString("add EE2020 [13/06/15 14/06/15]", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("d 2", repo);
+
+		// Current buffer size should be 1 after we delete the second item
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+
+		LogicMain.parseString("d 1", repo);
+
+		// Current buffer size should be 0 after we delete the first item
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+
+		LogicMain.parseString("undo", repo);
+
+		// Current buffer size should be 1 after we undo add the first item
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+
+		LogicMain.parseString("u", repo);
+		// Current buffer size should be 0 after we undo add the second item
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("redo", repo);
+		// Current buffer size should be 1 after we redo the undo action
+		assertEquals("Current buffer size", 1, repo.getBufferSize());
+
+		LogicMain.parseString("r", repo);
+
+		// Current buffer size should be 2 after we redo the undo action
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+	}
+
+	@Test
+	public void testUndoClear() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and remarks
+		LogicMain.parseString("add CS2103 [12/05/15] <Finish report>", repo);
+		// Adding a appointment task with task name
+		LogicMain.parseString("add EE2020 [13/06/15 14/06/15]", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("clear", repo);
+
+		// Current buffer size is 0 after clearing
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+
+		LogicMain.parseString("u", repo);
+
+		// Current buffer size is 2 after undo clear command
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		LogicMain.parseString("r", repo);
+
+		// Current buffer size is 0 after we redo the undo action
+		assertEquals("Current buffer size", 0, repo.getBufferSize());
+	}
+
+	@Test
+	public void testUndoComplete() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and remarks
+		LogicMain.parseString("add CS2103 [12/05/15] <Finish report>", repo);
+		// Adding a appointment task with task name
+		LogicMain.parseString("add EE2020 [13/06/15 14/06/15]", repo);
+
+		// Current buffer size is 2 after adding.
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		// Complete both tasks in the buffer
+		LogicMain.parseString("cp 1", repo);
+		LogicMain.parseString("cp 2", repo);
+
+		Task taskOne = UnitTest.retrieveTask(repo.getBuffer(), 1);
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(), 2);
+
+		// Result should be true after completing the two tasks
+		assertEquals("Completed for ID 1", true, taskOne.getCompleted());
+		assertEquals("Completed for ID 2", true, taskTwo.getCompleted());
+
+		LogicMain.parseString("u", repo);
+		LogicMain.parseString("u", repo);
+
+		// Result should be false after we undo
+		assertEquals("Completed for ID 1", false, taskOne.getCompleted());
+		assertEquals("Completed for ID 2", false, taskTwo.getCompleted());
+	}
+
+	@Test
+	public void testUndoUncomplete() {
+		Repository repo = new Repository();
+
+		// Adding a deadline task with task name and remarks
+		LogicMain.parseString("add CS2103 [12/05/15] <Finish report>", repo);
+		// Adding a appointment task with task name
+		LogicMain.parseString("add EE2020 [13/06/15 14/06/15]", repo);
+
+		// Current buffer size is 2 after adding
+		assertEquals("Current buffer size", 2, repo.getBufferSize());
+
+		Task taskOne = UnitTest.retrieveTask(repo.getBuffer(), 1);
+		Task taskTwo = UnitTest.retrieveTask(repo.getBuffer(), 2);
+
+		// Complete both tasks in the buffer
+		LogicMain.parseString("cp 1", repo);
+		LogicMain.parseString("cp 2", repo);
+
+		// Uncomplete both tasks in the buffer
+		LogicMain.parseString("ucp 1", repo);
+		LogicMain.parseString("ucp 2", repo);
+
+		// Result should be false after uncompleting the two tasks.
+		assertEquals("Completed for ID 1", false, taskOne.getCompleted());
+		assertEquals("Completed for ID 2", false, taskTwo.getCompleted());
+
+		LogicMain.parseString("u", repo);
+		LogicMain.parseString("u", repo);
+
+		// Result should be true after we undo
+		assertEquals("Completed for ID 1", true, taskOne.getCompleted());
+		assertEquals("Completed for ID 2", true, taskTwo.getCompleted());
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\MainUnitUndoTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\TestSuite.java
+	 */
+
+
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ MainUnitTest.class, MainUnitUndoTest.class,
+		LogicUndoUnitTest.class, LogicUnitTest.class,
+		ParserTestAddDateTime.class, ParserTestDelete.class,
+		ParserTestEdit.class, ParserTestSearch.class, StorageTest.class })
+public class TestSuite {
+
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\TestSuite.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Affix.java
+	 */
+
+
+public class Affix {
+
+	protected static void addTask(Interpreter item, ArrayList<Task> buffer,
+			int index) {
+
+		TaskType type = item.getType();
+
+		switch (type) {
+		case DEADLINE:
+			addDeadlineTask(item, buffer, index);
+			break;
+		case APPOINTMENT:
+			addAppointmentTask(item, buffer, index);
+			break;
+		default:
+			addFloatTask(item, buffer, index);
+		}
+	}
+
+	private static void addFloatTask(Interpreter item, ArrayList<Task> buffer,
+			int index) {
+		Task floating = new Task();
+
+		floating.setTaskID(index);
+		floating.setTaskName(item.getTaskName());
+		floating.setRemarks(item.getRemarks());
+
+		addToBuffer(floating, buffer);
+	}
+
+	private static void addDeadlineTask(Interpreter item,
+			ArrayList<Task> buffer, int index) {
+		Deadline deadline = new Deadline();
+
+		deadline.setTaskID(index);
+		deadline.setTaskName(item.getTaskName());
+		deadline.setDate(item.getDueDate());
+		deadline.setRemarks(item.getRemarks());
+
+		addToBuffer(deadline, buffer);
+	}
+
+	protected static void addAppointmentTask(Interpreter item,
+			ArrayList<Task> buffer, int index) {
+		Appointment appt = new Appointment();
+
+		appt.setTaskID(index);
+		appt.setTaskName(item.getTaskName());
+		appt.setStartDate(item.getStartDate());
+		appt.setDate(item.getDueDate());
+		appt.setRemarks(item.getRemarks());
+
+		addToBuffer(appt, buffer);
+	}
+
+	protected static void addToBuffer(Task task, ArrayList<Task> buffer) {
+		buffer.add(buffer.size(), task);
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Affix.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Amend.java
+	 */
+
+
+public class Amend {
+
+	protected static void setCompletion(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+
+		int taskID = item.getTaskID();
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+
+		String taskName = buffer.get(index).getTaskName();
+		boolean isCompleted = item.getCompleted();
+		boolean checkCompleted = buffer.get(index).getCompleted();
+
+		if (isCompleted == false && checkCompleted == false) {
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETED_TASK,
+					taskName));
+
+		} else if (isCompleted == true && checkCompleted == true) {
+			repo.setFeedbackMsg(String.format(Message.COMPLETED_TASK, taskName));
+
+		} else if (isCompleted == true && checkCompleted == false) {
+			LogicMain.undoCompleteOrUncomplete(item, repo);
+			buffer.get(index).setIsCompleted(isCompleted);
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK, taskName));
+
+		} else {
+			LogicMain.undoCompleteOrUncomplete(item, repo);
+			buffer.get(index).setIsCompleted(isCompleted);
+			repo.setFeedbackMsg(String
+					.format(Message.UNCOMPLETE_TASK, taskName));
+		}
+	}
+
+	protected static void determineAmend(Interpreter item, Repository repo) {
+		if (item.getIsRemarks() == true) {
+			amendRemarks(item, repo);
+		}
+
+		if (item.getType() == TaskType.FLOATING) {
+			amendName(item, repo);
+
+		} else if (item.getType() == TaskType.APPOINTMENT) {
+			amendName(item, repo);
+			amendStartDate(item, repo);
+			amendDueDate(item, repo);
+
+		} else if (item.getType() == TaskType.DEADLINE) {
+			amendName(item, repo);
+			amendDueDate(item, repo);
+		}
+	}
+
+	private static void amendName(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+
+		task.setTaskName(item.getTaskName());
+		repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
+				item.getTaskID()));
+	}
+
+	/*
+	 * Determines the task type. If appointment, start date is concerned. If
+	 * deadline, we will store the existing data into an new appointment object.
+	 * Floating tasks are not allowed.
+	 */
+
+	private static void amendStartDate(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+
+		if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
+			appt.setStartDate(item.getStartDate());
+
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
+			Appointment appt = new Appointment();
+
+			appt.setTaskID(deadline.getTaskID());
+			appt.setTaskName(deadline.getTaskName());
+			appt.setStartDate(item.getStartDate());
+			appt.setDate(deadline.getDate());
+			appt.setRemarks(deadline.getRemarks());
+
+			Obliterator.deleteTask(deadline.getTaskID(), repo);
+			Affix.addToBuffer(appt, buffer);
+		}
+	}
+
+	/*
+	 * Determines the task type. If appointment or deadline, due date is
+	 * concerned. If floating, we will store the existing data into an new
+	 * deadline object.
+	 */
+
+	private static void amendDueDate(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+
+		if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
+
+			appt.setDate(item.getDueDate());
+
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
+
+			deadline.setDate(item.getDueDate());
+
+		} else if (task.getType().equals(TaskType.FLOATING)) {
+			Task tasks = task;
+			Deadline deadline = new Deadline();
+
+			deadline.setTaskID(tasks.getTaskID());
+			deadline.setTaskName(tasks.getTaskName());
+			deadline.setRemarks(tasks.getRemarks());
+			deadline.setDate(item.getDueDate());
+
+			Obliterator.deleteTask(tasks.getTaskID(), repo);
+			Affix.addToBuffer(deadline, buffer);
+		}
+	}
+
+	private static void amendRemarks(Interpreter item, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		Task task = SearchEngine.retrieveTask(buffer, item.getTaskID());
+
+		task.setRemarks(item.getRemarks());
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Amend.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Appointment.java
+	 */
+
+
+public class Appointment extends Deadline {
+
+	private Date startDate;
+
+	public Appointment() {
+		super();
+		this.startDate = new Date();
+		this.setType(TaskType.APPOINTMENT);
+	}
+
+	public Appointment(int taskID, String taskName, String remarks,
+			boolean isCompleted, Date dueDate, Date startDate) {
+		super(taskID, taskName, remarks, isCompleted, dueDate);
+		this.startDate = startDate;
+		this.setType(TaskType.APPOINTMENT);
+	}
+
+	public Date getStartDate() {
+		return this.startDate;
+	}
+
+	public String getStartDateString() {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.startDate);
+		return dateString;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + " " + this.getStartDateString() + " "
+				+ this.getDueDateString() + "]";
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Appointment.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Compare.java
+	 */
+
+
+public class Compare {
+
+	public static Comparator<Task> numComparator = new Comparator<Task>() {
+		public int compare(Task bufferOne, Task bufferTwo) {
+			int first = bufferOne.getTaskID();
+			int second = bufferTwo.getTaskID();
+			return first - second;
+		}
+	};
+
+	public static Comparator<Task> StringComparator = new Comparator<Task>() {
+		public int compare(Task bufferOne, Task bufferTwo) {
+			String first = bufferOne.getTaskName().toLowerCase();
+			String second = bufferTwo.getTaskName().toLowerCase();
+			return first.compareTo(second);
+		}
+	};
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Compare.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Deadline.java
+	 */
+
+
+public class Deadline extends Task {
+
+	private Date dueDate;
+
+	public Deadline() {
+		super();
+		this.dueDate = new Date();
+		this.setType(TaskType.DEADLINE);
+	}
+
+	public Deadline(int taskID, String taskName, String remarks,
+			boolean isCompleted, Date dueDate) {
+		super(taskID, taskName, remarks, isCompleted);
+		this.dueDate = dueDate;
+		this.setType(TaskType.DEADLINE);
+	}
+
+	public Date getDate() {
+		return this.dueDate;
+	}
+
+	public void setDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	public void setDueDateString(String dueDateString) {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.dueDate);
+	}
+
+	public String getDueDateString() {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.dueDate);
+		return dateString;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + " " + this.getDueDateString() + "]";
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Deadline.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Enumerator.java
+	 */
+
+
+public class Enumerator {
+
+	public enum TaskType {
+		FLOATING, APPOINTMENT, DEADLINE
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Enumerator.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\History.java
+	 */
+
+
+public class History {
+
+	private int index;
+	private String feedbackMsg;
+	private ArrayList<Task> historyBuffer;
+
+	private Task task;
+	private Deadline deadline;
+	private Appointment appointment;
+
+	private TaskType taskType;
+	private Interpreter interpret;
+
+	public History() {
+		this.interpret = new Interpreter();
+		this.task = new Task();
+		this.deadline = new Deadline();
+		this.appointment = new Appointment();
+		this.index = 0;
+		this.taskType = null;
+		this.historyBuffer = new ArrayList<Task>();
+		this.feedbackMsg = "";
+	}
+
+	public Task getTask() {
+		return this.task;
+	}
+
+	public Deadline getDeadLine() {
+		return this.deadline;
+	}
+
+	public Appointment getAppointment() {
+		return this.appointment;
+	}
+
+	public CommandType getCommand() {
+		return this.interpret.getCommand();
+	}
+
+	public TaskType getTaskType() {
+		return this.taskType;
+	}
+
+	public int getIndex() {
+		return this.index;
+	}
+
+	public int getTaskID() {
+		return this.interpret.getTaskID();
+	}
+
+	public ArrayList<Task> getHistoryBuffer() {
+		return this.historyBuffer;
+	}
+
+	public String getFeedbackMsg() {
+		return this.feedbackMsg;
+	}
+
+	public void setTaskType(TaskType type) {
+		this.taskType = type;
+	}
+
+	public void setCommand(CommandType command) {
+		this.interpret.setCommandType(command);
+	}
+
+	public void setTaskID(int taskID) {
+		this.interpret.setTaskID(taskID);
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
+	public void setDeadline(Deadline deadline) {
+		this.deadline = deadline;
+	}
+
+	public void setAppointment(Appointment appointment) {
+		this.appointment = appointment;
+	}
+
+	public void setHistoryBuffer(ArrayList<Task> historyBuffer) {
+		this.historyBuffer = historyBuffer;
+	}
+
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\History.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\LogicMain.java
+	 */
+
+
+public class LogicMain {
+	private static final int MESSAGE_SYSTEM_EXIT = 0;
+	private static ProTaskStorage storage;
+
+	public static void main(String[] args) throws ParseException {
+
+		// Use for testing
+		Repository repo = new Repository();
+		Scanner sc = new Scanner(System.in);
+
+		while (true) {
+			Printer.printToUser("Command: ");
+			String command = sc.nextLine();
+			parseString(command, repo);
+			Printer.executePrint(repo.getBuffer());
+			System.out.println(repo.getBuffer().size());
+			Printer.printToUser(repo.getFeedback());
+		}
+
+	}
+
+	private static void initializeStorage() {
+		if (storage == null) {
+			storage = new ProTaskStorage();
+		}
+	}
+
+	public static Repository loadStorage() {
+		Repository repo = new Repository();
+		try {
+			initializeStorage();
+			repo = storage.getAllTasks();
+		} catch (FileNotFoundException e) {
+			Logging.getInputLog(Message.FILE_INEXISTS);
+		}
+		return repo;
+	}
+
+	private static void updateStorageToClear(Repository repo) {
+		try {
+			storage.clearAllTasks(repo);
+		} catch (FileNotFoundException e) {
+			Logging.getInputLog(Message.FILE_INEXISTS);
+		}
+	}
+
+	private static void updateStorage(Repository repo) {
+		storage.updateDeleteTask(repo);
+	}
+
+	private static void writeToStorage(Repository repo) {
+		storage.writeToFile(repo);
+	}
+
+	private static void catchException(Interpreter input, Repository repo) {
+		repo.setIsError(input.getIsError());
+		repo.setFeedbackMsg(input.getFeedbackMsg());
+	}
+
+	protected static ArrayList<Task> createTempBuffer(Repository repo) {
+		ArrayList<Task> tempBuffer = new ArrayList<Task>();
+		Iterator<Task> list = repo.getBuffer().iterator();
+
+		while (list.hasNext()) {
+			tempBuffer.add(list.next());
+		}
+		return tempBuffer;
+	}
+
+	public static Repository parseString(String command, Repository repo) {
+		assert (command != null);
+		Interpreter input = new Interpreter();
+
+		try {
+			input = ProParser.parse(command);
+			executeCommand(input, repo);
+		} catch (ParseException e) {
+			Logging.getInputLog("ParseException");
+		} catch (NullPointerException npe) {
+			Logging.getInputLog("NullPointerException");
+		}
+		return repo;
+	}
+
+	private static void executeCommand(Interpreter input, Repository repo) {
+		CommandType commandInfo = input.getCommand();
+		boolean isError = input.getIsError();
+
+		if (isError) {
+			catchException(input, repo);
+		}
+
+		switch (commandInfo) {
+		case ADD:
+			if (isError) {
+				catchException(input, repo);
+			}
+			Affix.addTask(input, repo.getBuffer(), repo.numberGenerator());
+			undoAdd(input, repo);
+
+			repo.setFeedbackMsg(String.format(Message.ADDED_SUCCESSFUL,
+					input.getTaskName()));
+			writeToStorage(repo);
+			break;
+
+		case AMEND:
+			try {
+				if (isError) {
+					catchException(input, repo);
+				} else {
+					undoAmend(input, repo);
+					Amend.determineAmend(input, repo);
+					updateStorage(repo);
+				}
+			} catch (IndexOutOfBoundsException e) {
+				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
+						input.getTaskID()));
+			}
+			break;
+
+		case DELETE:
+			try {
+				if (isError) {
+					catchException(input, repo);
+				} else {
+					undoDelete(input, repo);
+					Obliterator.deleteTask(input.getTaskID(), repo);
+					updateStorage(repo);
+				}
+			} catch (IndexOutOfBoundsException e) {
+				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
+						input.getTaskID()));
+			}
+			break;
+
+		case CLEAR:
+			if (isError) {
+				catchException(input, repo);
+
+			} else if (repo.getBuffer().isEmpty()) {
+				repo.setFeedbackMsg(Message.BUFFER_EMPTY);
+
+			} else {
+				undoClear(input, repo);
+				Obliterator.determineClear(input, repo.getBuffer());
+				repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
+				updateStorageToClear(repo);
+			}
+			break;
+
+		case DISPLAY:
+			repo.setFeedbackMsg(Message.CLEAR);
+			break;
+
+		case SEARCH:
+			try {
+				if (isError) {
+					catchException(input, repo);
+				} else {
+					SearchEngine.determineSearch(input.getKey(), repo);
+				}
+			} catch (IndexOutOfBoundsException e) {
+				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
+						input.getKey()));
+			}
+			break;
+
+		case SORT:
+			if (repo.getBuffer().size() <= 0) {
+				repo.setFeedbackMsg(Message.SORT_UNSUCCESSFUL);
+			} else {
+				Organizer.sort(repo);
+				undoSort(input, repo);
+				repo.setFeedbackMsg(Message.SORTED_SUCCESSFUL);
+			}
+			break;
+
+		case UNDO:
+			try {
+				UndoManager.determineUndo(repo);
+				updateStorage(repo);
+			} catch (EmptyStackException e) {
+				repo.setFeedbackMsg(Message.UNDO_UNSUCCESSFUL);
+			}
+			break;
+
+		case REDO:
+			try {
+				RedoManager.determineRedo(repo);
+				updateStorage(repo);
+			} catch (EmptyStackException e) {
+				repo.setFeedbackMsg(Message.REDO_UNSUCCESSFUL);
+			}
+			break;
+
+		case COMPLETE:
+			try {
+				if (isError) {
+					catchException(input, repo);
+				} else {
+					Amend.setCompletion(input, repo);
+					updateStorage(repo);
+				}
+			} catch (IndexOutOfBoundsException e) {
+				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
+						input.getTaskID()));
+				Logging.getInputLog(Message.COMPLETE_ERROR);
+			}
+			break;
+
+		case UNCOMPLETE:
+			try {
+				if (isError) {
+					catchException(input, repo);
+				} else {
+					Amend.setCompletion(input, repo);
+					updateStorage(repo);
+				}
+			} catch (IndexOutOfBoundsException e) {
+				repo.setFeedbackMsg(String.format(Message.TASK_NOT_FOUND,
+						input.getTaskID()));
+				Logging.getInputLog(Message.UNCOMPLETE_ERROR);
+			}
+			break;
+
+		case MOVE:
+			if (isError) {
+				catchException(input, repo);
+			} else {
+				initializeStorage();
+				storage.moveDataBase(input.getDataBasePath());
+				repo.setFeedbackMsg(String.format(
+						Message.FILE_SUCCESSFULLY_MOVED,
+						input.getDataBasePath()));
+			}
+			break;
+
+		case EXIT:
+			System.exit(MESSAGE_SYSTEM_EXIT);
+
+		default:
+			break;
+		}
+	}
+
+	private static void undoAdd(Interpreter input, Repository repo) {
+		History addedHistory = new History();
+
+		addedHistory = UndoManager.pushAddToStack(input, repo);
+		repo.undoActionPush(addedHistory);
+	}
+
+	private static void undoDelete(Interpreter input, Repository repo) {
+		History deletedHistory = new History();
+
+		deletedHistory = UndoManager.pushDeleteToStack(input, repo);
+		repo.undoActionPush(deletedHistory);
+	}
+
+	protected static void undoCompleteOrUncomplete(Interpreter input,
+			Repository repo) {
+		History completedHistory = new History();
+
+		completedHistory = UndoManager.pushCompleteOrUncompleteToStack(input,
+				repo);
+		repo.undoActionPush(completedHistory);
+	}
+
+	protected static void undoAmend(Interpreter input, Repository repo) {
+		History clearedHistory = new History();
+		ArrayList<Task> tempBuffer = createTempBuffer(repo);
+
+		clearedHistory = UndoManager.pushAmendToStack(input, tempBuffer);
+		repo.undoActionPush(clearedHistory);
+	}
+
+	private static void undoClear(Interpreter input, Repository repo) {
+		History clearedHistory = new History();
+		ArrayList<Task> tempBuffer = createTempBuffer(repo);
+
+		clearedHistory = UndoManager.pushClearToStack(input, tempBuffer);
+		repo.undoActionPush(clearedHistory);
+	}
+
+	private static void undoSort(Interpreter input, Repository repo) {
+		History sortedHistory = new History();
+
+		sortedHistory = UndoManager
+				.pushSortToStack(input, repo.getTempBuffer());
+		repo.undoActionPush(sortedHistory);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\LogicMain.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Message.java
+	 */
+
+
+public class Message {
+
+	public static final String WELCOME = "Welcome to ProTask! For first time user, please refer to\nthe help guide.";
+	protected static final String CLEAR = "";
+
+	protected static final String TASK_NOT_FOUND = "%1$s is not found.";
+	protected static final String INDEX_NOT_FOUND = "%1$s is not found when retrieving task object";
+
+	protected static final String ADDED_SUCCESSFUL = "%1$s has been added successfully!";
+	protected static final String EDITED_SUCCESSFUL = "%1$s has been edited.";
+	protected static final String DELETED_SUCCESSFUL = "%1$s has been successfully deleted.";
+	protected static final String DELETE_ALL_SUCCESSFUL = "All tasks have been deleted successfully!";
+	protected static final String DELETE_UNSUCCESSFUL = "There is nothing to delete.";
+	protected static final String UNDO_DELETE_ALL = "Your tasks are successfully undo.";
+
+	protected static final String SEARCH_FOUND = "%1$s search results(s) found.";
+	protected static final String SEARCH_IS_EMPTY = "There is nothing to search.";
+	protected static final String SEARCH_INVALID = "Please follow the specified command to search.";
+
+	protected static final String SORTED_SUCCESSFUL = "Your tasks are sorted alphabetically!";
+	protected static final String SORT_UNSUCCESSFUL = "There is nothing to be sort!";
+
+	protected static final String COMPLETE_TASK = "%1$s has been marked as completed.";
+	protected static final String UNCOMPLETE_TASK = "%1$s has been marked as uncompleted.";
+	protected static final String COMPLETED_TASK = "%1$s is already marked as completed. ";
+	protected static final String UNCOMPLETED_TASK = "%1$s is already marked as uncompleted.";
+	protected static final String CLEAR_COMPLETE_TASK = "All completed tasks have been successfully cleared.";
+	protected static final String BUFFER_EMPTY = "There is nothing to clear.";
+
+	protected static final String REDO_ACTION = "%1$s has been redo successfully.";
+	protected static final String UNDO_ACTION = "%1$s has been undo successfully.";
+	protected static final String REDO_UNSUCCESSFUL = "There is nothing to redo.";
+	protected static final String UNDO_UNSUCCESSFUL = "There is nothing to undo.";
+
+	protected static final String COMPLETE_ERROR = "[COMPLETE] - IndexOutOfBoundsException";
+	protected static final String UNCOMPLETE_ERROR = "[UNCOMPLETE] - IndexOutOfBoundsException";
+
+	protected static final String FILE_INEXISTS = "File does not exist.";
+	protected static final String FILE_SUCCESSFULLY_MOVED = "File is successfully moved to %1$s";
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Message.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Obliterator.java
+	 */
+
+
+public class Obliterator {
+
+	protected static void determineClear(Interpreter item,
+			ArrayList<Task> buffer) {
+		if (item.getClear().toLowerCase().equals("cp")) {
+			clearCompletedTask(buffer);
+		} else {
+			clearTask(buffer);
+		}
+	}
+
+	protected static void deleteTask(int taskID, Repository repo) {
+		String taskName = "";
+		ArrayList<Task> buffer = repo.getBuffer();
+
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+
+		taskName = buffer.get(index).getTaskName();
+		buffer.remove(index);
+
+		repo.setFeedbackMsg(String.format(Message.DELETED_SUCCESSFUL, taskName));
+
+	}
+
+	protected static void clearCompletedTask(ArrayList<Task> buffer) {
+		boolean isCompleted = true;
+		Iterator<Task> bufferList = buffer.iterator();
+
+		while (bufferList.hasNext()) {
+			if (bufferList.next().getCompleted() == isCompleted) {
+				bufferList.remove();
+			}
+		}
+	}
+
+	protected static void clearTask(ArrayList<Task> buffer) {
+		buffer.removeAll(buffer);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Obliterator.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Organizer.java
+	 */
+
+
+public class Organizer {
+
+	protected static void sort(Repository repo) {
+		ArrayList<Task> addToTempBuffer = new ArrayList<Task>();
+
+		for (int count = 0; count < repo.getBuffer().size(); count++) {
+			addToTempBuffer.add(repo.getBuffer().get(count));
+		}
+		repo.setTempBuffer(addToTempBuffer);
+		Collections.sort(repo.getTempBuffer(), Compare.StringComparator);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Organizer.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Printer.java
+	 */
+
+
+public class Printer {
+
+	public static void executePrint(ArrayList<Task> output) {
+
+		Iterator<Task> list = output.iterator();
+		while (list.hasNext()) {
+			System.out.println(list.next());
+		}
+	}
+
+	public static void printToUser(String output) {
+		if (!output.equals("")) {
+			System.out.println(output);
+		}
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Printer.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\RedoManager.java
+	 */
+
+
+public class RedoManager {
+	
+	protected static void determineRedo(Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		History history = repo.redoActionPop();
+
+		if (history.getCommand().equals(CommandType.ADD)) {
+			redoAddAction(history, buffer);
+			repo.setFeedbackMsg(String.format(Message.REDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.DELETE)) {
+			redoDeleteAction(history.getTaskID(), buffer);
+			repo.undoActionPop();
+			repo.setFeedbackMsg(String.format(Message.REDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.COMPLETE)) {
+			redoCompleteAction(history, buffer);
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
+			redoUncompleteAction(history, buffer);
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.CLEAR)) {
+			redoClearAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
+		}
+
+		if (history.getCommand().equals(CommandType.AMEND)) {
+			redoAmendAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.SORT)) {
+			redoSortAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(String.format(Message.SORTED_SUCCESSFUL,
+					history.getFeedbackMsg()));
+		}
+	}
+
+	private static void redoAddAction(History history, ArrayList<Task> buffer) {
+		if (history.getTaskType().equals(TaskType.FLOATING)) {
+			Affix.addToBuffer(history.getTask(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.DEADLINE)) {
+			Affix.addToBuffer(history.getDeadLine(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.APPOINTMENT)) {
+			Affix.addToBuffer(history.getAppointment(), buffer);
+		}
+	}
+
+	private static void redoAmendAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setTempBuffer(historyBuffer);
+	}
+
+	private static void redoDeleteAction(int taskID, ArrayList<Task> buffer) {
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+		buffer.remove(index);
+	}
+
+	private static void redoCompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(true);
+	}
+
+	private static void redoUncompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(false);
+	}
+
+	private static void redoClearAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		historyBuffer.removeAll(historyBuffer);
+		repo.getBuffer().removeAll(repo.getBuffer());
+	}
+
+	private static void redoSortAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setTempBuffer(historyBuffer);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\RedoManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Repository.java
+	 */
+
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class Repository {
+
+	private ArrayList<Task> buffer;
+	private ArrayList<Task> tempBuffer;
+	private int currentID;
+	private String feedbackMsg;
+	private boolean isError;
+	private Stack<History> undoAction;
+	private Stack<History> redoAction;
+
+	public Repository() {
+		this.buffer = new ArrayList<Task>();
+		this.tempBuffer = new ArrayList<Task>();
+		this.currentID = 0;
+		this.undoAction = new Stack<History>();
+		this.redoAction = new Stack<History>();
+		this.feedbackMsg = "";
+		this.isError = false;
+	}
+
+	public boolean getIsError() {
+		return this.isError;
+	}
+
+	public ArrayList<Task> getBuffer() {
+		return this.buffer;
+	}
+
+	public ArrayList<Task> getTempBuffer() {
+		return this.tempBuffer;
+	}
+
+	public int getTempBufferSize() {
+		return this.tempBuffer.size();
+	}
+
+	public int getBufferSize() {
+		return this.buffer.size();
+	}
+
+	public int numberGenerator() {
+		this.currentID++;
+		return this.currentID;
+	}
+
+	public int getCurrentID() {
+		return this.currentID;
+	}
+
+	public String getFeedback() {
+		return this.feedbackMsg;
+	}
+
+	public Stack<History> getUndoAction() {
+		return this.undoAction;
+	}
+
+	public Stack<History> getRedoAction() {
+		return this.redoAction;
+	}
+
+	public void setIsError(boolean isError) {
+		this.isError = isError;
+	}
+
+	public void setBuffer(ArrayList<Task> buffer) {
+		this.buffer = buffer;
+	}
+
+	public void setTempBuffer(ArrayList<Task> tempBuffer) {
+		this.tempBuffer = tempBuffer;
+	}
+
+	public void setCurrentID(int currentID) {
+		this.currentID = currentID;
+	}
+
+	public void setUndoAction(Stack<History> undoAction) {
+		this.undoAction = undoAction;
+	}
+
+	public void setRedoAction(Stack<History> redoAction) {
+		this.redoAction = redoAction;
+	}
+
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
+	}
+
+	public void undoActionPush(History history) {
+		undoAction.push(history);
+	}
+
+	public History undoActionPop() {
+		return undoAction.pop();
+	}
+
+	public History redoActionPeek() {
+		return undoAction.peek();
+	}
+
+	public void redoActionPush(History history) {
+		redoAction.push(history);
+	}
+
+	public History redoActionPop() {
+		return redoAction.pop();
+	}
+
+	public History undoActionPeek() {
+		return undoAction.peek();
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Repository.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\SearchEngine.java
+	 */
+
+
+public class SearchEngine {
+
+	protected static int convertToInt(String input) {
+		int number = Integer.parseInt(input);
+		return number;
+	}
+
+	protected static void determineSearch(String input, Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		int searchResult;
+		if (input.matches("-?\\d+(\\.\\d+)?")) {
+			repo.setTempBuffer(searchByTaskID(input.toLowerCase(), buffer));
+			searchResult = repo.getTempBufferSize();
+			repo.setFeedbackMsg(String.format(Message.SEARCH_FOUND,
+					searchResult));
+
+		} else {
+			repo.setTempBuffer(searchByKeyWords(input.toLowerCase(), buffer));
+			searchResult = repo.getTempBufferSize();
+			repo.setFeedbackMsg(String.format(Message.SEARCH_FOUND,
+					searchResult));
+		}
+	}
+
+	protected static int searchBufferIndex(int taskID, ArrayList<Task> buffer) {
+		int index = 0;
+		Iterator<Task> bufferList = buffer.iterator();
+
+		while (bufferList.hasNext()) {
+			if (bufferList.next().getTaskID() == taskID) {
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
+
+	private static ArrayList<Task> searchByTaskID(String input,
+			ArrayList<Task> buffer) {
+
+		ArrayList<Task> searchByIDList = new ArrayList<Task>();
+
+		Collections.sort(buffer, Compare.numComparator);
+		int num = convertToInt(input);
+		int index = searchBufferIndex(num, buffer);
+
+		searchByIDList.add(buffer.get(index));
+		return searchByIDList;
+	}
+
+	private static ArrayList<Task> searchByKeyWords(String wordSearch,
+			ArrayList<Task> buffer) {
+		ArrayList<Task> searchByWordsList = new ArrayList<Task>();
+		for (int count = 0; count < buffer.size(); count++) {
+			String description = buffer.get(count).getTaskName().toLowerCase();
+			if (description.contains(wordSearch.toLowerCase())) {
+				searchByWordsList.add(buffer.get(count));
+			}
+		}
+		Collections.sort(searchByWordsList, Compare.numComparator);
+		return searchByWordsList;
+	}
+
+	protected static Task retrieveTask(ArrayList<Task> buffer, int taskID) {
+		Task retrieveType;
+
+		int index = searchBufferIndex(taskID, buffer);
+		retrieveType = buffer.get(index);
+
+		return retrieveType;
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\SearchEngine.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Task.java
+	 */
+
+
+public class Task {
+
+	private int taskID;
+	private String taskName;
+	private boolean isCompleted;
+	private String remarks;
+	private TaskType type;
+
+	public Task() {
+		this.taskID = 0;
+		this.taskName = "";
+		this.isCompleted = false;
+		this.remarks = "";
+		this.type = TaskType.FLOATING;
+	}
+
+	public Task(int taskID, String taskName, String remarks, boolean isCompleted) {
+		this.taskID = taskID;
+		this.taskName = taskName;
+		this.remarks = remarks;
+		this.isCompleted = isCompleted;
+		this.type = TaskType.FLOATING;
+	}
+
+	public int getTaskID() {
+		return this.taskID;
+	}
+
+	public String getTaskName() {
+		return this.taskName;
+	}
+
+	public String getRemarks() {
+		return this.remarks;
+	}
+
+	public boolean getCompleted() {
+		return this.isCompleted;
+	}
+
+	public TaskType getType() {
+		return this.type;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public void setTaskID(int taskID) {
+		this.taskID = taskID;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public void setIsCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
+	}
+
+	public void setType(TaskType type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + "]";
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\UndoManager.java
+	 */
+
+
+public class UndoManager {
+
+	protected static void determineUndo(Repository repo) {
+		History history = repo.undoActionPop();
+		ArrayList<Task> buffer = repo.getBuffer();
+		ArrayList<Task> tempBuffer = LogicMain.createTempBuffer(repo);
+
+		if (history.getCommand().equals(CommandType.ADD)) {
+			repo.redoActionPush(history);
+			undoAddAction(history.getIndex(), buffer);
+
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.DELETE)) {
+			repo.redoActionPush(history);
+			undoDeleteAction(history, buffer);
+
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.AMEND)) {
+			// repo.redoActionPush(history);
+			undoAmendAction(history.getHistoryBuffer(), repo);
+
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.COMPLETE)) {
+			repo.redoActionPush(history);
+			undoCompleteAction(history, buffer);
+
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
+			repo.redoActionPush(history);
+			undoUncompleteAction(history, buffer);
+
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.CLEAR)) {
+			repo.redoActionPush(history);
+			undoClearAction(history.getHistoryBuffer(), repo);
+
+			repo.setFeedbackMsg(Message.UNDO_DELETE_ALL);
+		}
+
+		if (history.getCommand().equals(CommandType.SORT)) {
+			repo.redoActionPush(history);
+			undoSortAction(history.getHistoryBuffer(), tempBuffer);
+
+			repo.setFeedbackMsg(Message.CLEAR);
+		}
+	}
+
+	protected static History pushAddToStack(Interpreter input, Repository repo) {
+		History addedHistory = new History();
+
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				repo.getCurrentID());
+		int index = SearchEngine.searchBufferIndex(task.getTaskID(),
+				repo.getBuffer());
+
+		addedHistory.setCommand(input.getCommand());
+		addedHistory.setFeedbackMsg(input.getTaskName());
+		addedHistory.setIndex(index);
+
+		if (task.getType().equals(TaskType.FLOATING)) {
+			addedHistory.setTask(task);
+			addedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
+			addedHistory.setDeadline(deadline);
+			addedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
+			addedHistory.setAppointment(appt);
+			addedHistory.setTaskType(task.getType());
+		}
+		return addedHistory;
+	}
+
+	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
+			Repository repo) {
+		History completedHistory = new History();
+
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				input.getTaskID());
+		int index = SearchEngine.searchBufferIndex(task.getTaskID(),
+				repo.getBuffer());
+
+		completedHistory.setCommand(input.getCommand());
+		completedHistory.setFeedbackMsg(task.getTaskName());
+		completedHistory.setIndex(index);
+
+		return completedHistory;
+	}
+
+	protected static History pushDeleteToStack(Interpreter input,
+			Repository repo) {
+		History deletedHistory = new History();
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				input.getTaskID());
+
+		deletedHistory.setCommand(input.getCommand());
+		deletedHistory.setFeedbackMsg(task.getTaskName());
+		deletedHistory.setTaskID(input.getTaskID());
+
+		if (task.getType().equals(TaskType.FLOATING)) {
+			deletedHistory.setTask(task);
+			deletedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
+			deletedHistory.setDeadline(deadline);
+			deletedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
+			deletedHistory.setAppointment(appt);
+			deletedHistory.setTaskType(task.getType());
+		}
+		return deletedHistory;
+	}
+
+	protected static History pushAmendToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History amendedHistory = new History();
+
+		amendedHistory.setCommand(input.getCommand());
+		amendedHistory.setHistoryBuffer(buffer);
+		amendedHistory.setFeedbackMsg(input.getTaskName());
+
+		return amendedHistory;
+	}
+
+	protected static History pushClearToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History clearedHistory = new History();
+
+		clearedHistory.setCommand(input.getCommand());
+		clearedHistory.setHistoryBuffer(buffer);
+
+		return clearedHistory;
+	}
+
+	protected static History pushSortToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History sortedHistory = new History();
+
+		sortedHistory.setCommand(input.getCommand());
+		sortedHistory.setHistoryBuffer(buffer);
+
+		return sortedHistory;
+	}
+
+	private static void undoAddAction(int index, ArrayList<Task> buffer) {
+		buffer.remove(index);
+	}
+
+	private static void undoDeleteAction(History history, ArrayList<Task> buffer) {
+		if (history.getTaskType().equals(TaskType.FLOATING)) {
+			Affix.addToBuffer(history.getTask(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.DEADLINE)) {
+			Affix.addToBuffer(history.getDeadLine(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.APPOINTMENT)) {
+			Affix.addToBuffer(history.getAppointment(), buffer);
+		}
+	}
+
+	private static void undoAmendAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		// System.out.println(repo.getBuffer());
+		repo.getBuffer().removeAll(repo.getBuffer());
+		// System.out.println(historyBuffer);
+		repo.setBuffer(historyBuffer);
+	}
+
+	private static void undoCompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(false);
+	}
+
+	private static void undoUncompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(true);
+	}
+
+	private static void undoClearAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setBuffer(historyBuffer);
+	}
+
+	private static void undoSortAction(ArrayList<Task> historyBuffer,
+			ArrayList<Task> tempBuffer) {
+		tempBuffer.removeAll(tempBuffer);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\UndoManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\UnitTest.java
+	 */
+
+
+public class UnitTest {
+
+	public static void addTask(Interpreter item, ArrayList<Task> buffer,
+			int index) {
+		Affix.addTask(item, buffer, index);
+	}
+
+	public static void deleteTask(int taskID, Repository repo) {
+		Obliterator.deleteTask(taskID, repo);
+	}
+
+	public static void clearTask(ArrayList<Task> buffer) {
+		Obliterator.clearTask(buffer);
+	}
+
+	public static void sort(Repository mem) {
+		Organizer.sort(mem);
+	}
+
+	public static void setCompletion(Interpreter item, Repository repo) {
+		Amend.setCompletion(item, repo);
+	}
+
+	public static int searchBufferIndex(int taskID, ArrayList<Task> buffer) {
+		return SearchEngine.searchBufferIndex(taskID, buffer);
+	}
+
+	public static void determineAmend(Interpreter item, Repository repo) {
+		Amend.determineAmend(item, repo);
+	}
+
+	public static void determineClear(Interpreter item, ArrayList<Task> buffer) {
+		Obliterator.determineClear(item, buffer);
+	}
+
+	public static void determineSearch(String input, Repository mem) {
+		SearchEngine.determineSearch(input, mem);
+	}
+
+	public static void determineUndo(Repository repo) {
+		UndoManager.determineUndo(repo);
+	}
+
+	public static History pushAddToStack(Interpreter input, Repository repo) {
+		return UndoManager.pushAddToStack(input, repo);
+	}
+
+	public static History pushDeleteToStack(Interpreter input, Repository repo) {
+		return UndoManager.pushDeleteToStack(input, repo);
+	}
+
+	public static History pushAmendToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		return UndoManager.pushAmendToStack(input, buffer);
+	}
+
+	public static History pushClearToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		return UndoManager.pushClearToStack(input, buffer);
+	}
+
+	public static History pushCompleteOrUncompleteToStack(Interpreter input,
+			Repository repo) {
+		return UndoManager.pushCompleteOrUncompleteToStack(input, repo);
+	}
+
+	public static void determineRedo(Repository repo) {
+		RedoManager.determineRedo(repo);
+	}
+
+	public static Task retrieveTask(ArrayList<Task> buffer, int taskID) {
+		return SearchEngine.retrieveTask(buffer, taskID);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\UnitTest.java
+
+
+
+
+

@@ -1,0 +1,1341 @@
+//@author: a0110818m
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\ParserTestAddDateTime.java
+	 */
+
+public class ParserTestAddDateTime {
+	
+	ProParser Pro = new ProParser();
+	Interpreter item, item2; 
+	
+	@Test
+	public void test() throws ParseException {
+		
+		// Check if Floating
+		// This is a boundary case for Floating
+		String input0 = "add checking no date no time format <remarks here>";
+		item = Pro.parse(input0);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.FLOATING, item.getType());
+		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
+		assertEquals("Due Date does not exist: ", false, item.getIsDueDate());
+		assertEquals("StartDateString: ", "null", item.getStartDateString());
+		assertEquals("DueDateString: ", "null", item.getDueDateString());
+		assertEquals("TaskName: ", "checking no date no time format", item.getTaskName());
+		assertEquals("Remarks: ", "remarks here", item.getRemarks());
+		
+		// Check if Deadline
+		// This is a boundary case for Deadline
+		String input1 = "add checking date without time format [11/11/11] <remarks here>";
+		item = Pro.parse(input1);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.DEADLINE, item.getType());
+		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "null", item.getStartDateString());
+		assertEquals("DueDateString: ", "11/11/11 23:59", item.getDueDateString());
+		assertEquals("TaskName: ", "checking date without time format", item.getTaskName());
+		assertEquals("Remarks: ", "remarks here", item.getRemarks());
+		
+		// Check if Deadline
+		String input2 = "a checking single date with time format [11/11/11 11:11] <hello>";
+		item = Pro.parse(input2);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.DEADLINE, item.getType());
+		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "null", item.getStartDateString());
+		assertEquals("DueDateString: ", "11/11/11 11:11", item.getDueDateString());
+		assertEquals("TaskName: ", "checking single date with time format", item.getTaskName());
+		assertEquals("Remarks: ", "hello", item.getRemarks());
+		
+		// Check if Appointment
+		String input3 = "A checking double date without time format 11/11/11 12/12/12 [11/11/11 12/12/12]<remarks>";
+		item = Pro.parse(input3);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("Start Date exists: ", true, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "11/11/11 23:59", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 23:59", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date without time format 11/11/11 12/12/12", item.getTaskName());
+		assertEquals("Remarks: ", "remarks", item.getRemarks());
+		
+		
+		String input4 = "ADD checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12 [11/11/11 12/12/12 12:12]<Testing>";
+		item = Pro.parse(input4);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("Start Date exists: ", true, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "11/11/11 23:59", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 12:12", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12", item.getTaskName());
+		assertEquals("Remarks: ", "Testing", item.getRemarks());
+		
+		
+		String input5 = "add checking double date, start date with and due date without time format 11/11/11 11:11 12/12/12[11/11/11 11:11 12/12/12]<YAYYYYYY>";
+		item = Pro.parse(input5);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("Start Date exists: ", true, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "11/11/11 11:11", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 23:59", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date, start date with and due date without time format 11/11/11 11:11 12/12/12", item.getTaskName());
+		assertEquals("Remarks: ", "YAYYYYYY", item.getRemarks());
+		
+		// Check if Appointment
+		String input6 = "add checking double date with double time format [11/11/11 11:11 12/12/12 12:12] <insert remarks here>";
+		item = Pro.parse(input6);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("StartDateString: ", "11/11/11 11:11", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 12:12", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date with double time format", item.getTaskName());
+		assertEquals("Remarks: ", "insert remarks here", item.getRemarks());
+		
+		
+		String input7 = "add appt with wrong order of dates [12/12/12 11:11 11/11/11 12:12] <insert remarks here>";
+		item2 = Pro.parse(input7);
+		boolean result = false;
+		if(item2.getIsError()) {
+			result = true;
+		}
+		assertEquals("Wrong order of dates gives an exception", true, result);
+		System.out.println("Exception thrown due to wrong order of dates");
+		System.out.println();
+		
+		
+		String input8 = "add appt with wrong order of dates [12/12/12 11:11 12/12/12 10:10] <insert remarks here>";
+		item2 = Pro.parse(input8);
+		boolean result2 = false;
+		if(item2.getIsError()) {
+			result2 = true;
+		}
+		assertEquals("Wrong order of dates gives an exception", true, result2);
+		System.out.println("Exception thrown due to wrong order of times");
+		System.out.println();
+		
+		
+		String input9 = "a appt with wrong order of dates [12/12/12 12:12 10/10/10 10:10] <insert remarks here>";
+		item2 = Pro.parse(input9);
+		boolean result3 = false;
+		if(item2.getIsError()) {
+			result3 = true;
+		}
+		assertEquals("Wrong order of dates gives an exception", true, result3);
+		System.out.println("Exception thrown due to wrong order of date and times");
+		System.out.println();
+
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\ParserTestAddDateTime.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\ParserTestDelete.java
+	 */
+
+public class ParserTestDelete {
+
+	ProParser Pro = new ProParser();
+	Interpreter item, item2, item3; 
+	boolean result;
+	
+	@Test
+	public void test() throws ParseException {
+		
+		String input00 = "add checking no date no time format <remarks here>";
+		String input01 = "add checking no date no time format <remarks here>";
+		String input02 = "add checking no date no time format <remarks here>";
+		item = Pro.parse(input00);
+		item = Pro.parse(input01);
+		item = Pro.parse(input02);
+		
+		// 
+		// 
+		String input1 = "delete 1";
+		item = Pro.parse(input1);
+		assertEquals("Command: ", CommandType.DELETE, item.getCommand());
+		
+		
+		String input2 = "d 2";
+		item2 = Pro.parse(input2);
+		assertEquals("Command: ", CommandType.DELETE, item.getCommand());
+		
+		
+		String input3 = "delete";
+		item2 = Pro.parse(input3);
+		result = false;
+		if(item2.getIsError()) {
+			result = true;
+		}
+		assertEquals("isError is true", true, result);
+		System.out.println("isError is true as input is wrong");
+		
+		
+		String input4 = "delete 1 1";
+		item2 = Pro.parse(input4);
+		result = false;
+		if(item2.getIsError()) {
+			result = true;
+		}
+		assertEquals("isError is true", true, result);
+		System.out.println("isError is true as input is wrong");
+
+	}
+	
+	
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\ParserTestDelete.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\ParserTestEdit.java
+	 */
+
+public class ParserTestEdit {
+	ProParser Pro = new ProParser();
+	Interpreter item, item2;
+	
+	@Test
+	public void test() throws ParseException {
+		String input = "add DEFAULT ENTRY FOR TESTING PURPOSES [12/12/12 12:12] <ADDITIONAL REMARKS IF NECESSARY>";
+		item = Pro.parse(input);
+		
+				String input0 = "edit 1 checking no date no time format <remarks here>";
+		item = Pro.parse(input0);
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
+		assertEquals("TaskType: ", TaskType.FLOATING, item.getType());
+		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
+		assertEquals("Due Date does not exist: ", false, item.getIsDueDate());
+		assertEquals("StartDateString: ", "null", item.getStartDateString());
+		assertEquals("DueDateString: ", "null", item.getDueDateString());
+		assertEquals("Remarks: ", "remarks here", item.getRemarks());
+		
+		String input1 = "edit 1 checking date without time format [11/11/11] <remarks here>";
+		item = Pro.parse(input1);
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
+		assertEquals("TaskType: ", TaskType.DEADLINE, item.getType());
+		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "null", item.getStartDateString());
+		assertEquals("DueDateString: ", "11/11/11 23:59", item.getDueDateString());
+		assertEquals("TaskName: ", "checking date without time format", item.getTaskName());
+		assertEquals("Remarks: ", "remarks here", item.getRemarks());
+		
+		String input2 = "e 1 checking double date without time format 11/11/11 12:12 [11/11/11 12:12]<remarks>";
+		item = Pro.parse(input2);
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
+		assertEquals("TaskType: ", TaskType.DEADLINE, item.getType());
+		assertEquals("Start Date exists: ", false, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "null", item.getStartDateString());
+		assertEquals("DueDateString: ", "11/11/11 12:12", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date without time format 11/11/11 12:12", item.getTaskName());
+		assertEquals("Remarks: ", "remarks", item.getRemarks());
+		
+		System.out.println("INPUT3<");
+		String input3 = "EdiT 1 checking double date without time format 11/11/11 12/12/12 [11/11/11 12/12/12]<remarks>";
+		item = Pro.parse(input3);
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("Start Date exists: ", true, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "11/11/11 23:59", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 23:59", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date without time format 11/11/11 12/12/12", item.getTaskName());
+		assertEquals("Remarks: ", "remarks", item.getRemarks());
+		System.out.println(">INPUT3");
+		
+		String input4 = "edit 1 checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12 [11/11/11 12/12/12 12:12]<Testing>";
+		item = Pro.parse(input4);
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("Start Date exists: ", true, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "11/11/11 23:59", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 12:12", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12", item.getTaskName());
+		assertEquals("Remarks: ", "Testing", item.getRemarks());
+		
+		
+		String input5 = "e 1 checking double date, start date with and due date without time format 11/11/11 11:11 12/12/12 [11/11/11 11:11 12/12/12]<YAYYYYYY>";
+		item = Pro.parse(input5);
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("Start Date exists: ", true, item.getIsStartDate());
+		assertEquals("Due Date exists: ", true, item.getIsDueDate());
+		assertEquals("StartDateString: ", "11/11/11 11:11", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 23:59", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date, start date with and due date without time format 11/11/11 11:11 12/12/12", item.getTaskName());
+		assertEquals("Remarks: ", "YAYYYYYY", item.getRemarks());
+		
+		// Check if Appointment
+		String input6 = "e 1 checking double date with double time format [11/11/11 11:11 12/12/12 12:12] <insert remarks here>";
+		item = Pro.parse(input6);
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
+		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
+		assertEquals("StartDateString: ", "11/11/11 11:11", item.getStartDateString());
+		assertEquals("DueDateString: ", "12/12/12 12:12", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date with double time format", item.getTaskName());
+		assertEquals("Remarks: ", "insert remarks here", item.getRemarks());
+		
+		
+		String input7 = "e1 appt with wrong order of dates [12/12/12 11:11 11/11/11 12:12] <insert remarks here>";
+		item2 = Pro.parse(input7);
+		boolean result = false;
+		if(item2.getIsError()) {
+			result = true;
+		}
+		assertEquals("Invalid Command Format", true, result);
+		System.out.println("Exception thrown due to Invalid Command Format");
+		System.out.println();
+		
+		
+		String input8 = "edit1 appt with wrong order of dates [12/12/12 11:11 12/12/12 10:10] <insert remarks here>";
+		item2 = Pro.parse(input8);
+		boolean result2 = false;
+		if(item2.getIsError()) {
+			result2 = true;
+		}
+		assertEquals("Invalid Command Format", true, result2);
+		System.out.println("Exception thrown due to Invalid Command Format");
+		System.out.println();
+		
+		
+		String input9 = "EDIT appt with wrong order of dates [12/12/12 12:12 10/10/10 10:10] <insert remarks here>";
+		item2 = Pro.parse(input9);
+		boolean result3 = false;
+		if(item2.getIsError()) {
+			result3 = true;
+		}
+		assertEquals("Wrong order of dates gives an exception", true, result3);
+		System.out.println("Exception thrown due to wrong order of date and times");
+		System.out.println();
+
+	}
+
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\ParserTestEdit.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\junit\ParserTestSearch.java
+	 */
+
+public class ParserTestSearch {
+	
+	ProParser Pro = new ProParser();
+	Interpreter item, item2; 
+	
+	@Test
+	public void test() throws ParseException {
+		
+		String input0 = "add checking no date no time format <remarks here>";
+		item = Pro.parse(input0);
+		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("TaskType: ", TaskType.FLOATING, item.getType());
+		assertEquals("StartDateString: ", "null", item.getStartDateString());
+		assertEquals("DueDateString: ", "null", item.getDueDateString());
+		assertEquals("TaskName: ", "checking no date no time format", item.getTaskName());
+		assertEquals("Remarks: ", "remarks here", item.getRemarks());
+		
+		String input1 = "search check";
+		item = Pro.parse(input1);
+		assertEquals("Command: ", CommandType.SEARCH, item.getCommand());
+		assertEquals("Key words for Search: ", "check", item.getKey());
+		
+		String input2 = "search ";
+		item2 = Pro.parse(input2);
+		boolean result2 = false;
+		if(item2.getIsError()) {
+			result2 = true;
+		}
+		assertEquals("Invalid Input", true, result2);
+		System.out.println("Exception thrown due to invalid input");
+		
+		
+	}
+
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\junit\ParserTestSearch.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\Interpreter.java
+	 */
+
+public class Interpreter {
+
+	public enum CommandType {
+		ADD, AMEND, DELETE, CLEAR, UPDATE, DISPLAY, SORT, 
+		COMPLETE, UNCOMPLETE, POWERSEARCH, EXIT, SEARCH, 
+		UNDO, INVALID_COMMAND, REDO, MOVE;
+	}
+	
+	private CommandType command;
+	private int taskID;
+	private String taskName;
+	private boolean isRemarks;
+	private String remarks;
+	private boolean isCompleted;
+	private TaskType type;
+	private boolean isDueDate;
+	private boolean isStartDate;
+	private Date dueDate;
+	private Date startDate;
+	private String key;
+	private String feedbackMsg;
+	private String modeClear;
+	private boolean isError;
+	private String dataBasePath;
+	
+	
+	/*============GET METHODS============*/
+
+	public CommandType getCommand() {
+		return this.command;
+	}
+
+	public int getTaskID() {
+		return this.taskID;
+	}
+
+	public String getTaskName() {
+		return this.taskName;
+	}
+
+	public boolean getIsRemarks() {
+		return this.isRemarks;
+	}
+	
+	public String getRemarks() {
+		return this.remarks;
+	}
+
+	public boolean getCompleted() {
+		return this.isCompleted;
+	}
+
+	public TaskType getType() {
+		return this.type;
+	}
+	
+	public boolean getIsDueDate() {
+		return this.isDueDate;
+	}
+
+	public boolean getIsStartDate() {
+		return this.isStartDate;
+	}
+
+	public Date getDueDate() {
+		return this.dueDate;
+	}
+
+	public Date getStartDate() {
+		return this.startDate;
+	}
+
+	public String getKey() {
+		return this.key;
+	}
+
+	public String getFeedbackMsg() {
+		return this.feedbackMsg;
+	}
+	
+	public String getClear() {
+		return this.modeClear;
+	}
+	
+	public boolean getIsError() {
+		return this.isError;
+	}
+	
+	
+	/*============SET METHODS============*/
+
+	public void setCommandType(CommandType command) {
+		this.command = command;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public void setTaskID(int taskID) {
+		this.taskID = taskID;
+	}
+	
+	public void setIsRemarks(boolean isRemarks) {
+		this.isRemarks = isRemarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public void setType(TaskType type) {
+		this.type = type;
+	}
+	
+	public void setIsCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
+	}
+
+	public void setIsDueDate(boolean isDueDate) {
+		this.isDueDate = isDueDate;
+	}
+
+	public void setIsStartDate(boolean isStartDate) {
+		this.isStartDate = isStartDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+	
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
+	}
+	
+	public void setClear(String modeClear) {
+		this.modeClear = modeClear;
+	}
+
+	public void setIsError(boolean isError) {
+		this.isError = isError;
+	}
+	
+	
+	/*============DATE STRING METHODS============*/
+	
+	public String getDueDateString() {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		if (this.dueDate == null) {
+			return "null";
+		}
+		dateString = df.format(this.dueDate);
+		return dateString;
+	}
+
+	public String getStartDateString() {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		if (this.startDate == null) {
+			return "null";
+		}
+		dateString = df.format(this.startDate);
+		return dateString;
+	}
+
+	public String toString() {
+		return this.getCommand() + "+" + this.getTaskID() + "+"
+				+ this.getTaskName() + "+" + this.getRemarks() + "+"
+				+ this.getCompleted() + "+" + this.getType() + "+"
+				+ this.getDueDateString() + "+" + this.getStartDateString();
+	}
+
+	public String getDataBasePath() {
+		return dataBasePath;
+	}
+
+	public void setDataBasePath(String dataBasePath) {
+		this.dataBasePath = dataBasePath;
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\Interpreter.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserAdd.java
+	 */
+
+public class ParserAdd {
+	
+	public static void addTask(Interpreter item, String input, String[] inputArray) throws ParseException {
+		String[] dateArray = null;
+		int secondEntry = 1;
+		try {
+			if(inputArray.length < 2 || inputArray[secondEntry].equals("[]") || inputArray[secondEntry].equals("[")) {
+				throw new ParserException();
+			} else {
+				if(input.contains("[")) {
+					dateArray = defineDate(input);
+					String[] newInputArray = input.split("\\[");
+					inputArray = newInputArray[0].split(" ");
+				}
+				
+				defineTaskType(item, inputArray, dateArray);
+				defineTaskName(item, inputArray);
+				item.setIsCompleted(false);	
+			}
+			
+		} catch (ParserException npe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
+		}
+	}
+	
+	private static String[] defineDate(String input) {
+		String[] dateArray = null;
+		String[] splitInput = input.split("\\[");
+		if(splitInput[splitInput.length - 1].equals("]")) {
+			dateArray = null;
+			return dateArray;
+		} else {
+			if(splitInput[splitInput.length - 1].contains("]")) {
+				String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
+				dateArray = splitDate[0].split(" ");
+			} else {
+				dateArray = splitInput[splitInput.length - 1].split(" ");
+			}
+		return dateArray;
+		}
+	}
+	
+	// TaskType of the entry is set in ParserDateAndTimeChecker if the input is valid
+	private static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
+		int dateArrayLength; 
+		
+		if(dateArray == null) {
+			dateArrayLength = 0;
+		} else {
+			dateArrayLength = dateArray.length; 
+		}
+		
+		try {
+			boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
+			
+			// This will report invalid formats for date and/or time 
+			if(!isValidDateAndTime) {
+				throw new ParserException();
+			} 
+		} catch (ParserException pe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
+		}
+	}
+	
+	private static void defineTaskName(Interpreter item, String[] inputArray) {
+		String taskName = "";
+		int startIndex = 1;
+		int lastIndex = inputArray.length - 1;
+		
+		taskName = convertArrayToString(inputArray, startIndex, lastIndex);
+		
+		try {
+			if(taskName.equals("") || taskName.equals(" ")) {
+				throw new NullPointerException();
+			} else {
+				item.setTaskName(taskName);
+			}
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
+		}
+	}
+	
+	private static String convertArrayToString(String[] inputArray, int startIndex, int lastIndex) {
+		String taskName = "";
+		for(int i=startIndex; i<=lastIndex; i++){
+			if(i==lastIndex) {
+				taskName = taskName.concat(inputArray[i]); 
+			} else {
+				taskName = taskName.concat(inputArray[i] + " ");	
+			}			
+		}
+		return taskName;
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserAdd.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserClear.java
+	 */
+
+public class ParserClear {
+	
+	public static void clearTask(Interpreter item, String input, String[] inputArray) {
+		int inputLength = inputArray.length;
+		try {
+			if(inputLength == 2) {
+				if(inputArray[1].toLowerCase().equals("cp")) {
+					item.setClear("COMP");
+				} else {
+					throw new ParserException();
+				}
+			} else {
+				item.setClear("ALL");		
+			}
+		} catch (ParserException pe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_COMMAND);
+		}
+		
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserClear.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserCompleteTask.java
+	 */
+
+public class ParserCompleteTask {
+
+	public static void completeTask(Interpreter item, String[] inputArray) {
+		
+		try {
+			if(inputArray.length < 2) {
+				throw new ParserException();
+			} else {
+				int ID = Integer.parseInt(inputArray[1]);
+				item.setTaskID(ID);
+				item.setIsCompleted(true);
+			}
+		} catch (ParserException pe) {			
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
+			
+		} catch (NumberFormatException nfe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_ID);
+		}
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserCompleteTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserDateAndTimeChecker.java
+	 */
+
+public class ParserDateAndTimeChecker {
+	
+	// If no time is given but a date is given,
+	// set default time to 23:59
+	private static String DEFAULT_TIME = "23:59";
+	
+	public static boolean isDateAndTime(Interpreter item, String[] input, int length) throws ParseException {
+		if(input == null) {
+			setFloating(item);
+			return true;
+		}
+		
+		switch(length) {				
+			case 0:
+				setFloating(item);
+				return true;
+			case 1:
+				if(isDate(input[0])) {
+					setDeadline(input[0], DEFAULT_TIME, item); 
+					return true;
+				} else {
+					return false;
+				}
+			case 2:
+				if(isDate(input[0]) && isTime(input[1])) {
+					setDeadline(input[0], input[1], item);
+					return true;
+				} else if(isDate(input[0]) && isDate(input[1])) {
+					setAppointment(input[0], DEFAULT_TIME, input[1], DEFAULT_TIME, item);
+					return true;
+				} else {
+					return false;
+				}
+			case 3:
+				if(isDate(input[0]) && isTime(input[1]) && isDate(input[2])) {
+					setAppointment(input[0], input[1], input[2], DEFAULT_TIME, item);
+					return true;
+				} else if(isDate(input[0]) && isDate(input[1]) && isTime(input[2])) {
+					setAppointment(input[0], DEFAULT_TIME, input[1], input[2], item);
+					return true;
+				} else {
+					return false;
+				}
+			
+			case 4: 
+				if(isDate(input[0]) && isTime(input[1]) && isDate(input[2]) && isTime(input[3])) {
+					setAppointment(input[0], input[1], input[2], input[3], item);
+					return true;
+				} else {
+					return false;
+				}
+			default:
+				return false;
+		}
+	}
+	
+	private static boolean isDate(String checkInput) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		sdf.setLenient(false);
+		try {
+			Date date = sdf.parse(checkInput);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
+	}	
+	
+	private static boolean isTime(String checkInput) {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		sdf.setLenient(false);
+		try {
+			Date date = sdf.parse(checkInput);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
+	}
+	
+	private static void setFloating(Interpreter item) {
+		item.setType(TaskType.FLOATING);
+		item.setIsDueDate(false);
+		item.setIsStartDate(false);
+		Date date = null;
+		item.setStartDate(date);
+		item.setDueDate(date);
+	}
+	
+	private static void setDeadline(String dueDate, String endTime, Interpreter item) {
+		item.setType(TaskType.DEADLINE);
+		item.setIsStartDate(false);
+		Date startDate = null;
+		Date resultDueDate = setDate(item, dueDate, endTime);
+		System.out.println(dueDate);
+		System.out.println(endTime);
+		item.setIsStartDate(false);
+		item.setIsDueDate(true);
+		item.setStartDate(startDate);
+		item.setDueDate(resultDueDate);
+	}
+	
+	private static void setAppointment(String startDate, String startTime, 
+			String dueDate, String endTime, Interpreter item){
+	
+		Date resultStartDate = setDate(item, startDate, startTime);
+		Date resultDueDate = setDate(item, dueDate, endTime);
+		
+		int compareResult = compareDates(resultStartDate, resultDueDate);
+		
+		try {	
+			if(compareResult > 0) {
+				throw new ParserException();
+			} else {
+				item.setType(TaskType.APPOINTMENT);
+				item.setIsStartDate(true);
+				item.setIsDueDate(true);
+				item.setStartDate(resultStartDate);
+				item.setDueDate(resultDueDate);
+			}	
+		} catch (ParserException pe){
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
+		}
+	}
+	
+	// Returns:
+	// value == 0 if this Date is equal to the argument Date 
+	// value < 0 if this Date is before the Date argument
+	// value > 0 if this Date is after the Date argument
+	private static int compareDates(Date startDate, Date dueDate) {
+		return startDate.compareTo(dueDate);
+	}
+	
+	private static Date setDate(Interpreter item, String inputDate, String inputTime) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+		String inputDateAndTime = inputDate + " " + inputTime;
+		sdf.setLenient(true);
+		try {
+			Date date = sdf.parse(inputDateAndTime);
+			return date;
+		} catch (ParseException e) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
+			return null;
+		}
+	}	
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserDateAndTimeChecker.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserDelete.java
+	 */
+
+public class ParserDelete {
+
+	public static void deleteTask(Interpreter item, String[] inputArray) {
+		int ID;
+		try {
+			if(inputArray.length != 2) {
+				throw new ParserException(); 				
+			} else {
+				ID = Integer.parseInt(inputArray[1]);
+				item.setTaskID(ID);
+			}
+			
+		} catch (ParserException pe) {			
+			System.out.println("pe");
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
+			
+		} catch (NumberFormatException nfe) {
+			System.out.println("nfe");
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_ID);
+		} 
+	}	
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserDelete.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserEdit.java
+	 */
+
+public class ParserEdit {
+
+	public static void editTask(Interpreter item, String input, String[] inputArray)
+			throws ParseException {
+		int ID;
+		int thirdEntry = 2;
+		String[] dateArray = null;
+		String[] editedInputArray = new String[inputArray.length - 2];
+		
+		try {
+			ID = Integer.parseInt(inputArray[1]);
+			item.setTaskID(ID);
+			
+			if(input.length() < 3|| inputArray[thirdEntry].equals("[]") || inputArray[thirdEntry].equals("[")) {
+				throw new NullPointerException();
+			}
+			
+			if(input.contains("[")) {
+				dateArray = defineDate(input);
+				String[] newInputArray = input.split("\\[");
+			}
+			for (int i = 2; i < inputArray.length; i++) {
+				editedInputArray[i - 2] = inputArray[i];
+			}
+			
+			if(editedInputArray.length == 1) {
+				item.setType(TaskType.FLOATING);
+				item.setIsDueDate(false);
+				item.setIsStartDate(false);
+				Date date = null;
+				item.setStartDate(date);
+				item.setDueDate(date);
+				defineTaskName(item, editedInputArray, editedInputArray.length);
+			} else if(editedInputArray.length < 1) {
+				throw new ParserException();
+			} else {
+				defineTaskType(item, editedInputArray, dateArray);
+				if (dateArray == null){
+					if(editedInputArray[editedInputArray.length - 1].equals("[]")) {
+						defineTaskName(item, editedInputArray, editedInputArray.length - 1);
+					} else if(editedInputArray[editedInputArray.length - 1].equals("]")) {
+						int index = input.lastIndexOf("[");
+						defineTaskName(item, editedInputArray, index);
+					} else {
+						defineTaskName(item, editedInputArray, editedInputArray.length);
+					}
+				} else {
+					System.out.println(editedInputArray.length - dateArray.length);
+					defineTaskName(item, editedInputArray, editedInputArray.length - dateArray.length);
+				}
+			}
+		} catch (NumberFormatException nfe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_ID);
+		} catch (ParserException pe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
+	} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
+		}
+	}
+	
+	private static String[] defineDate(String input) {
+		String[] dateArray = null;
+		String[] splitInput = input.split("\\[");
+		if(splitInput[splitInput.length - 1].equals("]")) {
+			dateArray = null;
+			return dateArray;
+		} else {
+			if(splitInput[splitInput.length - 1].contains("]")) {
+				String[] splitDate = splitInput[splitInput.length - 1].split("\\]");
+				dateArray = splitDate[0].split(" ");
+			} else {
+				dateArray = splitInput[splitInput.length - 1].split(" ");
+			}
+		return dateArray;
+		}
+	}
+
+	public static void defineTaskType(Interpreter item, String[] inputArray, String[] dateArray) throws ParseException {
+		int dateArrayLength; 
+		if(dateArray == null) {
+			dateArrayLength = 0;
+		} else {
+			dateArrayLength = dateArray.length; 
+		}
+		try {
+			boolean isValidDateAndTime = ParserDateAndTimeChecker.isDateAndTime(item, dateArray, dateArrayLength);
+			
+			// This will report invalid formats for date and/or time 
+			if(!isValidDateAndTime) {
+				throw new ParserException();
+			} 
+		} catch (ParserException pe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_DATE_TIME_FORMAT);
+		}
+	}
+
+	public static void defineTaskName(Interpreter item, String[] inputArray, int length) {
+		String taskName = "";
+		int lastIndex = length - 1;
+		for(int i=0; i<=lastIndex; i++){
+			if(i==lastIndex) {
+				taskName = taskName.concat(inputArray[i]);
+				
+			} else {
+				taskName = taskName.concat(inputArray[i] + " ");
+			}			
+		}
+		
+		try {
+			if(taskName.equals("") || taskName.equals(" ")) {
+				throw new NullPointerException();
+			} else {
+				item.setTaskName(taskName);
+			}
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
+		}
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserEdit.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserException.java
+	 */
+
+public class ParserException extends Exception {
+	 public ParserException() {
+	 }
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserException.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserMessage.java
+	 */
+
+public class ParserMessage {
+	protected static final String INVALID_COMMAND = "The command does not exists.";
+	protected static final String INVALID_INPUT = "The input format you entered is invalid.";
+	protected static final String INVALID_TEXT = "The text format you entered is invalid.";
+	protected static final String INVALID_DATE_TIME_FORMAT = "The date and time format you entered is invalid.";
+	protected static final String INVALID_CATEGORY = "The category format you entered is invalid.";
+	protected static final String INVALID_ID = "The ID format you entered is invalid.";
+	protected static final String INVALID_FILEPATH = "The file path does not exist.";
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserMessage.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserPowerSearch.java
+	 */
+
+public class ParserPowerSearch {
+	
+	private static final String commandPS = "ps";
+	private static int START_INDEX_CASE_PS = commandPS.length();
+	
+	
+	public static ArrayList<Task> powerSearch(String input) {
+		String keyWords, checkCmd;
+		KeyWordStorage storage = new KeyWordStorage();
+		ArrayList<Task> keyWordsList = new ArrayList<Task>();
+		
+		checkCmd = input.substring(0,2);
+		
+		switch(checkCmd) {
+		case commandPS:
+			keyWords = input.substring(START_INDEX_CASE_PS, input.length());
+			keyWordsList =  storage.powerSearch(keyWords);
+			break;
+		}
+		return keyWordsList;
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserPowerSearch.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserSearch.java
+	 */
+
+public class ParserSearch {
+
+	public static void searchTask(Interpreter item, String[] inputArray) {
+		String searchKey = "";
+		try {
+			if(inputArray.length == 1) {
+				throw new NullPointerException();
+			} else {
+				int lengthSearchKey = inputArray.length-1;
+				for(int i=1; i<=lengthSearchKey; i++){
+					searchKey = searchKey.concat(inputArray[i]);
+				}
+				item.setKey(searchKey);
+			}
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
+		}	
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserSearch.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ParserUncompleteTask.java
+	 */
+
+public class ParserUncompleteTask {
+	public static void uncompleteTask(Interpreter item, String[] inputArray) {
+		try {
+			if(inputArray.length < 2) {
+				throw new ParserException();
+			} else {
+				int ID = Integer.parseInt(inputArray[1]);
+				item.setTaskID(ID);
+				item.setIsCompleted(false);
+			}
+		} catch (ParserException pe) {			
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
+			
+		} catch (NumberFormatException nfe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_ID);
+		}
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ParserUncompleteTask.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\parser\ProParser.java
+	 */
+
+public class ProParser {
+
+	public static Interpreter parse(String input) throws ParseException {
+		Interpreter item = new Interpreter();
+		
+		try {
+			if (input.contains("<")) {
+				String[] splitInput = input.split("<");
+				defineRemarks(item, splitInput[1]);
+				String inputWithoutRemarks = splitInput[0];
+				String[] inputArray = splitInput[0].split(" ");
+				defineCommand(item, inputWithoutRemarks, inputArray);
+			} else {
+				String[] inputArray = input.split(" ");
+			
+				item.setIsRemarks(false);
+				item.setRemarks("");
+				defineCommand(item, input, inputArray);
+			}
+		} catch (NullPointerException npe) {
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_INPUT);
+		}
+		return item;
+	}
+
+	private static void defineRemarks(Interpreter item, String remarks) {
+		if(remarks == null || remarks.equals(">")) {
+			item.setIsRemarks(false);
+			item.setRemarks(" ");
+		} else {		
+			String[] remarksArray = remarks.split(">");
+			item.setIsRemarks(true);
+			item.setRemarks(remarksArray[0]);
+		}
+	}
+
+	private static void defineCommand(Interpreter item, String input, String[] inputArray)
+			throws ParseException {
+
+		String command = inputArray[0].toLowerCase();
+
+		switch (command) {
+		case "add":
+		case "a":
+			item.setCommandType(Interpreter.CommandType.ADD);
+			ParserAdd.addTask(item, input, inputArray);
+			break;
+		case "delete":
+		case "d":
+			item.setCommandType(Interpreter.CommandType.DELETE);
+			ParserDelete.deleteTask(item, inputArray);
+			break;
+		case "clear":
+		case "cl":
+			item.setCommandType(Interpreter.CommandType.CLEAR);
+			ParserClear.clearTask(item, input, inputArray);
+			break;
+		case "display":
+		case "dp":
+			item.setCommandType(Interpreter.CommandType.DISPLAY);
+			break;
+		case "search":
+		case "find":
+			item.setCommandType(Interpreter.CommandType.SEARCH);
+			ParserSearch.searchTask(item, inputArray);
+			break;
+		case "edit":
+		case "e":
+			item.setCommandType(Interpreter.CommandType.AMEND);
+			ParserEdit.editTask(item, input, inputArray);
+			break;
+		case "undo":
+		case "u":
+			item.setCommandType(Interpreter.CommandType.UNDO);
+			break;
+		case "redo":
+		case "r":
+			item.setCommandType(Interpreter.CommandType.REDO);
+			break;
+		case "complete":
+		case "cp":
+			item.setCommandType(Interpreter.CommandType.COMPLETE);
+			ParserCompleteTask.completeTask(item, inputArray);
+			break;
+		case "uncomplete":
+		case "ucp":
+			item.setCommandType(Interpreter.CommandType.UNCOMPLETE);
+			ParserUncompleteTask.uncompleteTask(item, inputArray);
+			break;
+		case "sort":
+		case "s":
+			item.setCommandType(Interpreter.CommandType.SORT);
+			break;
+		case "exit":
+			item.setCommandType(Interpreter.CommandType.EXIT);
+			break;
+		case "move":
+		case "mv":
+			item.setCommandType(Interpreter.CommandType.MOVE);
+			ParserMove.moveDataBase(item, inputArray);
+			break;
+		default:
+			item.setIsError(true);
+			item.setFeedbackMsg(ParserMessage.INVALID_COMMAND);
+			item.setCommandType(Interpreter.CommandType.INVALID_COMMAND);
+			break;
+		}
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\parser\ProParser.java
+
+
+
+
+
