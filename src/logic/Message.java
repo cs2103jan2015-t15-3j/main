@@ -29,7 +29,8 @@ public class Message {
 	protected static final String COMPLETED_TASK = "%1$s is already marked as completed. ";
 	protected static final String UNCOMPLETED_TASK = "%1$s is already marked as uncompleted.";
 	protected static final String CLEAR_COMPLETE_TASK = "All completed tasks have been successfully cleared.";
-
+	protected static final String BUFFER_EMPTY = "There is nothing to clear.";
+	
 	protected static final String REDO_ACTION = "%1$s has been redo successfully.";
 	protected static final String UNDO_ACTION = "%1$s has been undo successfully.";
 	protected static final String REDO_UNSUCCESSFUL = "There is nothing to redo.";
@@ -38,5 +39,6 @@ public class Message {
 	protected static final String COMPLETE_ERROR = "[COMPLETE] - IndexOutOfBoundsException";
 	protected static final String UNCOMPLETE_ERROR = "[UNCOMPLETE] - IndexOutOfBoundsException";
 
+	protected static final String FILE_INEXISTS = "File does not exist.";
 	protected static final String FILE_SUCCESSFULLY_MOVED = "File is successfully moved to %1$s";
 }
