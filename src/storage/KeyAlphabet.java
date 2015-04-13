@@ -1,3 +1,4 @@
+//@author A0111842R
 package storage;
 
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ public class KeyAlphabet {
 		return positionNumber;
 	}
 
-	public void setPositionNumber(int poositionNumber) {
-		this.positionNumber = poositionNumber;
+	public void setPositionNumber(int positionNumber) {
+		this.positionNumber = positionNumber;
 	}
 
 	public void addWord(KeyWord word) {
