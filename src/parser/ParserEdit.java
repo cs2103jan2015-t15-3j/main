@@ -105,9 +105,11 @@ public class ParserEdit {
 			if(taskName.equals("") || taskName.equals(" ")) {
 				throw new NullPointerException();
 			} else {
+				item.setIsEditTaskName(true);
 				item.setTaskName(taskName);
 			}
 		} catch (NullPointerException npe) {
+			item.setIsEditTaskName(false);
 			item.setIsError(true);
 			item.setFeedbackMsg(ParserMessage.INVALID_TEXT);
 		}
