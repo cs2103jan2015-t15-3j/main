@@ -29,7 +29,8 @@ public class KeyWordStorage {
 	private final Character[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 			'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
 			'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7',
-			'8', '9', ' ', '/', ':' };
+			'8', '9', ' ', '/', ':', '`', '~', '!', '@', '#', '$', '%', '^',
+			'&', '*', '(', ')', '\'', '\\', '.', ',', '?' };
 	private ArrayList<KeyWord> allKeyWords;
 	private ProTaskStorage pStorage;
 	private final String weightPercentage = "0.6";
@@ -37,7 +38,7 @@ public class KeyWordStorage {
 	public KeyWordStorage() {
 
 		ProTaskStorage proT = new ProTaskStorage();
-		taskDataBase = proT.getCurrentDataBasePath() + "/test.csv";
+		taskDataBase = proT.getCurrentDataBasePath() + "/ProTaskDatabase.csv";
 		allAlphabets = new ArrayList<KeyAlphabet>();
 		keyWordID = 1;
 		allKeyWords = new ArrayList<KeyWord>();
@@ -126,8 +127,8 @@ public class KeyWordStorage {
 			BigDecimal answer = num1.divide(num2, scale, RoundingMode.HALF_UP);
 
 			if (answer.compareTo(referenceNum) >= 0) {
-				//System.out.println(answer.toString());
-				//System.out.println(word.getWord());
+				// System.out.println(answer.toString());
+				// System.out.println(word.getWord());
 				results.add(word);
 			}
 		}
@@ -242,36 +243,46 @@ public class KeyWordStorage {
 				keyWordID++;
 				allKeyWords.add(keyTaskName);
 
-				if (row[6] == "AP") {
-					String startDate = row[2];
-					if (!startDate.isEmpty()) {
-						KeyWord keyStartDate = new KeyWord();
-						keyStartDate.setTaskID(taskID);
-						keyStartDate.setWord(startDate);
-						chars = new ArrayList<Character>();
-						for (int i = 0; i < taskName.length(); i++) {
-							chars.add(Character.toUpperCase(startDate.charAt(i)));
+				if (row[6].equals("AP")) {
+					String startDateTime = row[2];
+					if (!startDateTime.isEmpty()) {
+						String[] splitStartDate = startDateTime.split(" ");
+						for (String startDate : splitStartDate) {
+							if (!startDate.isEmpty()) {
+								KeyWord keyStartDate = new KeyWord();
+								keyStartDate.setTaskID(taskID);
+								keyStartDate.setWord(startDate);
+								chars = new ArrayList<Character>();
+								for (int i = 0; i < startDate.length(); i++) {
+									chars.add(Character.toUpperCase(startDate
+											.charAt(i)));
+								}
+								keyStartDate.setSplitName(chars);
+								keyStartDate.setKeyWordID(keyWordID);
+								keyWordID++;
+								allKeyWords.add(keyStartDate);
+							}
 						}
-						keyStartDate.setSplitName(chars);
-						keyStartDate.setKeyWordID(keyWordID);
-						keyWordID++;
-						allKeyWords.add(keyStartDate);
 					}
 				}
-				if (row[6] == "AP" || row[6] == "DE") {
-					String endDate = row[3];
-					if (!endDate.isEmpty()) {
-						KeyWord keyEndDate = new KeyWord();
-						keyEndDate.setTaskID(taskID);
-						keyEndDate.setWord(endDate);
-						chars = new ArrayList<Character>();
-						for (int i = 0; i < taskName.length(); i++) {
-							chars.add(Character.toUpperCase(endDate.charAt(i)));
+				if (row[6].equals("AP") || row[6].equals("DE")) {
+					String endDateTime = row[3];
+					if (!endDateTime.isEmpty()) {
+						String[] splitEndDateTime = endDateTime.split(" ");
+						for (String endDate : splitEndDateTime) {
+							KeyWord keyEndDate = new KeyWord();
+							keyEndDate.setTaskID(taskID);
+							keyEndDate.setWord(endDate);
+							chars = new ArrayList<Character>();
+							for (int i = 0; i < endDate.length(); i++) {
+								chars.add(Character.toUpperCase(endDate
+										.charAt(i)));
+							}
+							keyEndDate.setSplitName(chars);
+							keyEndDate.setKeyWordID(keyWordID);
+							keyWordID++;
+							allKeyWords.add(keyEndDate);
 						}
-						keyEndDate.setSplitName(chars);
-						keyEndDate.setKeyWordID(keyWordID);
-						keyWordID++;
-						allKeyWords.add(keyEndDate);
 					}
 				}
 				String remarks = row[4];
