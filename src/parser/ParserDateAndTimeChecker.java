@@ -112,7 +112,8 @@ public class ParserDateAndTimeChecker {
 		item.setIsStartDate(false);
 		Date startDate = null;
 		Date resultDueDate = setDate(item, dueDate, endTime);
-		item.setKey("dueDate");
+		item.setIsStartDate(false);
+		item.setIsDueDate(true);
 		item.setStartDate(startDate);
 		item.setDueDate(resultDueDate);
 	}
@@ -122,7 +123,6 @@ public class ParserDateAndTimeChecker {
 	
 		Date resultStartDate = setDate(item, startDate, startTime);
 		Date resultDueDate = setDate(item, dueDate, endTime);
-		item.setKey("startDate");
 		
 		int compareResult = compareDates(resultStartDate, resultDueDate);
 		
@@ -131,6 +131,8 @@ public class ParserDateAndTimeChecker {
 				throw new ParserException();
 			} else {
 				item.setType(TaskType.APPOINTMENT);
+				item.setIsStartDate(true);
+				item.setIsDueDate(true);
 				item.setStartDate(resultStartDate);
 				item.setDueDate(resultDueDate);
 			}	

@@ -13,7 +13,7 @@ public class ProParser {
 				defineRemarks(item, splitInput[1]);
 				String inputWithoutRemarks = splitInput[0];
 				String[] inputArray = splitInput[0].split(" ");
-				item.setKey("remarks");
+				item.setIsRemarks(true);
 				defineCommand(item, inputWithoutRemarks, inputArray);
 			} else if(input.equals(" ")) {
 				throw new NullPointerException();

@@ -3,7 +3,6 @@ package parser;
 import java.text.ParseException;
 import java.util.Date;
 import logic.Enumerator.TaskType;
-import logic.Enumerator.KEY;
 
 public class ParserEdit {
 
@@ -97,7 +96,7 @@ public class ParserEdit {
 				taskName = taskName.concat(inputArray[i] + " ");
 			}			
 		}
-		item.setKey("taskName");
+		item.setIsEditTaskName(true);
 		
 		try {
 			if(taskName.equals("") || taskName.equals(" ")) {

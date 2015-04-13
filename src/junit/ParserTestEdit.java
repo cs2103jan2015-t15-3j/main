@@ -1,40 +1,42 @@
 package junit;
 
-import static org.junit.Assert.assertEquals;
-import java.text.ParseException;
-import logic.Enumerator.TaskType;
-import org.junit.Test;
-import parser.Interpreter.CommandType;
-import parser.ProParser;
-import parser.Interpreter;
+import static org.junit.Assert.*;
 
-public class ParserTestAddDateTime {
-	
+import java.text.ParseException;
+
+import logic.Enumerator.TaskType;
+
+import org.junit.Test;
+
+import parser.Interpreter;
+import parser.ProParser;
+import parser.Interpreter.CommandType;
+
+public class ParserTestEdit {
 	ProParser Pro = new ProParser();
-	Interpreter item, item2; 
+	Interpreter item, item2;
 	
 	@Test
 	public void test() throws ParseException {
+		String input = "add DEFAULT ENTRY FOR TESTING PURPOSES [12/12/12 12:12] <ADDITIONAL REMARKS IF NECESSARY>";
+		item = Pro.parse(input);
 		
-		// Check if Floating
-		// This is a boundary case for Floating
-		String input0 = "add checking no date no time format <remarks here>";
+				String input0 = "edit 1 checking no date no time format <remarks here>";
 		item = Pro.parse(input0);
-		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
 		assertEquals("TaskType: ", TaskType.FLOATING, item.getType());
 		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
 		assertEquals("Due Date does not exist: ", false, item.getIsDueDate());
 		assertEquals("StartDateString: ", "null", item.getStartDateString());
 		assertEquals("DueDateString: ", "null", item.getDueDateString());
-		assertEquals("TaskName: ", "checking no date no time format", item.getTaskName());
 		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "remarks here", item.getRemarks());
 		
-		// Check if Deadline
-		// This is a boundary case for Deadline
-		String input1 = "add checking date without time format [11/11/11] <remarks here>";
+		String input1 = "edit 1 checking date without time format [11/11/11] <remarks here>";
 		item = Pro.parse(input1);
-		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
 		assertEquals("TaskType: ", TaskType.DEADLINE, item.getType());
 		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
 		assertEquals("Due Date exists: ", true, item.getIsDueDate());
@@ -44,23 +46,23 @@ public class ParserTestAddDateTime {
 		assertEquals("Remarks exist: ", true, item.getIsRemarks());
 		assertEquals("Remarks: ", "remarks here", item.getRemarks());
 		
-		// Check if Deadline
-		String input2 = "a checking single date with time format [11/11/11 11:11] <hello>";
+		String input2 = "e 1 checking double date without time format 11/11/11 12:12 [11/11/11 12:12]<remarks>";
 		item = Pro.parse(input2);
-		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
 		assertEquals("TaskType: ", TaskType.DEADLINE, item.getType());
-		assertEquals("Start Date does exist: ", false, item.getIsStartDate());
+		assertEquals("Start Date exists: ", false, item.getIsStartDate());
 		assertEquals("Due Date exists: ", true, item.getIsDueDate());
 		assertEquals("StartDateString: ", "null", item.getStartDateString());
-		assertEquals("DueDateString: ", "11/11/11 11:11", item.getDueDateString());
-		assertEquals("TaskName: ", "checking single date with time format", item.getTaskName());
+		assertEquals("DueDateString: ", "11/11/11 12:12", item.getDueDateString());
+		assertEquals("TaskName: ", "checking double date without time format 11/11/11 12:12", item.getTaskName());
 		assertEquals("Remarks exist: ", true, item.getIsRemarks());
-		assertEquals("Remarks: ", "hello", item.getRemarks());
+		assertEquals("Remarks: ", "remarks", item.getRemarks());
 		
-		// Check if Appointment
-		String input3 = "A checking double date without time format 11/11/11 12/12/12 [11/11/11 12/12/12]<remarks>";
+		String input3 = "eDiT 1 checking double date without time format 11/11/11 12/12/12[11/11/11 12/12/12]<remarks>";
 		item = Pro.parse(input3);
-		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
 		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
 		assertEquals("Start Date exists: ", true, item.getIsStartDate());
 		assertEquals("Due Date exists: ", true, item.getIsDueDate());
@@ -71,9 +73,10 @@ public class ParserTestAddDateTime {
 		assertEquals("Remarks: ", "remarks", item.getRemarks());
 		
 		
-		String input4 = "ADD checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12 [11/11/11 12/12/12 12:12]<Testing>";
+		String input4 = "edit 1 checking double date, start date without and due date with time format 11/11/11 12/12/12 12:12 [11/11/11 12/12/12 12:12]<Testing>";
 		item = Pro.parse(input4);
-		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
 		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
 		assertEquals("Start Date exists: ", true, item.getIsStartDate());
 		assertEquals("Due Date exists: ", true, item.getIsDueDate());
@@ -84,9 +87,10 @@ public class ParserTestAddDateTime {
 		assertEquals("Remarks: ", "Testing", item.getRemarks());
 		
 		
-		String input5 = "add checking double date, start date with and due date without time format 11/11/11 11:11 12/12/12[11/11/11 11:11 12/12/12]<YAYYYYYY>";
+		String input5 = "e 1 checking double date, start date with and due date without time format 11/11/11 11:11 12/12/12 [11/11/11 11:11 12/12/12]<YAYYYYYY>";
 		item = Pro.parse(input5);
-		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
 		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
 		assertEquals("Start Date exists: ", true, item.getIsStartDate());
 		assertEquals("Due Date exists: ", true, item.getIsDueDate());
@@ -97,9 +101,10 @@ public class ParserTestAddDateTime {
 		assertEquals("Remarks: ", "YAYYYYYY", item.getRemarks());
 		
 		// Check if Appointment
-		String input6 = "add checking double date with double time format [11/11/11 11:11 12/12/12 12:12] <insert remarks here>";
+		String input6 = "e 1 checking double date with double time format [11/11/11 11:11 12/12/12 12:12] <insert remarks here>";
 		item = Pro.parse(input6);
-		assertEquals("Command: ", CommandType.ADD, item.getCommand());
+		assertEquals("Command: ", CommandType.AMEND, item.getCommand());
+		assertEquals("ID: ", 1, item.getTaskID());
 		assertEquals("TaskType: ", TaskType.APPOINTMENT, item.getType());
 		assertEquals("StartDateString: ", "11/11/11 11:11", item.getStartDateString());
 		assertEquals("DueDateString: ", "12/12/12 12:12", item.getDueDateString());
@@ -108,29 +113,29 @@ public class ParserTestAddDateTime {
 		assertEquals("Remarks: ", "insert remarks here", item.getRemarks());
 		
 		
-		String input7 = "add appt with wrong order of dates [12/12/12 11:11 11/11/11 12:12] <insert remarks here>";
+		String input7 = "e1 appt with wrong order of dates [12/12/12 11:11 11/11/11 12:12] <insert remarks here>";
 		item2 = Pro.parse(input7);
 		boolean result = false;
 		if(item2.getIsError()) {
 			result = true;
 		}
-		assertEquals("Wrong order of dates gives an exception", true, result);
-		System.out.println("Exception thrown due to wrong order of dates");
+		assertEquals("Invalid Command Format", true, result);
+		System.out.println("Exception thrown due to Invalid Command Format");
 		System.out.println();
 		
 		
-		String input8 = "add appt with wrong order of dates [12/12/12 11:11 12/12/12 10:10] <insert remarks here>";
+		String input8 = "edit1 appt with wrong order of dates [12/12/12 11:11 12/12/12 10:10] <insert remarks here>";
 		item2 = Pro.parse(input8);
 		boolean result2 = false;
 		if(item2.getIsError()) {
 			result2 = true;
 		}
-		assertEquals("Wrong order of dates gives an exception", true, result2);
-		System.out.println("Exception thrown due to wrong order of times");
+		assertEquals("Invalid Command Format", true, result2);
+		System.out.println("Exception thrown due to Invalid Command Format");
 		System.out.println();
 		
 		
-		String input9 = "a appt with wrong order of dates [12/12/12 12:12 10/10/10 10:10] <insert remarks here>";
+		String input9 = "EDIT appt with wrong order of dates [12/12/12 12:12 10/10/10 10:10] <insert remarks here>";
 		item2 = Pro.parse(input9);
 		boolean result3 = false;
 		if(item2.getIsError()) {
@@ -141,4 +146,5 @@ public class ParserTestAddDateTime {
 		System.out.println();
 
 	}
+
 }
