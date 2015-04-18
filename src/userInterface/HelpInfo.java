@@ -1,6 +1,6 @@
 package userInterface;
 
-//@author A0112961L
+//@author A0112961L -reused
 
 public class HelpInfo {
 	private static final String STRING_WRAPPER = "%s%s%s";

@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-//@author A0112961L
+//@author A0112961L -reused
 
 public class HelpDesign {
 
