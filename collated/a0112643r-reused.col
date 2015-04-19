@@ -1,0 +1,782 @@
+//@author: a0112643r-reused
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Appointment.java
+	 */
+
+
+public class Appointment extends Deadline {
+
+	private Date startDate;
+
+	public Appointment() {
+		super();
+		this.startDate = new Date();
+		this.setType(TaskType.APPOINTMENT);
+	}
+
+	public Appointment(int taskID, String taskName, String remarks,
+			boolean isCompleted, Date dueDate, Date startDate) {
+		super(taskID, taskName, remarks, isCompleted, dueDate);
+		this.startDate = startDate;
+		this.setType(TaskType.APPOINTMENT);
+	}
+
+	public Date getStartDate() {
+		return this.startDate;
+	}
+
+	public String getStartDateString() {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.startDate);
+		return dateString;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + " " + this.getStartDateString() + " "
+				+ this.getDueDateString() + "]";
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Appointment.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Deadline.java
+	 */
+
+
+public class Deadline extends Task {
+
+	private Date dueDate;
+
+	public Deadline() {
+		super();
+		this.dueDate = new Date();
+		this.setType(TaskType.DEADLINE);
+	}
+
+	public Deadline(int taskID, String taskName, String remarks,
+			boolean isCompleted, Date dueDate) {
+		super(taskID, taskName, remarks, isCompleted);
+		this.dueDate = dueDate;
+		this.setType(TaskType.DEADLINE);
+	}
+
+	public Date getDate() {
+		return this.dueDate;
+	}
+
+	public void setDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	public void setDueDateString(String dueDateString) {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.dueDate);
+	}
+
+	public String getDueDateString() {
+		String dateString = "";
+		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+		dateString = df.format(this.dueDate);
+		return dateString;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + " " + this.getDueDateString() + "]";
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Deadline.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\History.java
+	 */
+
+
+public class History {
+
+	private int index;
+	private String feedbackMsg;
+	private ArrayList<Task> historyBuffer;
+
+	private Task task;
+	private Deadline deadline;
+	private Appointment appointment;
+
+	private TaskType taskType;
+	private Interpreter interpret;
+
+	public History() {
+		this.interpret = new Interpreter();
+		this.task = new Task();
+		this.deadline = new Deadline();
+		this.appointment = new Appointment();
+		this.index = 0;
+		this.taskType = null;
+		this.historyBuffer = new ArrayList<Task>();
+		this.feedbackMsg = "";
+	}
+
+	public Task getTask() {
+		return this.task;
+	}
+
+	public Deadline getDeadLine() {
+		return this.deadline;
+	}
+
+	public Appointment getAppointment() {
+		return this.appointment;
+	}
+
+	public CommandType getCommand() {
+		return this.interpret.getCommand();
+	}
+
+	public TaskType getTaskType() {
+		return this.taskType;
+	}
+
+	public int getIndex() {
+		return this.index;
+	}
+
+	public int getTaskID() {
+		return this.interpret.getTaskID();
+	}
+
+	public ArrayList<Task> getHistoryBuffer() {
+		return this.historyBuffer;
+	}
+
+	public String getFeedbackMsg() {
+		return this.feedbackMsg;
+	}
+
+	public void setTaskType(TaskType type) {
+		this.taskType = type;
+	}
+
+	public void setCommand(CommandType command) {
+		this.interpret.setCommandType(command);
+	}
+
+	public void setTaskID(int taskID) {
+		this.interpret.setTaskID(taskID);
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
+	public void setDeadline(Deadline deadline) {
+		this.deadline = deadline;
+	}
+
+	public void setAppointment(Appointment appointment) {
+		this.appointment = appointment;
+	}
+
+	public void setHistoryBuffer(ArrayList<Task> historyBuffer) {
+		this.historyBuffer = historyBuffer;
+	}
+
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\History.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Printer.java
+	 */
+
+
+public class Printer {
+
+	public static void executePrint(ArrayList<Task> output) {
+
+		Iterator<Task> list = output.iterator();
+		while (list.hasNext()) {
+			System.out.println(list.next());
+		}
+	}
+
+	public static void printToUser(String output) {
+		if (!output.equals("")) {
+			System.out.println(output);
+		}
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Printer.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\RedoManager.java
+	 */
+
+
+public class RedoManager {
+	
+	protected static void determineRedo(Repository repo) {
+		ArrayList<Task> buffer = repo.getBuffer();
+		History history = repo.redoActionPop();
+
+		if (history.getCommand().equals(CommandType.ADD)) {
+			redoAddAction(history, buffer);
+			repo.setFeedbackMsg(String.format(Message.REDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.DELETE)) {
+			redoDeleteAction(history.getTaskID(), buffer);
+			repo.undoActionPop();
+			repo.setFeedbackMsg(String.format(Message.REDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.COMPLETE)) {
+			redoCompleteAction(history, buffer);
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
+			redoUncompleteAction(history, buffer);
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.CLEAR)) {
+			redoClearAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(Message.DELETE_ALL_SUCCESSFUL);
+		}
+
+		if (history.getCommand().equals(CommandType.AMEND)) {
+			redoAmendAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(String.format(Message.EDITED_SUCCESSFUL,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.SORT)) {
+			redoSortAction(history.getHistoryBuffer(), repo);
+			repo.setFeedbackMsg(String.format(Message.SORTED_SUCCESSFUL,
+					history.getFeedbackMsg()));
+		}
+	}
+
+	private static void redoAddAction(History history, ArrayList<Task> buffer) {
+		if (history.getTaskType().equals(TaskType.FLOATING)) {
+			Affix.addToBuffer(history.getTask(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.DEADLINE)) {
+			Affix.addToBuffer(history.getDeadLine(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.APPOINTMENT)) {
+			Affix.addToBuffer(history.getAppointment(), buffer);
+		}
+	}
+
+	private static void redoAmendAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setTempBuffer(historyBuffer);
+	}
+
+	private static void redoDeleteAction(int taskID, ArrayList<Task> buffer) {
+		int index = SearchEngine.searchBufferIndex(taskID, buffer);
+		buffer.remove(index);
+	}
+
+	private static void redoCompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(true);
+	}
+
+	private static void redoUncompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(false);
+	}
+
+	private static void redoClearAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		historyBuffer.removeAll(historyBuffer);
+		repo.getBuffer().removeAll(repo.getBuffer());
+	}
+
+	private static void redoSortAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setTempBuffer(historyBuffer);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\RedoManager.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Repository.java
+	 */
+
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class Repository {
+
+	private ArrayList<Task> buffer;
+	private ArrayList<Task> tempBuffer;
+	private int currentID;
+	private String feedbackMsg;
+	private boolean isError;
+	private Stack<History> undoAction;
+	private Stack<History> redoAction;
+
+	public Repository() {
+		this.buffer = new ArrayList<Task>();
+		this.tempBuffer = new ArrayList<Task>();
+		this.currentID = 0;
+		this.undoAction = new Stack<History>();
+		this.redoAction = new Stack<History>();
+		this.feedbackMsg = "";
+		this.isError = false;
+	}
+
+	public boolean getIsError() {
+		return this.isError;
+	}
+
+	public ArrayList<Task> getBuffer() {
+		return this.buffer;
+	}
+
+	public ArrayList<Task> getTempBuffer() {
+		return this.tempBuffer;
+	}
+
+	public int getTempBufferSize() {
+		return this.tempBuffer.size();
+	}
+
+	public int getBufferSize() {
+		return this.buffer.size();
+	}
+
+	public int numberGenerator() {
+		this.currentID++;
+		return this.currentID;
+	}
+
+	public int getCurrentID() {
+		return this.currentID;
+	}
+
+	public String getFeedback() {
+		return this.feedbackMsg;
+	}
+
+	public Stack<History> getUndoAction() {
+		return this.undoAction;
+	}
+
+	public Stack<History> getRedoAction() {
+		return this.redoAction;
+	}
+
+	public void setIsError(boolean isError) {
+		this.isError = isError;
+	}
+
+	public void setBuffer(ArrayList<Task> buffer) {
+		this.buffer = buffer;
+	}
+
+	public void setTempBuffer(ArrayList<Task> tempBuffer) {
+		this.tempBuffer = tempBuffer;
+	}
+
+	public void setCurrentID(int currentID) {
+		this.currentID = currentID;
+	}
+
+	public void setUndoAction(Stack<History> undoAction) {
+		this.undoAction = undoAction;
+	}
+
+	public void setRedoAction(Stack<History> redoAction) {
+		this.redoAction = redoAction;
+	}
+
+	public void setFeedbackMsg(String feedbackMsg) {
+		this.feedbackMsg = feedbackMsg;
+	}
+
+	public void undoActionPush(History history) {
+		undoAction.push(history);
+	}
+
+	public History undoActionPop() {
+		return undoAction.pop();
+	}
+
+	public History redoActionPeek() {
+		return undoAction.peek();
+	}
+
+	public void redoActionPush(History history) {
+		redoAction.push(history);
+	}
+
+	public History redoActionPop() {
+		return redoAction.pop();
+	}
+
+	public History undoActionPeek() {
+		return undoAction.peek();
+	}
+}
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Repository.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\Task.java
+	 */
+
+
+public class Task {
+
+	private int taskID;
+	private String taskName;
+	private boolean isCompleted;
+	private String remarks;
+	private TaskType type;
+
+	public Task() {
+		this.taskID = 0;
+		this.taskName = "";
+		this.isCompleted = false;
+		this.remarks = "";
+		this.type = TaskType.FLOATING;
+	}
+
+	public Task(int taskID, String taskName, String remarks, boolean isCompleted) {
+		this.taskID = taskID;
+		this.taskName = taskName;
+		this.remarks = remarks;
+		this.isCompleted = isCompleted;
+		this.type = TaskType.FLOATING;
+	}
+
+	public int getTaskID() {
+		return this.taskID;
+	}
+
+	public String getTaskName() {
+		return this.taskName;
+	}
+
+	public String getRemarks() {
+		return this.remarks;
+	}
+
+	public boolean getCompleted() {
+		return this.isCompleted;
+	}
+
+	public TaskType getType() {
+		return this.type;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public void setTaskID(int taskID) {
+		this.taskID = taskID;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public void setIsCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
+	}
+
+	public void setType(TaskType type) {
+		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.getTaskID() + " " + this.getTaskName() + " "
+				+ this.getRemarks() + " " + this.getCompleted() + " "
+				+ this.getType() + "]";
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\Task.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\SAM\Documents\main\src\logic\UndoManager.java
+	 */
+
+
+public class UndoManager {
+
+	protected static void determineUndo(Repository repo) {
+		History history = repo.undoActionPop();
+		ArrayList<Task> buffer = repo.getBuffer();
+		ArrayList<Task> tempBuffer = LogicMain.createTempBuffer(repo);
+
+		if (history.getCommand().equals(CommandType.ADD)) {
+			repo.redoActionPush(history);
+			undoAddAction(history.getIndex(), buffer);
+
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.DELETE)) {
+			repo.redoActionPush(history);
+			undoDeleteAction(history, buffer);
+
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.AMEND)) {
+			// repo.redoActionPush(history);
+			undoAmendAction(history.getHistoryBuffer(), repo);
+
+			repo.setFeedbackMsg(String.format(Message.UNDO_ACTION,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.COMPLETE)) {
+			repo.redoActionPush(history);
+			undoCompleteAction(history, buffer);
+
+			repo.setFeedbackMsg(String.format(Message.UNCOMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.UNCOMPLETE)) {
+			repo.redoActionPush(history);
+			undoUncompleteAction(history, buffer);
+
+			repo.setFeedbackMsg(String.format(Message.COMPLETE_TASK,
+					history.getFeedbackMsg()));
+		}
+
+		if (history.getCommand().equals(CommandType.CLEAR)) {
+			repo.redoActionPush(history);
+			undoClearAction(history.getHistoryBuffer(), repo);
+
+			repo.setFeedbackMsg(Message.UNDO_DELETE_ALL);
+		}
+
+		if (history.getCommand().equals(CommandType.SORT)) {
+			repo.redoActionPush(history);
+			undoSortAction(history.getHistoryBuffer(), tempBuffer);
+
+			repo.setFeedbackMsg(Message.CLEAR);
+		}
+	}
+
+	protected static History pushAddToStack(Interpreter input, Repository repo) {
+		History addedHistory = new History();
+
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				repo.getCurrentID());
+		int index = SearchEngine.searchBufferIndex(task.getTaskID(),
+				repo.getBuffer());
+
+		addedHistory.setCommand(input.getCommand());
+		addedHistory.setFeedbackMsg(input.getTaskName());
+		addedHistory.setIndex(index);
+
+		if (task.getType().equals(TaskType.FLOATING)) {
+			addedHistory.setTask(task);
+			addedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
+			addedHistory.setDeadline(deadline);
+			addedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
+			addedHistory.setAppointment(appt);
+			addedHistory.setTaskType(task.getType());
+		}
+		return addedHistory;
+	}
+
+	protected static History pushCompleteOrUncompleteToStack(Interpreter input,
+			Repository repo) {
+		History completedHistory = new History();
+
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				input.getTaskID());
+		int index = SearchEngine.searchBufferIndex(task.getTaskID(),
+				repo.getBuffer());
+
+		completedHistory.setCommand(input.getCommand());
+		completedHistory.setFeedbackMsg(task.getTaskName());
+		completedHistory.setIndex(index);
+
+		return completedHistory;
+	}
+
+	protected static History pushDeleteToStack(Interpreter input,
+			Repository repo) {
+		History deletedHistory = new History();
+		Task task = SearchEngine.retrieveTask(repo.getBuffer(),
+				input.getTaskID());
+
+		deletedHistory.setCommand(input.getCommand());
+		deletedHistory.setFeedbackMsg(task.getTaskName());
+		deletedHistory.setTaskID(input.getTaskID());
+
+		if (task.getType().equals(TaskType.FLOATING)) {
+			deletedHistory.setTask(task);
+			deletedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.DEADLINE)) {
+			Deadline deadline = (Deadline) task;
+			deletedHistory.setDeadline(deadline);
+			deletedHistory.setTaskType(task.getType());
+
+		} else if (task.getType().equals(TaskType.APPOINTMENT)) {
+			Appointment appt = (Appointment) task;
+			deletedHistory.setAppointment(appt);
+			deletedHistory.setTaskType(task.getType());
+		}
+		return deletedHistory;
+	}
+
+	protected static History pushAmendToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History amendedHistory = new History();
+
+		amendedHistory.setCommand(input.getCommand());
+		amendedHistory.setHistoryBuffer(buffer);
+		amendedHistory.setFeedbackMsg(input.getTaskName());
+
+		return amendedHistory;
+	}
+
+	protected static History pushClearToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History clearedHistory = new History();
+
+		clearedHistory.setCommand(input.getCommand());
+		clearedHistory.setHistoryBuffer(buffer);
+
+		return clearedHistory;
+	}
+
+	protected static History pushSortToStack(Interpreter input,
+			ArrayList<Task> buffer) {
+		History sortedHistory = new History();
+
+		sortedHistory.setCommand(input.getCommand());
+		sortedHistory.setHistoryBuffer(buffer);
+
+		return sortedHistory;
+	}
+
+	private static void undoAddAction(int index, ArrayList<Task> buffer) {
+		buffer.remove(index);
+	}
+
+	private static void undoDeleteAction(History history, ArrayList<Task> buffer) {
+		if (history.getTaskType().equals(TaskType.FLOATING)) {
+			Affix.addToBuffer(history.getTask(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.DEADLINE)) {
+			Affix.addToBuffer(history.getDeadLine(), buffer);
+
+		} else if (history.getTaskType().equals(TaskType.APPOINTMENT)) {
+			Affix.addToBuffer(history.getAppointment(), buffer);
+		}
+	}
+
+	private static void undoAmendAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		// System.out.println(repo.getBuffer());
+		repo.getBuffer().removeAll(repo.getBuffer());
+		// System.out.println(historyBuffer);
+		repo.setBuffer(historyBuffer);
+	}
+
+	private static void undoCompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(false);
+	}
+
+	private static void undoUncompleteAction(History history,
+			ArrayList<Task> buffer) {
+		buffer.get(history.getIndex()).setIsCompleted(true);
+	}
+
+	private static void undoClearAction(ArrayList<Task> historyBuffer,
+			Repository repo) {
+		repo.setBuffer(historyBuffer);
+	}
+
+	private static void undoSortAction(ArrayList<Task> historyBuffer,
+			ArrayList<Task> tempBuffer) {
+		tempBuffer.removeAll(tempBuffer);
+	}
+}
+
+	// End of segment: C:\Users\SAM\Documents\main\src\logic\UndoManager.java
+
+
+
+
+
