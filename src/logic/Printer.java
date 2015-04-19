@@ -3,7 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-//@author A0112643R
+//@author A0112643R-reused
 
 public class Printer {
 

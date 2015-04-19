@@ -2,7 +2,7 @@ package logic;
 
 import logic.Enumerator.TaskType;
 
-//@author A0112643R
+//@author A0112643R-reused
 
 public class Task {
 

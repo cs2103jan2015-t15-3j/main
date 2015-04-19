@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import logic.Enumerator.TaskType;
 
-//@author A0112643R
+//@author A0112643R-reused
 
 public class Appointment extends Deadline {
 
